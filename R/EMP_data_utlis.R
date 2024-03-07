@@ -1,0 +1,202 @@
+#' Title
+#'
+#' @param x wait_for_add
+#' @param experiment wait_for_add
+#' @param estimate_group wait_for_add
+#' @param method wait_for_add
+#' @param na_string wait_for_add
+#' @param collapse_sep wait_for_add
+#' @param action wait_for_add
+#' @importFrom tidybulk tidybulk
+#' @importFrom dplyr select
+#' @importFrom dplyr rename
+#' @importFrom tidyr drop_na
+#' @importFrom dplyr filter
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
+#' @importFrom tidyr pivot_wider
+#' @importFrom tibble column_to_rownames
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' # add example
+EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',
+                               na_string=c('NA','null',''),collapse_sep=' ',
+                               action='add') {
+  call <- match.call()
+  if (inherits(x,"MultiAssayExperiment")) {
+    EMPT <- .as.EMPT(x,
+                     experiment = experiment)
+    estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+    .get.estimate_group.EMPT(EMPT) <- estimate_group
+    .get.experiment.EMPT(EMPT) <- experiment
+    class(EMPT) <- 'EMP_assay_data'
+  }else if(inherits(x,'EMPT')){
+    EMPT <- x
+    estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+    experiment <- .get.experiment.EMPT(EMPT)
+    class(EMPT) <- 'EMP_assay_data'
+  }else {
+    stop('Please check the input data')
+  }
+
+  # check the df attr
+  df_attr_info <- EMPT@deposit2[['df_attr_info']]
+  if (!is.null(df_attr_info)) {
+    if (df_attr_info$feature == estimate_group) {
+      stop('estimate_group parameter should be different in a serious of EMP_collapse_byrow! ')
+    }
+  }
+
+  new_assay_data <- EMPT %>%
+    tidybulk::tidybulk() %>%
+    dplyr::select(.sample,counts,!!estimate_group) %>%
+    dplyr::rename(primary=.sample,feature=!!estimate_group) %>%
+    tidyr::drop_na() %>%
+    dplyr::filter(!feature %in% !!na_string) %>%
+    dplyr::group_by(primary, feature) %>%
+    dplyr::summarise(counts = .perform_operation(counts,method),.groups='drop') %>%
+    tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
+    tibble::column_to_rownames('primary') %>% t()
+
+
+  if (is.null(df_attr_info)) {
+    new_row_data <- .get.row_info.EMPT(EMPT)  %>%
+      tidyr::drop_na(!!estimate_group) %>%
+      dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
+      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep)
+    EMPT@deposit2[['df_attr_info']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
+  }else {
+    row_data <- .get.row_info.EMPT(EMPT)
+    colnames(row_data) <- EMPT@deposit2[['df_attr_info']][1,] ## Recovery the raw name
+    new_row_data <- row_data  %>%
+      tidyr::drop_na(!!estimate_group) %>%
+      dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
+      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep)
+    EMPT@deposit2[['df_attr_info']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
+  }
+
+  col_data <- colData(EMPT)
+
+  message_info <- list()
+  message_info %<>% append(paste0('Feature changed!'))
+  message_info %<>% append(paste0('Current feature: ',estimate_group))
+
+  data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(new_assay_data)),
+                                                       rowData=new_row_data, colData = col_data)
+
+  EMPT@colData <- data.se@colData
+  EMPT@assays <-data.se@assays
+  EMPT@NAMES <-data.se@NAMES
+  EMPT@elementMetadata <-data.se@elementMetadata
+  EMPT@metadata <-data.se@metadata
+
+
+  .get.estimate_group.EMPT(EMPT) <- estimate_group
+  .get.message_info.EMPT(EMPT) <- message_info
+  .get.history.EMPT(EMPT) <- call
+  .get.method.EMPT(EMPT) <- 'collapse'
+  .get.algorithm.EMPT(EMPT) <- 'collapse_byrow'
+  .get.info.EMPT(EMPT) <- 'EMP_assay_data'
+
+  if (action == 'add') {
+    return(EMPT)
+  }else if(action == 'get') {
+    return(.get.result.EMPT(EMPT))
+  }else{
+    warning('action should be one of add or get!')
+  }
+}
+
+#' @importFrom purrr reduce
+#' @noRd
+.collpseBygroup.tibble <- function(df,estimate_group,collapse_sep=' ') {
+  idx <- df  %>% dplyr::select(-!!estimate_group) %>% colnames()
+  old_col_name <- df %>% colnames()
+  data_deposit <- list()
+  for (i in idx) {
+    df %>%
+      dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
+      dplyr::summarise(!!i := paste0(unique(!!dplyr::sym(i)), collapse = collapse_sep ) ) -> data_deposit[[i]]
+  }
+
+  combined_df <- purrr::reduce(data_deposit, dplyr::full_join, by = estimate_group)
+
+  for (i in old_col_name) {
+    attr(combined_df[[i]], "raw_info")  <- i
+  }
+
+  combined_df %<>% dplyr::rename(old_feature = feature,
+                                 feature = !!dplyr::sym(estimate_group))
+
+  return(combined_df)
+}
+
+
+#' Title
+#'
+#' @param beta_obj wait_for_add
+#' @param top_number wait_for_add
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' # add example
+EMP_estimate_sample <- function(beta_obj,top_number = NULL){
+  pc_data  <- beta_obj$pc_data
+
+  # 计算近点中心点
+  core_point <- pc_data %>%
+    group_by(Group) %>%
+    summarise(median_PC1_within = median(PC1),median_PC2_within = median(PC2)) %>%
+    dplyr::full_join(.,pc_data,by = 'Group')
+
+  # 计算远点中心并于近点中心合并
+  pre_data <- pc_data %>%
+    group_by(Group) %>%
+    summarise(median_PC1_without = median(PC1),median_PC2_without = median(PC2)) %>%
+    mutate(Group = recode(Group, "Control" = "Insomnia", "Insomnia" = "Control")) %>% dplyr::full_join(.,core_point,by = 'Group')
+
+
+  result <- pre_data %>%
+    mutate(dis_within = c(sqrt( (PC1-median_PC1_within)**2 + (PC2-median_PC2_within)**2 )),
+           dis_without = c(sqrt( (PC1-median_PC1_without)**2 + (PC2-median_PC2_without)**2 )) ) %>%
+    mutate(dis_fold= log(abs(dis_without/dis_within))) %>%
+    mutate(vector1_start = c((PC1 - median_PC1_within)),
+           vector1_end = c((PC2 - median_PC2_within)),
+           vector2_start = c((PC1 - median_PC1_without)),
+           vector2_end = c((PC2 - median_PC2_without))) %>%
+    rowwise() %>%
+    mutate(dis_cosine = cosine(c(vector1_start,vector1_end),c(vector2_start,vector2_end))) %>%
+    mutate(dis_index = dis_fold * dis_cosine) %>%
+    mutate(dis_index = ifelse(dis_fold < 0 | dis_cosine < 0, -abs(dis_index), dis_index)) %>%
+    select(primary,Group,dis_index,dis_fold,dis_cosine,everything())
+
+  if (is.null(top_number)) {
+    return(result)
+  }else {
+    result %<>% group_by(Group) %>%
+      dplyr::top_n(top_number, dis_index)
+    return(result)
+  }
+}
+
+# 计算向量之间的夹角余弦值
+#' Title
+#'
+#' @param vector1 wait_for_add
+#' @param vector2 wait_for_add
+#'
+#' @return xx object
+#' @export 
+#'
+#' @examples
+#' # add example
+cosine <- function(vector1,vector2) {
+    sum(vector1 * vector2) / (sqrt(sum(vector1^2)) * sqrt(sum(vector2^2)))
+}
+
