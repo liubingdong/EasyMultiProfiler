@@ -23,9 +23,7 @@
 #'
 #' @examples
 #' # add example
-EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',
-                               na_string=c('NA','null',''),collapse_sep=' ',
-                               action='add') {
+EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -42,66 +40,66 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',
   }else {
     stop('Please check the input data')
   }
-
+  
   # check the df attr
-  df_attr_info <- EMPT@deposit2[['df_attr_info']]
-  if (!is.null(df_attr_info)) {
-    if (df_attr_info$feature == estimate_group) {
+  df_attr_row <- EMPT@deposit2[['df_attr_row']]
+  if (!is.null(df_attr_row)) {
+    if (df_attr_row$feature == estimate_group) {
       stop('estimate_group parameter should be different in a serious of EMP_collapse_byrow! ')
     }
   }
 
-  new_assay_data <- EMPT %>%
+  new_assay_data <- EMPT %>% 
     tidybulk::tidybulk() %>%
     dplyr::select(.sample,counts,!!estimate_group) %>%
     dplyr::rename(primary=.sample,feature=!!estimate_group) %>%
     tidyr::drop_na() %>%
-    dplyr::filter(!feature %in% !!na_string) %>%
+    dplyr::filter(!feature %in% !!na_string) %>% 
     dplyr::group_by(primary, feature) %>%
-    dplyr::summarise(counts = .perform_operation(counts,method),.groups='drop') %>%
+    dplyr::summarise(counts = .perform_operation(counts,method),.groups='drop') %>% 
     tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
     tibble::column_to_rownames('primary') %>% t()
+  
 
-
-  if (is.null(df_attr_info)) {
-    new_row_data <- .get.row_info.EMPT(EMPT)  %>%
+  if (is.null(df_attr_row)) {
+    new_row_data <- .get.row_info.EMPT(EMPT)  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
-      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep)
-    EMPT@deposit2[['df_attr_info']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
+      .collpseBygroup.tibble(estimate_group = estimate_group,method=method,collapse_by='row',collapse_sep=collapse_sep,...)
+    EMPT@deposit2[['df_attr_row']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
   }else {
     row_data <- .get.row_info.EMPT(EMPT)
-    colnames(row_data) <- EMPT@deposit2[['df_attr_info']][1,] ## Recovery the raw name
-    new_row_data <- row_data  %>%
+    colnames(row_data) <- EMPT@deposit2[['df_attr_row']][1,] ## Recovery the raw name
+    new_row_data <- row_data  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
-      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep)
-    EMPT@deposit2[['df_attr_info']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
+      .collpseBygroup.tibble(estimate_group = estimate_group,method=method,collapse_by='row',collapse_sep=collapse_sep,...)
+    EMPT@deposit2[['df_attr_row']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
   }
-
+  
   col_data <- colData(EMPT)
-
+  
   message_info <- list()
   message_info %<>% append(paste0('Feature changed!'))
   message_info %<>% append(paste0('Current feature: ',estimate_group))
-
+  
   data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(new_assay_data)),
                                                        rowData=new_row_data, colData = col_data)
-
+  
   EMPT@colData <- data.se@colData
   EMPT@assays <-data.se@assays
   EMPT@NAMES <-data.se@NAMES
   EMPT@elementMetadata <-data.se@elementMetadata
   EMPT@metadata <-data.se@metadata
 
-
+  
   .get.estimate_group.EMPT(EMPT) <- estimate_group
   .get.message_info.EMPT(EMPT) <- message_info
   .get.history.EMPT(EMPT) <- call
   .get.method.EMPT(EMPT) <- 'collapse'
   .get.algorithm.EMPT(EMPT) <- 'collapse_byrow'
   .get.info.EMPT(EMPT) <- 'EMP_assay_data'
-
+  
   if (action == 'add') {
     return(EMPT)
   }else if(action == 'get') {
@@ -111,29 +109,212 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',
   }
 }
 
+
+#' Title
+#'
+#' @param x wait_for_add
+#' @param experiment wait_for_add
+#' @param estimate_group wait_for_add
+#' @param method wait_for_add
+#' @param na_string wait_for_add
+#' @param collapse_sep wait_for_add
+#' @param action wait_for_add
+#' @importFrom tidybulk tidybulk
+#' @importFrom dplyr select
+#' @importFrom dplyr rename
+#' @importFrom tidyr drop_na
+#' @importFrom dplyr filter
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
+#' @importFrom tidyr pivot_wider
+#' @importFrom tibble column_to_rownames
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' # add example
+
+
+EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
+  call <- match.call()
+  if (inherits(x,"MultiAssayExperiment")) {
+    EMPT <- .as.EMPT(x,
+                     experiment = experiment)
+    estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+    .get.estimate_group.EMPT(EMPT) <- estimate_group
+    .get.experiment.EMPT(EMPT) <- experiment
+    class(EMPT) <- 'EMP_assay_data'
+  }else if(inherits(x,'EMPT')){
+    EMPT <- x
+    estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+    experiment <- .get.experiment.EMPT(EMPT)
+    class(EMPT) <- 'EMP_assay_data'
+  }else {
+    stop('Please check the input data')
+  }
+  
+  # check the df attr
+  df_attr_col <- EMPT@deposit2[['df_attr_col']]
+  if (!is.null(df_attr_col)) {
+    if (df_attr_col$primary == estimate_group) {
+      stop('estimate_group parameter should be different in a serious of EMP_collapse_byrow! ')
+    }
+  }
+  
+  new_assay_data <- EMPT %>% 
+    tidybulk::tidybulk() %>%
+    dplyr::select(.feature,counts,!!estimate_group) %>%
+    dplyr::rename(primary=!!estimate_group,feature=.feature) %>%
+    tidyr::drop_na() %>%
+    dplyr::filter(!primary %in% !!na_string) %>% 
+    dplyr::group_by(primary, feature) %>%
+    dplyr::summarise(counts = .perform_operation(counts,method),.groups='drop') %>%
+    tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
+    tibble::column_to_rownames('primary') %>% t()
+  
+  
+  if (is.null(df_attr_col)) {
+    new_col_data <- .get.mapping.EMPT(EMPT)  %>% 
+      tidyr::drop_na(!!estimate_group) %>%
+      dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
+      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep,collapse_by = 'col',method=method,...)
+    EMPT@deposit2[['df_attr_col']] <- lapply(new_col_data, attr, "raw_info")%>% as.data.frame()
+    
+  }else {
+    col_data <- .get.mapping.EMPT(EMPT)
+    colnames(col_data) <- EMPT@deposit2[['df_attr_col']][1,] ## Recovery the raw name
+    new_col_data <- col_data  %>% 
+      tidyr::drop_na(!!estimate_group) %>%
+      dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
+      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep,collapse_by = 'col',method=method,...)
+    EMPT@deposit2[['df_attr_col']] <- lapply(new_col_data, attr, "raw_info")%>% as.data.frame()
+  }
+  
+  row_data <- EMPT %>% EMP_rowdata_extract()
+  new_col_data %<>% tibble::column_to_rownames('primary')
+    
+  message_info <- list()
+  message_info %<>% append(paste0('Primary changed!'))
+  message_info %<>% append(paste0('Current primary: ',estimate_group))
+  
+  data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(new_assay_data)),
+                                                        rowData=row_data, colData = new_col_data)
+  
+  
+  EMPT@colData <- data.se@colData
+  EMPT@assays <-data.se@assays
+  EMPT@NAMES <-data.se@NAMES
+  EMPT@elementMetadata <-data.se@elementMetadata
+  EMPT@metadata <-data.se@metadata
+  
+  
+  .get.estimate_group.EMPT(EMPT) <- estimate_group
+  .get.message_info.EMPT(EMPT) <- message_info
+  .get.history.EMPT(EMPT) <- call
+  .get.method.EMPT(EMPT) <- 'collapse'
+  .get.algorithm.EMPT(EMPT) <- 'collapse_bycol'
+  .get.info.EMPT(EMPT) <- 'EMP_assay_data'
+  
+  if (action == 'add') {
+    return(EMPT)
+  }else if(action == 'get') {
+    return(.get.result.EMPT(EMPT))
+  }else{
+    warning('action should be one of add or get!')
+  }
+}
+
+
+
+
+
 #' @importFrom purrr reduce
 #' @noRd
-.collpseBygroup.tibble <- function(df,estimate_group,collapse_sep=' ') {
+.collpseBygroup.tibble <- function(df,estimate_group,method,collapse_sep=' ',collapse_by,...) {
   idx <- df  %>% dplyr::select(-!!estimate_group) %>% colnames()
   old_col_name <- df %>% colnames()
   data_deposit <- list()
-  for (i in idx) {
+
+
+  idx_numeric <- df  %>% dplyr::select(-!!estimate_group) %>% dplyr::select(where(is.numeric)) %>% colnames()
+  idx_character <- df  %>% dplyr::select(-!!estimate_group) %>% dplyr::select(where(is.character)) %>% colnames()
+  
+  for (i in idx_character) {
     df %>%
       dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
       dplyr::summarise(!!i := paste0(unique(!!dplyr::sym(i)), collapse = collapse_sep ) ) -> data_deposit[[i]]
   }
 
-  combined_df <- purrr::reduce(data_deposit, dplyr::full_join, by = estimate_group)
+  for (i in idx_numeric) {
+    df %>%
+      dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
+      dplyr::summarise(!!i := .perform_operation(!!dplyr::sym(i),method,...),.groups='drop') -> data_deposit[[i]]
+  }
 
+  combined_df <- purrr::reduce(data_deposit, dplyr::full_join, by = estimate_group)
+  
   for (i in old_col_name) {
     attr(combined_df[[i]], "raw_info")  <- i
   }
-
-  combined_df %<>% dplyr::rename(old_feature = feature,
+  
+  if (collapse_by == 'row') {
+      combined_df %<>% dplyr::rename(old_feature = feature,
                                  feature = !!dplyr::sym(estimate_group))
+  }else if (collapse_by == 'col') {
+      combined_df %<>% dplyr::rename(old_primary = primary,
+                                 primary = !!dplyr::sym(estimate_group))
+  }
 
+  
   return(combined_df)
 }
+
+
+
+#' Title
+#'
+#' @param x wait_for_add
+#' @param experiment wait_for_add
+#' @param estimate_group wait_for_add
+#' @param method wait_for_add
+#' @param na_string wait_for_add
+#' @param collapse_sep wait_for_add
+#' @param action wait_for_add
+#' @importFrom tidybulk tidybulk
+#' @importFrom dplyr select
+#' @importFrom dplyr rename
+#' @importFrom tidyr drop_na
+#' @importFrom dplyr filter
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarise
+#' @importFrom tidyr pivot_wider
+#' @importFrom tibble column_to_rownames
+#' @importFrom SummarizedExperiment SummarizedExperiment
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' # add example
+EMP_collapse <- function (x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',action='add',...) {
+  if (collapse_by == 'row') {
+    deposit <- EMP_collapse_byrow(x,experiment,
+                                  estimate_group,method,
+                                  na_string,collapse_sep,action,...)
+  }else if (collapse_by == 'col') {
+    deposit <- EMP_collapse_bycol(x,experiment,
+                                  estimate_group,method,
+                                  na_string,collapse_sep,action,...)
+  }else{
+    stop("Please set parameter collapse_by (row or col)! ")
+  }
+  return(deposit)
+}
+
+
+
 
 
 #' Title

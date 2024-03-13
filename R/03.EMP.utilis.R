@@ -137,7 +137,11 @@ setMethod(".get.plot_deposit.EMP<-","EMP",function(obj,info,value,...){
 })
 
 
-
+setGeneric(".get.experiment.EMP",function(obj,info,...) standardGeneric(".get.experiment.EMP"))
+setMethod(".get.experiment.EMP","EMP",function(obj,info,...){
+  experiment_name <-names(obj@ExperimentList)
+  experiment_name
+})
 
 
 

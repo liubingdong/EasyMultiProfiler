@@ -83,7 +83,8 @@
 as.EMP <- function(object,select=NULL) {
   call <- match.call()
   deposit <- new(Class = 'EMP')
-
+  
+  
   if (inherits(object,'MultiAssayExperiment')) {
     if (is.null(select)) {
       stop("When input data is MultiAssayExperiment, parameter select need to be specified! ")
@@ -98,18 +99,34 @@ as.EMP <- function(object,select=NULL) {
   }else {
     stop("Please check the input data!")
   }
-
+  
   experiment_name <- c()
   for (i in data_list) {
-    experiment_name <- append(experiment_name,.get.experiment.EMPT(i))
+    if (inherits(i,'EMP')) {
+      each_experiment_name <- .get.experiment.EMP(i)
+    }else if (inherits(i,'EMPT')) {
+      each_experiment_name <- .get.experiment.EMPT(i)
+    }
+    experiment_name  <- append(experiment_name,each_experiment_name)
   }
-
   experiment_name <- .check_duplicate(experiment_name)
-
-  for (i in 1:length(data_list)) {
-    .get.ExperimentList.EMP(deposit)[[experiment_name[i]]] <- data_list[[i]]
-    .get.history.EMP(deposit,all = TRUE,experiment=experiment_name[[i]]) <- .get.history.EMPT(data_list[[i]])
-   }
+  
+  real_data_list <- list()
+  for (i in data_list) {
+    if (inherits(i,'EMP')) {
+      each_data <- i@ExperimentList
+    }else if (inherits(i,'EMPT')) {
+      each_data <- i
+    }
+    counts <- length(real_data_list) +1
+    real_data_list[[counts]] <- each_data
+  }
+  real_data_list %<>% unlist()
+  
+  for (i in 1:length(real_data_list)) {
+    .get.ExperimentList.EMP(deposit)[[experiment_name[i]]] <- real_data_list[[i]]
+    .get.history.EMP(deposit,all = TRUE,experiment=experiment_name[[i]]) <- .get.history.EMPT(real_data_list[[i]])
+  }
   .get.history.EMP(deposit,all = FALSE) <- call
   .get.info.EMP(deposit) <- 'EMP_list_data'
   return(deposit)
@@ -216,11 +233,15 @@ as.EMP <- function(object,select=NULL) {
   dup_indices <- duplicated(string_vector)
   if (any(dup_indices)) {
     # 在重复元素后添加序号
-    string_vector[dup_indices] <- paste0(string_vector[dup_indices],
-                                           ave(seq_along(string_vector),
-                                               string_vector,
-                                               FUN = seq_along)[dup_indices])
-
+    for(i in which(dup_indices)){
+      string_original <- string_vector[i]
+      string_counter <- 1
+      while(string_original %in% string_vector){
+        string_counter <- string_counter + 1
+        string_original <- paste0(string_vector[i], string_counter)
+      }
+      string_vector[i] <- string_original
+    }
   }
   return(string_vector)
 }

@@ -47,7 +47,7 @@ setClass("EMP",
 ##'
 ##' @docType class
 ##' @slot deposit deposit               
-##' @slot deposit2 deposit2
+##' @slot deposit2 deposit2 
 ##' @slot plot_deposit plot_deposit
 ##' @slot deposit_append deposit_append
 ##' @slot deposit_info deposit_info
@@ -219,4 +219,20 @@ setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
   EMP_curveplot_enrich(obj,...)
 })
+
+
+`+.EMPT` <- function(...) {
+  data_list <- list(...) %>% unlist()
+  result <- as.EMP(data_list)
+  return(result)
+}
+
+`+.EMP` <- function(...) {
+  data_list <- list(...) %>% unlist()
+  result <- as.EMP(data_list)
+  return(result)
+}
+
+
+
 
