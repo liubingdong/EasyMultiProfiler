@@ -11,6 +11,7 @@ License: Artistic-2.0
 Encoding: UTF-8
 Imports: 
     ape,
+    bigstatsr,
     clusterProfiler,
     dendextend,
     DESeq2,

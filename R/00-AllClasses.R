@@ -167,7 +167,7 @@ setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
 
 
-
+#' @export
 setGeneric("EMP_assay_extract",function(obj,...) standardGeneric("EMP_assay_extract"))
 setMethod("EMP_assay_extract","MultiAssayExperiment",function(obj,...){
   .EMP_assay_extract_EMP(obj,...)
@@ -178,6 +178,7 @@ setMethod("EMP_assay_extract","EMPT",function(obj,...){
 
 
 ## boxplot
+#' @export
 setGeneric("EMP_boxplot",function(obj,...) standardGeneric("EMP_boxplot"))
 
 setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj,...){
@@ -193,12 +194,14 @@ setMethod("EMP_boxplot","EMP_assay_data",function(obj,...){
 })
 
 ## scatterplot
+#' @export
 setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"))
 setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
   EMP_scatterplot_reduce_dimension(obj,...)
 })
 
 ## dotplot
+#' @export
 setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 
 setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
@@ -207,6 +210,7 @@ setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
 
 
 ## netplot
+#' @export
 setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 
 setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
@@ -214,6 +218,7 @@ setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
 })
 
 ## curveplot
+#' @export
 setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 
 setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
