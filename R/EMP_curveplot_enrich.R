@@ -54,7 +54,7 @@ EMP_curveplot_enrich <- function(EMPT,plot_category = 1,seed =123,...) {
            withr::with_seed(seed,EMP_curveplot_enrich_default(EMPT,...))
          },
          "2" = {
-           withr::with_seed(seed,EMP_curveplot_enrich_2(EMPT,...))
+           # withr::with_seed(seed,EMP_curveplot_enrich_2(EMPT,...))
          }
 
   )

@@ -3,8 +3,7 @@
                                     exact=F,action='add') {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
-    EMPT <- .as.EMPT(x,
-                     experiment = experiment)
+    EMPT <- .as.EMPT(x, experiment = experiment)
   }else if(inherits(x,'EMPT')) {
     EMPT <-x
   }
@@ -13,7 +12,7 @@
                                    exact=exact,action = 'add') ## action must be add here!
   if (action == 'add') {
     return(EMPT)
-  }else if(action == 'get') {
+  } else if(action == 'get') {
     return(.get.result.EMPT(EMPT))
   }else{
     warning('action should be one of add or get!')
@@ -21,8 +20,9 @@
 }
 
 .EMP_assay_extract_EMPT <- function (EMPT,
-                               pattern_ref = 'Name',pattern=NULL,
+                               pattern_ref = 'Name',pattern = NULL,
                                exact=F,action = 'add') {
+  feature <- primary <- NULL
   call <- match.call()
 
   assay_content <-.get.assay.EMPT(EMPT)
@@ -55,8 +55,8 @@
 
 #' Title
 #'
-#' @param obj wait_for_add
-#' @param experiment wait_for_add
+#' @param obj MultiAssayExperiment object 
+#' @param experiment the choosed 
 #' @param pattern_ref wait_for_add
 #' @param pattern wait_for_add
 #' @param exact wait_for_add
@@ -115,6 +115,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
 #' @examples
 #' # add example
 EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_name='undefined',action='get'){
+    assay <- colname <- primary <- NULL
     call <- match.call()
 
     colData(obj) %>% as.data.frame()%>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() -> coldata

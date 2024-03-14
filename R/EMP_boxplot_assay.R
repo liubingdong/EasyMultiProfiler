@@ -1,53 +1,5 @@
 #' Title
 #'
-#' @param obj wait_for_add
-#' @param method wait_for_add
-#' @param x wait_for_add
-#' @param y wait_for_add
-#' @param fill wait_for_add
-#' @param facet_wrap wait_for_add
-#' @param long_data wait_for_add
-#' @param html wait_for_add
-#' @param html_width wait_for_add
-#' @param html_height wait_for_add
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
-EMP_boxplot_raw <- function (obj,method = 'wilcox.test',x = 'Group',y = 'abundance', fill = 'Group',facet_wrap = 'ID',long_data = F,html=F,html_width=NULL,html_height=NULL) {
-  if (long_data == F) {
-    obj %<>%  tidyr::pivot_longer(cols = c(-primary,-Group),
-                           names_to = 'ID',
-                           values_to = 'abundance')
-  }
-
-  group_combn <- combn(as.character(unique(obj$Group)),2)
-  compare <- plyr::alply(group_combn,2)
-
-  obj %>%
-    ggplot(., aes(x = !!dplyr::sym(x), y = !!dplyr::sym(y), fill = !!dplyr::sym(fill))) +
-    geom_boxplot(outlier.color=NA) +
-    ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',!!dplyr::sym(y))),shape=21,position = position_jitter(height = .00000001))+
-    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
-    facet_wrap(paste0(facet_wrap,'~.'), scales = 'free', strip.position = 'right') +
-    xlab(NULL) +
-    ylab("Abundance") +
-    theme_bw() +
-    theme(strip.background = element_rect(color=NA), panel.grid = element_blank(), legend.position = 'none') +
-    scale_fill_manual(values = c("#E64B35FF","#4DBBD5FF","#00A087FF","#3C5488FF","#F39B7FFF","#8491B4FF","#B2182B","#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7","#CC6666")) -> p1
-  if (html == F){
-    return(p1)
-  } else {
-    p1_html <- ggiraph::girafe(code = print(p1),width = html_width,height = html_height)
-    return(p1_html)
-  }
-
-}
-
-#' Title
-#'
 #' @param EMPT wait_for_add
 #' @param method wait_for_add
 #' @param estimate_group wait_for_add

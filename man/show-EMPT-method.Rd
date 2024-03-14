@@ -7,7 +7,7 @@
 \S4method{show}{EMPT}(object)
 }
 \arguments{
-\item{EMPT}{wait_for_add}
+\item{object}{wait_for_add}
 }
 \value{
 xx object

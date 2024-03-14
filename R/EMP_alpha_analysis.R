@@ -5,8 +5,10 @@
 #' @importFrom tibble column_to_rownames
 #' @importFrom vegan diversity
 #' @importFrom dplyr select
+#' @importFrom dplyr everything
 #' @noRd
 .EMP_alpha_analysis <- function(EMPT,...) {
+  primary <- NULL
   assay_data  <- EMPT %>%
     .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
   alpha_shannon <- vegan::diversity(assay_data,,index = 'shannon',...)

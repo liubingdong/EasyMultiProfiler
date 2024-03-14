@@ -9,6 +9,7 @@
 #' @importFrom ropls opls
 #' @noRd
 .EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL){
+  p1 <- p2 <- p3 <- R2X <- NULL
   deposit <- list()
   assay_data  <- EMPT %>%
     .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
@@ -135,7 +136,7 @@
 #'
 #' @examples
 #' # add example
-EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,
+EMP_dimension_analysis <- function(x,experiment,method='pca',distance=NULL,
                                    estimate_group=NULL,action='add'){
   call <- match.call()
 
@@ -157,7 +158,8 @@ EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,
     deposit <- list()
     deposit[['dimension_coordinate']] <- EMPT@deposit$dimension_coordinate
     deposit[['dimension_axis']] <- EMPT@deposit$dimension_axis
-    try(EMPT@deposit[['dimension_VIP']] <- vip_score,silent = T)
+    # try(EMPT@deposit[['dimension_VIP']] <- vip_score, silent = T)
+    try(deposit[['dimension_VIP']] <- EMPT@deposit$dimension_VIP, silent = T)
     return(deposit)
   }else{
     warning('action should be one of add or get!')

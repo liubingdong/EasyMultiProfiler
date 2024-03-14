@@ -13,9 +13,9 @@ EMP_rowdata_extract(
 )
 }
 \arguments{
-\item{obj}{wait_for_add}
+\item{obj}{MultiAssayExperiment object}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{the choosed}
 
 \item{pattern_ref}{wait_for_add}
 

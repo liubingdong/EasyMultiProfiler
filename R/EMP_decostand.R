@@ -1,7 +1,7 @@
 #' @importFrom vegan decostand
 #' @noRd
 .EMP_decostand <- function(EMPT,bySample=T,logbase,pseudocount=pseudocount,...){
-
+  primary <- NULL
   MARGIN <- ifelse(bySample, 2, 1)
 
   .get.assay.EMPT(EMPT) -> assay_data
@@ -22,13 +22,13 @@
   ## .calc_rclr unused argument pseudocount
   if (method == 'rclr') {
     assay_decostand_data <- assay_data %>%  tibble::column_to_rownames('primary') %>% t() %>%
-    vegan::decostand(., method = method, MARGIN = MARGIN,logbase=logbase,...)
+    vegan::decostand(method = method, MARGIN = MARGIN,logbase=logbase,...)
   }else if(method == 'integer'){
     assay_decostand_data <- assay_data %>%  tibble::column_to_rownames('primary') %>% t() %>%
      round(digits = 0)
   }else {
     assay_decostand_data <- assay_data %>%  tibble::column_to_rownames('primary') %>% t() %>%
-    vegan::decostand(., method = method, MARGIN = MARGIN,logbase=logbase,pseudocount=pseudocount,...)
+    vegan::decostand(method = method, MARGIN = MARGIN,logbase=logbase,pseudocount=pseudocount,...)
   }
 
 

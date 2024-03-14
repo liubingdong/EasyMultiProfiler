@@ -1,11 +1,11 @@
 
 #' Title
 #'
-#' @param EMPT wait_for_add
+#' @param object wait_for_add
 #'
 #' @return xx object
-#' @export
-#'
+##' @importFrom methods show
+##' @exportMethod show
 #' @examples
 #' # add example
 setMethod("show", "EMPT",
@@ -166,7 +166,7 @@ setMethod("show", "EMPT",
 
 #' Title
 #'
-#' @param EMP wait_for_add
+#' @param object wait_for_add
 #'
 #' @return xx object
 #' @export

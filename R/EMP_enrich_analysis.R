@@ -46,8 +46,14 @@
 #' Title
 #'
 #' @param x wait_for_add
-#' @param ... wait_for_add
+#' @param condition filter condition
+#' @param minGSSize wait_for_add
+#' @param maxGSSize wait_for_add
+#' @param keyType wait_for_add
+#' @param KEGG_Type wait_for_add
+#' @param species wait_for_add
 #' @param action wait_for_add
+#' @param ... wait_for_add
 #'
 #' @return xx object
 #' @export

@@ -10,7 +10,7 @@
 .EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',...) {
   #call <- match.call()
 
-
+  var1 <- NULL
   if (is.null(select)) {
     data1 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%
       dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
@@ -50,8 +50,8 @@
   data1_sample_num <- rownames(data1) %>% unique %>% length()
   data2_sample_num <- rownames(data2) %>% unique %>% length()
 
-  data1 %<>% dplyr::filter(rownames(.) %in% real_sample)
-  data2 %<>% dplyr::filter(rownames(.) %in% real_sample)
+  data1 <- dplyr::filter(rownames(data1) %in% real_sample)
+  data2 <- dplyr::filter(rownames(data2) %in% real_sample)
   df.cor.p<-agricolae_correlation(x=data1,y=data2,method = method,...)
 
   df <- df.cor.p$correlation %>%

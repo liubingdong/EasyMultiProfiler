@@ -44,7 +44,7 @@
 
 .EMP_GSEA_analysis_Signal2Noise <- function(EMPT,estimate_group,group_level=NULL,keyType=NULL,KEGG_Type='KEGG',species = "all",
                                              pseudocount=0.0001,pvalueCutoff=1,threshold=NULL,seed=T,...){
-  
+    Signal2Noise <- vs <- NULL
     Signal2Noise_data <- .Signal2Noise_caculate(EMPT,estimate_group,group_level) %>%
                             dplyr::mutate(Signal2Noise = replace(Signal2Noise, Signal2Noise == 0, pseudocount)) %>%
                             tidyr::drop_na() 
@@ -54,7 +54,7 @@
       Signal2Noise_data %<>% dplyr::filter(Signal2Noise >= threshold)
     }
     
-    Signal2Noise_data %<>% dplyr::arrange(desc(Signal2Noise)) ## rank the feature
+    Signal2Noise_data %<>% dplyr::arrange(dplyr::desc(Signal2Noise)) ## rank the feature
     
     # get the named vector
     geneList <- Signal2Noise_data[['Signal2Noise']]
@@ -76,15 +76,16 @@
     
     EMPT@deposit[['enrich_data']] <- enrich.data
 
-    .get.estimate_group_info.EMPT(EMPT) <- Signal2Noise_data %>% dplyr::pull(vs) %>% unique()
+    .get.estimate_group_info.EMPT(EMPT) <- Signal2Noise_data %>% dplyr::pull(var = vs) %>% unique()
     message('VS info: ',.get.estimate_group_info.EMPT(EMPT))
     message('The Signal2Noise values are arranged in descending order.')
     return(EMPT)
 }
 
-
+#' @importFrom dplyr desc
 .EMP_GSEA_analysis_cor <- function(EMPT,estimate_group,cor_method='pearson',keyType=NULL,KEGG_Type='KEGG', species = "all",
                                     pvalueCutoff=1,threshold_r=0,threshold_p=0.05,seed=T,...){
+      primary <- NULL
       if(is.null(estimate_group)){
         stop('GSEA based on correlation analysis need estimate_group parameter!')
       }
@@ -106,7 +107,7 @@
       
       data.r %<>% as.data.frame() %>% 
         dplyr::filter(!!dplyr::sym(estimate_group) != 0) %>% ## filter the irrelevant feature
-        dplyr::arrange(desc(!!dplyr::sym(estimate_group))) 
+        dplyr::arrange(dplyr::desc(!!dplyr::sym(estimate_group))) 
   
     
     # get the named vector
@@ -136,8 +137,9 @@
     return(EMPT)
 }
 
+#' @importFrom dplyr desc
 .EMP_GSEA_analysis_log2FC <- function(EMPT,condition,keyType=NULL,KEGG_Type='KEGG',species = "all",pvalueCutoff=1,seed=T,...){
-  
+  log2FC <- NULL
   data <- EMPT@deposit[['diff_analysis_result']] 
 
   if (is.null(data)) {
@@ -183,8 +185,6 @@
 #' @param method wait_for_add
 #' @param cor_method wait_for_add
 #' @param group_level wait_for_add
-#' @param type wait_for_add
-#' @param use_cached wait_for_add
 #' @param pseudocount wait_for_add
 #' @param pvalueCutoff wait_for_add
 #' @param threshold wait_for_add
@@ -192,6 +192,9 @@
 #' @param threshold_p wait_for_add
 #' @param seed wait_for_add
 #' @param action wait_for_add
+#' @param keyType keyType
+#' @param KEGG_Type KEGG_Type
+#' @param species species
 #' @param ... wait_for_add
 #'
 #' @return xx object

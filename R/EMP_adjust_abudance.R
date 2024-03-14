@@ -23,6 +23,7 @@
 #' @importFrom stats setNames
 #' @importFrom utils combn
 #' @importFrom utils read.table
+#' @importFrom SummarizedExperiment assay
 #' @noRd
 .EMP_adjust_abudance <- function(EMPT,method,.factor_unwanted,.factor_of_interest,...) {
 

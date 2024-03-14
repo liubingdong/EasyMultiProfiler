@@ -24,7 +24,7 @@
 EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=F,
                                  method='average',h=NULL,groupLabels=T,
                                  cluster=NULL,action='add',...) {
-
+  colname <- primary <- NULL
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
 

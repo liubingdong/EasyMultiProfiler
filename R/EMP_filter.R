@@ -29,6 +29,7 @@ EMP_filterBysample <- function(obj,condition,action='select'){
 }
 
 .filter.EMPT <- function(EMPT,filterSample=NULL,filterFeature=NULL,action='kick') {
+  primary <- feature <- NULL
   if (action == 'kick') {
     if(!is.null(filterSample)) {
       .get.mapping.EMPT(EMPT) <- .get.mapping.EMPT(EMPT) %>%
@@ -83,7 +84,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
     if (is.null(experiment)) {
       check_obj <-"MultiAssayExperiment"
     }else{
-      obj %<>% .as.EMPT(experiment=experiment,assay_name=assay_name)
+      obj %<>% .as.EMPT(experiment = experiment)  
       check_obj <-'EMPT'
       .get.method.EMPT(obj) <- 'filter'
       .get.history.EMPT(obj) <- call
@@ -186,6 +187,8 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
 
 
 .filter.deposit.EMPT <- function(EMPT,real_sample,real_feature){
+  Result <- attribute <- attribute2 <- affect_when_sample_changed <- affect_when_feature_changed <- NULL
+  primary <- feature <- NULL
   result_names <- names(EMPT@deposit)
   deposit_info <- .get.deposit_info.EMPT(EMPT) %>% dplyr::filter(Result %in% !!result_names)
 
@@ -219,9 +222,13 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
         if (result_attribute2 == 'normal') {
           EMPT@deposit[[i]] %<>% dplyr::filter(primary %in% real_sample)
         }else if(result_attribute2 == 'diagonal'){
+          # EMPT@deposit[[i]] %<>% as.data.frame() %>%
+          #   dplyr::select(dplyr::all_of(!!real_sample)) %>%
+          #   dplyr::filter(rownames(.) %in% !!real_sample)
+
           EMPT@deposit[[i]] %<>% as.data.frame() %>%
-            dplyr::select(dplyr::all_of(!!real_sample)) %>%
-            dplyr::filter(rownames(.) %in% !!real_sample)
+            dplyr::select(dplyr::all_of(!!real_sample))
+          EMPT@deposit[[i]] <- dplyr::filter(rownames(EMPT@deposit[[i]]) %in% !!real_sample)
         }else{
           stop("The attribute2 in the deposit_info should be normal or diagonal!")
         }
@@ -263,6 +270,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
 
 
 .filter.merge.EMPT <- function(EMPT){
+  Result <- attribute <- attribute2 <- NULL
   result_names <- names(EMPT@deposit)
   deposit_info <- .get.deposit_info.EMPT(EMPT) %>%
     dplyr::filter(Result %in% !!result_names ) %>%

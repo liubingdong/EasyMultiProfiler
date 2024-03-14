@@ -2,7 +2,19 @@
 kegg_rest <- getFromNamespace("kegg_rest", "clusterProfiler")
 
 #########
-# 原版的仅支持pathway，不支持module，也不支持单物种。
+
+#' Title
+#'
+#' @param KEGG_Type KEGG_Type
+#' @param species species
+#' @importFrom gson gson
+#' @importFrom yulab.utils yread
+#'
+#' @return gson object
+#' @export 
+#'
+#' @examples
+#' # xx
 gson_cpd2 <- function(KEGG_Type = "KEGG", species = "all") {
     if (KEGG_Type == "KEGG") {
         target <- "pathway"
@@ -22,7 +34,7 @@ gson_cpd2 <- function(KEGG_Type = "KEGG", species = "all") {
     k2[, 1]  <- gsub("path:", "", k2[, 1])
     if (species != "all") {
         url_pathway2gene <- paste0("https://rest.kegg.jp/link/", species, "/", target, collapse="")
-        pathway2gene <- clusterProfiler:::kegg_rest(url_pathway2gene)
+        pathway2gene <- kegg_rest(url_pathway2gene)
         if (KEGG_Type == "KEGG") {
             pathways <- gsub(paste0("path:", species), "map", pathway2gene[, 1])
         } else {
@@ -34,9 +46,9 @@ gson_cpd2 <- function(KEGG_Type = "KEGG", species = "all") {
     
     gsid2gene <- setNames(k1, c("gsid", "gene"))
     gsid2name <- setNames(k2, c("gsid", "name"))
-    y <- yulab.utils::yread("https://rest.kegg.jp/info/cpd")
+    y <- yread("https://rest.kegg.jp/info/cpd")
     version <- sub("\\w+\\s+", "", y[grep('Release', y)])
-    gson::gson(
+    gson(
         gsid2gene = gsid2gene,
         gsid2name = gsid2name,
         species = species,
@@ -48,7 +60,18 @@ gson_cpd2 <- function(KEGG_Type = "KEGG", species = "all") {
 }
 
 
-# clusterProfiler有个同名函数gson_KEGG，因此改为gson_KEGG2
+
+#' Title
+#'
+#' @param keyType keyType
+#' @param KEGG_Type keyType
+#' @param species keyType
+#'
+#' @return gson object
+#' @export 
+#'
+#' @examples
+#' # xx
 gson_KEGG2 <- function(keyType = "ko", KEGG_Type = "KEGG", species = "all") {
     keyType <- match.arg(keyType, c("ko", "ec"))
     if (KEGG_Type == "KEGG") {
@@ -56,20 +79,20 @@ gson_KEGG2 <- function(keyType = "ko", KEGG_Type = "KEGG", species = "all") {
     } else {
         target <- "module"
     }
-    kegg_rest <- getFromNamespace("kegg_rest", "clusterProfiler")
+
     if (species == "all") {
         url_k1 <- paste0("https://rest.kegg.jp/link/", keyType, "/", target, collapse = "")
         k1 <- kegg_rest(url_k1)
     } else {
         url_pathway2gene <- paste0("https://rest.kegg.jp/link/", species, "/", target, collapse="")
-        pathway2gene <- clusterProfiler:::kegg_rest(url_pathway2gene)
+        pathway2gene <- kegg_rest(url_pathway2gene)
         if (KEGG_Type == "KEGG") {
             pathway2gene[, 1] <- gsub(paste0("path:", species), "map", pathway2gene[, 1])
         } else {
             pathway2gene[, 1] <- gsub(paste0("md:", species, "_"), "", pathway2gene[, 1])
         }
         url_id2gene <- paste0("https://rest.kegg.jp/link/", species, "/", keyType, collapse="")
-        id2gene <- clusterProfiler:::kegg_rest(url_id2gene)     
+        id2gene <- kegg_rest(url_id2gene)     
         k1 <- merge(id2gene, pathway2gene, by = "to")[, c(3, 2)]
         k1[, 2]  <-  gsub("[^:]+:", "",  k1[, 2])
     }
@@ -91,7 +114,7 @@ gson_KEGG2 <- function(keyType = "ko", KEGG_Type = "KEGG", species = "all") {
     } else {
         keytype <- "kegg_enzyme"
     }
-    gson::gson(
+    gson(
         gsid2gene = gsid2gene,
         gsid2name = gsid2name,
         species = species,
@@ -103,6 +126,18 @@ gson_KEGG2 <- function(keyType = "ko", KEGG_Type = "KEGG", species = "all") {
 }
 
 # 主函数
+#' Title
+#'
+#' @param keyType keyType
+#' @param KEGG_Type keyType
+#' @param species keyType
+#' @importFrom clusterProfiler gson_KEGG
+#'
+#' @return gson object
+#' @export
+#'
+#' @examples
+#' # xx
 build_gson <- function(keyType = "ko", KEGG_Type = "KEGG", species = "hsa") {
     keyType <-  tolower(keyType) |> 
         match.arg(choices = c("ko", "ec", "cpd", "entrezid"))
@@ -124,7 +159,7 @@ build_gson <- function(keyType = "ko", KEGG_Type = "KEGG", species = "hsa") {
         if (species == "all") {
             stop("When keyType is 'entrezid', a specific species must be specified, not 'all'.")
         } else {
-            return(clusterProfiler::gson_KEGG(species = species, KEGG_Type = KEGG_Type, keyType = "kegg"))
+            return(gson_KEGG(species = species, KEGG_Type = KEGG_Type, keyType = "kegg"))
         }
         
     }

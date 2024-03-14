@@ -7,7 +7,7 @@
 \S4method{show}{EMP}(object)
 }
 \arguments{
-\item{EMP}{wait_for_add}
+\item{object}{wait_for_add}
 }
 \value{
 xx object

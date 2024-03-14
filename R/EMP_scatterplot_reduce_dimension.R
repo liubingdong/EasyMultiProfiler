@@ -2,7 +2,7 @@
   result <- .get.plot_deposit.EMPT(obj,info = 'dimension_analysis_scatterplot')
   switch(plot,
          "p12" = print(result$pic$p12),
-         "p23" = print(resultpic$p23),
+         "p23" = print(result$pic$p23),
          "p13" = print(result$pic$p13),
          "p12html" = print(result$html$p12_html),
          "p23html" = print(result$html$p23_html),

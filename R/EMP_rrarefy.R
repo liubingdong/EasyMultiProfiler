@@ -1,5 +1,6 @@
 .EMP_rrarefy <- function(EMPT, raresize=NULL,seed=123,only_show_depth = F, ...){
-
+  primary <- feature <- value <- mean_value <- sd_value <- min_sd <- real_sd <- NULL
+  real_mean <- mean_diff <- sd_sum <- NULL
   trim_sample_id <- NULL
   trim_feature_id <- NULL
   message_info <- list()

@@ -16,6 +16,7 @@
 #' @importFrom graphics abline
 #' @importFrom methods new
 #' @importFrom psych corr.test
+#' @importFrom dplyr if_any
 #'
 #' @return xx object
 #' @export
@@ -25,6 +26,7 @@
 EMP_COR_HEAT_ <-function(data,meta_data,method = 'spearman',width=10,height=10,
                          cor_output=F,cluster_rows = F,cluster_cols = F,
                          file_name='cor_plot'){
+  Group <- getSig <- NULL                      
   deposit <- list()
   real_sample <- intersect(meta_data$primary,data$primary)
   data <- data[data$primary%in%real_sample, ]

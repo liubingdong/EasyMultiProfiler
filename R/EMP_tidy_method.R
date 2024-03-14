@@ -1,3 +1,4 @@
+#' @import tidySummarizedExperiment
 mutate.SummarizedExperiment <- getFromNamespace("mutate.SummarizedExperiment", "tidySummarizedExperiment")
 #' Title
 #'

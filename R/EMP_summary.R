@@ -45,7 +45,8 @@
 
 }
 
-
+#' @importFrom SummarizedExperiment rowData
+#' @importFrom SummarizedExperiment assay
 .creat_EMP_summary <- function(EMP) {
   featdim <- c()
   sampdim <- c()

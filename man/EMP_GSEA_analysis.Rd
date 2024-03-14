@@ -12,8 +12,9 @@ EMP_GSEA_analysis(
   method,
   cor_method = "pearson",
   group_level = NULL,
-  type,
-  use_cached = T,
+  keyType = NULL,
+  KEGG_Type = "KEGG",
+  species = "all",
   pseudocount = 1e-04,
   pvalueCutoff = 1,
   threshold = NULL,
@@ -39,9 +40,11 @@ EMP_GSEA_analysis(
 
 \item{group_level}{wait_for_add}
 
-\item{type}{wait_for_add}
+\item{keyType}{keyType}
 
-\item{use_cached}{wait_for_add}
+\item{KEGG_Type}{KEGG_Type}
+
+\item{species}{species}
 
 \item{pseudocount}{wait_for_add}
 

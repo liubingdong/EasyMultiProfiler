@@ -288,8 +288,10 @@ progress_text <- function(style = 3, ...) {
 #' @examples
 #' # add example
 EMP_RFCV <- function(RF,seed_start=123,ntree=1000,kfold=5,rep=10,RF_importance=1,step=1,each_ouput=F,
-                 x_break=1,cutoff_colour=c("red"),palette=c("#E64B35FF","#4DBBD5FF","#00A087FF","#3C5488FF","#F39B7FFF","#8491B4FF",
-                                                            "#B2182B","#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7","#CC6666")){
+                 x_break=1,cutoff_colour=c("red"),
+                 palette=c("#E64B35FF","#4DBBD5FF","#00A087FF","#3C5488FF","#F39B7FFF","#8491B4FF",
+                          "#B2182B","#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7","#CC6666")){
+  SampleID <- NULL
   deposit <- list()
   try(RF <- subset(RF,select=-c(SampleID)),silent=T)
   try(RF %>% dplyr::rename_all(~gsub("\\|", ".", .)))

@@ -1,12 +1,3 @@
-#' Title
-#'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param estimate_group wait_for_add
-#' @param method wait_for_add
-#' @param na_string wait_for_add
-#' @param collapse_sep wait_for_add
-#' @param action wait_for_add
 #' @importFrom tidybulk tidybulk
 #' @importFrom dplyr select
 #' @importFrom dplyr rename
@@ -17,13 +8,10 @@
 #' @importFrom tidyr pivot_wider
 #' @importFrom tibble column_to_rownames
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
-EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
+#' @noRd 
+EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),
+    collapse_sep=' ',action='add',...) {
+  `.sample` <- counts <- feature <- primary <- NULL 
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -110,15 +98,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 }
 
 
-#' Title
-#'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param estimate_group wait_for_add
-#' @param method wait_for_add
-#' @param na_string wait_for_add
-#' @param collapse_sep wait_for_add
-#' @param action wait_for_add
+
 #' @importFrom tidybulk tidybulk
 #' @importFrom dplyr select
 #' @importFrom dplyr rename
@@ -131,13 +111,9 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'
 #' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
-
-
+#' @noRd 
 EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
+  `.feature` <- counts <- primary <- feature <- NULL
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -233,6 +209,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @importFrom purrr reduce
 #' @noRd
 .collpseBygroup.tibble <- function(df,estimate_group,method,collapse_sep=' ',collapse_by,...) {
+  feature <- primary <- NULL
   idx <- df  %>% dplyr::select(-!!estimate_group) %>% colnames()
   old_col_name <- df %>% colnames()
   data_deposit <- list()
@@ -282,6 +259,8 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @param na_string wait_for_add
 #' @param collapse_sep wait_for_add
 #' @param action wait_for_add
+#' @param collapse_by wait_for_add
+#' @param ... wait_for_add
 #' @importFrom tidybulk tidybulk
 #' @importFrom dplyr select
 #' @importFrom dplyr rename

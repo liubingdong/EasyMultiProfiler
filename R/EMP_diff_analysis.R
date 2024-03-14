@@ -14,6 +14,8 @@
 #' @importFrom SummarizedExperiment colData
 #' @noRd
 .EMP_diff_analysis_deseq2_deprecated <- function(EMPT,group_level=NULL,design,...) {
+  log2FoldChange <- log2FC <- feature <- Estimate_group <- pvalue <- padj <- sign_group <- NULL
+  method <- vs <- fold_change <- batch_effect <- NULL
   # confirm group and batch info
   Group_info <- as.list(design)[[2]]
   estimate_group <- as.list(Group_info)[[length(Group_info)]] %>% as.character()
@@ -89,8 +91,12 @@
 .EMP_diff_analysis_deseq2_m_deprecated <- memoise::memoise(.EMP_diff_analysis_deseq2_deprecated)
 
 
+#' @importFrom rlang `:=`
+#' @importFrom dplyr last_col
+#' @importFrom dplyr matches
 .EMP_diff_analysis_tidybulk <- function(EMPT,method,.formula,p.adjust='fdr',group_level=NULL,...) {
-
+  pvalue <- feature <- Estimate_group <- sign_group <- vs <- log2FC <- Estimate_group <- fold_change <- NULL
+  batch_effect <- NULL
   Group_info <- as.list(.formula)[[2]]
   estimate_group <- as.list(Group_info)[[length(Group_info)]] %>% as.character()
   if (length(as.list(Group_info)) ==3) {
@@ -248,14 +254,14 @@ EMP_diff_analysis <- function(x,experiment,
 .EMP_diff_analysis <- function(EMPT,experiment,assay_name,method,
                                estimate_group=NULL,feature_name=NULL,
                                p.adjust='fdr',group_level=NULL,core=NULL,...){
-
+  primary <- NULL
   message_info <- list()
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
 
   assay_data <- .get.assay.EMPT(EMPT) %>%
-              dplyr::left_join(.,mapping,by = 'primary') %>%
+              dplyr::left_join(mapping,by = 'primary') %>%
               dplyr::select(primary,!!estimate_group,everything())
   .get.assay_name.EMPT(EMPT) -> assay_name
 
@@ -286,7 +292,7 @@ EMP_diff_analysis <- function(x,experiment,
 
   diff_result_brief <-  diff_data %>%
       dplyr::mutate(!!p.adjust := stats::p.adjust(pvalue,method = p.adjust)) %>%
-      dplyr::full_join(.,sign_fold_temp, by='feature') %>%
+      dplyr::full_join(sign_fold_temp, by='feature') %>%
       dplyr::select(feature,Estimate_group,pvalue,!!p.adjust,sign_group,everything())
 
 
@@ -378,8 +384,9 @@ EMP_diff_analysis <- function(x,experiment,
   return(result)
 }
 
+#' @importFrom dplyr across
 .get_sign_fold <- function(assay_data,subgroup,assay_name,group_level=NULL,estimate_group) {
-
+  feature <- abundance <- vs <- `.` <- NULL
   means <- assay_data %>%
     dplyr::group_by(!!sym(estimate_group)) %>%
     dplyr::summarise(across(where(is.numeric), ~mean(., na.rm = TRUE)))

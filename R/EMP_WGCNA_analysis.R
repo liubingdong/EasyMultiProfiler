@@ -34,7 +34,7 @@
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
                                         saveTOMs = T,...) {
   deposit <- list()
-
+  Var1 <- Freq <- NULL
   #enableWGCNAThreads()
 
   assay_data <- .get.assay.EMPT(EMPT) %>%
@@ -74,7 +74,7 @@
                 dplyr::rename(WGCNA_color=Var1,WGCNA_module_elements=Freq)
 
   feature_modules <- data.frame(WGCNA_cluster=net$unmergedColors,WGCNA_color=mergedColors) %>% tibble::rownames_to_column('feature') %>%
-    tibble::as_tibble() %>% dplyr::left_join(.,WGCNA_module_elements,by='WGCNA_color')
+    tibble::as_tibble() %>% dplyr::left_join(WGCNA_module_elements,by='WGCNA_color')
 
 
   #disableWGCNAThreads()
@@ -168,9 +168,9 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
 
 }
 
-
+#' @importFrom dplyr where
 .EMP_WGCNA_cor_analysis_EMPT <-function(EMPT,method='spearman',coldata_to_assay=NULL){
-
+  var1 <- NULL
   call <- match.call()
   experiment_name <- .get.experiment.EMPT(EMPT)
   #net <- EMPT@deposit_append[['feature_WGCNA_cluster_result']]
@@ -231,6 +231,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
 
 .EMP_WGCNA_cor_analysis_EMPT_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMPT)
 
+#' @importFrom WGCNA orderMEs
 .EMP_WGCNA_cor_analysis_EMP <- function(EMP,select=NULL,method='spearman',...){
 
   if (is.null(select)) {
@@ -272,8 +273,8 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   data1_sample_num <- rownames(data1) %>% unique %>% length()
   data2_sample_num <- rownames(data2) %>% unique %>% length()
 
-  data1 %<>% dplyr::filter(rownames(.) %in% real_samples)
-  data2 %<>% dplyr::filter(rownames(.) %in% real_samples)
+  data1 <- dplyr::filter(rownames(data1) %in% real_samples)
+  data2 <- dplyr::filter(rownames(data2) %in% real_samples)
 
   net <- EMP@ExperimentList[[1]]@deposit_append[['feature_WGCNA_cluster_result']]
   if(is.null(net)){

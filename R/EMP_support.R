@@ -43,9 +43,11 @@
 
 
 
-
+#' @importFrom SummarizedExperiment assays
+#' @importFrom S4Vectors DataFrame
+#' @importFrom SummarizedExperiment rowData
 .as.EMPT <- function(x,experiment,estimate_group = NULL) {
-
+  assay <- colname <- primary <- NULL
   sampleMap <- x@sampleMap %>% tibble::as_tibble() %>%
     dplyr::filter(assay %in% experiment) %>%
     dplyr::select(colname,primary)
@@ -54,7 +56,7 @@
 
   assay_data <- assays(x[[experiment]])[[1]] %>% t() %>% as.data.frame() %>%
     tibble::rownames_to_column(var = 'colname') %>%
-    dplyr::left_join(.,sampleMap,by = 'colname') %>%
+    dplyr::left_join(sampleMap,by = 'colname') %>%
     dplyr::arrange(primary) %>%  ## confrim the sample order
     tibble::column_to_rownames('primary') %>%
     dplyr::select(-colname) %>% t()
@@ -152,7 +154,7 @@ as.EMP <- function(object,select=NULL) {
  .return_wrap <- function(...){
    msg <- paste(..., collapse = "", sep = "")
    wrapped <- strwrap(msg, width = getOption("width") - 2) %>%
-     glue::glue_collapse(., "\n", last = "\n")
+     glue::glue_collapse("\n", last = "\n")
    wrapped
  }
  message_wrap <- function(...){
@@ -189,45 +191,6 @@ as.EMP <- function(object,select=NULL) {
   return(group_level)
 }
 
-.get.kegg_data <- function(type,use_cached=T) {
-  switch(type,
-         "KO" = {
-           if (!use_cached){
-             memoise::forget(gson_KO_pathway) %>% invisible()
-           }
-           gason_data <- gson_KO_pathway()
-         },
-         "KO_module" = {
-           if (!use_cached){
-             memoise::forget(gson_KO_module) %>% invisible()
-           }
-           gason_data <- gson_KO_module()
-         },
-         "EC" = {
-           if (!use_cached){
-             memoise::forget(gson_EC_pathway) %>% invisible()
-           }
-           gason_data <- gson_EC_pathway()
-         },
-         "EC_module" = {
-           if (!use_cached){
-             memoise::forget(gson_EC_module) %>% invisible()
-           }
-           gason_data <- gson_EC_module()
-         },
-         "compound" = {
-           if (!use_cached){
-             memoise::forget(gson_cpd_pathway) %>% invisible()
-           }
-           gason_data <- gson_cpd_pathway()
-         },
-         {
-           stop('Parameter type must be one of KO,KO_module,EC,EC_module,compound!')
-         }
-  )
-  message('KEGG database version: ',gason_data@version)
-  return(gason_data)
-}
 
 .check_duplicate <- function(string_vector){
   dup_indices <- duplicated(string_vector)

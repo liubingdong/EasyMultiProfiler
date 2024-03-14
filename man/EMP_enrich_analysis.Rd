@@ -4,14 +4,36 @@
 \alias{EMP_enrich_analysis}
 \title{Title}
 \usage{
-EMP_enrich_analysis(x, ..., action = "add")
+EMP_enrich_analysis(
+  x,
+  condition,
+  minGSSize = 1,
+  maxGSSize = 500,
+  keyType = NULL,
+  KEGG_Type = "KEGG",
+  species = "all",
+  action = "add",
+  ...
+)
 }
 \arguments{
 \item{x}{wait_for_add}
 
-\item{...}{wait_for_add}
+\item{condition}{filter condition}
+
+\item{minGSSize}{wait_for_add}
+
+\item{maxGSSize}{wait_for_add}
+
+\item{keyType}{wait_for_add}
+
+\item{KEGG_Type}{wait_for_add}
+
+\item{species}{wait_for_add}
 
 \item{action}{wait_for_add}
+
+\item{...}{wait_for_add}
 }
 \value{
 xx object
