@@ -10,6 +10,7 @@ EMP_scatterplot_reduce_dimension(
   group_level = "default",
   show = "p12",
   distance_for_adonis = NULL,
+  force_adonis = FALSE,
   estimate_group = NULL,
   palette = NULL,
   method = "t.test",
