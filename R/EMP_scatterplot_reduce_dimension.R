@@ -36,7 +36,7 @@
 #' @examples
 #' # add example
 EMP_scatterplot_reduce_dimension =function(EMPT,seed=123,group_level='default',
-                                           show='p12',distance_for_adonis=NULL,
+                                           show='p12',distance_for_adonis=NULL,force_adonis=FALSE,
                                            estimate_group=NULL,palette=NULL,
                                            method='t.test',key_samples = NULL,
                                            ellipse = NULL,width=15,height=15){
@@ -248,8 +248,6 @@ EMP_scatterplot_reduce_dimension =function(EMPT,seed=123,group_level='default',
   }
 
 
-
-
   if (!is.null(ellipse)) {
     p12 <-p12+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=palette)+guides(colour = "none")
     if (axis_num >= 3) {
@@ -259,7 +257,43 @@ EMP_scatterplot_reduce_dimension =function(EMPT,seed=123,group_level='default',
   }
 
 
+ # set the warning
+ assay_data  <- EMPT %>%
+    .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
 
+ check_dim <- dim(assay_data)[1] * dim(assay_data)[2]
+ if (force_adonis == F) {
+   if (check_dim > 1e+05) {
+   message_wrap("Inputting large-scale data may lead to extended computation time for adonis. If necessary, please enable the force_adonis = TRUE.")
+   }
+ }else {
+   check_dim <- 1
+ } 
+
+ 
+ if (check_dim > 1e+05) {
+  if (!is.null(.get.algorithm.EMPT(EMPT))) {
+      distance <- .get.algorithm.EMPT(EMPT)
+  } else {
+      distance <- 'NULL'
+  }
+  
+  dimension_method <- .get.method.EMPT(EMPT)
+  p5 <- ggplot() +
+  geom_text(aes(x = -0.5,y = 0.6,
+                label = paste("\nReduce Dimension:\nmethod = ",
+                              dimension_method,
+                              "\ndistance = ",distance)),
+            size = 5.5) +
+  theme_bw() +
+  xlab("") + ylab("") +
+  theme(panel.grid=element_blank(),
+        axis.title = element_blank(),
+        axis.line = element_blank(),
+        axis.ticks = element_blank(),
+        axis.text = element_blank())
+
+ }else {
   #PERMANOVA分析
   if (is.null(distance_for_adonis)) {
     if (!is.null(.get.algorithm.EMPT(EMPT))) {
@@ -289,6 +323,10 @@ EMP_scatterplot_reduce_dimension =function(EMPT,seed=123,group_level='default',
           axis.line = element_blank(),
           axis.ticks = element_blank(),
           axis.text = element_blank())
+
+ }
+
+
 
   #图像拼接-使用patchwork包将4幅图拼在一起
   p12 <- p1 + p5 + p12 + p2 +
@@ -326,5 +364,5 @@ EMP_scatterplot_reduce_dimension =function(EMPT,seed=123,group_level='default',
   .get.plot_specific.EMPT(EMPT) <- show
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_dimension_analysis_scatterplot'
-  EMPT
+  return(EMPT)
 }
