@@ -4,42 +4,45 @@
 #' @param method wait_for_add
 #' @param distance wait_for_add
 #' @param estimate_group wait_for_add
+#' @importFrom bigstatsr big_SVD
 #' @importFrom vegan vegdist
-#' @importFrom ape pcoa
+#' @importFrom stats cmdscale
 #' @importFrom ropls opls
 #' @noRd
 .EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL){
   deposit <- list()
   assay_data  <- EMPT %>%
     .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
-
+  
   switch(method,
          "pca" = {
-           distance <- 'euclidean' ## PCA is one of pcoa using euclidean distance!
-           assay_data_dis <-  vegan::vegdist(assay_data,method=distance) %>% as.matrix()
-           pca_result <- ape::pcoa(assay_data_dis, correction = "none", rn = NULL)
-           dimension_reslut <- data.frame(PC1=pca_result$vectors[,1],
-                                          PC2=pca_result$vectors[,2],
-                                          PC3=pca_result$vectors[,3]) %>%
-             tibble::rownames_to_column('primary') %>% tibble::as_tibble()
-           axis_value <- c(round(pca_result$values$Relative_eig[1]*100,digits = 2),
-            round(pca_result$values$Relative_eig[2]*100,digits = 3),
-            round(pca_result$values$Relative_eig[3]*100,digits = 3))
-
+           sample_name <- rownames(assay_data)
+           assay_data <- assay_data |> bigstatsr::as_FBM()
+           pca_result <- bigstatsr::big_SVD(assay_data,k = 3)
+           colnames(pca_result$u) <- c('PC1','PC2','PC3')
+           dimension_reslut <- pca_result$u |> 
+             tibble::as_tibble() |> 
+             dplyr::mutate(primary = {{sample_name}},.before = 1) 
+           axis_value <- round( (pca_result$d/sum(pca_result$d)) * 100, digits = 2)
          },
          "pcoa" = {
            if(is.null(distance)){
              stop("Parameter distance in necessary!")
            }
            assay_data_dis <-  vegan::vegdist(assay_data,method=distance) %>% as.matrix()
-           pca_result <- ape::pcoa(assay_data_dis, correction = "none", rn = NULL)
-           dimension_reslut <- data.frame(PC1=pca_result$vectors[,1],
-                                          PC2=pca_result$vectors[,2],
-                                          PC3=pca_result$vectors[,3]) %>%
-             tibble::rownames_to_column('primary') %>% tibble::as_tibble()
-           axis_value <- c(round(pca_result$values$Relative_eig[1]*100,digits = 2),
-            round(pca_result$values$Relative_eig[2]*100,digits = 3),
-            round(pca_result$values$Relative_eig[3]*100,digits = 3))
+           
+           # set the warning
+           check_dim <- dim(assay_data)[1] * dim(assay_data)[2]
+           if (check_dim > 1e+05) {
+             message_wrap("Inputting large-scale data may lead to longer computation time. It is recommended to use other dimensionality reduction methods or filter the data first.")
+           }
+           
+           pca_result <- stats::cmdscale(assay_data_dis,k=3,eig=T)
+           colnames(pca_result$points) <- c('PCoA1','PCoA2','PCoA3')
+           dimension_reslut <- pca_result$points |> 
+             as.data.frame() |>
+             tibble::rownames_to_column('primary') 
+           axis_value <- round((pca_result$eig / sum(pca_result$eig))[1:3] * 100,digits = 2)
          },
          "pls" = {
            if(!is.null(distance)){
@@ -48,12 +51,12 @@
            }
            estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
            group_info <- EMPT %>% EMP_coldata_extract() %>% dplyr::pull(!!estimate_group)
-
+           
            plsda_raw <- ropls::opls(assay_data,
-                             group_info,
-                             orthoI=0,
-                             predI=3,
-                             scaleC = 'none',fig.pdfC='none',info.txtC='none')
+                                    group_info,
+                                    orthoI=0,
+                                    predI=3,
+                                    scaleC = 'none',fig.pdfC='none',info.txtC='none')
            dimension_reslut <- plsda_raw@scoreMN %>% as.data.frame() %>%
              tibble::rownames_to_column('primary') %>% tibble::as_tibble() %>%
              dplyr::rename(t1 = p1,t2 =p2, t3 =p3)
@@ -62,7 +65,7 @@
            colnames(vip_score) <- c('feature','VIP')
            axis_value <- plsda_raw@modelDF  %>% dplyr::pull(R2X)
            axis_value <- axis_value * 100
-
+           
          },
          "opls" = {
            if(!is.null(distance)){
@@ -71,30 +74,30 @@
            }
            estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
            group_info <- EMPT %>% EMP_coldata_extract() %>% dplyr::pull(!!estimate_group)
-
+           
            if(length(unique(group_info)) > 2){
-            stop("opls model ony support two groups analysis!")
+             stop("opls model ony support two groups analysis!")
            }
-
+           
            opsda_raw <- ropls::opls(assay_data,
-                             group_info,
-                             orthoI=NA,
-                             predI=1,scaleC = 'none',fig.pdfC='none',info.txtC='none')
-
-
+                                    group_info,
+                                    orthoI=NA,
+                                    predI=1,scaleC = 'none',fig.pdfC='none',info.txtC='none')
+           
+           
            if(!is.null(opsda_raw) & length(opsda_raw@modelDF) == 0) {
-               message_wrap("No model was built because the first predictive component was already not significant!")
-               message_wrap("Filter the input data may improve the issue!")
-               stop()
+             message_wrap("No model was built because the first predictive component was already not significant!")
+             message_wrap("Filter the input data may improve the issue!")
+             stop()
            }
-
+           
            dimension_reslut <-  opsda_raw@scoreMN %>%  #得分矩阵
              as.data.frame() %>%
              dplyr::mutate(o1 = opsda_raw@orthoScoreMN[,1]) %>%
              dplyr::rename(t1=p1) %>%
              tibble::rownames_to_column('primary')
            try(dimension_reslut %<>% dplyr::mutate(o2 = opsda_raw@orthoScoreMN[,2]),silent = T)
-
+           
            vip_score <- opsda_raw@vipVn %>% as.data.frame() %>%
              tibble::rownames_to_column('feature') %>% tibble::as_tibble()
            colnames(vip_score) <- c('feature','VIP')
@@ -106,6 +109,7 @@
            print('method in EMP_reduce_dimension should be pca, pcoa, pls or opls!')
          }
   )
+  
 
   EMPT@deposit[['dimension_coordinate']] <- dimension_reslut
   EMPT@deposit[['dimension_axis']] <- axis_value
@@ -135,7 +139,7 @@
 #'
 #' @examples
 #' # add example
-EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,
+EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,use_cached=T,
                                    estimate_group=NULL,action='add'){
   call <- match.call()
 
@@ -145,7 +149,12 @@ EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,
   }else if(inherits(x,'EMPT')) {
     EMPT <-x
   }
+
   #estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+  if (use_cached == F) {
+    memoise::forget(.EMP_dimension_analysis_m) %>% invisible()
+  }
+
   EMPT %<>% .EMP_dimension_analysis_m(method=method,distance=distance,estimate_group=estimate_group)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_dimension_analysis'
@@ -157,7 +166,7 @@ EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,
     deposit <- list()
     deposit[['dimension_coordinate']] <- EMPT@deposit$dimension_coordinate
     deposit[['dimension_axis']] <- EMPT@deposit$dimension_axis
-    try(EMPT@deposit[['dimension_VIP']] <- vip_score,silent = T)
+    try(deposit[['dimension_VIP']] <- EMPT@deposit$dimension_VIP,silent = T)
     return(deposit)
   }else{
     warning('action should be one of add or get!')
