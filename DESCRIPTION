@@ -33,7 +33,6 @@ Imports:
     missRanger,
     MultiAssayExperiment,
     patchwork,
-    pheatmap,
     plotly,
     plyr,
     pROC,
