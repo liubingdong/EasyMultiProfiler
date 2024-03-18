@@ -33,7 +33,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 
 #' Title
 #'
-#' @param EMPT wait_for_add
+#' @param EMPT Object in EMP format.
 #' @param plot_category wait_for_add
 #' @param seed wait_for_add
 #' @param ... wait_for_add

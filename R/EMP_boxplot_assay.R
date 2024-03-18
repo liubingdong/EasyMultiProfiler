@@ -1,15 +1,15 @@
 #' Title
 #'
-#' @param EMPT wait_for_add
-#' @param method wait_for_add
-#' @param estimate_group wait_for_add
-#' @param group_level  wait_for_add
-#' @param ncol wait_for_add
-#' @param show wait_for_add
-#' @param palette wait_for_add
-#' @param html_width wait_for_add
-#' @param html_height wait_for_add
-#' @param mytheme wait_for_add
+#' @param EMPT Object in EMPT format.
+#' @param method The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).
+#' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
+#' @param group_level A string vector. Set the group order in the plot.
+#' @param ncol An interger. Set the col number in the facet plot.
+#' @param show A character string include pic (default), html.
+#' @param palette A character string.Color palette.
+#' @param html_width An interger. Set the html width.
+#' @param html_height An interger. Set the html height.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #'
 #' @return xx object
 #' @export
@@ -82,9 +82,18 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 
 #' Title
 #'
-#' @param EMPT wait_for_add
-#' @param plot_category wait_for_add
-#' @param seed wait_for_add
+#' @param EMPT Object in EMPT format.
+#' @param plot_category An interger.More plot style.
+#' @param seed An interger. Set the random seed to the plot.
+#' @param method The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).
+#' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
+#' @param group_level A string vector. Set the group order in the plot.
+#' @param ncol An interger. Set the col number in the facet plot.
+#' @param show A character string include pic (default), html.
+#' @param palette A character string.Color palette.
+#' @param html_width An interger. Set the html width.
+#' @param html_height An interger. Set the html height.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @param ... wait_for_add
 #'
 #' @return xx object

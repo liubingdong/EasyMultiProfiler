@@ -50,8 +50,8 @@
   data1_sample_num <- rownames(data1) %>% unique %>% length()
   data2_sample_num <- rownames(data2) %>% unique %>% length()
 
-  data1 <- dplyr::filter(rownames(data1) %in% real_sample)
-  data2 <- dplyr::filter(rownames(data2) %in% real_sample)
+  data1 <- data1 |> dplyr::filter(rownames(data1) %in% real_sample)
+  data2 <- data2 |> dplyr::filter(rownames(data2) %in% real_sample)
   df.cor.p<-agricolae_correlation(x=data1,y=data2,method = method,...)
 
   df <- df.cor.p$correlation %>%
@@ -82,12 +82,12 @@
 
 #' Title
 #'
-#' @param EMP wait_for_add
-#' @param select wait_for_add
-#' @param method wait_for_add
-#' @param action wait_for_add
-#' @param use_cached wait_for_add
-#' @param ... wait_for_add
+#' @param EMP Object in EMP format.
+#' @param select A character string. The experiment name in the EMP object.
+#' @param method A character string. Methods include pearson (default), spearman and kendall.
+#' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param ... Further parameters passed to the function agricolae::correlation
 #'
 #' @return xx object
 #' @export

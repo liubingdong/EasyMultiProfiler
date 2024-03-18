@@ -1,10 +1,10 @@
 #' Title
 #'
-#' @param EMPT wait_for_add
-#' @param method wait_for_add
-#' @param .factor_unwanted wait_for_add
-#' @param .factor_of_interest wait_for_add
-#' @param ... wait_for_add
+#' @param EMPT object in EMPT format.
+#' @param method A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.
+#' @param .factor_unwanted A tidy select, e.g. column names without double quotation. c(batch, country) These are the factor that we want to adjust for, including unwanted batcheffect, and unwanted biological effects.
+#' @param .factor_of_interest A tidy select, e.g. column names without double quotation. c(treatment) These are the factor that we want to preserve.
+#' @param ... Further parameters passed to the function tidybulk::adjust_abundance
 #' @importFrom tidybulk adjust_abundance
 #' @importFrom tibble rownames_to_column
 #' @importFrom tibble as_tibble
@@ -47,14 +47,14 @@
 
 #' Title
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param method wait_for_add
-#' @param use_cached wait_for_add
-#' @param .factor_unwanted wait_for_add
-#' @param .factor_of_interest wait_for_add
-#' @param action wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param method A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param .factor_unwanted A tidy select, e.g. column names without double quotation. c(batch, country) These are the factor that we want to adjust for, including unwanted batcheffect, and unwanted biological effects.
+#' @param .factor_of_interest A tidy select, e.g. column names without double quotation. c(treatment) These are the factor that we want to preserve.
+#' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... Further parameters passed to the function tidybulk::adjust_abundance
 #' @importFrom memoise forget
 #'
 #' @return xx object

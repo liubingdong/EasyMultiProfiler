@@ -1,8 +1,18 @@
 #' Title
 #'
-#' @param EMPT wait_for_add
-#' @param plot_category wait_for_add
-#' @param seed wait_for_add
+#' @param EMPT Object in EMPT format.
+#' @param plot_category An interger.More plot style.
+#' @param seed An interger. Set the random seed to the plot.
+#' @param method The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).
+#' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
+#' @param group_level A string vector. Set the group order in the plot.
+#' @param ncol An interger. Set the col number in the facet plot.
+#' @param select_metrics A string vector. Select the alpha metrics you want to plot.
+#' @param palette A character string.Color palette.
+#' @param show A character string include pic (default), html.
+#' @param html_width An interger. Set the html width.
+#' @param html_height An interger. Set the html height.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @param ... wait_for_add
 #' @importFrom withr with_seed
 #'

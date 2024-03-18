@@ -1,15 +1,13 @@
 #' Title
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param distance wait_for_add
-#' @param rowdata wait_for_add
-#' @param method wait_for_add
-#' @param h wait_for_add
-#' @param groupLabels wait_for_add
-#' @param cluster wait_for_add
-#' @param action wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param distance A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
+#' @param rowdata A boolean. Whether the function cluster the feature or not.
+#' @param method The agglomeration method to be used. This should be (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC).
+#' @param h A numeric. Height at which to cut tree (passed to cutree)
+#' @param groupLabels A boolean. Whether show the group label or not.
+#' @param action  A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @importFrom tibble column_to_rownames
 #' @importFrom stats hclust
 #' @importFrom vegan vegdist
@@ -23,7 +21,7 @@
 #' # add example
 EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=F,
                                  method='average',h=NULL,groupLabels=T,
-                                 cluster=NULL,action='add',...) {
+                                 action='add') {
   colname <- primary <- NULL
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
