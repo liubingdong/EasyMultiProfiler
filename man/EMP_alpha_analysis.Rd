@@ -7,15 +7,15 @@
 EMP_alpha_analysis(x, experiment, use_cached = T, action = "add", ...)
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{use_cached}{wait_for_add}
+\item{use_cached}{A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function vegan::diversity}
 }
 \value{
 xx object

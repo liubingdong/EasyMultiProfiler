@@ -7,7 +7,7 @@
 EMP_curveplot_enrich(EMPT, plot_category = 1, seed = 123, ...)
 }
 \arguments{
-\item{EMPT}{wait_for_add}
+\item{EMPT}{Object in EMP format.}
 
 \item{plot_category}{wait_for_add}
 

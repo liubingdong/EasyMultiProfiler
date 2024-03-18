@@ -18,25 +18,25 @@ EMP_boxplot_assay_default(
 )
 }
 \arguments{
-\item{EMPT}{wait_for_add}
+\item{EMPT}{Object in EMPT format.}
 
-\item{method}{wait_for_add}
+\item{method}{The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).}
 
-\item{estimate_group}{wait_for_add}
+\item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
 
-\item{group_level}{wait_for_add}
+\item{group_level}{A string vector. Set the group order in the plot.}
 
-\item{ncol}{wait_for_add}
+\item{ncol}{An interger. Set the col number in the facet plot.}
 
-\item{show}{wait_for_add}
+\item{show}{A character string include pic (default), html.}
 
-\item{palette}{wait_for_add}
+\item{palette}{A character string.Color palette.}
 
-\item{html_width}{wait_for_add}
+\item{html_width}{An interger. Set the html width.}
 
-\item{html_height}{wait_for_add}
+\item{html_height}{An interger. Set the html height.}
 
-\item{mytheme}{wait_for_add}
+\item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
 }
 \value{
 xx object

@@ -7,13 +7,22 @@
 EMP_assay_boxplot(EMPT, plot_category = 1, seed = 123, ...)
 }
 \arguments{
-\item{EMPT}{wait_for_add}
+\item{EMPT}{Object in EMPT format.}
 
-\item{plot_category}{wait_for_add}
+\item{plot_category}{An interger.More plot style.}
 
-\item{seed}{wait_for_add}
+\item{seed}{An interger. Set the random seed to the plot.}
 
-\item{...}{wait_for_add}
+\item{...}{Other parametes:
+method: The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).
+estimate_group: A character string. Select the colname in the coldata to compare the data in the statistical test.
+group_level: A string vector. Set the group order in the plot.
+ncol: An interger. Set the col number in the facet plot.
+show: A character string include pic (default), html.
+palette: A character string.Color palette.
+html_width: An interger. Set the html width.
+html_height: An interger. Set the html height.
+mytheme: Modify components of a theme according to the ggplot2::theme.}
 }
 \value{
 xx object

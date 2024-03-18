@@ -14,17 +14,17 @@ EMP_cor_analysis(
 )
 }
 \arguments{
-\item{EMP}{wait_for_add}
+\item{EMP}{Object in EMP format.}
 
-\item{select}{wait_for_add}
+\item{select}{A character string. The experiment name in the EMP object.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string. Methods include pearson (default), spearman and kendall.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{use_cached}{wait_for_add}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function agricolae::correlation}
 }
 \value{
 xx object

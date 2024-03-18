@@ -12,7 +12,6 @@ Encoding: UTF-8
 Imports: 
     bigstatsr,
     clusterProfiler,
-    dendextend,
     DESeq2,
     dplyr,
     enrichplot,
@@ -54,7 +53,10 @@ Imports:
     withr,
     yulab.utils
 RoxygenNote: 7.2.3
-Suggests: knitr, rmarkdown
+Suggests: 
+    dendextend,
+    knitr,
+    rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no
 Packaged: 2024-03-06 17:14:44 UTC; 13766

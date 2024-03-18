@@ -292,3 +292,4 @@ correl <- function(x,y,method = "pearson", alternative = "two.sided"){
   }
   list(stat=stat,rho=rho,pvalue=pvalue)
 }
+

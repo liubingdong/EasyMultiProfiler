@@ -13,30 +13,27 @@ EMP_cluster_analysis(
   h = NULL,
   groupLabels = T,
   cluster = NULL,
-  action = "add",
-  ...
+  action = "add"
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{distance}{wait_for_add}
+\item{distance}{A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".}
 
-\item{rowdata}{wait_for_add}
+\item{rowdata}{A boolean. Whether the function cluster the feature or not.}
 
-\item{method}{wait_for_add}
+\item{method}{The agglomeration method to be used. This should be (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC).}
 
-\item{h}{wait_for_add}
+\item{h}{A numeric. Height at which to cut tree (passed to cutree)}
 
-\item{groupLabels}{wait_for_add}
+\item{groupLabels}{A boolean. Whether show the group label or not.}
 
-\item{cluster}{wait_for_add}
+\item{cluster}{cluster}
 
-\item{action}{wait_for_add}
-
-\item{...}{wait_for_add}
+\item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
 \value{
 xx object

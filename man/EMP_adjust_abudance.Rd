@@ -16,21 +16,21 @@ EMP_adjust_abudance(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.}
 
-\item{use_cached}{wait_for_add}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{.factor_unwanted}{wait_for_add}
+\item{.factor_unwanted}{A tidy select, e.g. column names without double quotation. c(batch, country) These are the factor that we want to adjust for, including unwanted batcheffect, and unwanted biological effects.}
 
-\item{.factor_of_interest}{wait_for_add}
+\item{.factor_of_interest}{A tidy select, e.g. column names without double quotation. c(treatment) These are the factor that we want to preserve.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function tidybulk::adjust_abundance}
 }
 \value{
 xx object
