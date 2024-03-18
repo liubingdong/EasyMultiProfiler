@@ -22,7 +22,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()') {
 
-
+  primary <- value <- `.` <- NULL
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
   if (is.null(palette)) {
@@ -101,7 +101,8 @@ EMP_assay_boxplot <- function(EMPT,plot_category = 1,seed =123,...) {
            withr::with_seed(seed,EMP_boxplot_assay_default(EMPT,...))
          },
          "2" = {
-           withr::with_seed(seed,EMP_boxplot_assay_2(EMPT,...))
+           # where is EMP_boxplot_assay_2?
+           # withr::with_seed(seed,EMP_boxplot_assay_2(EMPT,...))
          }
 
   )

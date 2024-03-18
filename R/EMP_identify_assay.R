@@ -49,7 +49,7 @@
   }
 
   if (!is.null(estimate_group)) {
-    data <- .get.mapping.EMPT(EMPT,action='get') %>% dplyr::select(primary,!!estimate_group) %>%
+    data <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group) %>%
       dplyr::right_join(data,by='primary')
 
     data %>%

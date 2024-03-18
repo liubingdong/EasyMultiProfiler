@@ -14,6 +14,8 @@
 #' @importFrom randomForest varImpPlot
 #' @importFrom randomForest importance
 #' @importFrom pROC roc
+#' @importFrom grDevices pdf
+#' @importFrom grDevices dev.off
 #' @return xx object
 #' @export
 #'
@@ -32,6 +34,7 @@ RFCVSEED <- function(RF,seed_start=123,ntree=1000,core=1,kfold=5,rep=10,RF_impor
   RFCV_single= function(i){
     # 删除id为i的行，创建训练集
     # 选id为i的行，创建训练集
+    id <- Group <- NULL
     trainingset <- subset(data, id !=i)
     testset <- subset(data, id==i)
     #运行一个随机森林模型

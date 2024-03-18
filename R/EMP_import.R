@@ -1,5 +1,17 @@
-#' @importFrom utils getFromNamespace
-kegg_rest <- getFromNamespace("kegg_rest", "clusterProfiler")
+
+##' @importFrom yulab.utils yread
+kegg_rest <- function(rest_url) {
+    `.` <- NULL
+    message('Reading KEGG annotation online: "', rest_url, '"...')
+    # content <- readLines(f)
+    content <- yread(rest_url)
+    content %<>% strsplit(., "\t") %>% do.call('rbind', .)
+    res <- data.frame(from=content[,1],
+                      to=content[,2])
+    return(res)
+}
+
+
 
 #' Title
 #'
@@ -14,6 +26,7 @@ kegg_rest <- getFromNamespace("kegg_rest", "clusterProfiler")
 #' @examples
 #' # add example
 humann_function_import <- function(x,type) {
+  from <- to <- feature <- Name <- `.` <- NULL
   temp <- read.table(x,header = T,sep = '\t',quote="")
   if (type== 'KO') {
     ref = kegg_rest("https://rest.kegg.jp/list/ko") %>%
@@ -44,6 +57,7 @@ humann_function_import <- function(x,type) {
 #' @examples
 #' # add example
 humann_taxonomy_import <- function(x,sep = '|') {
+  feature <- `.` <- NULL
   temp <- read.table(x,header = T,sep = '\t',quote="")
   colnames(temp)[1] <- 'feature'
   temp%<>%dplyr::filter(stringr::str_detect(feature,'\\|t_'))
@@ -69,6 +83,7 @@ humann_taxonomy_import <- function(x,sep = '|') {
 #' @examples
 #' # add example
 EMP_taxonomy_import <- function(x,humann_format=FALSE,assay_name=NULL,sep=if (humann_format == "FALSE") ';' else '|') {
+  feature <- `.` <- NULL
   if(humann_format == TRUE){
     deposit <- humann_taxonomy_import(x,sep = sep)
   }else{
@@ -94,6 +109,8 @@ EMP_taxonomy_import <- function(x,humann_format=FALSE,assay_name=NULL,sep=if (hu
 #' @param type wait_for_add
 #' @param assay_name wait_for_add
 #' @param humann_format wait_for_add
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom SummarizedExperiment `assayNames<-`
 #'
 #' @return xx object
 #' @export
@@ -101,6 +118,7 @@ EMP_taxonomy_import <- function(x,humann_format=FALSE,assay_name=NULL,sep=if (hu
 #' @examples
 #' # add example
 EMP_function_import <- function(x,type,assay_name=NULL,humann_format=FALSE) {
+  from <- to <- feature <- Name <- NULL
   if(humann_format == T){
     deposit <- humann_function_import(x,type)
   }else {
@@ -133,6 +151,7 @@ EMP_function_import <- function(x,type,assay_name=NULL,humann_format=FALSE) {
 #' @param dfmap wait_for_add
 #' @param assay_name wait_for_add
 #' @param assay wait_for_add
+#' @importFrom dplyr all_of
 #'
 #' @return xx object
 #' @export
@@ -140,6 +159,7 @@ EMP_function_import <- function(x,type,assay_name=NULL,humann_format=FALSE) {
 #' @examples
 #' # example
 EMP_normal_import <- function(x,sampleID=NULL,dfmap=NULL,assay_name=NULL,assay=NULL){
+  colname <- feature <- NULL
   if (!is.null(sampleID)) {
     sampleID <- sampleID
   }else{

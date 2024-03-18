@@ -20,7 +20,8 @@ EMP_dotplot_enrich <- function(EMPT,plot_category = 1,seed =123,...) {
            withr::with_seed(seed,EMP_dotplot_enrich_default(EMPT,...))
          },
          "2" = {
-           withr::with_seed(seed,EMP_dotplot_enrich_2(EMPT,...))
+           # where is EMP_dotplot_enrich_2?
+           # withr::with_seed(seed,EMP_dotplot_enrich_2(EMPT,...))
          }
 
   )

@@ -182,6 +182,57 @@ return(lista)
 #-------------
 }
 }
+vark <- function(x, y){
+  ties.x <- rle(sort(x))$lengths
+  ties.y <- rle(sort(y))$lengths
+  n <- length(x)
+  t1 <- n * (n - 1) * (2 * n + 5)
+  t2 <- sum(ties.x * (ties.x - 1) * (2 * ties.x + 5))
+  t3 <- sum(ties.y * (ties.y - 1) * (2 * ties.y + 5))
+  v1 <- (t1 - t2 - t3)/18
+  t1 <- sum(ties.x * (ties.x - 1) * (ties.x - 2))
+  t2 <- sum(ties.y * (ties.y - 1) * (ties.y - 2))
+  v2 <- (t1 * t2)/(9 * n * (n - 1) * (n - 2))
+  t1 <- sum(ties.x * (ties.x - 1)) * sum(ties.y * (ties.y - 1))
+  v3 <- t1/(2 * n * (n - 1))
+  v1 + v2 + v3
+}
+
+#' @importFrom stats pnorm
+kendall <- function(data1,data2) {
+  n<-length(data1)
+  n2<-0;n1<-0;is<-0
+  n0<-n-1
+  for (j in 1:n0) { 
+    jj<-j+1
+    for (k in jj:n) {
+    a1<-data1[j]-data1[k]
+    a2<-data2[j]-data2[k]
+    aa<-a1*a2
+    if (! is.na(aa)) {
+      if (aa) {
+        n1<-n1+1
+        n2<-n2+1
+        if(aa > 0.0) is<-is+1
+        else is=is-1
+      } else { 
+        if (a1) n1<-n1+1
+        if (a2) n2<-n2+1
+        }
+      }
+    }
+  }
+  tau<-is/(sqrt(n1)*sqrt(n2))
+  #
+  #svar<-(4.0*n+10.0)/(9.0*n*(n-1.0))
+  #z<-tau/sqrt(svar)
+  #prob<-erfcc(abs(z)/1.4142136)
+  z<-is/sqrt(vark(data1,data2))
+  prob<- 2*pnorm(-abs(z))
+  return(list(stat=z,tau=tau,pvalue=prob))
+}
+
+
 
 #' Title
 #'
@@ -196,47 +247,48 @@ return(lista)
 #' @examples
 #' # add example
 correl <- function(x,y,method = "pearson", alternative = "two.sided"){
-x<-1.0*x;y<-1.0*y
-n<-length(x)
-if(method=="kendall"){
-corr<-kendall(x,y)
-stat<-corr$stat
-rho<-corr$tau
-if(alternative == "two.sided" ) pvalue<-corr$pvalue
-if(alternative == "less" ) pvalue<-1-corr$pvalue/2
-if(alternative == "greater") pvalue<-corr$pvalue/2
-}
-if(method=="spearman" ){
-a<-rank(x)
-b<-rank(y)
-x<-a
-y<-b
-}
-if ((method =="pearson") | (method=="spearman")) {
-sumx<-sum(x^2)-sum(x)^2/n
-sumy<-sum(y^2)-sum(y)^2/n
-sumxy<-sum(x*y)-sum(x)*sum(y)/n
-rho<-sumxy/sqrt(sumx*sumy)
-gl<-n-2
-stat<-rho*sqrt(gl)/(sqrt(1-rho^2))
-if(alternative == "two.sided" ) pvalue<-2*(1-pt(abs(stat),gl))
-if(alternative == "less" ) pvalue<-pt(abs(stat),gl)
-if(alternative == "greater") pvalue<-1-pt(abs(stat),gl)
-}
-if (method =="lin") {
-mx<-mean(x)
-my<-mean(y)
-sumx<-(sum(x^2)-sum(x)^2/n)/n
-sumy<-(sum(y^2)-sum(y)^2/n)/n
-sumxy<-(sum(x*y)-sum(x)*sum(y)/n)/n
-r<-sumxy/sqrt(sumx*sumy)
-rho<-2*sumxy/(sumx+sumy+(mx-my)^2)
-gl<-n-2
-sdlin<-sqrt((1/gl)*((1-r^2)*rho^2*(1-rho^2)/r^2+2*rho^3*(1-rho)*(mx-my)^2/(r*sqrt(sumx*sumy))-rho^4*(mx-my)^4/(2*sumx*sumy*r^2)))
-stat<-rho/sdlin
-if(alternative == "two.sided" ) pvalue<-2*(1-pt(abs(stat),gl))
-if(alternative == "less" ) pvalue<-pt(abs(stat),gl)
-if(alternative == "greater") pvalue<-1-pt(abs(stat),gl)
-}
-list(stat=stat,rho=rho,pvalue=pvalue)
+  x<-1.0*x;y<-1.0*y
+  n<-length(x)
+  if(method=="kendall"){
+    # where is kendall?
+  corr <- kendall(x,y)
+  stat<-corr$stat
+  rho<-corr$tau
+  if(alternative == "two.sided" ) pvalue<-corr$pvalue
+  if(alternative == "less" ) pvalue<-1-corr$pvalue/2
+  if(alternative == "greater") pvalue<-corr$pvalue/2
+  }
+  if(method=="spearman" ){
+  a<-rank(x)
+  b<-rank(y)
+  x<-a
+  y<-b
+  }
+  if ((method =="pearson") | (method=="spearman")) {
+  sumx<-sum(x^2)-sum(x)^2/n
+  sumy<-sum(y^2)-sum(y)^2/n
+  sumxy<-sum(x*y)-sum(x)*sum(y)/n
+  rho<-sumxy/sqrt(sumx*sumy)
+  gl<-n-2
+  stat<-rho*sqrt(gl)/(sqrt(1-rho^2))
+  if(alternative == "two.sided" ) pvalue<-2*(1-pt(abs(stat),gl))
+  if(alternative == "less" ) pvalue<-pt(abs(stat),gl)
+  if(alternative == "greater") pvalue<-1-pt(abs(stat),gl)
+  }
+  if (method =="lin") {
+  mx<-mean(x)
+  my<-mean(y)
+  sumx<-(sum(x^2)-sum(x)^2/n)/n
+  sumy<-(sum(y^2)-sum(y)^2/n)/n
+  sumxy<-(sum(x*y)-sum(x)*sum(y)/n)/n
+  r<-sumxy/sqrt(sumx*sumy)
+  rho<-2*sumxy/(sumx+sumy+(mx-my)^2)
+  gl<-n-2
+  sdlin<-sqrt((1/gl)*((1-r^2)*rho^2*(1-rho^2)/r^2+2*rho^3*(1-rho)*(mx-my)^2/(r*sqrt(sumx*sumy))-rho^4*(mx-my)^4/(2*sumx*sumy*r^2)))
+  stat<-rho/sdlin
+  if(alternative == "two.sided" ) pvalue<-2*(1-pt(abs(stat),gl))
+  if(alternative == "less" ) pvalue<-pt(abs(stat),gl)
+  if(alternative == "greater") pvalue<-1-pt(abs(stat),gl)
+  }
+  list(stat=stat,rho=rho,pvalue=pvalue)
 }

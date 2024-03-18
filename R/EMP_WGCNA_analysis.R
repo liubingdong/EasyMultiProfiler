@@ -233,7 +233,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
 
 #' @importFrom WGCNA orderMEs
 .EMP_WGCNA_cor_analysis_EMP <- function(EMP,select=NULL,method='spearman',...){
-
+  var1 <- NULL
   if (is.null(select)) {
     data1 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%
       dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()

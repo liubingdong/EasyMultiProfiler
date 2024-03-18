@@ -26,6 +26,7 @@
 #' @param ellipse wait_for_add
 #' @param width wait_for_add
 #' @param height wait_for_add
+#' @param force_adonis force_adonis
 #' @importFrom ggpubr stat_compare_means
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
@@ -35,11 +36,12 @@
 #'
 #' @examples
 #' # add example
-EMP_scatterplot_reduce_dimension =function(EMPT,seed=123,group_level='default',
+EMP_scatterplot_reduce_dimension  <- function(EMPT,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,
                                            estimate_group=NULL,palette=NULL,
                                            method='t.test',key_samples = NULL,
                                            ellipse = NULL,width=15,height=15){
+  primary <- Group <- NULL
   call <- match.call()
   deposit <- list()
 

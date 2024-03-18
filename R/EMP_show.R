@@ -60,9 +60,6 @@ setMethod("show", "EMPT",
                     "EMP_dimension_analysis_scatterplot" = {
                      .show_EMP_dimension_analysis_scatterplot(object,.get.plot_specific.EMPT(object))
                    },
-                   "EMP_beta_analysis_boxplot" = {
-                     .show_EMP_beta_boxplot(object,.get.plot_specific.EMPT(object))
-                   },
                    "EMP_alpha_analysis_boxplot" = {
                      .show_EMP_alpha_boxplot(object,.get.plot_specific.EMPT(object))
                    },

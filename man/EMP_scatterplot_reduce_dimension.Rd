@@ -31,6 +31,8 @@ EMP_scatterplot_reduce_dimension(
 
 \item{distance_for_adonis}{wait_for_add}
 
+\item{force_adonis}{force_adonis}
+
 \item{estimate_group}{wait_for_add}
 
 \item{palette}{wait_for_add}

@@ -11,6 +11,7 @@
 #' @examples
 #' # add example
 EMP_filterBysample <- function(obj,condition,action='select'){
+  primary <- NULL
   condition <- dplyr::enquo(condition)
   if (action == 'select') {
     obj %>% EMP_coldata_extract() %>%
@@ -76,6 +77,7 @@ EMP_filterBysample <- function(obj,condition,action='select'){
 EMP_filter <- function(obj,sample_condition,feature_condition,
                        filterSample=NULL,filterFeature=NULL,experiment=NULL,
                        show_info=NULL,action='select'){
+  primary <- feature <- NULL
   call <- match.call()
   sample_condition <- dplyr::enquo(sample_condition)
   feature_condition <- dplyr::enquo(feature_condition)
@@ -187,7 +189,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
 
 
 .filter.deposit.EMPT <- function(EMPT,real_sample,real_feature){
-  Result <- attribute <- attribute2 <- affect_when_sample_changed <- affect_when_feature_changed <- NULL
+  Result <- attribute <- attribute2 <- affect_when_sample_changed <- affect_when_feature_changed <- `.` <- NULL
   primary <- feature <- NULL
   result_names <- names(EMPT@deposit)
   deposit_info <- .get.deposit_info.EMPT(EMPT) %>% dplyr::filter(Result %in% !!result_names)

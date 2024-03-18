@@ -134,6 +134,7 @@
 #' @param distance wait_for_add
 #' @param estimate_group wait_for_add
 #' @param action wait_for_add
+#' @param use_cached use_cached
 #'
 #' @return xx object
 #' @export

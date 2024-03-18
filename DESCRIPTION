@@ -10,7 +10,6 @@ Description: More about what it does (maybe more than one line)
 License: Artistic-2.0
 Encoding: UTF-8
 Imports: 
-    ape,
     bigstatsr,
     clusterProfiler,
     dendextend,
@@ -19,13 +18,11 @@ Imports:
     enrichplot,
     formattable,
     ggiraph,
-    ggkegg,
     ggplot2,
     ggpubr,
-    ggraph,
     ggsignif,
+    ggthemes,
     glue,
-    grDevices,
     gson,
     kableExtra,
     magrittr,
@@ -37,7 +34,6 @@ Imports:
     plotly,
     plyr,
     pROC,
-    psych,
     purrr,
     randomForest,
     rlang,

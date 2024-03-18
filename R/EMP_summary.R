@@ -106,6 +106,7 @@
 #' @examples
 #' # add example
 EMP_summary <- function(obj) {
+  Sample <- Feature <- `Sample_atrr.` <- `Feature_atrr.` <- Assay <- Assay_status <- Sample_status <- Feature_status <- NULL
   if (inherits(obj,"MultiAssayExperiment")) {
     dt <- .creat_MAE_summary(obj)
   }else if (inherits(obj,"EMP")) {

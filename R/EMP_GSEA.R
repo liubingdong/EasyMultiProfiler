@@ -1,5 +1,6 @@
 .Signal2Noise_caculate <- function(EMPT,estimate_group,group_level=NULL) {
-
+  primary <- feature <- value <- mean_value <- sd_value <- min_sd <- real_sd <- NULL
+  real_mean <- mean_diff <- sd_sum <- NULL
   coldata <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
   
   data  <- .get.assay.EMPT(EMPT)  %>% tidyr::pivot_longer(cols = -primary,names_to = 'feature',values_to = 'value') %>%

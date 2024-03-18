@@ -16,7 +16,7 @@
 #' # add example
 EMP_heatmap_cor <- function(EMP,palette=c("steelblue","white","darkred"),
                             show='all',mytheme = 'theme()'){
-
+  var1 <- var2 <- coefficient <- NULL
   result <- .get.result.EMP(EMP,info = 'EMP_cor_analysis')
 
   experiment_name <- result[["cor_info"]]
@@ -111,7 +111,8 @@ EMP_heatmap_cor <- function(EMP,palette=c("steelblue","white","darkred"),
 #'
 #' @examples
 #' # add example
-EMP_heatmap_WGCNA<- function(x,palette=c("steelblue","white","darkred"),show='all',mytheme = 'theme()'){
+EMP_heatmap_WGCNA <- function(x,palette=c("steelblue","white","darkred"),show='all',mytheme = 'theme()'){
+  WGCNA_color <- WGCNA_module_elements <- `.` <- var2 <- var1 <- coefficient <- NULL
   call <- match.call()
   if (inherits(x,"EMP")) {
     WGCNA_cluster_result <- .get.result.EMPT(x@ExperimentList[[1]],info = 'EMP_WGCNA_cluster_analysis')

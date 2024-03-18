@@ -23,6 +23,8 @@ EMP_dimension_analysis(
 
 \item{distance}{wait_for_add}
 
+\item{use_cached}{use_cached}
+
 \item{estimate_group}{wait_for_add}
 
 \item{action}{wait_for_add}

@@ -71,6 +71,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
                                        estimate_group = NULL,group_level = 'default',
                                        ncol = NULL,select_metrics = NULL,palette = NULL,
                                  show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()') {
+  primary <- ID <- value <- NULL
 
   alpha_plot <- list()
 
@@ -106,8 +107,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
   }
 
 
-  alpha_plot[['pic']] <- alpha_data %>%
-    ggplot(., aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
+  alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
     geom_boxplot(outlier.color=NA) +
     ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,position = position_jitter(height = .00000001))+
     ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
@@ -144,6 +144,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
 #' @param html_width wait_for_add
 #' @param html_height wait_for_add
 #' @param mytheme wait_for_add
+#' @importFrom ggthemes theme_few
 #' @noRd
 EMP_boxplot_alpha_2 <- function(EMPT,method = 'wilcox.test',estimate_group = NULL,shape,
                                        show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()') {

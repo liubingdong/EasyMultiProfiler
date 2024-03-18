@@ -1,13 +1,14 @@
 #' @importFrom SummarizedExperiment colData
-setGeneric(".get.mapping.EMPT",function(obj,...) standardGeneric(".get.mapping.EMPT"))
-setMethod(".get.mapping.EMPT","EMPT",function(obj,...){
+setGeneric(".get.mapping.EMPT",function(obj) standardGeneric(".get.mapping.EMPT"))
+setMethod(".get.mapping.EMPT","EMPT",function(obj){
   colData(obj) %>% 
   as.data.frame() %>%
   tibble::rownames_to_column('primary') %>%
   tibble::as_tibble()
 })
-setGeneric(".get.mapping.EMPT<-",function(obj,value,...) standardGeneric(".get.mapping.EMPT<-"))
+setGeneric(".get.mapping.EMPT<-",function(obj,value) standardGeneric(".get.mapping.EMPT<-"))
 setMethod(".get.mapping.EMPT<-","EMPT",function(obj,value){
+  primary <- NULL
   check_primary_exist <- 'primary' %in% colnames(value)
   if (!check_primary_exist) {
     stop('New coldata must contain primary column!')
@@ -36,13 +37,15 @@ setMethod(".get.mapping.EMPT<-","EMPT",function(obj,value){
 })
 
 
-setGeneric(".get.row_info.EMPT",function(obj,...) standardGeneric(".get.row_info.EMPT"))
-setMethod(".get.row_info.EMPT","EMPT",function(obj,...){
+setGeneric(".get.row_info.EMPT",function(obj) standardGeneric(".get.row_info.EMPT"))
+setMethod(".get.row_info.EMPT","EMPT",function(obj){
+  feature <- NULL
   rowData(obj) %>% as.data.frame() %>% 
     dplyr::select(feature,everything()) %>% tibble::as_tibble()
 })
-setGeneric(".get.row_info.EMPT<-",function(obj,value,...) standardGeneric(".get.row_info.EMPT<-"))
+setGeneric(".get.row_info.EMPT<-",function(obj,value) standardGeneric(".get.row_info.EMPT<-"))
 setMethod(".get.row_info.EMPT<-","EMPT",function(obj,value){
+  feature <- NULL
   check_feature_exist <- 'feature' %in% colnames(value)
   if (!check_feature_exist) {
     stop('New row_info data must contain feature column!')
@@ -57,7 +60,7 @@ setMethod(".get.row_info.EMPT<-","EMPT",function(obj,value){
 
 
   assay_content <- assay(obj) %>% as.data.frame()
-  assay_content <- assay_content %>% dplyr::filter(rownames(.) %in% !!new_feature_name)
+  assay_content <- assay_content %>% dplyr::filter(rownames(assay_content) %in% !!new_feature_name)
 
   rowdata <- value
 
@@ -75,13 +78,13 @@ setMethod(".get.row_info.EMPT<-","EMPT",function(obj,value){
 
 
 
-setGeneric(".get.deposit_info.EMPT",function(obj,...) standardGeneric(".get.deposit_info.EMPT"))
-setMethod(".get.deposit_info.EMPT","EMPT",function(obj,...){
+setGeneric(".get.deposit_info.EMPT",function(obj) standardGeneric(".get.deposit_info.EMPT"))
+setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
   obj@deposit_info
 })
 
-setGeneric(".get.deposit.EMPT",function(obj,info,...) standardGeneric(".get.deposit.EMPT"))
-setMethod(".get.deposit.EMPT","EMPT",function(obj,info,...){
+setGeneric(".get.deposit.EMPT",function(obj,info) standardGeneric(".get.deposit.EMPT"))
+setMethod(".get.deposit.EMPT","EMPT",function(obj,info){
   deposilt_info <- .get.deposit_info.EMPT(obj)
   if (info %in% deposilt_info$Result) {
     obj@deposit[[info]]
@@ -93,19 +96,19 @@ setMethod(".get.deposit.EMPT","EMPT",function(obj,info,...){
   }
 })
 
-setGeneric(".get.deposit.EMPT<-",function(obj,result,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,...) standardGeneric(".get.deposit.EMPT<-"))
-setMethod(".get.deposit.EMPT<-","EMPT",function(obj,result,result_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,...){
+setGeneric(".get.deposit.EMPT<-",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source, value) standardGeneric(".get.deposit.EMPT<-"))
+setMethod(".get.deposit.EMPT<-","EMPT",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source, value){
  deposilt_info <- .get.deposit_info.EMPT(obj)
  
  if (attribute2 == 'normal') {
-   check_attribute <- attribute %in% (result %>% as.data.frame() %>% colnames())
+   check_attribute <- attribute %in% (value %>% as.data.frame() %>% colnames())
    if (!check_attribute) {
-     stop("When attribute2 == 'normal', new result must contain primary or feature or attribute must be none!")
+     stop("When attribute2 == 'normal', new value must contain primary or feature or attribute must be none!")
    }
  }else if(attribute2 == 'diagonal'){
-   check_diagonal <- colnames(as.data.frame(result)) == rownames(as.data.frame(result))
+   check_diagonal <- colnames(as.data.frame(value)) == rownames(as.data.frame(value))
    if (!check_diagonal) {
-     stop("New result is not a diagonal matrix or data.frame,please check!")
+     stop("New value is not a diagonal matrix or data.frame,please check!")
    }
  }else if(attribute2 == 'none'){
    if (attribute != 'all') {
@@ -128,49 +131,49 @@ setMethod(".get.deposit.EMPT<-","EMPT",function(obj,result,result_name,affect_wh
    source <- 'user_import'
  }
  
- new_result_info <- data.frame(Result=result_name,
+ new_value_info <- data.frame(value=value_name,
                               affect_when_sample_changed=affect_when_sample_changed,
                               affect_when_feature_changed=affect_when_feature_changed,
                               attribute=attribute,
                               attribute2=attribute2,
                               source=source)
- deposilt_info %<>% dplyr::bind_rows(new_result_info)
+ deposilt_info %<>% dplyr::bind_rows(new_value_info)
  obj@deposit_info <- deposilt_info
- obj@deposit[[result_name]] <- result
+ obj@deposit[[value_name]] <- value
  return(obj)
 })
 
 
-setGeneric(".get.deposit_append.EMPT",function(obj,info,...) standardGeneric(".get.deposit_append.EMPT"))
-setMethod(".get.deposit_append.EMPT","EMPT",function(obj,info,...){
+setGeneric(".get.deposit_append.EMPT",function(obj,info) standardGeneric(".get.deposit_append.EMPT"))
+setMethod(".get.deposit_append.EMPT","EMPT",function(obj,info){
   obj@deposit_append[[info]]
 })
 
-setGeneric(".get.deposit_append.EMPT<-",function(obj,info,value,...) standardGeneric(".get.deposit_append.EMPT<-"))
-setMethod(".get.deposit_append.EMPT<-","EMPT",function(obj,info,value,...){
+setGeneric(".get.deposit_append.EMPT<-",function(obj,info,value) standardGeneric(".get.deposit_append.EMPT<-"))
+setMethod(".get.deposit_append.EMPT<-","EMPT",function(obj,info,value){
   obj@deposit_append[[info]] <- value
   obj
 })
 
 
 
-setGeneric(".get.plot_deposit.EMPT",function(obj,info,...) standardGeneric(".get.plot_deposit.EMPT"))
-setMethod(".get.plot_deposit.EMPT","EMPT",function(obj,info,...){
+setGeneric(".get.plot_deposit.EMPT",function(obj,info) standardGeneric(".get.plot_deposit.EMPT"))
+setMethod(".get.plot_deposit.EMPT","EMPT",function(obj,info){
   obj@plot_deposit[[info]]
 })
 
-setGeneric(".get.plot_deposit.EMPT<-",function(obj,info,value,...) standardGeneric(".get.plot_deposit.EMPT<-"))
-setMethod(".get.plot_deposit.EMPT<-","EMPT",function(obj,info,value,...){
+setGeneric(".get.plot_deposit.EMPT<-",function(obj,info,value) standardGeneric(".get.plot_deposit.EMPT<-"))
+setMethod(".get.plot_deposit.EMPT<-","EMPT",function(obj,info,value){
   obj@plot_deposit[[info]] <- value
   obj
 })
 
 
-setGeneric(".get.rowRanges.EMPT",function(obj,...) standardGeneric(".get.rowRanges.EMPT"))
-setMethod(".get.rowRanges.EMPT","EMPT",function(obj,...){
+setGeneric(".get.rowRanges.EMPT",function(obj) standardGeneric(".get.rowRanges.EMPT"))
+setMethod(".get.rowRanges.EMPT","EMPT",function(obj){
   obj@rowdata[["rowRanges"]]
 })
-setGeneric(".get.rowRanges.EMPT<-",function(obj,value,...) standardGeneric(".get.rowRanges.EMPT<-"))
+setGeneric(".get.rowRanges.EMPT<-",function(obj,value) standardGeneric(".get.rowRanges.EMPT<-"))
 setMethod(".get.rowRanges.EMPT<-","EMPT",function(obj,value){
   obj@rowdata[["rowRanges"]] <- value
   obj
@@ -178,36 +181,36 @@ setMethod(".get.rowRanges.EMPT<-","EMPT",function(obj,value){
 
 
 
-setGeneric(".get.experiment.EMPT",function(obj,...) standardGeneric(".get.experiment.EMPT"))
-setMethod(".get.experiment.EMPT","EMPT",function(obj,...){
+setGeneric(".get.experiment.EMPT",function(obj) standardGeneric(".get.experiment.EMPT"))
+setMethod(".get.experiment.EMPT","EMPT",function(obj){
   obj@experiment
 })
-setGeneric(".get.experiment.EMPT<-",function(obj,value,...) standardGeneric(".get.experiment.EMPT<-"))
+setGeneric(".get.experiment.EMPT<-",function(obj,value) standardGeneric(".get.experiment.EMPT<-"))
 setMethod(".get.experiment.EMPT<-","EMPT",function(obj,value){
   obj@experiment <- value
   obj
 })
 
 
-setGeneric(".get.assay_name.EMPT",function(obj,...) standardGeneric(".get.assay_name.EMPT"))
-setMethod(".get.assay_name.EMPT","EMPT",function(obj,...){
+setGeneric(".get.assay_name.EMPT",function(obj) standardGeneric(".get.assay_name.EMPT"))
+setMethod(".get.assay_name.EMPT","EMPT",function(obj){
   obj@assay_name
 })
-setGeneric(".get.assay_name.EMPT<-",function(obj,value,...) standardGeneric(".get.assay_name.EMPT<-"))
+setGeneric(".get.assay_name.EMPT<-",function(obj,value) standardGeneric(".get.assay_name.EMPT<-"))
 setMethod(".get.assay_name.EMPT<-","EMPT",function(obj,value){
   obj@assay_name <- value
   obj
 })
 
-setGeneric(".get.SE.EMPT",function(obj,...) standardGeneric(".get.SE.EMPT"))
-setMethod(".get.SE.EMPT","EMPT",function(obj,...){
+setGeneric(".get.SE.EMPT",function(obj) standardGeneric(".get.SE.EMPT"))
+setMethod(".get.SE.EMPT","EMPT",function(obj){
   count.da <- assay(obj) 
   sample.da<-colData(obj)
   row.da <- rowData(obj)
   SE <- SummarizedExperiment::SummarizedExperiment(assays=list(counts = as.matrix(count.da)), colData = sample.da,rowData =row.da) 
   SE
 })
-setGeneric(".get.SE.EMPT<-",function(obj,value,...) standardGeneric(".get.SE.EMPT<-"))
+setGeneric(".get.SE.EMPT<-",function(obj,value) standardGeneric(".get.SE.EMPT<-"))
 setMethod(".get.SE.EMPT<-","EMPT",function(obj,value){
   obj@colData <- value@colData
   obj@assays <-value@assays
@@ -218,8 +221,8 @@ setMethod(".get.SE.EMPT<-","EMPT",function(obj,value){
 })
 
 
-setGeneric(".get.assay.EMPT",function(obj,...) standardGeneric(".get.assay.EMPT"))
-setMethod(".get.assay.EMPT","EMPT",function(obj,...){
+setGeneric(".get.assay.EMPT",function(obj) standardGeneric(".get.assay.EMPT"))
+setMethod(".get.assay.EMPT","EMPT",function(obj){
   obj %>% 
   assay() %>% 
   as.data.frame() %>% 
@@ -228,9 +231,9 @@ setMethod(".get.assay.EMPT","EMPT",function(obj,...){
   tibble::rownames_to_column('primary') %>% 
   tibble::as_tibble()
 })
-setGeneric(".get.assay.EMPT<-",function(obj,value,...) standardGeneric(".get.assay.EMPT<-"))
+setGeneric(".get.assay.EMPT<-",function(obj,value) standardGeneric(".get.assay.EMPT<-"))
 setMethod(".get.assay.EMPT<-","EMPT",function(obj,value){
-  
+  primary <- feature <- NULL
   sample_name <- value %>% dplyr::pull(primary)
   feature_name <- colnames(value)[-1]
 
@@ -253,22 +256,22 @@ setMethod(".get.assay.EMPT<-","EMPT",function(obj,value){
   obj
 })
 
-setGeneric(".get.estimate_group.EMPT",function(obj,...) standardGeneric(".get.estimate_group.EMPT"))
-setMethod(".get.estimate_group.EMPT","EMPT",function(obj,...){
+setGeneric(".get.estimate_group.EMPT",function(obj) standardGeneric(".get.estimate_group.EMPT"))
+setMethod(".get.estimate_group.EMPT","EMPT",function(obj){
   obj@estimate_group
 })
-setGeneric(".get.estimate_group.EMPT<-",function(obj,value,...) standardGeneric(".get.estimate_group.EMPT<-"))
+setGeneric(".get.estimate_group.EMPT<-",function(obj,value) standardGeneric(".get.estimate_group.EMPT<-"))
 setMethod(".get.estimate_group.EMPT<-","EMPT",function(obj,value){
   obj@estimate_group <- value
   obj
 })
 
 
-setGeneric(".get.estimate_group_info.EMPT",function(obj,...) standardGeneric(".get.estimate_group_info.EMPT"))
-setMethod(".get.estimate_group_info.EMPT","EMPT",function(obj,...){
+setGeneric(".get.estimate_group_info.EMPT",function(obj) standardGeneric(".get.estimate_group_info.EMPT"))
+setMethod(".get.estimate_group_info.EMPT","EMPT",function(obj){
   obj@estimate_group_info
 })
-setGeneric(".get.estimate_group_info.EMPT<-",function(obj,value,...) standardGeneric(".get.estimate_group_info.EMPT<-"))
+setGeneric(".get.estimate_group_info.EMPT<-",function(obj,value) standardGeneric(".get.estimate_group_info.EMPT<-"))
 setMethod(".get.estimate_group_info.EMPT<-","EMPT",function(obj,value){
   obj@estimate_group_info <- value
   obj
@@ -276,70 +279,70 @@ setMethod(".get.estimate_group_info.EMPT<-","EMPT",function(obj,value){
 
 
 
-setGeneric(".get.formula.EMPT",function(obj,...) standardGeneric(".get.formula.EMPT"))
-setMethod(".get.formula.EMPT","EMPT",function(obj,...){
+setGeneric(".get.formula.EMPT",function(obj) standardGeneric(".get.formula.EMPT"))
+setMethod(".get.formula.EMPT","EMPT",function(obj){
   obj@formula
 })
-setGeneric(".get.formula.EMPT<-",function(obj,value,...) standardGeneric(".get.formula.EMPT<-"))
+setGeneric(".get.formula.EMPT<-",function(obj,value) standardGeneric(".get.formula.EMPT<-"))
 setMethod(".get.formula.EMPT<-","EMPT",function(obj,value){
   obj@formula <- value
   obj
 })
 
 
-setGeneric(".get.method.EMPT",function(obj,...) standardGeneric(".get.method.EMPT"))
-setMethod(".get.method.EMPT","EMPT",function(obj,...){
+setGeneric(".get.method.EMPT",function(obj) standardGeneric(".get.method.EMPT"))
+setMethod(".get.method.EMPT","EMPT",function(obj){
   obj@method
 })
-setGeneric(".get.method.EMPT<-",function(obj,value,...) standardGeneric(".get.method.EMPT<-"))
+setGeneric(".get.method.EMPT<-",function(obj,value) standardGeneric(".get.method.EMPT<-"))
 setMethod(".get.method.EMPT<-","EMPT",function(obj,value){
   obj@method <- value
   obj
 })
 
 
-setGeneric(".get.message_info.EMPT",function(obj,...) standardGeneric(".get.message_info.EMPT"))
-setMethod(".get.message_info.EMPT","EMPT",function(obj,...){
+setGeneric(".get.message_info.EMPT",function(obj) standardGeneric(".get.message_info.EMPT"))
+setMethod(".get.message_info.EMPT","EMPT",function(obj){
   for (str in obj@message_info) {
        message_wrap(str)
   }       
 })
-setGeneric(".get.message_info.EMPT<-",function(obj,value,...) standardGeneric(".get.message_info.EMPT<-"))
+setGeneric(".get.message_info.EMPT<-",function(obj,value) standardGeneric(".get.message_info.EMPT<-"))
 setMethod(".get.message_info.EMPT<-","EMPT",function(obj,value){
   obj@message_info <- value
   obj
 })
 
-setGeneric(".get.message_info.EMP",function(obj,...) standardGeneric(".get.message_info.EMP"))
-setMethod(".get.message_info.EMP","EMP",function(obj,...){
+setGeneric(".get.message_info.EMP",function(obj) standardGeneric(".get.message_info.EMP"))
+setMethod(".get.message_info.EMP","EMP",function(obj){
   for (str in obj@message_info) {
        message_wrap(str)
   }       
 })
-setGeneric(".get.message_info.EMP<-",function(obj,value,...) standardGeneric(".get.message_info.EMP<-"))
+setGeneric(".get.message_info.EMP<-",function(obj,value) standardGeneric(".get.message_info.EMP<-"))
 setMethod(".get.message_info.EMP<-","EMP",function(obj,value){
   obj@message_info <- value
   obj
 })
 
 
-setGeneric(".get.algorithm.EMPT",function(obj,...) standardGeneric(".get.algorithm.EMPT"))
-setMethod(".get.algorithm.EMPT","EMPT",function(obj,...){
+setGeneric(".get.algorithm.EMPT",function(obj) standardGeneric(".get.algorithm.EMPT"))
+setMethod(".get.algorithm.EMPT","EMPT",function(obj){
   obj@algorithm
 })
-setGeneric(".get.algorithm.EMPT<-",function(obj,value,...) standardGeneric(".get.algorithm.EMPT<-"))
+setGeneric(".get.algorithm.EMPT<-",function(obj,value) standardGeneric(".get.algorithm.EMPT<-"))
 setMethod(".get.algorithm.EMPT<-","EMPT",function(obj,value){
   obj@algorithm <- value
   obj
 })
 
 
-setGeneric(".get.history.EMPT",function(obj,replace=FALSE,...) standardGeneric(".get.history.EMPT"))
-setMethod(".get.history.EMPT","EMPT",function(obj,replace=FALSE,...){
+setGeneric(".get.history.EMPT",function(obj,replace=FALSE) standardGeneric(".get.history.EMPT"))
+setMethod(".get.history.EMPT","EMPT",function(obj,replace=FALSE){
   obj@history
 })
-setGeneric(".get.history.EMPT<-",function(obj,value,replace=FALSE,...) standardGeneric(".get.history.EMPT<-"))
-setMethod(".get.history.EMPT<-","EMPT",function(obj,value,replace=FALSE){
+setGeneric(".get.history.EMPT<-",function(obj,replace=FALSE,value) standardGeneric(".get.history.EMPT<-"))
+setMethod(".get.history.EMPT<-","EMPT",function(obj,replace=FALSE,value){
   if(replace==FALSE){
   obj@history %<>% append(value)
   obj
@@ -350,55 +353,55 @@ setMethod(".get.history.EMPT<-","EMPT",function(obj,value,replace=FALSE){
 })
 
 
-setGeneric(".get.palette.EMPT",function(obj,...) standardGeneric(".get.palette.EMPT"))
-setMethod(".get.palette.EMPT","EMPT",function(obj,...){
+setGeneric(".get.palette.EMPT",function(obj) standardGeneric(".get.palette.EMPT"))
+setMethod(".get.palette.EMPT","EMPT",function(obj){
   obj@palette
 })
-setGeneric(".get.palette.EMPT<-",function(obj,value,...) standardGeneric(".get.palette.EMPT<-"))
+setGeneric(".get.palette.EMPT<-",function(obj,value) standardGeneric(".get.palette.EMPT<-"))
 setMethod(".get.palette.EMPT<-","EMPT",function(obj,value){
   obj@palette <- value
   obj
 })
 
 
-setGeneric(".get.plot_category.EMPT",function(obj,...) standardGeneric(".get.plot_category.EMPT"))
-setMethod(".get.plot_category.EMPT","EMPT",function(obj,...){
+setGeneric(".get.plot_category.EMPT",function(obj) standardGeneric(".get.plot_category.EMPT"))
+setMethod(".get.plot_category.EMPT","EMPT",function(obj){
   obj@plot_category
 })
-setGeneric(".get.plot_category.EMPT<-",function(obj,value,...) standardGeneric(".get.plot_category.EMPT<-"))
+setGeneric(".get.plot_category.EMPT<-",function(obj,value) standardGeneric(".get.plot_category.EMPT<-"))
 setMethod(".get.plot_category.EMPT<-","EMPT",function(obj,value){
   obj@plot_category <- value
   obj
 })
 
 
-setGeneric(".get.plot_specific.EMPT",function(obj,...) standardGeneric(".get.plot_specific.EMPT"))
-setMethod(".get.plot_specific.EMPT","EMPT",function(obj,...){
+setGeneric(".get.plot_specific.EMPT",function(obj) standardGeneric(".get.plot_specific.EMPT"))
+setMethod(".get.plot_specific.EMPT","EMPT",function(obj){
   obj@plot_specific
 })
-setGeneric(".get.plot_specific.EMPT<-",function(obj,value,...) standardGeneric(".get.plot_specific.EMPT<-"))
+setGeneric(".get.plot_specific.EMPT<-",function(obj,value) standardGeneric(".get.plot_specific.EMPT<-"))
 setMethod(".get.plot_specific.EMPT<-","EMPT",function(obj,value){
   obj@plot_specific <- value
   obj
 })
 
 
-setGeneric(".get.plot_info.EMPT",function(obj,...) standardGeneric(".get.plot_info.EMPT"))
-setMethod(".get.plot_info.EMPT","EMPT",function(obj,...){
+setGeneric(".get.plot_info.EMPT",function(obj) standardGeneric(".get.plot_info.EMPT"))
+setMethod(".get.plot_info.EMPT","EMPT",function(obj){
   obj@plot_info
 })
-setGeneric(".get.plot_info.EMPT<-",function(obj,value,...) standardGeneric(".get.plot_info.EMPT<-"))
+setGeneric(".get.plot_info.EMPT<-",function(obj,value) standardGeneric(".get.plot_info.EMPT<-"))
 setMethod(".get.plot_info.EMPT<-","EMPT",function(obj,value){
   obj@plot_info <- value
   obj
 })
 
 
-setGeneric(".get.info.EMPT",function(obj,...) standardGeneric(".get.info.EMPT"))
-setMethod(".get.info.EMPT","EMPT",function(obj,...){
+setGeneric(".get.info.EMPT",function(obj) standardGeneric(".get.info.EMPT"))
+setMethod(".get.info.EMPT","EMPT",function(obj){
   obj@info
 })
-setGeneric(".get.info.EMPT<-",function(obj,value,...) standardGeneric(".get.info.EMPT<-"))
+setGeneric(".get.info.EMPT<-",function(obj,value) standardGeneric(".get.info.EMPT<-"))
 setMethod(".get.info.EMPT<-","EMPT",function(obj,value){
   obj@info <- value
   obj

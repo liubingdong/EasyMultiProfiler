@@ -167,73 +167,220 @@ setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
 
 
+
+#' Title
+#'
+#' @param obj obj
+#' @param ... ...
+#' @rdname EMP_assay_extract
+#'
+#' @return xx object
 #' @export
+#'
+#' @examples
+#' # xx
 setGeneric("EMP_assay_extract",function(obj,...) standardGeneric("EMP_assay_extract"))
+
+#' Title
+#'
+#' @param MultiAssayExperiment MultiAssayExperiment
+#' @rdname EMP_assay_extract
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' # 
 setMethod("EMP_assay_extract","MultiAssayExperiment",function(obj,...){
   .EMP_assay_extract_EMP(obj,...)
 })
+
+#' Title
+#'
+#' @param EMPT xx
+#' @rdname EMP_assay_extract
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #
 setMethod("EMP_assay_extract","EMPT",function(obj,...){
   .EMP_assay_extract_EMPT(obj,...)
 })
 
 
-## boxplot
+
+#' Title
+#'
+#' @param obj obj
+#' @param ... ...
+#' @rdname EMP_boxplot
+#'
+#' @return xx object
 #' @export
+#'
+#' @examples
+#' # xx
 setGeneric("EMP_boxplot",function(obj,...) standardGeneric("EMP_boxplot"))
 
+#' Title
+#'
+#' @rdname EMP_boxplot
+#'
+#' @return xx object
+#' @examples
+#' #
 setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj,...){
   EMP_boxplot_alpha(obj,...)
 })
 
-setMethod("EMP_boxplot","EMP_beta_analysis",function(obj,...){
-  EMP_boxplot_beta(obj,...)
-})
 
+#' Title
+#'
+#' @rdname EMP_boxplot
+#'
+#' @return xx object
+#' @examples
+#' #
 setMethod("EMP_boxplot","EMP_assay_data",function(obj,...){
   EMP_assay_boxplot(obj,...)
 })
 
-## scatterplot
+
+#' Title
+#'
+#' @param obj obj
+#' @param ... ...
+#' @rdname EMP_scatterplot
+#'
+#' @return xx object
 #' @export
+#'
+#' @examples
+#' # 
 setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"))
+
+#' Title
+#'
+#' @param EMP_dimension_analysis xx
+#' @rdname EMP_scatterplot
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #
 setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
   EMP_scatterplot_reduce_dimension(obj,...)
 })
 
-## dotplot
+
+#' Title
+#'
+#' @param obj obj
+#' @param ... ...
+#' @rdname EMP_dotplot
+#'
+#' @return xx object
 #' @export
+#'
+#' @examples
+#' # 
 setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 
+#' Title
+#'
+#' @param EMP_enrich_analysis xx
+#' @rdname EMP_dotplot
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #
 setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
 
 
-## netplot
+
+#' Title
+#'
+#' @param obj obj 
+#' @param ... ...
+#' @rdname EMP_netplot
+#'
+#' @return xx object
 #' @export
+#'
+#' @examples
+#' # 
 setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 
+#' Title
+#'
+#' @param EMP_enrich_analysis xx
+#' @rdname EMP_netplot
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #
 setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
 
-## curveplot
+
+#' Title
+#'
+#' @param obj obj 
+#' @param ... ...
+#' @rdname EMP_curveplot
+#'
+#' @return xx object
 #' @export
+#'
+#' @examples
+#' #
 setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 
+#' Title
+#'
+#' @rdname EMP_curveplot
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #
 setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
   EMP_curveplot_enrich(obj,...)
 })
 
-
-`+.EMPT` <- function(...) {
-  data_list <- list(...) %>% unlist()
+#' Title
+#'
+#' @param e1 An object of class EMPT.
+#' @param e2 An object of class EMPT or EMP.
+#' @param ... ...
+#' @export
+#' @method + EMPT
+`+.EMPT` <- function(e1, e2, ...) {
+  data_list <- list(e1, e2, ...) %>% unlist()
   result <- as.EMP(data_list)
   return(result)
 }
 
-`+.EMP` <- function(...) {
-  data_list <- list(...) %>% unlist()
+#' Title
+#'
+#' @param e1 An object of class EMP.
+#' @param e2 An object of class EMPT or EMP.
+#' @param ... ...
+#' @export
+#' @method + EMP
+`+.EMP` <- function(e1, e2, ...) {
+  data_list <- list(e1, e2, ...) %>% unlist()
   result <- as.EMP(data_list)
   return(result)
 }

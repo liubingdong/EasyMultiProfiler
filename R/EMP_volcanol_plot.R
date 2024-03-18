@@ -16,6 +16,7 @@
 EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
                            html_width=NULL,html_height=NULL,
                            mytheme = 'theme()') {
+  sign_group <- log2FC <- feature <- color <- NULL
   if (is.null(palette)) {
     col_values <- .get.palette.EMPT(EMPT)
   }else {

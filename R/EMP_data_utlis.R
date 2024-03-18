@@ -300,6 +300,8 @@ EMP_collapse <- function (x,experiment,estimate_group=NULL,method='sum',na_strin
 #'
 #' @param beta_obj wait_for_add
 #' @param top_number wait_for_add
+#' @importFrom dplyr rowwise
+#' @importFrom dplyr recode
 #'
 #' @return xx object
 #' @export
@@ -307,6 +309,9 @@ EMP_collapse <- function (x,experiment,estimate_group=NULL,method='sum',na_strin
 #' @examples
 #' # add example
 EMP_estimate_sample <- function(beta_obj,top_number = NULL){
+  Group <- PC1 <- PC2 <- `.` <- median_PC1_within <- median_PC2_within <- median_PC1_without <- NULL
+  median_PC2_without <- dis_without <- dis_within <- vector1_start <- vector1_end <- vector2_start <- vector2_end <- NULL
+  dis_fold <- dis_cosine <- dis_index <- primary <- NULL
   pc_data  <- beta_obj$pc_data
 
   # 计算近点中心点

@@ -108,6 +108,8 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
 #' @param assay_name wait_for_add
 #' @param action wait_for_add
 #' @importFrom SummarizedExperiment colData
+#' @importFrom dplyr any_of
+#' @importFrom methods new
 #'
 #' @return xx object
 #' @export
