@@ -111,6 +111,7 @@
 #' @param pamRespectsDendro wait_for_add
 #' @param saveTOMs wait_for_add
 #' @param action wait_for_add
+#' @importFrom WGCNA cor
 #' @param ... wait_for_add
 #'
 #' @return xx object
@@ -120,7 +121,7 @@
 #' # add example
 EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, seq(from = 12, to=20, by=2)),
                                         RsquaredCut=0.85, removeFirst = FALSE, nBreaks = 10, blockSize = NULL,
-                                        corFnc = cor, corOptions = list(use = 'p'),
+                                        corFnc = WGCNA::cor, corOptions = list(use = 'p'),
                                         networkType = "unsigned",
                                         moreNetworkConcepts = FALSE,
                                         gcInterval = NULL,

@@ -13,7 +13,7 @@ EMP_WGCNA_cluster_analysis(
   removeFirst = FALSE,
   nBreaks = 10,
   blockSize = NULL,
-  corFnc = cor,
+  corFnc = WGCNA::cor,
   corOptions = list(use = "p"),
   networkType = "unsigned",
   moreNetworkConcepts = FALSE,
