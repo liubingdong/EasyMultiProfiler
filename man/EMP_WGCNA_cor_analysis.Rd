@@ -6,14 +6,16 @@
 \alias{EMP_WGCNA_cor_analysis,EMP-method}
 \title{Title}
 \usage{
-EMP_WGCNA_cor_analysis(obj)
+EMP_WGCNA_cor_analysis(obj, ...)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMPT}(obj)
+\S4method{EMP_WGCNA_cor_analysis}{EMPT}(obj, ...)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMP}(obj)
+\S4method{EMP_WGCNA_cor_analysis}{EMP}(obj, ...)
 }
 \arguments{
 \item{obj}{x}
+
+\item{...}{...}
 
 \item{EMPT}{x}
 

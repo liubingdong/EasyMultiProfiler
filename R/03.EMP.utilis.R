@@ -107,6 +107,7 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 #' Title
 #'
 #' @param obj x
+#' @param ... ...
 #' @rdname EMP_heatmap_plot
 #'
 #' @return xx object
@@ -114,11 +115,12 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 #'
 #' @examples
 #' #x
-setGeneric("EMP_heatmap_plot",function(obj) standardGeneric("EMP_heatmap_plot"))
+setGeneric("EMP_heatmap_plot",function(obj, ...) standardGeneric("EMP_heatmap_plot"))
 
 #' Title
 #'
 #' @param EMP_cor_analysis x
+#' @param ... ...
 #' @rdname EMP_heatmap_plot
 #'
 #' @return xx object
@@ -126,13 +128,14 @@ setGeneric("EMP_heatmap_plot",function(obj) standardGeneric("EMP_heatmap_plot"))
 #'
 #' @examples
 #' # x
-setMethod("EMP_heatmap_plot","EMP_cor_analysis",function(obj){
-  EMP_heatmap_cor(obj)
+setMethod("EMP_heatmap_plot","EMP_cor_analysis",function(obj, ...){
+  EMP_heatmap_cor(obj, ...)
 })
 
 #' Title
 #'
 #' @param EMP_WGCNA_cor_analysis x
+#' @param ... ...
 #' @rdname EMP_heatmap_plot
 #'
 #' @return xx object
@@ -140,13 +143,14 @@ setMethod("EMP_heatmap_plot","EMP_cor_analysis",function(obj){
 #'
 #' @examples
 #' # x
-setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis",function(obj){
-  EMP_heatmap_WGCNA(obj)
+setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis",function(obj, ...){
+  EMP_heatmap_WGCNA(obj, ...)
 })
 
 #' Title
 #'
 #' @param EMP_WGCNA_cor_analysis2 x
+#' @param ... ...
 #' @rdname EMP_heatmap_plot
 #'
 #' @return x object
@@ -154,13 +158,14 @@ setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis",function(obj){
 #'
 #' @examples
 #' # 
-setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj){
-  EMP_heatmap_WGCNA(obj)
+setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj, ...){
+  EMP_heatmap_WGCNA(obj, ...)
 })
 
 #' Title
 #'
 #' @param obj x
+#' @param ... ...
 #' @rdname EMP_WGCNA_cor_analysis
 #'
 #' @return xx object
@@ -168,11 +173,12 @@ setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj){
 #'
 #' @examples
 #' #x
-setGeneric("EMP_WGCNA_cor_analysis",function(obj) standardGeneric("EMP_WGCNA_cor_analysis"))
+setGeneric("EMP_WGCNA_cor_analysis",function(obj, ...) standardGeneric("EMP_WGCNA_cor_analysis"))
 
 #' Title
 #'
 #' @param EMPT x
+#' @param ... ...
 #' @rdname EMP_WGCNA_cor_analysis
 #'
 #' @return xx object
@@ -180,13 +186,14 @@ setGeneric("EMP_WGCNA_cor_analysis",function(obj) standardGeneric("EMP_WGCNA_cor
 #'
 #' @examples
 #' #x
-setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj){
-  .EMP_WGCNA_cor_analysis_EMPT_m(obj)
+setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj, ...){
+  .EMP_WGCNA_cor_analysis_EMPT_m(obj, ...)
 })
 
 #' Title
 #'
 #' @param EMP x
+#' @param ... ...
 #' @rdname EMP_WGCNA_cor_analysis
 #'
 #' @return xx object
@@ -194,8 +201,8 @@ setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj){
 #'
 #' @examples
 #' #x
-setMethod("EMP_WGCNA_cor_analysis","EMP",function(obj){
-  .EMP_WGCNA_cor_analysis_EMP_m(obj)
+setMethod("EMP_WGCNA_cor_analysis","EMP",function(obj, ...){
+  .EMP_WGCNA_cor_analysis_EMP_m(obj, ...)
 })
 
 

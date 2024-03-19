@@ -7,16 +7,18 @@
 \alias{EMP_heatmap_plot,EMP_WGCNA_cor_analysis2-method}
 \title{Title}
 \usage{
-EMP_heatmap_plot(obj)
+EMP_heatmap_plot(obj, ...)
 
-\S4method{EMP_heatmap_plot}{EMP_cor_analysis}(obj)
+\S4method{EMP_heatmap_plot}{EMP_cor_analysis}(obj, ...)
 
-\S4method{EMP_heatmap_plot}{EMP_WGCNA_cor_analysis}(obj)
+\S4method{EMP_heatmap_plot}{EMP_WGCNA_cor_analysis}(obj, ...)
 
-\S4method{EMP_heatmap_plot}{EMP_WGCNA_cor_analysis2}(obj)
+\S4method{EMP_heatmap_plot}{EMP_WGCNA_cor_analysis2}(obj, ...)
 }
 \arguments{
 \item{obj}{x}
+
+\item{...}{...}
 
 \item{EMP_cor_analysis}{x}
 
