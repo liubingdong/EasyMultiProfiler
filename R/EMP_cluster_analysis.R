@@ -8,7 +8,6 @@
 #' @param h A numeric. Height at which to cut tree (passed to cutree)
 #' @param groupLabels A boolean. Whether show the group label or not.
 #' @param action  A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param cluster cluster
 #' @importFrom tibble column_to_rownames
 #' @importFrom stats hclust
 #' @importFrom vegan vegdist
@@ -20,8 +19,7 @@
 #' @examples
 #' # add example
 EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=F,
-                                 method='average',h=NULL,groupLabels=T,
-                                 cluster=NULL,action='add') {
+                                 method='average',h=NULL,groupLabels=T,action='add') {
   colname <- primary <- `.` <- NULL
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

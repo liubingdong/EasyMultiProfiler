@@ -265,7 +265,7 @@ EMP_scatterplot_reduce_dimension  <- function(EMPT,seed=123,group_level='default
 
  check_dim <- dim(assay_data)[1] * dim(assay_data)[2]
  if (force_adonis == F) {
-   if (check_dim > 1e+05) {
+   if (check_dim > 8.1e+07) {
    message_wrap("Inputting large-scale data may lead to extended computation time for adonis. If necessary, please enable the force_adonis = TRUE.")
    }
  }else {
@@ -273,7 +273,7 @@ EMP_scatterplot_reduce_dimension  <- function(EMPT,seed=123,group_level='default
  } 
 
  
- if (check_dim > 1e+05) {
+ if (check_dim > 8.1e+07) {
   if (!is.null(.get.algorithm.EMPT(EMPT))) {
       distance <- .get.algorithm.EMPT(EMPT)
   } else {
