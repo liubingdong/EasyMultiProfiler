@@ -157,11 +157,42 @@ setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj){
   EMP_heatmap_WGCNA(obj)
 })
 
-
+#' Title
+#'
+#' @param obj x
+#' @rdname EMP_WGCNA_cor_analysis
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #x
 setGeneric("EMP_WGCNA_cor_analysis",function(obj) standardGeneric("EMP_WGCNA_cor_analysis"))
+
+#' Title
+#'
+#' @param EMPT x
+#' @rdname EMP_WGCNA_cor_analysis
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #x
 setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj){
   .EMP_WGCNA_cor_analysis_EMPT_m(obj)
 })
+
+#' Title
+#'
+#' @param EMP x
+#' @rdname EMP_WGCNA_cor_analysis
+#'
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' #x
 setMethod("EMP_WGCNA_cor_analysis","EMP",function(obj){
   .EMP_WGCNA_cor_analysis_EMP_m(obj)
 })
