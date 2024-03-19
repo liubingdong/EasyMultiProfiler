@@ -2,6 +2,7 @@
 
 S3method("+",EMP)
 S3method("+",EMPT)
+export(.pattern_Dectect_multi)
 export(EMP_GSEA_analysis)
 export(EMP_RFCV)
 export(EMP_WGCNA_cluster_analysis)

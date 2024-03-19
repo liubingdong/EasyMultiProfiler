@@ -5,7 +5,8 @@
 \title{Title}
 \usage{
 EMP_normal_import(
-  x,
+  file = NULL,
+  data = NULL,
   sampleID = NULL,
   dfmap = NULL,
   assay_name = NULL,
@@ -13,18 +14,20 @@ EMP_normal_import(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{file}{A file path.}
 
-\item{sampleID}{wait_for_add}
+\item{data}{A dataframe.The row must be the feature and the column is the sample.}
 
-\item{dfmap}{wait_for_add}
+\item{sampleID}{a seris of string character.}
 
-\item{assay_name}{wait_for_add}
+\item{dfmap}{A dataframe. Indicate the experiment name, sample source and sample tube details in the omics data.}
 
-\item{assay}{wait_for_add}
+\item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
+
+\item{assay}{A character string. Indicate the experiment name of the import data in the dfmap.}
 }
 \value{
-xx object
+SummmariseExperiment object
 }
 \description{
 Title

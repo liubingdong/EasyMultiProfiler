@@ -4,15 +4,17 @@
 \alias{humann_function_import}
 \title{Title}
 \usage{
-humann_function_import(x, type)
+humann_function_import(file = NULL, data = NULL, type)
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{file}{A file path.}
 
-\item{type}{wait_for_add}
+\item{data}{A dataframe.The row must be the feature and the column is the sample.}
+
+\item{type}{A character string. Methods include ko and ec.}
 }
 \value{
-xx object
+SummmariseExperiment object
 }
 \description{
 Title

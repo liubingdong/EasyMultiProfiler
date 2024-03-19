@@ -12,7 +12,6 @@ EMP_cluster_analysis(
   method = "average",
   h = NULL,
   groupLabels = T,
-  cluster = NULL,
   action = "add"
 )
 }
@@ -30,8 +29,6 @@ EMP_cluster_analysis(
 \item{h}{A numeric. Height at which to cut tree (passed to cutree)}
 
 \item{groupLabels}{A boolean. Whether show the group label or not.}
-
-\item{cluster}{cluster}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }

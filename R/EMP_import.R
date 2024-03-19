@@ -121,6 +121,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
 #'
 #' @param file A file path.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
+#' @param type type
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
 #' @importFrom SummarizedExperiment assayNames

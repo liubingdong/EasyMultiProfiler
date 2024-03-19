@@ -4,19 +4,27 @@
 \alias{EMP_function_import}
 \title{Title}
 \usage{
-EMP_function_import(x, type, assay_name = NULL, humann_format = FALSE)
+EMP_function_import(
+  file = NULL,
+  data = NULL,
+  type,
+  assay_name = NULL,
+  humann_format = FALSE
+)
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{file}{A file path.}
 
-\item{type}{wait_for_add}
+\item{data}{A dataframe.The row must be the feature and the column is the sample.}
 
-\item{assay_name}{wait_for_add}
+\item{type}{type}
 
-\item{humann_format}{wait_for_add}
+\item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
+
+\item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
 }
 \value{
-xx object
+SummmariseExperiment object
 }
 \description{
 Title

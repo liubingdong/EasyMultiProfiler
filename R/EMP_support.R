@@ -8,6 +8,16 @@
     return(result)
 }
 
+#' Title
+#'
+#' @param pattern_ref Object in EMPT format.
+#' @param pattern A character string. Experiment name in the MultiAssayExperiment object.
+#' @param exact A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
+#' @return xx object
+#' @export
+#'
+#' @examples
+#' # add example
 .pattern_Dectect_multi <- function(pattern_ref,pattern,exact=F){
   if (length(pattern) ==1) {
     .pattern_Dectect(pattern_ref = pattern_ref,pattern = pattern,exact=exact)

@@ -4,15 +4,17 @@
 \alias{humann_taxonomy_import}
 \title{Title}
 \usage{
-humann_taxonomy_import(x, sep = "|")
+humann_taxonomy_import(file = NULL, data = NULL, sep = "|")
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{file}{A file path.}
 
-\item{sep}{wait_for_add}
+\item{data}{A dataframe.The row must be the feature and the column is the sample.}
+
+\item{sep}{The field separator character. Values on each line of the file are separated by this character. (defacult:'|')}
 }
 \value{
-xx object
+SummmariseExperiment object
 }
 \description{
 Title

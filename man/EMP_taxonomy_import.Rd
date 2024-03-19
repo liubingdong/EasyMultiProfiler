@@ -5,23 +5,26 @@
 \title{Title}
 \usage{
 EMP_taxonomy_import(
-  x,
+  file = NULL,
+  data = NULL,
   humann_format = FALSE,
   assay_name = NULL,
   sep = if (humann_format == "FALSE") ";" else "|"
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{file}{A file path.}
 
-\item{humann_format}{wait_for_add}
+\item{data}{A dataframe.The row must be the feature and the column is the sample.}
 
-\item{assay_name}{wait_for_add}
+\item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
 
-\item{sep}{wait_for_add}
+\item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
+
+\item{sep}{The field separator character. Values on each line of the file are separated by this character. (defacult:'|')}
 }
 \value{
-xx object
+SummmariseExperiment object
 }
 \description{
 Title
