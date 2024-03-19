@@ -4,6 +4,7 @@
 \alias{EMP_heatmap_plot}
 \alias{EMP_heatmap_plot,EMP_cor_analysis-method}
 \alias{EMP_heatmap_plot,EMP_WGCNA_cor_analysis-method}
+\alias{EMP_heatmap_plot,EMP_WGCNA_cor_analysis2-method}
 \title{Title}
 \usage{
 EMP_heatmap_plot(obj)
@@ -11,6 +12,8 @@ EMP_heatmap_plot(obj)
 \S4method{EMP_heatmap_plot}{EMP_cor_analysis}(obj)
 
 \S4method{EMP_heatmap_plot}{EMP_WGCNA_cor_analysis}(obj)
+
+\S4method{EMP_heatmap_plot}{EMP_WGCNA_cor_analysis2}(obj)
 }
 \arguments{
 \item{obj}{x}
@@ -18,6 +21,8 @@ EMP_heatmap_plot(obj)
 \item{EMP_cor_analysis}{x}
 
 \item{EMP_WGCNA_cor_analysis}{x}
+
+\item{EMP_WGCNA_cor_analysis2}{x}
 }
 \value{
 xx object
@@ -25,8 +30,12 @@ xx object
 xx object
 
 xx object
+
+x object
 }
 \description{
+Title
+
 Title
 
 Title
@@ -37,4 +46,5 @@ Title
 #x
 # x
 # x
+# 
 }

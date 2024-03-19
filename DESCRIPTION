@@ -14,6 +14,7 @@ Imports:
     clusterProfiler,
     DESeq2,
     dplyr,
+    dynamicTreeCut,
     enrichplot,
     formattable,
     ggiraph,
@@ -23,6 +24,7 @@ Imports:
     ggthemes,
     glue,
     gson,
+    impute,
     kableExtra,
     magrittr,
     memoise,
@@ -56,6 +58,7 @@ RoxygenNote: 7.2.3
 Suggests: 
     dendextend,
     knitr,
+    fastcluster,
     rmarkdown
 VignetteBuilder: knitr
 NeedsCompilation: no

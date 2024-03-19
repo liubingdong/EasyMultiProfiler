@@ -1,10 +1,10 @@
 .perform_operation <- function(x, method,na.rm=TRUE,...) {
     result <- switch(method,
-                     "mean" = mean(x,na.rm=na.rm),
-                     "sum" = sum(x,na.rm=na.rm),
-                     "median" = median(x,na.rm=na.rm),
-                     "max" = max(x,na.rm=na.rm),
-                     "min" = min(x,na.rm=na.rm))
+                     "mean" = mean(x,na.rm=na.rm, ...),
+                     "sum" = sum(x,na.rm=na.rm, ...),
+                     "median" = median(x,na.rm=na.rm, ...),
+                     "max" = max(x,na.rm=na.rm, ...),
+                     "min" = min(x,na.rm=na.rm, ...))
     return(result)
 }
 

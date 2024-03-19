@@ -11,7 +11,7 @@
 #' @noRd 
 EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),
     collapse_sep=' ',action='add',...) {
-  `.sample` <- counts <- feature <- primary <- NULL 
+  `.sample` <- counts <- feature <- primary <- old_feature <- NULL 
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -57,7 +57,13 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
     EMPT@deposit2[['df_attr_row']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
   }else {
     row_data <- .get.row_info.EMPT(EMPT)
-    colnames(row_data) <- EMPT@deposit2[['df_attr_row']][1,] ## Recovery the raw name
+    
+    ## Recovery the raw name
+    change_name <- EMPT@deposit2[['df_attr_row']] %>% dplyr::select(feature,old_feature)
+    feature_origin <- change_name %>% dplyr::pull(feature)
+    old_feature_origin <- change_name %>% dplyr::pull(old_feature)
+    row_data <- row_data %>% dplyr::rename({{feature_origin}} := feature,{{old_feature_origin}} := old_feature)
+
     new_row_data <- row_data  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
@@ -113,7 +119,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @return xx object
 #' @noRd 
 EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
-  `.feature` <- counts <- primary <- feature <- NULL
+  `.feature` <- counts <- primary <- feature <- old_feature <- NULL
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -160,7 +166,13 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
     
   }else {
     col_data <- .get.mapping.EMPT(EMPT)
-    colnames(col_data) <- EMPT@deposit2[['df_attr_col']][1,] ## Recovery the raw name
+
+    ## Recovery the raw name
+    change_name <- EMPT@deposit2[['df_attr_row']] %>% dplyr::select(feature,old_feature)
+    feature_origin <- change_name %>% dplyr::pull(feature)
+    old_feature_origin <- change_name %>% dplyr::pull(old_feature)
+    row_data <- row_data %>% dplyr::rename({{feature_origin}} := feature,{{old_feature_origin}} := old_feature)
+
     new_col_data <- col_data  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value

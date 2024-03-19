@@ -6,8 +6,6 @@
 #' @param removeFirst wait_for_add
 #' @param nBreaks wait_for_add
 #' @param blockSize wait_for_add
-#' @param corFnc wait_for_add
-#' @param corOptions wait_for_add
 #' @param networkType wait_for_add
 #' @param moreNetworkConcepts wait_for_add
 #' @param gcInterval wait_for_add
@@ -18,61 +16,64 @@
 #' @param numericLabels wait_for_add
 #' @param pamRespectsDendro wait_for_add
 #' @param saveTOMs wait_for_add
-#' @param ... wait_for_add
+# ' @param ... wait_for_add
 #' @importFrom WGCNA labels2colors
 #'
 #' @return xx object
 #' @noRd
 .EMP_WGCNA_cluster_analysis <- function(EMPT,powers=c(1:10, seq(from = 12, to=20, by=2)),
                                         RsquaredCut=0.85, removeFirst = FALSE, nBreaks = 10, blockSize = NULL,
-                                        corFnc = cor, corOptions = list(use = 'p'),
+                                        # corFnc = WGCNA::cor, corOptions = list(use = 'p'),
                                         networkType = "unsigned",
                                         moreNetworkConcepts = FALSE,
                                         gcInterval = NULL,
                                         TOMType = "unsigned", minModuleSize = 30,
                                         reassignThreshold = 0, mergeCutHeight = 0.25,
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
-                                        saveTOMs = T,...) {
+                                        # saveTOMs = T,...) {
+                                        saveTOMs = T) {
   deposit <- list()
   Var1 <- Freq <- NULL
   #enableWGCNAThreads()
-
+  
   assay_data <- .get.assay.EMPT(EMPT) %>%
     tibble::column_to_rownames('primary') %>%
     as.matrix()
-
+  # print("here 2_1 over")
   sft <- spsUtil::quiet(WGCNA::pickSoftThreshold(assay_data, powerVector = powers,
                           RsquaredCut=RsquaredCut, removeFirst = removeFirst, nBreaks = nBreaks, blockSize = blockSize,
-                          corFnc = corFnc, corOptions = corOptions,
+                          # corFnc = corFnc, corOptions = corOptions,
                           networkType = networkType,
                           moreNetworkConcepts = moreNetworkConcepts,
                           gcInterval = gcInterval),print_cat = TRUE, message = TRUE, warning = TRUE)
-
+  # print("here 2_2 over")
   check_best_power <- sft[['powerEstimate']]
 
   if (is.na(check_best_power)) {
     stop("No best soft power,please reset the RsquaredCut or other parameter!")
   }
-
-  net = WGCNA::blockwiseModules(assay_data, power = check_best_power,
+  save(assay_data, check_best_power, TOMType, minModuleSize, reassignThreshold, mergeCutHeight, numericLabels, pamRespectsDendro, saveTOMs, file = "test.Rdata")
+  # net = WGCNA::blockwiseModules(assay_data, power = check_best_power,
+  net = WGCNA_blockwiseModules(assay_data, power = check_best_power,
                          TOMType = TOMType, minModuleSize = minModuleSize,
                          reassignThreshold = reassignThreshold, mergeCutHeight = mergeCutHeight,
                          numericLabels = numericLabels, pamRespectsDendro = pamRespectsDendro,
-                         saveTOMs = saveTOMs,...)
+                         # saveTOMs = saveTOMs,...)
+                         saveTOMs = saveTOMs)
 
   mergedColors = WGCNA::labels2colors(net$colors)
-
+  # print("here 2_3 over")
   WGCNA::plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]], "Module colors",
                       dendroLabels = FALSE, hang = 0.03,
                       addGuide = TRUE, guideHang = 0.05,
                       abHeight=mergeCutHeight)
 
   mergedColors = WGCNA::labels2colors(net$colors)
-
+  # print("here 2_4 over")
   WGCNA_module_elements <- table(WGCNA::labels2colors(net$colors)) %>%
                 as.data.frame() %>%
                 dplyr::rename(WGCNA_color=Var1,WGCNA_module_elements=Freq)
-
+  # print("here 2_5 over")
   feature_modules <- data.frame(WGCNA_cluster=net$unmergedColors,WGCNA_color=mergedColors) %>% tibble::rownames_to_column('feature') %>%
     tibble::as_tibble() %>% dplyr::left_join(WGCNA_module_elements,by='WGCNA_color')
 
@@ -80,6 +81,7 @@
   #disableWGCNAThreads()
 
   .get.deposit_append.EMPT(EMPT,info='feature_WGCNA_cluster_result') <- net
+  # print("here 2_6 over")
   EMPT@deposit[['feature_WGCNA_cluster_result']] <-feature_modules
   return(EMPT)
 }
@@ -98,8 +100,6 @@
 #' @param removeFirst wait_for_add
 #' @param nBreaks wait_for_add
 #' @param blockSize wait_for_add
-#' @param corFnc wait_for_add
-#' @param corOptions wait_for_add
 #' @param networkType wait_for_add
 #' @param moreNetworkConcepts wait_for_add
 #' @param gcInterval wait_for_add
@@ -111,8 +111,7 @@
 #' @param pamRespectsDendro wait_for_add
 #' @param saveTOMs wait_for_add
 #' @param action wait_for_add
-#' @importFrom WGCNA cor
-#' @param ... wait_for_add
+# ' @param ... wait_for_add
 #'
 #' @return xx object
 #' @export
@@ -121,14 +120,15 @@
 #' # add example
 EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, seq(from = 12, to=20, by=2)),
                                         RsquaredCut=0.85, removeFirst = FALSE, nBreaks = 10, blockSize = NULL,
-                                        corFnc = WGCNA::cor, corOptions = list(use = 'p'),
+                                        # corFnc = WGCNA::cor, corOptions = list(use = 'p'),
                                         networkType = "unsigned",
                                         moreNetworkConcepts = FALSE,
                                         gcInterval = NULL,
                                         TOMType = "unsigned", minModuleSize = 30,
                                         reassignThreshold = 0, mergeCutHeight = 0.25,
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
-                                        saveTOMs = T,action='add',...) {
+                                        # saveTOMs = T,action='add',...) {
+                                        saveTOMs = T,action='add') {
 
   call <- match.call()
 
@@ -144,20 +144,23 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   if (use_cached == F) {
     memoise::forget(.EMP_WGCNA_cluster_analysis_m) %>% invisible()
   }
-
+  # print("here 1_1 over")
   EMPT <- .EMP_WGCNA_cluster_analysis_m(EMPT=x,powers=powers,
                                         RsquaredCut=RsquaredCut, removeFirst = removeFirst, nBreaks = nBreaks, blockSize = blockSize,
-                                        corFnc = corFnc, corOptions = corOptions,
+                                        # corFnc = corFnc, corOptions = corOptions,
                                         networkType = networkType,
                                         moreNetworkConcepts = moreNetworkConcepts,
                                         gcInterval = gcInterval,
                                         TOMType = TOMType, minModuleSize = minModuleSize,
                                         reassignThreshold = reassignThreshold, mergeCutHeight = mergeCutHeight,
                                         numericLabels = numericLabels, pamRespectsDendro = pamRespectsDendro,
-                                        saveTOMs = saveTOMs,...)
+                                        # saveTOMs = saveTOMs,...)
+                                        saveTOMs = saveTOMs)
+  # print("here 1_2 over")                                        
 
   .get.history.EMPT(EMPT) <- call
   .get.info.EMPT(EMPT) <- 'EMP_WGCNA_cluster_analysis'
+  # print("here 1_3 over")
   class(EMPT) <- 'EMP_WGCNA_cluster_analysis'
   if (action == 'add') {
     return(EMPT)

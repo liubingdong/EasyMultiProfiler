@@ -13,8 +13,6 @@ EMP_WGCNA_cluster_analysis(
   removeFirst = FALSE,
   nBreaks = 10,
   blockSize = NULL,
-  corFnc = WGCNA::cor,
-  corOptions = list(use = "p"),
   networkType = "unsigned",
   moreNetworkConcepts = FALSE,
   gcInterval = NULL,
@@ -25,8 +23,7 @@ EMP_WGCNA_cluster_analysis(
   numericLabels = TRUE,
   pamRespectsDendro = FALSE,
   saveTOMs = T,
-  action = "add",
-  ...
+  action = "add"
 )
 }
 \arguments{
@@ -45,10 +42,6 @@ EMP_WGCNA_cluster_analysis(
 \item{nBreaks}{wait_for_add}
 
 \item{blockSize}{wait_for_add}
-
-\item{corFnc}{wait_for_add}
-
-\item{corOptions}{wait_for_add}
 
 \item{networkType}{wait_for_add}
 
@@ -71,8 +64,6 @@ EMP_WGCNA_cluster_analysis(
 \item{saveTOMs}{wait_for_add}
 
 \item{action}{wait_for_add}
-
-\item{...}{wait_for_add}
 }
 \value{
 xx object

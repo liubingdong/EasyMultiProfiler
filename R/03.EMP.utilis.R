@@ -146,7 +146,8 @@ setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis",function(obj){
 
 #' Title
 #'
-#' @param EMP_WGCNA_cor_analysis2 
+#' @param EMP_WGCNA_cor_analysis2 x
+#' @rdname EMP_heatmap_plot
 #'
 #' @return x object
 #' @export
