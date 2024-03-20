@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_dimension_analysis.R
 \name{EMP_dimension_analysis}
 \alias{EMP_dimension_analysis}
-\title{Title}
+\title{Dimension reduction of the abundance or experssion data}
 \usage{
 EMP_dimension_analysis(
   x,
@@ -15,25 +15,25 @@ EMP_dimension_analysis(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string. Methods include pca, pcoa, pls, opls.}
 
-\item{distance}{wait_for_add}
+\item{distance}{A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist.}
 
-\item{use_cached}{use_cached}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{estimate_group}{wait_for_add}
+\item{estimate_group}{A character string. Select the group name in the coldata to be considerated.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Dimension reduction of the abundance or experssion data
 }
 \examples{
 # add example

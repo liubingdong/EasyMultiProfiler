@@ -2,18 +2,18 @@
 % Please edit documentation in R/EMP_summary.R
 \name{EMP_summary}
 \alias{EMP_summary}
-\title{Title}
+\title{Visual charts for MultiAssayExperiment or EMP object}
 \usage{
 EMP_summary(obj)
 }
 \arguments{
-\item{obj}{wait_for_add}
+\item{obj}{MultiAssayExperiment or EMP object}
 }
 \value{
-xx object
+view object
 }
 \description{
-Title
+Visual charts for MultiAssayExperiment or EMP object
 }
 \examples{
 # add example

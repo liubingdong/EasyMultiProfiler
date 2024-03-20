@@ -2,17 +2,15 @@ Package: EasyMultiPlot
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Authors@R: c( person(given = "Bingdong", family = "liu",       email = "xx@xx.com",           role = c("aut", "cre")),
+Authors@R: c( person(given = "Bingdong", family = "liu",       email = "382983280@qq.com", role = c("aut", "cre")),
               person(given = "Erqiang",  family = "Hu",        email = "13766876214@163.com", role = c("aut", "ctb")))
 Maintainer: Guangchuang Yu <xx@xx.com>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: The EasyMulitiPlot package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from beginning to end.
 License: Artistic-2.0
 Encoding: UTF-8
 Imports: 
     bigstatsr,
     clusterProfiler,
-    DESeq2,
     dplyr,
     dynamicTreeCut,
     enrichplot,
@@ -48,13 +46,12 @@ Imports:
     tibble,
     tidybulk,
     tidyr,
-    tidySummarizedExperiment,
     utils,
     vegan,
     WGCNA,
     withr,
     yulab.utils
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     dendextend,
     knitr,

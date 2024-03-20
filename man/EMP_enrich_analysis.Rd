@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_enrich_analysis.R
 \name{EMP_enrich_analysis}
 \alias{EMP_enrich_analysis}
-\title{Title}
+\title{KEGG enrichment for the KO, EC and compound}
 \usage{
 EMP_enrich_analysis(
   x,
@@ -17,29 +17,29 @@ EMP_enrich_analysis(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{condition}{filter condition}
+\item{condition}{Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05}
 
-\item{minGSSize}{wait_for_add}
+\item{minGSSize}{Minimal size of genes annotated by Ontology term for testing.}
 
-\item{maxGSSize}{wait_for_add}
+\item{maxGSSize}{Maximal size of genes annotated for testing.}
 
-\item{keyType}{wait_for_add}
+\item{keyType}{A character string. keyType include ko, ec, cpd, entrezid.}
 
-\item{KEGG_Type}{wait_for_add}
+\item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG.}
 
-\item{species}{wait_for_add}
+\item{species}{A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'}
 
-\item{action}{wait_for_add}
+\item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to clusterProfiler::compareCluster.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+KEGG enrichment for the KO, EC and compound
 }
 \examples{
 # add example

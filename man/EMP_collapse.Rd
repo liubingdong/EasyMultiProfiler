@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_data_utlis.R
 \name{EMP_collapse}
 \alias{EMP_collapse}
-\title{Title}
+\title{Aggregates abundace or experssion from the same attributes in the coldata or rowdata}
 \usage{
 EMP_collapse(
   x,
@@ -17,29 +17,29 @@ EMP_collapse(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{estimate_group}{wait_for_add}
+\item{estimate_group}{A character string. Select the column in the rowdata or coldata to collapse.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string. Methods include mean, sum, median, min, max.}
 
-\item{na_string}{wait_for_add}
+\item{na_string}{A series of character strings. Indicate which characters can be considered missing values.}
 
-\item{collapse_by}{wait_for_add}
+\item{collapse_by}{A character string. Methods include col or row.}
 
-\item{collapse_sep}{wait_for_add}
+\item{collapse_sep}{A character string. The linking symbol used when strings are combined.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function mean, sum, median, min, max in the base package.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Aggregates abundace or experssion from the same attributes in the coldata or rowdata
 }
 \examples{
 # add example

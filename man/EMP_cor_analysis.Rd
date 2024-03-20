@@ -27,7 +27,7 @@ EMP_cor_analysis(
 \item{...}{Further parameters passed to the function agricolae::correlation}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
 Title

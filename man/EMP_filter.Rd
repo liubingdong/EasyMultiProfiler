@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_filter.R
 \name{EMP_filter}
 \alias{EMP_filter}
-\title{Title}
+\title{Filer experssion or abudance data that match a condition}
 \usage{
 EMP_filter(
   obj,
@@ -16,27 +16,27 @@ EMP_filter(
 )
 }
 \arguments{
-\item{obj}{wait_for_add}
+\item{obj}{EMPT or MultiAssayExperiment object.}
 
-\item{sample_condition}{wait_for_add}
+\item{sample_condition}{Expressions that return a logical value, and are defined in terms of the variables in coldata. If multiple expressions are included, they are combined with the &，| operator.}
 
-\item{feature_condition}{wait_for_add}
+\item{feature_condition}{Expressions that return a logical value, and are defined in terms of the variables in rowdata. If multiple expressions are included, they are combined with the &，| operator.}
 
-\item{filterSample}{wait_for_add}
+\item{filterSample}{A series of character strings. Select samples in the data exactly.}
 
-\item{filterFeature}{wait_for_add}
+\item{filterFeature}{A series of character strings. Select samples in the data exactly.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
 \item{show_info}{wait_for_add}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Filer experssion or abudance data that match a condition
 }
 \examples{
 # add example

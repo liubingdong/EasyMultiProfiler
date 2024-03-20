@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_extract.R
 \name{EMP_rowdata_extract}
 \alias{EMP_rowdata_extract}
-\title{Title}
+\title{Extract rowdata from EMPT or MultiAssayExperiment object}
 \usage{
 EMP_rowdata_extract(
   obj,
@@ -13,21 +13,21 @@ EMP_rowdata_extract(
 )
 }
 \arguments{
-\item{obj}{MultiAssayExperiment object}
+\item{obj}{EMPT or MultiAssayExperiment object.}
 
-\item{experiment}{the choosed}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{pattern_ref}{wait_for_add}
+\item{pattern_ref}{A character string. Select which column in the rowdata to extract rowdata from.}
 
-\item{pattern}{wait_for_add}
+\item{pattern}{A character string. Select which pattern in the feature to extract rowdata.}
 
-\item{exact}{wait_for_add}
+\item{exact}{A boolean. Whether the extract use exact search method.}
 }
 \value{
-xx object
+table
 }
 \description{
-Title
+Extract rowdata from EMPT or MultiAssayExperiment object
 }
 \examples{
 # add example

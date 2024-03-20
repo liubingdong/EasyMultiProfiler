@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_decostand.R
 \name{EMP_decostand}
 \alias{EMP_decostand}
-\title{Title}
+\title{Standardization Methods}
 \usage{
 EMP_decostand(
   x,
@@ -17,29 +17,29 @@ EMP_decostand(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string. Standardization method inluding relative(Equivalent to total in the vegan::decostand), integer, log, clr, alr, aclr,and more. Details see vegan::decostand.}
 
-\item{bySample}{wait_for_add}
+\item{bySample}{A boolean. Whether the function decostand by the sample or feature.}
 
-\item{logbase}{wait_for_add}
+\item{logbase}{An interger. The logarithm base used in method = "log".(default=2)}
 
-\item{use_cached}{wait_for_add}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{pseudocount}{wait_for_add}
+\item{pseudocount}{A number. The logarithm pseudocount used in method = "clr".(default=0.0000001)}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function vegan::decostand.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Standardization Methods
 }
 \examples{
 # add example

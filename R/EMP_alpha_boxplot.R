@@ -72,7 +72,7 @@ EMP_boxplot_alpha <- function(EMPT,plot_category = 1,seed =123,...) {
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr filter
 #' @noRd
-#' # add example
+
 EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
                                        estimate_group = NULL,group_level = 'default',
                                        ncol = NULL,select_metrics = NULL,palette = NULL,

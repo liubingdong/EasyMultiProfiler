@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_import.R
 \name{EMP_normal_import}
 \alias{EMP_normal_import}
-\title{Title}
+\title{Import combined data into SummariseExperiment}
 \usage{
 EMP_normal_import(
   file = NULL,
@@ -30,7 +30,7 @@ EMP_normal_import(
 SummmariseExperiment object
 }
 \description{
-Title
+Import combined data into SummariseExperiment
 }
 \examples{
 # example

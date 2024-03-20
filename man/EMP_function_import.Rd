@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_import.R
 \name{EMP_function_import}
 \alias{EMP_function_import}
-\title{Title}
+\title{Import gene data into SummariseExperiment}
 \usage{
 EMP_function_import(
   file = NULL,
@@ -27,7 +27,7 @@ EMP_function_import(
 SummmariseExperiment object
 }
 \description{
-Title
+Import gene data into SummariseExperiment
 }
 \examples{
 # add example

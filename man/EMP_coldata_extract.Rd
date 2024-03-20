@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_extract.R
 \name{EMP_coldata_extract}
 \alias{EMP_coldata_extract}
-\title{Title}
+\title{Extract coldata from EMPT or MultiAssayExperiment object}
 \usage{
 EMP_coldata_extract(
   obj,
@@ -13,21 +13,21 @@ EMP_coldata_extract(
 )
 }
 \arguments{
-\item{obj}{wait_for_add}
+\item{obj}{EMPT or MultiAssayExperiment object.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{coldata_to_assay}{wait_for_add}
+\item{coldata_to_assay}{A series of character strings. The coldata_to_assay used in action = "add". Select which columns in the coldata to transfer into assay.}
 
-\item{assay_name}{wait_for_add}
+\item{assay_name}{A character string. The assay_name used in action = "add".(default:undefined)}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
 \value{
-xx object
+EMPT object or table
 }
 \description{
-Title
+Extract coldata from EMPT or MultiAssayExperiment object
 }
 \examples{
 # add example

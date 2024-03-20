@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_import.R
 \name{EMP_taxonomy_import}
 \alias{EMP_taxonomy_import}
-\title{Title}
+\title{Import microbial data into SummariseExperiment}
 \usage{
 EMP_taxonomy_import(
   file = NULL,
@@ -27,7 +27,7 @@ EMP_taxonomy_import(
 SummmariseExperiment object
 }
 \description{
-Title
+Import microbial data into SummariseExperiment
 }
 \examples{
 # add example

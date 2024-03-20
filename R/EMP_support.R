@@ -12,7 +12,7 @@
 #'
 #' @param pattern_ref Object in EMPT format.
 #' @param pattern A character string. Experiment name in the MultiAssayExperiment object.
-#' @param exact 
+#' @param exact A boolean. Whether the extract use exact search method.
 #' @return xx object
 #' @export
 #'

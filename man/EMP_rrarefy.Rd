@@ -2,26 +2,26 @@
 % Please edit documentation in R/EMP_rrarefy.R
 \name{EMP_rrarefy}
 \alias{EMP_rrarefy}
-\title{Title}
+\title{Rarefaction abundance or experssion Richness}
 \usage{
 EMP_rrarefy(x, experiment, use_cached = T, action = "add", ...)
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{use_cached}{wait_for_add}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function vegan::rrarefy.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Rarefaction abundance or experssion Richness
 }
 \examples{
 # add example
