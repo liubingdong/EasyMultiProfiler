@@ -43,19 +43,19 @@
 
 .EMP_decostand_m <- memoise::memoise(.EMP_decostand)
 
-#' Title
+#' Standardization Methods
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param method wait_for_add
-#' @param bySample wait_for_add
-#' @param logbase wait_for_add
-#' @param use_cached wait_for_add
-#' @param pseudocount wait_for_add
-#' @param action wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param method A character string. Standardization method inluding relative(Equivalent to total in the vegan::decostand), integer, log, clr, alr, aclr,and more. Details see vegan::decostand.
+#' @param bySample A boolean. Whether the function decostand by the sample or feature.
+#' @param logbase An interger. The logarithm base used in method = "log".(default=2)
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param pseudocount A number. The logarithm pseudocount used in method = "clr".(default=0.0000001)
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... Further parameters passed to the function vegan::decostand.
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

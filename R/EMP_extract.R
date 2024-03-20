@@ -53,16 +53,16 @@
 
 
 
-#' Title
+#' Extract rowdata from EMPT or MultiAssayExperiment object
 #'
-#' @param obj MultiAssayExperiment object 
-#' @param experiment the choosed 
-#' @param pattern_ref wait_for_add
-#' @param pattern wait_for_add
-#' @param exact wait_for_add
+#' @param obj EMPT or MultiAssayExperiment object.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
+#' @param pattern_ref A character string. Select which column in the rowdata to extract rowdata from.
+#' @param pattern A character string. Select which pattern in the feature to extract rowdata.
+#' @param exact A boolean. Whether the extract use exact search method.
 #' @importFrom dplyr select_if
 #'
-#' @return xx object
+#' @return table
 #' @export
 #'
 #' @examples
@@ -100,18 +100,18 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
   return(deposit)
 }
 
-#' Title
+#' Extract coldata from EMPT or MultiAssayExperiment object
 #'
-#' @param obj wait_for_add
-#' @param experiment wait_for_add
-#' @param coldata_to_assay wait_for_add
-#' @param assay_name wait_for_add
-#' @param action wait_for_add
+#' @param obj EMPT or MultiAssayExperiment object.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
+#' @param coldata_to_assay A series of character strings. The coldata_to_assay used in action = "add". Select which columns in the coldata to transfer into assay.
+#' @param assay_name A character string. The assay_name used in action = "add".(default:undefined)
+#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @importFrom SummarizedExperiment colData
 #' @importFrom dplyr any_of
 #' @importFrom methods new
 #'
-#' @return xx object
+#' @return EMPT object or table
 #' @export
 #'
 #' @examples

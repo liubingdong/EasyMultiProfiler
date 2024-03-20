@@ -1,19 +1,19 @@
-#' Title
+#' Fast Imputation of Missing Values by Chained Random Forests
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param coldata wait_for_add
-#' @param assay wait_for_add
-#' @param rowdata wait_for_add
-#' @param pmm.k wait_for_add
-#' @param num.trees wait_for_add
-#' @param seed wait_for_add
-#' @param verbose wait_for_add
-#' @param action wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param coldata A boolean. Whether the function use the coldata to impute or not.
+#' @param assay A boolean. Whether the function use the assay to impute or not.
+#' @param rowdata A boolean. Whether the function use the rowdata to impute or not.
+#' @param pmm.k Number of candidate non-missing values to sample from in the predictive mean matching steps. 0 to avoid this step.
+#' @param num.trees Tree number.
+#' @param seed Integer seed to initialize the random generator.
+#' @param verbose Controls how much info is printed to screen. 0 to print nothing.
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... Further parameters passed to the function missRanger::missRanger.
 #' @importFrom missRanger missRanger
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

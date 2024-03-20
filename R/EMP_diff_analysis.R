@@ -1,96 +1,3 @@
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param group_level wait_for_add
-#' @param design wait_for_add
-#' @param ... wait_for_add
-#' @importFrom DESeq2 DESeqDataSetFromMatrix
-#' @importFrom DESeq2 DESeq
-#' @importFrom DESeq2 results
-#' @importFrom dplyr rename
-#' @importFrom dplyr mutate
-#' @importFrom tibble as_tibble
-#' @importFrom stringr str_remove
-#' @importFrom SummarizedExperiment colData
-#' @noRd
-.EMP_diff_analysis_deseq2_deprecated <- function(EMPT,group_level=NULL,design,...) {
-  log2FoldChange <- log2FC <- feature <- Estimate_group <- pvalue <- padj <- sign_group <- NULL
-  method <- vs <- fold_change <- batch_effect <- NULL
-  # confirm group and batch info
-  Group_info <- as.list(design)[[2]]
-  estimate_group <- as.list(Group_info)[[length(Group_info)]] %>% as.character()
-  if (length(as.list(Group_info)) ==3) {
-    batch_info <- as.list(Group_info)[[2]] %>% as.character()
-  }else{
-    batch_info <- NULL
-  }
-
-  # prepare data for deseq2
-  sub_data <- .get.result.EMPT(EMPT) %>%
-    tibble::column_to_rownames('primary') %>%
-    round(digits = 0) %>%
-    t()
-  colData <- .get.mapping.EMPT(EMPT) %>%
-    tibble::column_to_rownames('primary')  %>%
-    dplyr::select(!!estimate_group,!!batch_info)
-
-  if (is.null(group_level)) {
-    group_level <- colData[[estimate_group]] %>% unique()
-  }
-
-  colData[[estimate_group]] <- factor(colData[[estimate_group]],levels = rev(group_level))
-
-
-  cds <- DESeq2::DESeqDataSetFromMatrix(sub_data,colData,design) %>%
-    suppressMessages() %>%
-    suppressWarnings()
-
-  #fitType <- match.arg(fitType, choices=c("parametric","local","mean","glmGamPoi"))
-  #test <- match.arg(test, choices=c("Wald","LRT"))
-  dds <- DESeq2::DESeq(cds,...)
-
-  res <- DESeq2::results(dds)
-
-
-  # obetain vs info
-  vs_info <- as.data.frame(res@elementMetadata)[2,2]
-
-
-  res_df <- as.data.frame(res)  %>%
-    tibble::rownames_to_column('feature') %>%
-    dplyr::rename(log2FC = log2FoldChange) %>%
-    dplyr::mutate(vs = vs_info) %>%
-    dplyr::mutate(fold_change = 2^log2FC) %>%
-    dplyr::mutate(
-      sign_group = dplyr::case_when(
-        log2FC > 0 ~ group_level[1],
-        log2FC < 0 ~ group_level[2]
-      )
-    ) %>%
-    dplyr::mutate(Estimate_group=estimate_group) %>%
-    dplyr::mutate(method='deseq2') %>%
-    dplyr::select(feature,Estimate_group,pvalue,padj,sign_group,method,vs,fold_change,log2FC,everything()) %>%
-    tibble::as_tibble()
-
-  if (!is.null(batch_info)) {
-    res_df %<>%
-      dplyr::mutate(batch_effect=batch_info) %>%
-      dplyr::select(feature,Estimate_group,batch_effect,everything())
-  }
-
-
-  #EMPT@deposit[['raw']] <- res
-  EMPT@deposit[['diff_analysis_result']] <- res_df
-  .get.estimate_group.EMPT(EMPT) <- group_level
-  .get.algorithm.EMPT(EMPT) <- 'diff_analysis'
-  .get.info.EMPT(EMPT) <- 'EMP_diff_analysis'
-  EMPT
-}
-
-
-.EMP_diff_analysis_deseq2_m_deprecated <- memoise::memoise(.EMP_diff_analysis_deseq2_deprecated)
-
-
 #' @importFrom rlang `:=`
 #' @importFrom dplyr last_col
 #' @importFrom dplyr matches
@@ -193,20 +100,20 @@
 
 
 
-#' Title
+#' Differential expression or abundance analysis
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param method wait_for_add
-#' @param estimate_group wait_for_add
-#' @param use_cached wait_for_add
-#' @param action wait_for_add
-#' @param group_level wait_for_add
-#' @param core wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param method A character string.Methods include t.test, wilcox_test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights
+#' @param estimate_group A character string. Select the group name in the coldata to be calculated.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param group_level A series of character strings. Determine the comparison order of groups.
+#' @param core A number. Select the core numbers in the parallel compute to speed up the result.
+#' @param ... Further parameters passed to the function tidybulk::test_differential_abundance, or statistical function in the stats package.
 #' @importFrom memoise forget
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

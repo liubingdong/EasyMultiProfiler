@@ -64,15 +64,15 @@
 
 .EMP_rrarefy_m <- memoise::memoise(.EMP_rrarefy)
 
-#' Title
+#' Rarefaction abundance or experssion Richness
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param use_cached wait_for_add
-#' @param action wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... Further parameters passed to the function vegan::rrarefy.
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

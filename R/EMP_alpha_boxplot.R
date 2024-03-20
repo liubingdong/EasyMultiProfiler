@@ -1,8 +1,8 @@
 #' Title
 #'
-#' @param EMPT Object in EMPT format.
+#' @param EMPT Object in EMPT or MultiAssayExperiment format.
 #' @param plot_category An interger.More plot style.
-#' @param seed An interger. Set the random seed to the plot.
+#' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param ... Other parameters:
 #' method: The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).
 #' estimate_group: A character string. Select the colname in the coldata to compare the data in the statistical test.
@@ -71,11 +71,7 @@ EMP_boxplot_alpha <- function(EMPT,plot_category = 1,seed =123,...) {
 #' @importFrom plyr alply
 #' @importFrom tidyr pivot_longer
 #' @importFrom dplyr filter
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
+#' @noRd
 #' # add example
 EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
                                        estimate_group = NULL,group_level = 'default',

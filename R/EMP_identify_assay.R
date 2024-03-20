@@ -164,17 +164,17 @@
   }
 }
 
-#' Title
+#' Identify the most core experssion and abudnace from sparse data
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param estimate_group wait_for_add
-#' @param method wait_for_add
-#' @param min wait_for_add
-#' @param min_ratio wait_for_add
-#' @param action wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param estimate_group A character string. Select the group name in the coldata to be calculated.
+#' @param method A character string.Methods include default, edgeR. Method default is from doi: 10.3389/fgene.2021.803627. Method edgeR in from edgeR::filterByExpr.
+#' @param min A number. Set the min abundance for filtering. When method='default', min means the lowest relative bundance. When method='edgeR.', min means the lowest abosulte bundance.
+#' @param min_ratio Set the min ratio presence for feature.
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

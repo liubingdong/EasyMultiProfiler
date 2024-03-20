@@ -89,7 +89,7 @@
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to the function agricolae::correlation
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples
