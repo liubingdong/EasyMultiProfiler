@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_adjust_abudance.R
 \name{EMP_adjust_abudance}
 \alias{EMP_adjust_abudance}
-\title{Title}
+\title{Adjust experssion or abundance for unexpected bias or batch effect}
 \usage{
 EMP_adjust_abudance(
   x,
@@ -16,7 +16,7 @@ EMP_adjust_abudance(
 )
 }
 \arguments{
-\item{x}{Object in EMPT format.}
+\item{x}{Object in EMPT or SummarisedExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
@@ -30,13 +30,13 @@ EMP_adjust_abudance(
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{Further parameters passed to the function tidybulk::adjust_abundance}
+\item{...}{Further parameters passed to the function tidybulk::adjust_abundance.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Adjust experssion or abundance for unexpected bias or batch effect
 }
 \examples{
 # add example

@@ -201,6 +201,9 @@ setMethod("show", "EMP",
                     "EMP_WGCNA_cor_heatmap2" = {
                       .get.result.EMP(object) %>% print()
                    },
+                    "EMP_cor_heatmap" = {
+                      .get.result.EMP(object) %>% print()
+                   },
                    {
                      print('No info is matched!')
                    }
@@ -223,6 +226,12 @@ setMethod("show", "EMP",
                      }
                      return(object@deposit[["cor_analysis_result"]])
                    },
+                  "EMP_cor_heatmap" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }
+                     return(.get.plot_deposit.EMP(object,info='EMP_cor_heatmap'))
+                   },                   ,
                   "EMP_WGCNA_cor_analysis2" = {
                      for (str in object@message_info) {
                       message_wrap(str)

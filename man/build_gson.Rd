@@ -2,22 +2,22 @@
 % Please edit documentation in R/EMP_gason.R
 \name{build_gson}
 \alias{build_gson}
-\title{Title}
+\title{Build the KEGG gason file including KO, EC, compound.}
 \usage{
 build_gson(keyType = "ko", KEGG_Type = "KEGG", species = "hsa")
 }
 \arguments{
-\item{keyType}{keyType}
+\item{keyType}{A character string. keyType include ko, ec, cpd, entrezid.}
 
-\item{KEGG_Type}{keyType}
+\item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG.}
 
-\item{species}{keyType}
+\item{species}{A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'}
 }
 \value{
 gson object
 }
 \description{
-Title
+Build the KEGG gason file including KO, EC, compound.
 }
 \examples{
 # xx

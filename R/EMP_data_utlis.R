@@ -261,17 +261,17 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 
 
 
-#' Title
+#' Aggregates abundace or experssion from the same attributes in the coldata or rowdata
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param estimate_group wait_for_add
-#' @param method wait_for_add
-#' @param na_string wait_for_add
-#' @param collapse_sep wait_for_add
-#' @param action wait_for_add
-#' @param collapse_by wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param estimate_group A character string. Select the column in the rowdata or coldata to collapse. 
+#' @param method  A character string. Methods include mean, sum, median, min, max.
+#' @param na_string A series of character strings. Indicate which characters can be considered missing values.
+#' @param collapse_sep A character string. The linking symbol used when strings are combined.
+#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param collapse_by A character string. Methods include col or row.
+#' @param ... Further parameters passed to the function mean, sum, median, min, max in the base package.
 #' @importFrom tidybulk tidybulk
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
@@ -282,7 +282,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @importFrom tibble column_to_rownames
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples
@@ -306,72 +306,5 @@ EMP_collapse <- function (x,experiment,estimate_group=NULL,method='sum',na_strin
 
 
 
-#' Title
-#'
-#' @param beta_obj wait_for_add
-#' @param top_number wait_for_add
-#' @importFrom dplyr rowwise
-#' @importFrom dplyr recode
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
-EMP_estimate_sample <- function(beta_obj,top_number = NULL){
-  Group <- PC1 <- PC2 <- `.` <- median_PC1_within <- median_PC2_within <- median_PC1_without <- NULL
-  median_PC2_without <- dis_without <- dis_within <- vector1_start <- vector1_end <- vector2_start <- vector2_end <- NULL
-  dis_fold <- dis_cosine <- dis_index <- primary <- NULL
-  pc_data  <- beta_obj$pc_data
 
-  # 计算近点中心点
-  core_point <- pc_data %>%
-    group_by(Group) %>%
-    summarise(median_PC1_within = median(PC1),median_PC2_within = median(PC2)) %>%
-    dplyr::full_join(.,pc_data,by = 'Group')
-
-  # 计算远点中心并于近点中心合并
-  pre_data <- pc_data %>%
-    group_by(Group) %>%
-    summarise(median_PC1_without = median(PC1),median_PC2_without = median(PC2)) %>%
-    mutate(Group = recode(Group, "Control" = "Insomnia", "Insomnia" = "Control")) %>% dplyr::full_join(.,core_point,by = 'Group')
-
-
-  result <- pre_data %>%
-    mutate(dis_within = c(sqrt( (PC1-median_PC1_within)**2 + (PC2-median_PC2_within)**2 )),
-           dis_without = c(sqrt( (PC1-median_PC1_without)**2 + (PC2-median_PC2_without)**2 )) ) %>%
-    mutate(dis_fold= log(abs(dis_without/dis_within))) %>%
-    mutate(vector1_start = c((PC1 - median_PC1_within)),
-           vector1_end = c((PC2 - median_PC2_within)),
-           vector2_start = c((PC1 - median_PC1_without)),
-           vector2_end = c((PC2 - median_PC2_without))) %>%
-    rowwise() %>%
-    mutate(dis_cosine = cosine(c(vector1_start,vector1_end),c(vector2_start,vector2_end))) %>%
-    mutate(dis_index = dis_fold * dis_cosine) %>%
-    mutate(dis_index = ifelse(dis_fold < 0 | dis_cosine < 0, -abs(dis_index), dis_index)) %>%
-    select(primary,Group,dis_index,dis_fold,dis_cosine,everything())
-
-  if (is.null(top_number)) {
-    return(result)
-  }else {
-    result %<>% group_by(Group) %>%
-      dplyr::top_n(top_number, dis_index)
-    return(result)
-  }
-}
-
-# 计算向量之间的夹角余弦值
-#' Title
-#'
-#' @param vector1 wait_for_add
-#' @param vector2 wait_for_add
-#'
-#' @return xx object
-#' @export 
-#'
-#' @examples
-#' # add example
-cosine <- function(vector1,vector2) {
-    sum(vector1 * vector2) / (sqrt(sum(vector1^2)) * sqrt(sum(vector2^2)))
-}
 

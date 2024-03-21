@@ -7,16 +7,16 @@
 EMP_curveplot_enrich(EMPT, plot_category = 1, seed = 123, ...)
 }
 \arguments{
-\item{EMPT}{Object in EMP format.}
+\item{EMPT}{Object in EMPT format.}
 
-\item{plot_category}{wait_for_add}
+\item{plot_category}{An interger.More plot style.}
 
-\item{seed}{wait_for_add}
+\item{seed}{An interger. Set the random seed to the plot.(default:123)}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function enrichplot::gseaplot2}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
 Title

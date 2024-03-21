@@ -12,7 +12,7 @@
 #'
 #' @param pattern_ref Object in EMPT format.
 #' @param pattern A character string. Experiment name in the MultiAssayExperiment object.
-#' @param exact A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
+#' @param exact A boolean. Whether the extract use exact search method.
 #' @return xx object
 #' @export
 #'

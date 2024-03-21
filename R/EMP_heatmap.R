@@ -57,16 +57,16 @@ EMP_heatmap_cor <- function(EMP,palette=c("steelblue","white","darkred"),
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_gradient2(low = palette[1], mid=palette[2],high = palette[3]) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text() + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-      guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+      #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_gradient(low = palette[1],high = palette[2]) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text() + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-      guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+      #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 1){
     check_palette <- palette %in% c('BrBG', 'PiYG', 'PRGn', 'PuOr', 'RdBu', 'RdGy', 'RdYlBu', 'RdYlGn', 'Spectral',
@@ -78,22 +78,24 @@ EMP_heatmap_cor <- function(EMP,palette=c("steelblue","white","darkred"),
         geom_tile(color = "white") +
         geom_text() + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-        guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+        #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
 
     }else{
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_gradient(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_text() + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-        guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+        #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
     }
   }
 
-  return(p1)
-
-
+  .get.plot_deposit.EMP(EMP,info='EMP_cor_heatmap') <- p1
+  .get.info.EMP(EMP) <- 'EMP_cor_heatmap'
+  .get.history.EMP(EMP) <- call
+  class(EMP) <- 'EMP_cor_heatmap'
+  return(EMP)
 }
 
 
@@ -173,16 +175,16 @@ EMP_heatmap_WGCNA <- function(x,palette=c("steelblue","white","darkred"),show='a
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_gradient2(low = palette[1], mid=palette[2],high = palette[3]) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text() + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-      guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+      #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_gradient(low = palette[1],high = palette[2]) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text() + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-      guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+      #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 1){
     check_palette <- palette %in% c('BrBG', 'PiYG', 'PRGn', 'PuOr', 'RdBu', 'RdGy', 'RdYlBu', 'RdYlGn', 'Spectral',
@@ -194,15 +196,15 @@ EMP_heatmap_WGCNA <- function(x,palette=c("steelblue","white","darkred"),show='a
         geom_tile(color = "white") +
         geom_text() + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-        guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+        #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
 
     }else{
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_gradient(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_text() + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
-        guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+        #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
     }
   }

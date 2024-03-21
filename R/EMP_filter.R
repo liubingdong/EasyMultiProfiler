@@ -1,34 +1,3 @@
-#' Title
-#'
-#' @param obj wait_for_add
-#' @param condition wait_for_add
-#' @param action wait_for_add
-#' @importFrom dplyr enquo
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
-EMP_filterBysample <- function(obj,condition,action='select'){
-  primary <- NULL
-  condition <- dplyr::enquo(condition)
-  if (action == 'select') {
-    obj %>% EMP_coldata_extract() %>%
-      dplyr::filter(!!condition) %>% dplyr::pull(primary) -> sample_id
-  }else if(action == 'kick') {
-    obj %>% EMP_coldata_extract() %>%
-      dplyr::filter(!(!!condition)) %>% dplyr::pull(primary) -> sample_id
-  }
-
-  if (length(sample_id) == 0) {
-    warning('No samples meet the condition, plz reset the parameter!')
-  }else if(length(sample_id) > 0) {
-    deposit <- obj[,sample_id]
-    return(deposit)
-  }
-}
-
 .filter.EMPT <- function(EMPT,filterSample=NULL,filterFeature=NULL,action='kick') {
   primary <- feature <- NULL
   if (action == 'kick') {
@@ -58,18 +27,18 @@ EMP_filterBysample <- function(obj,condition,action='select'){
 }
 
 
-#' Title
+#' Filer experssion or abudance data that match a condition
 #'
-#' @param obj wait_for_add
-#' @param sample_condition wait_for_add
-#' @param feature_condition wait_for_add
-#' @param filterSample wait_for_add
-#' @param filterFeature wait_for_add
-#' @param experiment wait_for_add
+#' @param obj EMPT or MultiAssayExperiment object.
+#' @param sample_condition Expressions that return a logical value, and are defined in terms of the variables in coldata. If multiple expressions are included, they are combined with the &，| operator. 
+#' @param feature_condition Expressions that return a logical value, and are defined in terms of the variables in rowdata. If multiple expressions are included, they are combined with the &，| operator. 
+#' @param filterSample A series of character strings. Select samples in the data exactly.
+#' @param filterFeature A series of character strings. Select samples in the data exactly.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
 #' @param show_info wait_for_add
-#' @param action wait_for_add
+#' @param action A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

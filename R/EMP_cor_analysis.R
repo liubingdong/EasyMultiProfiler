@@ -80,7 +80,7 @@
 .EMP_cor_analysis_m <- memoise::memoise(.EMP_cor_analysis)
 
 
-#' Title
+#' Correlation analysis
 #'
 #' @param EMP Object in EMP format.
 #' @param select A character string. The experiment name in the EMP object.
@@ -89,7 +89,7 @@
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to the function agricolae::correlation
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

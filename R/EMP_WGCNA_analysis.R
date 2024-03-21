@@ -90,30 +90,30 @@
 
 
 
-#' Title
+#' WGCNA cluster analysis
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param use_cached wait_for_add
-#' @param powers wait_for_add
-#' @param RsquaredCut wait_for_add
-#' @param removeFirst wait_for_add
-#' @param nBreaks wait_for_add
-#' @param blockSize wait_for_add
-#' @param networkType wait_for_add
-#' @param moreNetworkConcepts wait_for_add
-#' @param gcInterval wait_for_add
-#' @param TOMType wait_for_add
-#' @param minModuleSize wait_for_add
-#' @param reassignThreshold wait_for_add
-#' @param mergeCutHeight wait_for_add
-#' @param numericLabels wait_for_add
-#' @param pamRespectsDendro wait_for_add
-#' @param saveTOMs wait_for_add
-#' @param action wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param powers a vector of soft thresholding powers for which the scale free topology fit indices are to be calculated.
+#' @param RsquaredCut desired minimum scale free topology fitting index R2.
+#' @param removeFirst should the first bin be removed from the connectivity histogram?
+#' @param nBreaks number of bins in connectivity histograms.
+#' @param blockSize block size into which the calculation of connectivity should be broken up. If not given, a suitable value will be calculated using function blockSize and printed if verbose>0. If R runs into memory problems, decrease this value.
+#' @param networkType network type. Allowed values are (unique abbreviations of) "unsigned", "signed", "signed hybrid". See WGCNA::adjacency
+#' @param moreNetworkConcepts logical: should additional network concepts be calculated? If TRUE, the function will calculate how the network density, the network heterogeneity, and the network centralization depend on the power. For the definition of these additional network concepts, see Horvath and Dong (2008). PloS Comp Biol.
+#' @param gcInterval a number specifying in interval (in terms of individual genes) in which garbage collection will be performed. The actual interval will never be less than blockSize.
+#' @param TOMType one of "none", "unsigned", "signed", "signed Nowick", "unsigned 2", "signed 2" and "signed Nowick 2". If "none", adjacency will be used for clustering. See WGCNA::TOMsimilarityFromExpr for details.
+#' @param minModuleSize minimum module size for module detection. See WCGNA::cutreeDynamic for more details.
+#' @param reassignThreshold p-value ratio threshold for reassigning genes between modules.
+#' @param mergeCutHeight dendrogram cut height for module merging.
+#' @param numericLabels logical: should the returned modules be labeled by colors (FALSE), or by numbers (TRUE)?
+#' @param pamRespectsDendro Logical, only used when pamStage is TRUE. If TRUE, the PAM stage will respect the dendrogram in the sense an object can be PAM-assigned only to clusters that lie below it on the branch that the object is merged into. See WGCNA::cutreeDynamic for more details.
+#' @param saveTOMs logical: should the consensus topological overlap matrices for each block be saved and returned?
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 # ' @param ... wait_for_add
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

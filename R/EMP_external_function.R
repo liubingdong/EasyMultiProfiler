@@ -11,7 +11,7 @@
 #' @param alternative wait_for_add
 #'
 #' @return xx object
-#' @export
+#' @noRd
 #'
 #' @examples
 #' # add example
@@ -233,7 +233,7 @@ kendall <- function(data1,data2) {
 }
 
 
-
+## WGCNA analysis code is from agricolae package(https://cran.r-project.org/web/packages/WGCNA/index.html)
 #' Title
 #'
 #' @param x wait_for_add
@@ -242,7 +242,7 @@ kendall <- function(data1,data2) {
 #' @param alternative wait_for_add
 #'
 #' @return xx object
-#' @export
+#' @noRd
 #'
 #' @examples
 #' # add example

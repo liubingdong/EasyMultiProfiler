@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_WGCNA_analysis.R
 \name{EMP_WGCNA_cluster_analysis}
 \alias{EMP_WGCNA_cluster_analysis}
-\title{Title}
+\title{WGCNA cluster analysis}
 \usage{
 EMP_WGCNA_cluster_analysis(
   x,
@@ -27,49 +27,49 @@ EMP_WGCNA_cluster_analysis(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{use_cached}{wait_for_add}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{powers}{wait_for_add}
+\item{powers}{a vector of soft thresholding powers for which the scale free topology fit indices are to be calculated.}
 
-\item{RsquaredCut}{wait_for_add}
+\item{RsquaredCut}{desired minimum scale free topology fitting index R2.}
 
-\item{removeFirst}{wait_for_add}
+\item{removeFirst}{should the first bin be removed from the connectivity histogram?}
 
-\item{nBreaks}{wait_for_add}
+\item{nBreaks}{number of bins in connectivity histograms.}
 
-\item{blockSize}{wait_for_add}
+\item{blockSize}{block size into which the calculation of connectivity should be broken up. If not given, a suitable value will be calculated using function blockSize and printed if verbose>0. If R runs into memory problems, decrease this value.}
 
-\item{networkType}{wait_for_add}
+\item{networkType}{network type. Allowed values are (unique abbreviations of) "unsigned", "signed", "signed hybrid". See WGCNA::adjacency}
 
-\item{moreNetworkConcepts}{wait_for_add}
+\item{moreNetworkConcepts}{logical: should additional network concepts be calculated? If TRUE, the function will calculate how the network density, the network heterogeneity, and the network centralization depend on the power. For the definition of these additional network concepts, see Horvath and Dong (2008). PloS Comp Biol.}
 
-\item{gcInterval}{wait_for_add}
+\item{gcInterval}{a number specifying in interval (in terms of individual genes) in which garbage collection will be performed. The actual interval will never be less than blockSize.}
 
-\item{TOMType}{wait_for_add}
+\item{TOMType}{one of "none", "unsigned", "signed", "signed Nowick", "unsigned 2", "signed 2" and "signed Nowick 2". If "none", adjacency will be used for clustering. See WGCNA::TOMsimilarityFromExpr for details.}
 
-\item{minModuleSize}{wait_for_add}
+\item{minModuleSize}{minimum module size for module detection. See WCGNA::cutreeDynamic for more details.}
 
-\item{reassignThreshold}{wait_for_add}
+\item{reassignThreshold}{p-value ratio threshold for reassigning genes between modules.}
 
-\item{mergeCutHeight}{wait_for_add}
+\item{mergeCutHeight}{dendrogram cut height for module merging.}
 
-\item{numericLabels}{wait_for_add}
+\item{numericLabels}{logical: should the returned modules be labeled by colors (FALSE), or by numbers (TRUE)?}
 
-\item{pamRespectsDendro}{wait_for_add}
+\item{pamRespectsDendro}{Logical, only used when pamStage is TRUE. If TRUE, the PAM stage will respect the dendrogram in the sense an object can be PAM-assigned only to clusters that lie below it on the branch that the object is merged into. See WGCNA::cutreeDynamic for more details.}
 
-\item{saveTOMs}{wait_for_add}
+\item{saveTOMs}{logical: should the consensus topological overlap matrices for each block be saved and returned?}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+WGCNA cluster analysis
 }
 \examples{
 # add example

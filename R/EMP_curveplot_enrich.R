@@ -33,13 +33,13 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 
 #' Title
 #'
-#' @param EMPT Object in EMP format.
-#' @param plot_category wait_for_add
-#' @param seed wait_for_add
-#' @param ... wait_for_add
+#' @param EMPT Object in EMPT format.
+#' @param plot_category An interger.More plot style.
+#' @param seed An interger. Set the random seed to the plot.(default:123)
+#' @param ... Further parameters passed to the function enrichplot::gseaplot2
 #' @importFrom withr with_seed
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

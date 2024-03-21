@@ -89,9 +89,9 @@
 
 
 
-#' Title
+#' Visual charts for MultiAssayExperiment or EMP object
 #'
-#' @param obj wait_for_add
+#' @param obj MultiAssayExperiment or EMP object
 #' @importFrom formattable proportion_bar
 #' @importFrom kableExtra cell_spec
 #' @importFrom kableExtra kable_styling
@@ -100,7 +100,7 @@
 #' @importFrom kableExtra scroll_box
 #' @importFrom kableExtra footnote
 #'
-#' @return xx object
+#' @return view object
 #' @export
 #'
 #' @examples

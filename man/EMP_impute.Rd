@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_impute.R
 \name{EMP_impute}
 \alias{EMP_impute}
-\title{Title}
+\title{Fast Imputation of Missing Values by Chained Random Forests}
 \usage{
 EMP_impute(
   x,
@@ -19,33 +19,33 @@ EMP_impute(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{coldata}{wait_for_add}
+\item{coldata}{A boolean. Whether the function use the coldata to impute or not.}
 
-\item{assay}{wait_for_add}
+\item{assay}{A boolean. Whether the function use the assay to impute or not.}
 
-\item{rowdata}{wait_for_add}
+\item{rowdata}{A boolean. Whether the function use the rowdata to impute or not.}
 
-\item{pmm.k}{wait_for_add}
+\item{pmm.k}{Number of candidate non-missing values to sample from in the predictive mean matching steps. 0 to avoid this step.}
 
-\item{num.trees}{wait_for_add}
+\item{num.trees}{Tree number.}
 
-\item{seed}{wait_for_add}
+\item{seed}{Integer seed to initialize the random generator.}
 
-\item{verbose}{wait_for_add}
+\item{verbose}{Controls how much info is printed to screen. 0 to print nothing.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function missRanger::missRanger.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Fast Imputation of Missing Values by Chained Random Forests
 }
 \examples{
 # add example

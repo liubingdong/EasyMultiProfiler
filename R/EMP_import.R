@@ -79,7 +79,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
   return(deposit)
 }
 
-#' Title
+#' Import microbial data into SummariseExperiment
 #'
 #' @param file A file path.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
@@ -117,7 +117,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
 }
 
 
-#' Title
+#' Import gene data into SummariseExperiment
 #'
 #' @param file A file path.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
@@ -163,7 +163,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 }
 
 
-#' Title
+#' Import combined data into SummariseExperiment
 #'
 #' @param file A file path.
 #' @param data A dataframe.The row must be the feature and the column is the sample.

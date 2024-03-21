@@ -132,14 +132,14 @@ setClass("EMP_assay_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExp
 setClass("EMP_alpha_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_alpha_analysis_boxplot",contains = c("EMP_alpha_analysis","EMPT","SummarizedExperiment"))
 
-setClass("EMP_beta_analysis",contains = c("EMPT","SummarizedExperiment"))
-setClass("EMP_beta_analysis_boxplot",contains = c("EMP_beta_analysis","EMPT","SummarizedExperiment"))
+#setClass("EMP_beta_analysis",contains = c("EMPT","SummarizedExperiment"))
+#setClass("EMP_beta_analysis_boxplot",contains = c("EMP_beta_analysis","EMPT","SummarizedExperiment"))
 
 setClass("EMP_diff_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_diff_volcanol_plot",contains = c("EMP_diff_analysis","EMPT","SummarizedExperiment"))
 
 setClass("EMP_dimension_analysis",contains = c("EMPT","SummarizedExperiment"))
-setClass("EMP_dimension_analysis_scatterplot",contains = c("EMP_beta_analysis","EMPT","SummarizedExperiment"))
+setClass("EMP_dimension_analysis_scatterplot",contains = c("EMPT","SummarizedExperiment"))
 
 
 setClass("EMP_cluster_analysis",contains = c("EMPT","SummarizedExperiment"))
@@ -160,8 +160,7 @@ setClass("EMP_WGCNA_cor_analysis2",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
 
-
-
+setClass("EMP_cor_heatmap",contains = c("EMP"))
 
 
 

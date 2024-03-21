@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_diff_analysis.R
 \name{EMP_diff_analysis}
 \alias{EMP_diff_analysis}
-\title{Title}
+\title{Differential expression or abundance analysis}
 \usage{
 EMP_diff_analysis(
   x,
@@ -17,29 +17,29 @@ EMP_diff_analysis(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string.Methods include t.test, wilcox_test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights}
 
-\item{estimate_group}{wait_for_add}
+\item{estimate_group}{A character string. Select the group name in the coldata to be calculated.}
 
-\item{use_cached}{wait_for_add}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{group_level}{wait_for_add}
+\item{group_level}{A series of character strings. Determine the comparison order of groups.}
 
-\item{core}{wait_for_add}
+\item{core}{A number. Select the core numbers in the parallel compute to speed up the result.}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to the function tidybulk::test_differential_abundance, or statistical function in the stats package.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Differential expression or abundance analysis
 }
 \examples{
 # add example

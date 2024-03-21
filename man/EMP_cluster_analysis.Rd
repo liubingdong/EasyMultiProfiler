@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_cluster_analysis.R
 \name{EMP_cluster_analysis}
 \alias{EMP_cluster_analysis}
-\title{Title}
+\title{Identify clusters for sample or feature}
 \usage{
 EMP_cluster_analysis(
   x,
@@ -16,7 +16,7 @@ EMP_cluster_analysis(
 )
 }
 \arguments{
-\item{x}{Object in EMPT format.}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
@@ -36,7 +36,7 @@ EMP_cluster_analysis(
 xx object
 }
 \description{
-Title
+Identify clusters for sample or feature
 }
 \examples{
 # add example

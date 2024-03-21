@@ -7,11 +7,11 @@
 EMP_boxplot_alpha(EMPT, plot_category = 1, seed = 123, ...)
 }
 \arguments{
-\item{EMPT}{Object in EMPT format.}
+\item{EMPT}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{plot_category}{An interger.More plot style.}
 
-\item{seed}{An interger. Set the random seed to the plot.}
+\item{seed}{An interger. Set the random seed to the plot.(default:123)}
 
 \item{...}{Other parameters:
 method: The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).

@@ -1,6 +1,6 @@
-#' Title
+#' Identify clusters for sample or feature
 #'
-#' @param x Object in EMPT format.
+#' @param x Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param distance A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
 #' @param rowdata A boolean. Whether the function cluster the feature or not.

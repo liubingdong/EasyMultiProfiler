@@ -1,12 +1,12 @@
 #' Title
 #'
 #' @param EMPT wait_for_add
-#' @param condition wait_for_add
-#' @param type wait_for_add
-#' @param minGSSize wait_for_add
-#' @param maxGSSize wait_for_add
-#' @param use_cache wait_for_add
-#' @param ... wait_for_add
+#' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05
+#' @param keyType A character string. Methods include ko, ec, cpd.
+#' @param minGSSize minimal size of genes annotated by Ontology term for testing.
+#' @param maxGSSize maximal size of genes annotated for testing.
+#' @param use_cache A boolean. Whether the function use the results in cache or re-compute.
+#' @param ... Further parameters passed to clusterProfiler::compareCluster.
 #' @importFrom clusterProfiler compareCluster
 #' @importFrom clusterProfiler enricher
 #'
@@ -42,19 +42,19 @@
   return(EMPT) 
 }
 
-#' Title
+#' KEGG enrichment for the KO, EC and compound
 #'
-#' @param x wait_for_add
-#' @param condition filter condition
-#' @param minGSSize wait_for_add
-#' @param maxGSSize wait_for_add
-#' @param keyType wait_for_add
-#' @param KEGG_Type wait_for_add
-#' @param species wait_for_add
-#' @param action wait_for_add
-#' @param ... wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05
+#' @param minGSSize Minimal size of genes annotated by Ontology term for testing.
+#' @param maxGSSize Maximal size of genes annotated for testing.
+#' @param keyType A character string. keyType include ko, ec, cpd, entrezid.
+#' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.
+#' @param species A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'
+#' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... Further parameters passed to clusterProfiler::compareCluster.
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

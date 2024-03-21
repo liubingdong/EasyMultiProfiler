@@ -11,7 +11,7 @@
 
 \item{pattern}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{exact}{A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".}
+\item{exact}{A boolean. Whether the extract use exact search method.}
 }
 \value{
 xx object

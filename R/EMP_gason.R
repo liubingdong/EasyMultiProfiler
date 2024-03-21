@@ -3,15 +3,15 @@ kegg_rest <- getFromNamespace("kegg_rest", "clusterProfiler")
 
 #########
 
-#' Title
+#' Build the KEGG compound gason file
 #'
-#' @param KEGG_Type KEGG_Type
-#' @param species species
+#' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.
+#' @param species A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'
 #' @importFrom gson gson
 #' @importFrom yulab.utils yread
 #'
 #' @return gson object
-#' @export 
+#' @noRd
 #'
 #' @examples
 #' # xx
@@ -61,14 +61,14 @@ gson_cpd2 <- function(KEGG_Type = "KEGG", species = "all") {
 
 
 
-#' Title
+#' Build the KEGG KO gason file
 #'
 #' @param keyType keyType
 #' @param KEGG_Type keyType
 #' @param species keyType
 #'
 #' @return gson object
-#' @export 
+#' @noRd 
 #'
 #' @examples
 #' # xx
@@ -126,11 +126,11 @@ gson_KEGG2 <- function(keyType = "ko", KEGG_Type = "KEGG", species = "all") {
 }
 
 # 主函数
-#' Title
+#' Build the KEGG gason file including KO, EC, compound.
 #'
-#' @param keyType keyType
-#' @param KEGG_Type keyType
-#' @param species keyType
+#' @param keyType A character string. keyType include ko, ec, cpd, entrezid.
+#' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.
+#' @param species A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'
 #' @importFrom clusterProfiler gson_KEGG
 #'
 #' @return gson object

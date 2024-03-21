@@ -177,28 +177,28 @@
   return(EMPT)
 }
 
-#' Title
+#' Gene set enrichment analysis.
 #'
-#' @param x wait_for_add
-#' @param condition wait_for_add
-#' @param experiment wait_for_add
-#' @param estimate_group wait_for_add
-#' @param method wait_for_add
-#' @param cor_method wait_for_add
-#' @param group_level wait_for_add
-#' @param pseudocount wait_for_add
-#' @param pvalueCutoff wait_for_add
-#' @param threshold wait_for_add
-#' @param threshold_r wait_for_add
-#' @param threshold_p wait_for_add
-#' @param seed wait_for_add
-#' @param action wait_for_add
-#' @param keyType keyType
-#' @param KEGG_Type KEGG_Type
-#' @param species species
-#' @param ... wait_for_add
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param condition Expressions that return a logical value. The alogarithm condition used in method = "log2FC".eg. pvalue < 0.05
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param estimate_group A character string. Select the column you are interested in the coldata.
+#' @param method A character string. Methods include signal2Noise, cor, log2FC.
+#' @param cor_method A character string including pearson, spearman, kendall. The alogarithm cor_method used in method = "cor".
+#' @param group_level A series of character strings. Determine the comparison order of groups when method = "log2FC".
+#' @param pseudocount A number. The alogarithm pseudocount used in method = "signal2Noise", adjust the 0 in the signal2Noise result into pseudocount value. (default:0.0001)
+#' @param pvalueCutoff A character string. Adjusted pvalue cutoff on enrichment tests to report.
+#' @param threshold A number. The alogarithm threshold used in method = "signal2Noise",filter out the feature below the signal2Noise threshold.
+#' @param threshold_r A number. The alogarithm threshold used in method = "cor",filter out the feature below the abusolte corffcient threshold.
+#' @param threshold_p A number. The alogarithm threshold used in method = "cor",filter out the feature above the cor test pavlue threshold.
+#' @param seed A boolean. 
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param keyType A character string. keyType include ko, ec, cpd, entrezid.
+#' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.
+#' @param species A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'
+#' @param ... Further parameters passed to clusterProfiler::GSEA.
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

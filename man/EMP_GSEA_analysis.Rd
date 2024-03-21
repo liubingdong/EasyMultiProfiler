@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_GSEA.R
 \name{EMP_GSEA_analysis}
 \alias{EMP_GSEA_analysis}
-\title{Title}
+\title{Gene set enrichment analysis.}
 \usage{
 EMP_GSEA_analysis(
   x,
@@ -26,47 +26,47 @@ EMP_GSEA_analysis(
 )
 }
 \arguments{
-\item{x}{wait_for_add}
+\item{x}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{condition}{wait_for_add}
+\item{condition}{Expressions that return a logical value. The alogarithm condition used in method = "log2FC".eg. pvalue < 0.05}
 
-\item{experiment}{wait_for_add}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{estimate_group}{wait_for_add}
+\item{estimate_group}{A character string. Select the column you are interested in the coldata.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string. Methods include signal2Noise, cor, log2FC.}
 
-\item{cor_method}{wait_for_add}
+\item{cor_method}{A character string including pearson, spearman, kendall. The alogarithm cor_method used in method = "cor".}
 
-\item{group_level}{wait_for_add}
+\item{group_level}{A series of character strings. Determine the comparison order of groups when method = "log2FC".}
 
-\item{keyType}{keyType}
+\item{keyType}{A character string. keyType include ko, ec, cpd, entrezid.}
 
-\item{KEGG_Type}{KEGG_Type}
+\item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG.}
 
-\item{species}{species}
+\item{species}{A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'}
 
-\item{pseudocount}{wait_for_add}
+\item{pseudocount}{A number. The alogarithm pseudocount used in method = "signal2Noise", adjust the 0 in the signal2Noise result into pseudocount value. (default:0.0001)}
 
-\item{pvalueCutoff}{wait_for_add}
+\item{pvalueCutoff}{A character string. Adjusted pvalue cutoff on enrichment tests to report.}
 
-\item{threshold}{wait_for_add}
+\item{threshold}{A number. The alogarithm threshold used in method = "signal2Noise",filter out the feature below the signal2Noise threshold.}
 
-\item{threshold_r}{wait_for_add}
+\item{threshold_r}{A number. The alogarithm threshold used in method = "cor",filter out the feature below the abusolte corffcient threshold.}
 
-\item{threshold_p}{wait_for_add}
+\item{threshold_p}{A number. The alogarithm threshold used in method = "cor",filter out the feature above the cor test pavlue threshold.}
 
-\item{seed}{wait_for_add}
+\item{seed}{A boolean.}
 
-\item{action}{wait_for_add}
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{wait_for_add}
+\item{...}{Further parameters passed to clusterProfiler::GSEA.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Gene set enrichment analysis.
 }
 \examples{
 # add example

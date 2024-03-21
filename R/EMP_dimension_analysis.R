@@ -126,17 +126,17 @@
 
 .EMP_dimension_analysis_m <-memoise::memoise(.EMP_dimension_analysis)
 
-#' Title
+#' Dimension reduction of the abundance or experssion data
 #'
-#' @param x wait_for_add
-#' @param experiment wait_for_add
-#' @param method wait_for_add
-#' @param distance wait_for_add
-#' @param estimate_group wait_for_add
-#' @param action wait_for_add
-#' @param use_cached use_cached
+#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param method  A character string. Methods include pca, pcoa, pls, opls.
+#' @param distance A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist.
+#' @param estimate_group A character string. Select the group name in the coldata to be considerated.
+#' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples
