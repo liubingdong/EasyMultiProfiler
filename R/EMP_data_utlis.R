@@ -1,5 +1,5 @@
 #' @importFrom tidybulk tidybulk
-#' @importFrom dplyr select
+# ' @importFrom dplyr select
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr filter
@@ -106,7 +106,6 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 
 
 #' @importFrom tidybulk tidybulk
-#' @importFrom dplyr select
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr filter
@@ -274,7 +273,6 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @param collapse_by wait_for_add
 #' @param ... wait_for_add
 #' @importFrom tidybulk tidybulk
-#' @importFrom dplyr select
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr filter

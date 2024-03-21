@@ -59,7 +59,8 @@ Suggests:
     dendextend,
     knitr,
     fastcluster,
-    rmarkdown
+    rmarkdown,
+    AnnotationDbi
 VignetteBuilder: knitr
 NeedsCompilation: no
 Packaged: 2024-03-06 17:14:44 UTC; 13766
