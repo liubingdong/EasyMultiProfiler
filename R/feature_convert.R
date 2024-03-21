@@ -29,5 +29,11 @@ feature_convert <- function(feature, from = "SYMBOL", to = "ENTREZID", species =
     from <- match.arg(from, colnames(data_df))
     to <- match.arg(to, colnames(data_df))
     result <- data_df[data_df[, from] %in% feature, c(from, to)]
+    na_feature <- setdiff(feature, result[, 1])
+    if (length(na_feature) > 0) {
+        result2 <- data.frame(from = na_feature, to = NA)
+        colnames(result2) <- colnames(result)
+        result <- rbind(result, result2)
+    }
     return(result)  
 }    
