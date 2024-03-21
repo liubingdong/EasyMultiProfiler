@@ -91,9 +91,11 @@ EMP_heatmap_cor <- function(EMP,palette=c("steelblue","white","darkred"),
     }
   }
 
-  return(p1)
-
-
+  .get.plot_deposit.EMP(EMP,info='EMP_cor_heatmap') <- p1
+  .get.info.EMP(EMP) <- 'EMP_cor_heatmap'
+  .get.history.EMP(EMP) <- call
+  class(EMP) <- 'EMP_cor_heatmap'
+  return(EMP)
 }
 
 

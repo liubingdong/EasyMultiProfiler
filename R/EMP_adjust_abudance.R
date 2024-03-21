@@ -45,7 +45,7 @@
 .EMP_adjust_abudance_m <- memoise::memoise(.EMP_adjust_abudance)
 
 
-#' Title
+#' Adjust experssion or abundance for unexpected bias or batch effect
 #'
 #' @param x Object in EMPT or SummarisedExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
@@ -57,7 +57,7 @@
 #' @param ... Further parameters passed to the function tidybulk::adjust_abundance.
 #' @importFrom memoise forget
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

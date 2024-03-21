@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_alpha_analysis.R
 \name{EMP_alpha_analysis}
 \alias{EMP_alpha_analysis}
-\title{Title}
+\title{Diversity Indices}
 \usage{
 EMP_alpha_analysis(x, experiment, use_cached = T, action = "add", ...)
 }
@@ -18,10 +18,10 @@ EMP_alpha_analysis(x, experiment, use_cached = T, action = "add", ...)
 \item{...}{Further parameters passed to the function vegan::diversity}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Diversity Indices
 }
 \examples{
 # add example

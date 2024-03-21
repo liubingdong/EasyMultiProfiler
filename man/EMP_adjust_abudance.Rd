@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_adjust_abudance.R
 \name{EMP_adjust_abudance}
 \alias{EMP_adjust_abudance}
-\title{Title}
+\title{Adjust experssion or abundance for unexpected bias or batch effect}
 \usage{
 EMP_adjust_abudance(
   x,
@@ -33,10 +33,10 @@ EMP_adjust_abudance(
 \item{...}{Further parameters passed to the function tidybulk::adjust_abundance.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+Adjust experssion or abundance for unexpected bias or batch effect
 }
 \examples{
 # add example

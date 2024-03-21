@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_cor_analysis.R
 \name{EMP_cor_analysis}
 \alias{EMP_cor_analysis}
-\title{Title}
+\title{Correlation analysis}
 \usage{
 EMP_cor_analysis(
   EMP,
@@ -30,7 +30,7 @@ EMP_cor_analysis(
 EMPT object
 }
 \description{
-Title
+Correlation analysis
 }
 \examples{
 # add example

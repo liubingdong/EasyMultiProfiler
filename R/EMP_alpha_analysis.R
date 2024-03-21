@@ -43,7 +43,7 @@
 #' @importFrom memoise memoise
 EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis)
 
-#' Title
+#' Diversity Indices
 #'
 #' @param x Object in EMPT format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
@@ -52,7 +52,7 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis)
 #' @param ... Further parameters passed to the function vegan::diversity
 #' @importFrom memoise forget
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

@@ -80,7 +80,7 @@
 .EMP_cor_analysis_m <- memoise::memoise(.EMP_cor_analysis)
 
 
-#' Title
+#' Correlation analysis
 #'
 #' @param EMP Object in EMP format.
 #' @param select A character string. The experiment name in the EMP object.

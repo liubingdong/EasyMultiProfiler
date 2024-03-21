@@ -160,8 +160,7 @@ setClass("EMP_WGCNA_cor_analysis2",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
 
-
-
+setClass("EMP_cor_heatmap",contains = c("EMP"))
 
 
 
