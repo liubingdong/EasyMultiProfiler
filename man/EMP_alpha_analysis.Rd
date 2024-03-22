@@ -4,14 +4,14 @@
 \alias{EMP_alpha_analysis}
 \title{Diversity Indices}
 \usage{
-EMP_alpha_analysis(x, experiment, use_cached = T, action = "add", ...)
+EMP_alpha_analysis(x, experiment, use_cached = TRUE, action = "add", ...)
 }
 \arguments{
 \item{x}{Object in EMPT format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{use_cached}{A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.}
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 

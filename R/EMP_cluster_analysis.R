@@ -13,13 +13,13 @@
 #' @importFrom vegan vegdist
 #' @importFrom graphics abline
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples
 #' # add example
-EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=F,
-                                 method='average',h=NULL,groupLabels=T,action='add') {
+EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,
+                                 method='average',h=NULL,groupLabels=TRUE,action='add') {
   colname <- primary <- `.` <- NULL
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

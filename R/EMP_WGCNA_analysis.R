@@ -1,26 +1,4 @@
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param powers wait_for_add
-#' @param RsquaredCut wait_for_add
-#' @param removeFirst wait_for_add
-#' @param nBreaks wait_for_add
-#' @param blockSize wait_for_add
-#' @param networkType wait_for_add
-#' @param moreNetworkConcepts wait_for_add
-#' @param gcInterval wait_for_add
-#' @param TOMType wait_for_add
-#' @param minModuleSize wait_for_add
-#' @param reassignThreshold wait_for_add
-#' @param mergeCutHeight wait_for_add
-#' @param numericLabels wait_for_add
-#' @param pamRespectsDendro wait_for_add
-#' @param saveTOMs wait_for_add
-# ' @param ... wait_for_add
 #' @importFrom WGCNA labels2colors
-#'
-#' @return xx object
-#' @noRd
 .EMP_WGCNA_cluster_analysis <- function(EMPT,powers=c(1:10, seq(from = 12, to=20, by=2)),
                                         RsquaredCut=0.85, removeFirst = FALSE, nBreaks = 10, blockSize = NULL,
                                         # corFnc = WGCNA::cor, corOptions = list(use = 'p'),
@@ -128,7 +106,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
                                         reassignThreshold = 0, mergeCutHeight = 0.25,
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
                                         # saveTOMs = T,action='add',...) {
-                                        saveTOMs = T,action='add') {
+                                        saveTOMs = TRUE,action='add') {
 
   call <- match.call()
 
@@ -236,7 +214,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
 .EMP_WGCNA_cor_analysis_EMPT_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMPT)
 
 #' @importFrom WGCNA orderMEs
-.EMP_WGCNA_cor_analysis_EMP <- function(EMP,select=NULL,method='spearman',...){
+.EMP_WGCNA_cor_analysis_EMP <- function(EMP,select=NULL,method='spearman'){
   var1 <- NULL
   if (is.null(select)) {
     data1 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%

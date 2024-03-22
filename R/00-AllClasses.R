@@ -167,44 +167,38 @@ setClass("EMP_cor_heatmap",contains = c("EMP"))
 
 
 
-#' Title
+#' Extract assay data from EMPT or MultiAssayExperiment object
 #'
-#' @param obj obj
+#' @param obj EMPT or MultiAssayExperiment object.
 #' @param ... ...
 #' @rdname EMP_assay_extract
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples
 #' # xx
 setGeneric("EMP_assay_extract",function(obj,...) standardGeneric("EMP_assay_extract"))
 
-#' Title
-#'
-#' @param MultiAssayExperiment MultiAssayExperiment
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
+#' @param pattern_ref A character string. Select which column in the rowdata to extract assay data from.
+#' @param pattern A character string. Select which pattern in the rowdata to extract assay data.
+#' @param exact A boolean. Whether the extract use exact search method.(default:FALSE)
+#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... ...
 #' @rdname EMP_assay_extract
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # 
-setMethod("EMP_assay_extract","MultiAssayExperiment",function(obj,...){
+setMethod("EMP_assay_extract","MultiAssayExperiment",function(obj,experiment,pattern_ref,pattern,exact,action,...){
   .EMP_assay_extract_EMP(obj,...)
 })
 
-#' Title
-#'
-#' @param EMPT xx
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
+#' @param pattern_ref A character string. Select which column in the rowdata to extract assay data from.
+#' @param pattern A character string. Select which pattern in the rowdata to extract assay data.
+#' @param exact A boolean. Whether the extract use exact search method.(default:FALSE)
+#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... ...
 #' @rdname EMP_assay_extract
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' #
-setMethod("EMP_assay_extract","EMPT",function(obj,...){
+setMethod("EMP_assay_extract","EMPT",function(obj,experiment,pattern_ref,pattern,exact,action,...){
   .EMP_assay_extract_EMPT(obj,...)
 })
 

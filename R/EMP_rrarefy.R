@@ -77,7 +77,7 @@
 #'
 #' @examples
 #' # add example
-EMP_rrarefy <- function(x,experiment,use_cached = T,action = 'add',...) {
+EMP_rrarefy <- function(x,experiment,use_cached = TRUE,action = 'add',...) {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     x <- .as.EMPT(x,

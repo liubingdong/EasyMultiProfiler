@@ -4,39 +4,35 @@
 \alias{EMP_assay_extract}
 \alias{EMP_assay_extract,MultiAssayExperiment-method}
 \alias{EMP_assay_extract,EMPT-method}
-\title{Title}
+\title{Extract assay data from EMPT or MultiAssayExperiment object}
 \usage{
 EMP_assay_extract(obj, ...)
 
-\S4method{EMP_assay_extract}{MultiAssayExperiment}(obj, ...)
+\S4method{EMP_assay_extract}{MultiAssayExperiment}(obj, experiment, pattern_ref, pattern, exact, action, ...)
 
-\S4method{EMP_assay_extract}{EMPT}(obj, ...)
+\S4method{EMP_assay_extract}{EMPT}(obj, experiment, pattern_ref, pattern, exact, action, ...)
 }
 \arguments{
-\item{obj}{obj}
+\item{obj}{EMPT or MultiAssayExperiment object.}
 
 \item{...}{...}
 
-\item{MultiAssayExperiment}{MultiAssayExperiment}
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{EMPT}{xx}
+\item{pattern_ref}{A character string. Select which column in the rowdata to extract assay data from.}
+
+\item{pattern}{A character string. Select which pattern in the rowdata to extract assay data.}
+
+\item{exact}{A boolean. Whether the extract use exact search method.(default:FALSE)}
+
+\item{action}{A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
 \value{
-xx object
-
-xx object
-
-xx object
+EMPT object
 }
 \description{
-Title
-
-Title
-
-Title
+Extract assay data from EMPT or MultiAssayExperiment object
 }
 \examples{
 # xx
-# 
-#
 }

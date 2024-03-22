@@ -1,14 +1,7 @@
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param method wait_for_add
-#' @param distance wait_for_add
-#' @param estimate_group wait_for_add
 #' @importFrom bigstatsr big_SVD
 #' @importFrom vegan vegdist
 #' @importFrom stats cmdscale
 #' @importFrom ropls opls
-#' @noRd
 .EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL){
   p1 <- p2 <- p3 <- R2X <- NULL
   deposit <- list()
@@ -141,7 +134,7 @@
 #'
 #' @examples
 #' # add example
-EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,use_cached=T,
+EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,use_cached=TRUE,
                                    estimate_group=NULL,action='add'){
   call <- match.call()
 

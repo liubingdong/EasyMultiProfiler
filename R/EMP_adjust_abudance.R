@@ -1,10 +1,3 @@
-#' Title
-#'
-#' @param EMPT object in EMPT format.
-#' @param method A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.
-#' @param .factor_unwanted A tidy select, e.g. column names without double quotation. c(batch, country) These are the factor that we want to adjust for, including unwanted batcheffect, and unwanted biological effects.
-#' @param .factor_of_interest A tidy select, e.g. column names without double quotation. c(treatment) These are the factor that we want to preserve.
-#' @param ... Further parameters passed to the function tidybulk::adjust_abundance
 #' @importFrom tidybulk adjust_abundance
 #' @importFrom tibble rownames_to_column
 #' @importFrom tibble as_tibble
@@ -63,7 +56,7 @@
 #' @examples
 #' # add example
 EMP_adjust_abudance <- function(x,experiment,
-                                method='combat_seq',use_cached=T,
+                                method='combat_seq',use_cached=TRUE,
                                 .factor_unwanted,.factor_of_interest,action='add',...) {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

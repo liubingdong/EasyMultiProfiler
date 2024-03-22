@@ -28,7 +28,7 @@ EMP_filter(
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{show_info}{wait_for_add}
+\item{show_info}{A character string. Set the class of EMPT to show properly.}
 
 \item{action}{A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).}
 }

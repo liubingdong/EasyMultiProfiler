@@ -20,7 +20,7 @@ EMP_GSEA_analysis(
   threshold = NULL,
   threshold_r = 0,
   threshold_p = 0.05,
-  seed = T,
+  seed = TRUE,
   action = "add",
   ...
 )

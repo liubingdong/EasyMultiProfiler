@@ -1,13 +1,12 @@
 \docType{package}
 \name{EasyMultiPlot}
-\alias{EMP-package}
+\alias{EasyMultiPlot}
 \title{EasyMultiPlot: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization for Clinical Study}
 
-\section{Description}{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
-
+\description{
 The EasyMulitiPlot package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from beginning to end.
 }
+
 
 \section{Function}{
 {Data Extract} : 
@@ -18,6 +17,7 @@ The EasyMulitiPlot package aims to offer a user-friendly and efficient multi-omi
 }
 {Data Preparetion} : 
 \itemize{
+	\item \code{\link{EMP_feature_convert}}
 	\item \code{\link{EMP_impute}} 
 	\item \code{\link{EMP_rrarefy}}  
  	\item \code{\link{EMP_decostand}}
@@ -31,9 +31,8 @@ The EasyMulitiPlot package aims to offer a user-friendly and efficient multi-omi
 	\item \code{\link{EMP_cor_analysis}}
 	\item \code{\link{EMP_diff_analysis}}
 	\item \code{\link{EMP_dimension_analysis}}
-	\item \code{\link{EMP_cor_analysis}}
 	\item \code{\link{EMP_enrich_analysis}}
-	\item \code{\link{EMP_GSEA}}
+	\item \code{\link{EMP_GSEA_analysis}}
 	\item \code{\link{EMP_WGCNA_cluster_analysis}}
 	\item \code{\link{EMP_WGCNA_cor_analysis}}
 	\item \code{\link{EMP_multienrich_analysis}}

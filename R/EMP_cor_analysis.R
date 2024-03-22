@@ -1,9 +1,3 @@
-#' Title
-#'
-#' @param EMP wait_for_add
-#' @param select wait_for_add
-#' @param method wait_for_add
-#' @param ... wait_for_add
 #' @importFrom dplyr arrange
 #' @importFrom tibble column_to_rownames
 #' @noRd
@@ -88,14 +82,14 @@
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to the function agricolae::correlation
-#'
+#' @rdname EMP_cor_analysis
 #' @return EMPT object
 #' @export
 #'
 #' @examples
 #' # add example
 EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',
-                             use_cached = T,...) {
+                             use_cached = TRUE,...) {
   call <- match.call()
 
   if (use_cached == F) {

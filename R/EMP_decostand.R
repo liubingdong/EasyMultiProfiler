@@ -1,6 +1,6 @@
 #' @importFrom vegan decostand
 #' @noRd
-.EMP_decostand <- function(EMPT,bySample=T,logbase,pseudocount=pseudocount,...){
+.EMP_decostand <- function(EMPT,bySample=TRUE,logbase,pseudocount=pseudocount,...){
   primary <- NULL
   MARGIN <- ifelse(bySample, 2, 1)
 

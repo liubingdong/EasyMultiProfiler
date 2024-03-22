@@ -8,10 +8,10 @@ EMP_cluster_analysis(
   x,
   experiment,
   distance = "bray",
-  rowdata = F,
+  rowdata = FALSE,
   method = "average",
   h = NULL,
-  groupLabels = T,
+  groupLabels = TRUE,
   action = "add"
 )
 }
@@ -33,7 +33,7 @@ EMP_cluster_analysis(
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
 Identify clusters for sample or feature

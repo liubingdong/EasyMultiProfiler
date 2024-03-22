@@ -120,7 +120,7 @@
 #' # add example
 EMP_diff_analysis <- function(x,experiment,
                               method = 'wilcox.test',estimate_group=NULL,
-                              use_cached = T,action='add',group_level=NULL,
+                              use_cached = TRUE,action='add',group_level=NULL,
                               core=NULL,...){
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
@@ -244,15 +244,7 @@ EMP_diff_analysis <- function(x,experiment,
 
 ## This code '.multi_compare' is modified from package 'MicrobiotaProcess' for diff analysis
 ## Here add the parallel function
-#' Title
-#'
-#' @param fun wait_for_add
-#' @param data wait_for_add
-#' @param feature wait_for_add
-#' @param factorNames wait_for_add
-#' @param subgroup wait_for_add
-#' @param core wait_for_add
-#' @param ... wait_for_add
+
 #' @importFrom spsUtil quiet
 #' @importFrom snowfall sfLapply
 #' @importFrom snowfall sfStop
@@ -336,43 +328,4 @@ EMP_diff_analysis <- function(x,experiment,
   return(deposit)
 }
 
-## This code 'chectCores' is from the function 'detectCores' in the package 'parallel' for core detect
-#' Title
-#'
-#' @param all.tests wait_for_add
-#' @param logical wait_for_add
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
-chectCores <- function (all.tests = FALSE, logical = TRUE){
-  systems <- list(linux = "grep \"^processor\" /proc/cpuinfo 2>/dev/null | wc -l",
-                  darwin = if (logical) "/usr/sbin/sysctl -n hw.logicalcpu 2>/dev/null" else "/usr/sbin/sysctl -n hw.physicalcpu 2>/dev/null",
-                  solaris = if (logical) "/usr/sbin/psrinfo -v | grep 'Status of.*processor' | wc -l" else "/bin/kstat -p -m cpu_info | grep :core_id | cut -f2 | uniq | wc -l",
-                  freebsd = "/sbin/sysctl -n hw.ncpu 2>/dev/null", openbsd = "/sbin/sysctl -n hw.ncpuonline 2>/dev/null")
-  nm <- names(systems)
-  m <- pmatch(nm, R.version$os)
-  m <- nm[!is.na(m)]
-  if (length(m)) {
-    cmd <- systems[[m]]
-    if (!is.null(a <- tryCatch(suppressWarnings(system(cmd,
-                                                       TRUE)), error = function(e) NULL))) {
-      a <- gsub("^ +", "", a[1])
-      if (grepl("^[1-9]", a))
-        return(as.integer(a))
-    }
-  }
-  if (all.tests) {
-    for (i in seq(systems)) for (cmd in systems[i]) {
-      if (is.null(a <- tryCatch(suppressWarnings(system(cmd,
-                                                        TRUE)), error = function(e) NULL)))
-        next
-      a <- gsub("^ +", "", a[1])
-      if (grepl("^[1-9]", a))
-        return(as.integer(a))
-    }
-  }
-  NA_integer_
-}
+

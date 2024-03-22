@@ -22,7 +22,7 @@ EMP_WGCNA_cluster_analysis(
   mergeCutHeight = 0.25,
   numericLabels = TRUE,
   pamRespectsDendro = FALSE,
-  saveTOMs = T,
+  saveTOMs = TRUE,
   action = "add"
 )
 }

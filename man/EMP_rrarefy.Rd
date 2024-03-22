@@ -4,7 +4,7 @@
 \alias{EMP_rrarefy}
 \title{Rarefaction abundance or experssion Richness}
 \usage{
-EMP_rrarefy(x, experiment, use_cached = T, action = "add", ...)
+EMP_rrarefy(x, experiment, use_cached = TRUE, action = "add", ...)
 }
 \arguments{
 \item{x}{Object in EMPT or MultiAssayExperiment format.}

@@ -162,47 +162,38 @@ setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj, ...){
   EMP_heatmap_WGCNA(obj, ...)
 })
 
-#' Title
+#' EMP_WGCNA_cor_analysis
 #'
-#' @param obj x
-#' @param ... ...
+#' @param obj EMPT or MultiAssayExperiment object.
 #' @rdname EMP_WGCNA_cor_analysis
 #'
-#' @return xx object
+#' @return EMP object
 #' @export
 #'
 #' @examples
 #' #x
-setGeneric("EMP_WGCNA_cor_analysis",function(obj, ...) standardGeneric("EMP_WGCNA_cor_analysis"))
+setGeneric("EMP_WGCNA_cor_analysis",function(obj,...) standardGeneric("EMP_WGCNA_cor_analysis"))
 
-#' Title
-#'
-#' @param EMPT x
-#' @param ... ...
+
+
+#' @param method A character string. Methods include pearson (default), spearman and kendall.
+#' @param coldata_to_assay A series of character strings. Select the column from coldata to caculate.
+#' @param ... Further parameters passed to the function agricolae::correlation
 #' @rdname EMP_WGCNA_cor_analysis
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' #x
-setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj, ...){
-  .EMP_WGCNA_cor_analysis_EMPT_m(obj, ...)
+
+setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj,method,coldata_to_assay,...){
+  .EMP_WGCNA_cor_analysis_EMPT_m(obj,method,coldata_to_assay,...)
 })
 
-#' Title
-#'
-#' @param EMP x
-#' @param ... ...
+
+#' @param select A character string. The experiment name in the EMP object.
+#' @param method A character string. Methods include pearson (default), spearman and kendall.
+#' @param ... Further parameters passed to the function agricolae::correlation
 #' @rdname EMP_WGCNA_cor_analysis
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' #x
-setMethod("EMP_WGCNA_cor_analysis","EMP",function(obj, ...){
-  .EMP_WGCNA_cor_analysis_EMP_m(obj, ...)
+
+
+setMethod("EMP_WGCNA_cor_analysis","EMP",function(obj,select,method,...){
+  .EMP_WGCNA_cor_analysis_EMP_m(obj,select,method,...)
 })
 
 

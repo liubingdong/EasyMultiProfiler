@@ -35,7 +35,7 @@
 #' @param filterSample A series of character strings. Select samples in the data exactly.
 #' @param filterFeature A series of character strings. Select samples in the data exactly.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
-#' @param show_info wait_for_add
+#' @param show_info A character string. Set the class of EMPT to show properly.
 #' @param action A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).
 #'
 #' @return EMPT object

@@ -4,39 +4,31 @@
 \alias{EMP_WGCNA_cor_analysis}
 \alias{EMP_WGCNA_cor_analysis,EMPT-method}
 \alias{EMP_WGCNA_cor_analysis,EMP-method}
-\title{Title}
+\title{EMP_WGCNA_cor_analysis}
 \usage{
 EMP_WGCNA_cor_analysis(obj, ...)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMPT}(obj, ...)
+\S4method{EMP_WGCNA_cor_analysis}{EMPT}(obj, method, coldata_to_assay, ...)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMP}(obj, ...)
+\S4method{EMP_WGCNA_cor_analysis}{EMP}(obj, select, method, ...)
 }
 \arguments{
-\item{obj}{x}
+\item{obj}{EMPT or MultiAssayExperiment object.}
 
-\item{...}{...}
+\item{...}{Further parameters passed to the function agricolae::correlation}
 
-\item{EMPT}{x}
+\item{method}{A character string. Methods include pearson (default), spearman and kendall.}
 
-\item{EMP}{x}
+\item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate.}
+
+\item{select}{A character string. The experiment name in the EMP object.}
 }
 \value{
-xx object
-
-xx object
-
-xx object
+EMPT object
 }
 \description{
-Title
-
-Title
-
-Title
+EMP_WGCNA_cor_analysis
 }
 \examples{
-#x
-#x
 #x
 }

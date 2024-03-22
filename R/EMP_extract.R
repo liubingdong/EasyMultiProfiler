@@ -59,7 +59,7 @@
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
 #' @param pattern_ref A character string. Select which column in the rowdata to extract rowdata from.
 #' @param pattern A character string. Select which pattern in the feature to extract rowdata.
-#' @param exact A boolean. Whether the extract use exact search method.
+#' @param exact A boolean. Whether the extract use exact search method.(default:FALSE)
 #' @importFrom dplyr select_if
 #'
 #' @return table
@@ -67,7 +67,7 @@
 #'
 #' @examples
 #' # add example
-EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern = NULL,exact=F){
+EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern = NULL,exact=FALSE){
 
   if (inherits(obj,"MultiAssayExperiment")) {
     if (!is.null(experiment)) {

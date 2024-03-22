@@ -9,7 +9,7 @@ EMP_cor_analysis(
   select = NULL,
   method = "spearman",
   action = "add",
-  use_cached = T,
+  use_cached = TRUE,
   ...
 )
 }

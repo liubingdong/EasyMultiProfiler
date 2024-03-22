@@ -9,7 +9,7 @@ EMP_rowdata_extract(
   experiment = NULL,
   pattern_ref = "Name",
   pattern = NULL,
-  exact = F
+  exact = FALSE
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ EMP_rowdata_extract(
 
 \item{pattern}{A character string. Select which pattern in the feature to extract rowdata.}
 
-\item{exact}{A boolean. Whether the extract use exact search method.}
+\item{exact}{A boolean. Whether the extract use exact search method.(default:FALSE)}
 }
 \value{
 table

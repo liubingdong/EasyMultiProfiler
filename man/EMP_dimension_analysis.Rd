@@ -9,7 +9,7 @@ EMP_dimension_analysis(
   experiment,
   method = "pcoa",
   distance = NULL,
-  use_cached = T,
+  use_cached = TRUE,
   estimate_group = NULL,
   action = "add"
 )

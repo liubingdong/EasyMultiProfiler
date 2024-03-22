@@ -2,9 +2,9 @@
 #'
 #' @param x Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param coldata A boolean. Whether the function use the coldata to impute or not.
-#' @param assay A boolean. Whether the function use the assay to impute or not.
-#' @param rowdata A boolean. Whether the function use the rowdata to impute or not.
+#' @param coldata A boolean. Whether the function use the coldata to impute or not.(default:TRUE)
+#' @param assay A boolean. Whether the function use the assay to impute or not.(default:FALSE)
+#' @param rowdata A boolean. Whether the function use the rowdata to impute or not.(default:FALSE)
 #' @param pmm.k Number of candidate non-missing values to sample from in the predictive mean matching steps. 0 to avoid this step.
 #' @param num.trees Tree number.
 #' @param seed Integer seed to initialize the random generator.
@@ -18,7 +18,7 @@
 #'
 #' @examples
 #' # add example
-EMP_impute <- function(x,experiment,coldata = T,assay = F, rowdata = F,
+EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALSE,
                        pmm.k = 10, num.trees = 1000, seed = 123,verbose = 0,action='add',...){
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

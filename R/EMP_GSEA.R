@@ -206,7 +206,7 @@
 EMP_GSEA_analysis <- function(x,condition,experiment,estimate_group=NULL,method,cor_method='pearson',group_level=NULL,
                                keyType=NULL,KEGG_Type='KEGG',species = "all",
                                pseudocount=0.0001,pvalueCutoff=1,threshold=NULL,
-                               threshold_r=0,threshold_p=0.05,seed=T,action='add',...){
+                               threshold_r=0,threshold_p=0.05,seed=TRUE,action='add',...){
   
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

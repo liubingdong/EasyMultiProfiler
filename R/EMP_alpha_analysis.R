@@ -1,5 +1,3 @@
-#' Title
-#'
 #' @param EMPT wait_for_add
 #' @param ... wait_for_add
 #' @importFrom tibble column_to_rownames
@@ -47,7 +45,7 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis)
 #'
 #' @param x Object in EMPT format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param use_cached A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param ... Further parameters passed to the function vegan::diversity
 #' @importFrom memoise forget
@@ -57,7 +55,7 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis)
 #'
 #' @examples
 #' # add example
-EMP_alpha_analysis <- function(x,experiment,use_cached = T,action='add',...) {
+EMP_alpha_analysis <- function(x,experiment,use_cached = TRUE,action='add',...) {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
 

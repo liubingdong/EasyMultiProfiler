@@ -9,7 +9,7 @@ EMP_diff_analysis(
   experiment,
   method = "wilcox.test",
   estimate_group = NULL,
-  use_cached = T,
+  use_cached = TRUE,
   action = "add",
   group_level = NULL,
   core = NULL,

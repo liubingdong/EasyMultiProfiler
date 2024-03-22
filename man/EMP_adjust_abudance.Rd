@@ -8,7 +8,7 @@ EMP_adjust_abudance(
   x,
   experiment,
   method = "combat_seq",
-  use_cached = T,
+  use_cached = TRUE,
   .factor_unwanted,
   .factor_of_interest,
   action = "add",
