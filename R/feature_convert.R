@@ -36,6 +36,7 @@
         result <- rbind(result, result2)
     }
     result <- dplyr::distinct(result)
+    result <- result[!duplicated(result[, 1]), ]
     return(result)  
 }    
 
