@@ -4,9 +4,10 @@
 \title{EasyMultiPlot: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization for Clinical Study}
 
 \description{
-The EasyMulitiPlot package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from beginning to end.
-}
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
+The EasyMulitiPlot package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from start to finish.
+}
 
 \section{Function}{
 {Data Extract} : 

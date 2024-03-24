@@ -10,6 +10,10 @@
   
   switch(method,
          "pca" = {
+           if(!is.null(distance)){
+             message("Parameter distance in pca is euclidean!")
+             distance <- 'euclidean'
+           }
            sample_name <- rownames(assay_data)
            assay_data <- assay_data |> bigstatsr::as_FBM()
            pca_result <- bigstatsr::big_SVD(assay_data,k = 3)

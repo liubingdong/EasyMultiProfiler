@@ -4,18 +4,24 @@
 \alias{EMP_assay_extract}
 \alias{EMP_assay_extract,MultiAssayExperiment-method}
 \alias{EMP_assay_extract,EMPT-method}
-\title{Extract assay data from EMPT or MultiAssayExperiment object}
+\title{Extract assay data}
 \usage{
-EMP_assay_extract(obj, ...)
+EMP_assay_extract(
+  obj,
+  experiment,
+  pattern_ref = "Name",
+  pattern = NULL,
+  exact = FALSE,
+  action = "add",
+  ...
+)
 
-\S4method{EMP_assay_extract}{MultiAssayExperiment}(obj, experiment, pattern_ref, pattern, exact, action, ...)
+\S4method{EMP_assay_extract}{MultiAssayExperiment}(obj, experiment, pattern_ref, pattern, exact, action)
 
-\S4method{EMP_assay_extract}{EMPT}(obj, experiment, pattern_ref, pattern, exact, action, ...)
+\S4method{EMP_assay_extract}{EMPT}(obj, pattern_ref, pattern, exact, action)
 }
 \arguments{
 \item{obj}{EMPT or MultiAssayExperiment object.}
-
-\item{...}{...}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
@@ -26,12 +32,14 @@ EMP_assay_extract(obj, ...)
 \item{exact}{A boolean. Whether the extract use exact search method.(default:FALSE)}
 
 \item{action}{A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
+
+\item{...}{...}
 }
 \value{
 EMPT object
 }
 \description{
-Extract assay data from EMPT or MultiAssayExperiment object
+Extract assay data
 }
 \examples{
 # xx

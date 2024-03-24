@@ -53,7 +53,7 @@
 
 
 
-#' Extract rowdata from EMPT or MultiAssayExperiment object
+#' Extract rowdata
 #'
 #' @param obj EMPT or MultiAssayExperiment object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
@@ -100,7 +100,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
   return(deposit)
 }
 
-#' Extract coldata from EMPT or MultiAssayExperiment object
+#' Extract coldata
 #'
 #' @param obj EMPT or MultiAssayExperiment object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 

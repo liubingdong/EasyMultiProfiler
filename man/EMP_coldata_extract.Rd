@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_extract.R
 \name{EMP_coldata_extract}
 \alias{EMP_coldata_extract}
-\title{Extract coldata from EMPT or MultiAssayExperiment object}
+\title{Extract coldata}
 \usage{
 EMP_coldata_extract(
   obj,
@@ -27,7 +27,7 @@ EMP_coldata_extract(
 EMPT object or table
 }
 \description{
-Extract coldata from EMPT or MultiAssayExperiment object
+Extract coldata
 }
 \examples{
 # add example

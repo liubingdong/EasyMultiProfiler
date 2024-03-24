@@ -24,7 +24,7 @@ EMP_WGCNA_cor_analysis(obj, ...)
 \item{select}{A character string. The experiment name in the EMP object.}
 }
 \value{
-EMPT object
+EMP object
 }
 \description{
 EMP_WGCNA_cor_analysis

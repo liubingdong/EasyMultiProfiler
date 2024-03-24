@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_extract.R
 \name{EMP_rowdata_extract}
 \alias{EMP_rowdata_extract}
-\title{Extract rowdata from EMPT or MultiAssayExperiment object}
+\title{Extract rowdata}
 \usage{
 EMP_rowdata_extract(
   obj,
@@ -27,7 +27,7 @@ EMP_rowdata_extract(
 table
 }
 \description{
-Extract rowdata from EMPT or MultiAssayExperiment object
+Extract rowdata
 }
 \examples{
 # add example
