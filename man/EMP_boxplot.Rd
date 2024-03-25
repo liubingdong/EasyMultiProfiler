@@ -4,35 +4,82 @@
 \alias{EMP_boxplot}
 \alias{EMP_boxplot,EMP_alpha_analysis-method}
 \alias{EMP_boxplot,EMP_assay_data-method}
-\title{Title}
+\title{EMP_boxplot}
 \usage{
-EMP_boxplot(obj, ...)
+EMP_boxplot(
+  obj,
+  method = "wilcox.test",
+  estimate_group = NULL,
+  group_level = "default",
+  ncol = NULL,
+  show = "pic",
+  palette = NULL,
+  html_width = NULL,
+  html_height = NULL,
+  mytheme = "theme()",
+  ...
+)
 
-\S4method{EMP_boxplot}{EMP_alpha_analysis}(obj, ...)
+\S4method{EMP_boxplot}{EMP_alpha_analysis}(
+  obj,
+  method = "wilcox.test",
+  estimate_group = NULL,
+  group_level = "default",
+  ncol = NULL,
+  select_metrics = NULL,
+  show = "pic",
+  palette = NULL,
+  html_width = NULL,
+  html_height = NULL,
+  mytheme = "theme()",
+  ...
+)
 
-\S4method{EMP_boxplot}{EMP_assay_data}(obj, ...)
+\S4method{EMP_boxplot}{EMP_assay_data}(
+  obj,
+  method = "wilcox.test",
+  estimate_group = NULL,
+  group_level = "default",
+  ncol = NULL,
+  show = "pic",
+  palette = NULL,
+  html_width = NULL,
+  html_height = NULL,
+  mytheme = "theme()",
+  ...
+)
 }
 \arguments{
-\item{obj}{obj}
+\item{obj}{EMPT object}
+
+\item{method}{A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).}
+
+\item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
+
+\item{group_level}{A string vector. Set the group order in the plot.}
+
+\item{ncol}{An interger. Set the col number in the facet plot.}
+
+\item{show}{A character string include pic (default), html.}
+
+\item{palette}{A series of character string. Color palette.}
+
+\item{html_width}{An interger. Set the html width.}
+
+\item{html_height}{An interger. Set the html height.}
+
+\item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
 
 \item{...}{...}
+
+\item{select_metrics}{A series of character string. Select the alpha metrics to show.}
 }
 \value{
-xx object
-
-xx object
-
-xx object
+EMPT object
 }
 \description{
-Title
-
-Title
-
-Title
+EMP_boxplot
 }
 \examples{
 # xx
-#
-#
 }
