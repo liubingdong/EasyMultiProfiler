@@ -3,17 +3,19 @@
 #' @param EMPT Object in EMPT or MultiAssayExperiment format.
 #' @param plot_category An interger.More plot style.
 #' @param seed An interger. Set the random seed to the plot.(default:123)
+#' @param obj EMPT object
+#' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
+#' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
+#' @param group_level A string vector. Set the group order in the plot.
+#' @param ncol An interger. Set the col number in the facet plot.
+#' @param select_metrics A series of character string. Select the alpha metrics to show. 
+#' @param show A character string include pic (default), html.
+#' @param palette A series of character string. Color palette.
+#' @param html_width An interger. Set the html width.
+#' @param html_height An interger. Set the html height.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @param ... Other parameters:
-#' method: The name of the statistical test that is applied to the values of the 2 columns (e.g. t.test, wilcox.test etc.).
-#' estimate_group: A character string. Select the colname in the coldata to compare the data in the statistical test.
-#' group_level: A string vector. Set the group order in the plot.
-#' ncol: An interger. Set the col number in the facet plot.
-#' select_metrics: A string vector. Select the alpha metrics you want to plot.
-#' palette: A character string.Color palette.
-#' show: A character string include pic (default), html.
-#' html_width: An interger. Set the html width.
-#' html_height: An interger. Set the html height.
-#' mytheme: Modify components of a theme according to the ggplot2::theme.
+#' @rdname EMP_boxplot
 #' @importFrom withr with_seed
 #'
 #' @return xx object
@@ -21,7 +23,7 @@
 #'
 #' @examples
 #' # add example
-EMP_boxplot_alpha <- function(EMPT,plot_category = 1,seed =123,...) {
+EMP_boxplot.EMP_alpha_analysis <- function(EMPT,plot_category = 1,seed =123,...) {
   #call <- match.call()
   .get.plot_category.EMPT(EMPT) <- plot_category
   #.get.history.EMPT(EMPT) <- call

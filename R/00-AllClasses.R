@@ -205,7 +205,6 @@ setMethod("EMP_assay_extract","EMPT",function(obj,pattern_ref,pattern,exact,acti
 
 #' EMP_boxplot
 #'
-#' @param obj EMPT object
 #' @param ... ...
 #' @rdname EMP_boxplot
 #'
@@ -214,58 +213,23 @@ setMethod("EMP_assay_extract","EMPT",function(obj,pattern_ref,pattern,exact,acti
 #'
 #' @examples
 #' # xx
-setGeneric("EMP_boxplot",function(obj,method = 'wilcox.test',
-                                       estimate_group = NULL,group_level = 'default',
-                                       ncol = NULL,show = 'pic',palette = NULL,
-                                       html_width = NULL,html_height = NULL,
-                                       mytheme = 'theme()',...) standardGeneric("EMP_boxplot"))
+setGeneric("EMP_boxplot",function(obj, ...) standardGeneric("EMP_boxplot"))
 
-#' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
-#' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
-#' @param group_level A string vector. Set the group order in the plot.
-#' @param ncol An interger. Set the col number in the facet plot.
-#' @param select_metrics A series of character string. Select the alpha metrics to show. 
-#' @param show A character string include pic (default), html.
-#' @param palette A series of character string. Color palette.
-#' @param html_width An interger. Set the html width.
-#' @param html_height An interger. Set the html height.
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+
 #' @param ... ...
 #' @rdname EMP_boxplot
 
-setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj,method = 'wilcox.test',
-                                       estimate_group = NULL,group_level = 'default',
-                                       ncol = NULL,select_metrics = NULL,show = 'pic',palette = NULL,
-                                       html_width = NULL,html_height = NULL,
-                                       mytheme = 'theme()',...){
-  EMP_boxplot_alpha(obj,method,estimate_group,group_level,
-                                       ncol,select_metrics,show,palette,
-                                       html_width,html_height,
-                                       mytheme,...)
+setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj, ...){
+  # EMP_boxplot_alpha(obj,method,estimate_group,group_level,
+  EMP_boxplot.EMP_alpha_analysis(obj, ...)
 })
 
 
-#' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
-#' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
-#' @param group_level A string vector. Set the group order in the plot.
-#' @param ncol An interger. Set the col number in the facet plot.
-#' @param show A character string include pic (default), html.
-#' @param palette A series of character string. Color palette.
-#' @param html_width An interger. Set the html width.
-#' @param html_height An interger. Set the html height.
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @param ... ...
 #' @rdname EMP_boxplot
 
-setMethod("EMP_boxplot","EMP_assay_data",function(obj,method = 'wilcox.test',
-                                       estimate_group = NULL,group_level = 'default',
-                                       ncol = NULL,show = 'pic',palette = NULL,
-                                       html_width = NULL,html_height = NULL,
-                                       mytheme = 'theme()',...){
-  EMP_assay_boxplot(obj,method,estimate_group,group_level,
-                                       ncol,show,palette,
-                                       html_width,html_height,
-                                       mytheme,...)
+setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
+  EMP_boxplot.EMP_assay_data(obj, ...)
 })
 
 
