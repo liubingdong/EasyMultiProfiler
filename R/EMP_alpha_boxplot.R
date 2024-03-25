@@ -1,7 +1,7 @@
 #' Title
 #'
 #' @param EMPT Object in EMPT or MultiAssayExperiment format.
-#' @param plot_category An interger.More plot style.
+#' @param plot_category An interger.More plot style.(under constrution)
 #' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param obj EMPT object
 #' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
@@ -14,27 +14,37 @@
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
-#' @param ... Other parameters:
 #' @rdname EMP_boxplot
 #' @importFrom withr with_seed
 #'
-#' @return xx object
 #' @export
 #'
 #' @examples
 #' # add example
-EMP_boxplot.EMP_alpha_analysis <- function(EMPT,plot_category = 1,seed =123,...) {
+EMP_boxplot.EMP_alpha_analysis <- function(EMPT,plot_category = 1,seed =123,method = 'wilcox.test',
+                               estimate_group = NULL,group_level = 'default',
+                               ncol = NULL,select_metrics=NULL,show = 'pic',palette = NULL,
+                               html_width=NULL,html_height=NULL,
+                               mytheme = 'theme()') {
   #call <- match.call()
   .get.plot_category.EMPT(EMPT) <- plot_category
   #.get.history.EMPT(EMPT) <- call
 
   switch(.get.plot_category.EMPT(EMPT),
          "1" = {
-           withr::with_seed(seed,EMP_boxplot_alpha_default(EMPT,...))
+           withr::with_seed(seed,EMP_boxplot_alpha_default(EMPT,method = method,
+                               estimate_group = estimate_group,group_level = group_level,
+                               ncol = ncol,select_metrics=select_metrics,show = show,palette = palette,
+                               html_width=html_width,html_height=html_height,
+                               mytheme = mytheme))
          },
-         "2" = {
-           withr::with_seed(seed,EMP_boxplot_alpha_2(EMPT,...))
-         }
+         #"2" = {
+         # withr::with_seed(seed,EMP_boxplot_alpha_2(EMPT,method = method,
+         #                      estimate_group = estimate_group,group_level = group_level,
+         #                      ncol = ncol,select_metrics=select_metrics,show = show,palette = palette,
+         #                      html_width=html_width,html_height=html_height,
+         #                      mytheme = mytheme))
+         #}
 
   )
 
@@ -51,30 +61,7 @@ EMP_boxplot.EMP_alpha_analysis <- function(EMPT,plot_category = 1,seed =123,...)
 
 
 
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param method wait_for_add
-#' @param estimate_group wait_for_add
-#' @param group_level wait_for_add
-#' @param ncol wait_for_add
-#' @param select_metrics wait_for_add
-#' @param palette wait_for_add
-#' @param show wait_for_add
-#' @param html_width wait_for_add
-#' @param html_height wait_for_add
-#' @param mytheme wait_for_add
-#' @importFrom tidyr pivot_longer
-#' @importFrom plyr alply
-#' @importFrom dplyr sym
-#' @importFrom ggiraph geom_jitter_interactive
-#' @importFrom ggsignif geom_signif
-#' @importFrom dplyr full_join
-#' @importFrom plyr alply
-#' @importFrom tidyr pivot_longer
-#' @importFrom dplyr filter
-#' @noRd
-
+#' @import ggthemes
 EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
                                        estimate_group = NULL,group_level = 'default',
                                        ncol = NULL,select_metrics = NULL,palette = NULL,
@@ -139,66 +126,51 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
 }
 
 
-
-
-##### only for test
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param method wait_for_add
-#' @param estimate_group wait_for_add
-#' @param shape wait_for_add
-#' @param show wait_for_add
-#' @param html_width wait_for_add
-#' @param html_height wait_for_add
-#' @param mytheme wait_for_add
-#' @importFrom ggthemes theme_few
-#' @noRd
-EMP_boxplot_alpha_2 <- function(EMPT,method = 'wilcox.test',estimate_group = NULL,shape,
-                                       show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()') {
-  primary <- value <- NULL
-  call <- match.call()
-  alpha_plot <- list()
-
-  estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
-
-
-  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
-
-  alpha_data <- .get.result.EMPT(EMPT) %>%
-    dplyr::full_join(mapping,by= 'primary')
-
-  group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
-  compare <- plyr::alply(group_combn,2)
-
-  col_values <- .get.palette.EMPT(EMPT)
-  alpha_data %<>%  tidyr::pivot_longer(cols = c(-primary,-!!dplyr::sym(estimate_group)),
-                                       names_to = 'ID',
-                                       values_to = 'value')
-
-  alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
-    geom_boxplot(outlier.color=NA,shape = shape,alpha=0.5) +
-    ggiraph::geom_jitter_interactive(aes(tooltip = value),shape=21,position = position_jitter(height = .00000001))+
-    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
-    facet_wrap(ID~., scales = 'free', strip.position = 'right') +
-    xlab(NULL) +
-    ylab("Alpha Metrics") +
-    ggtitle('Alpha analysis Plot') +
-    scale_fill_manual(values = col_values) +
-    theme_bw() + eval(parse(text = paste0(mytheme))) +theme_few()
-
-
-  alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
-
-  .get.plot_deposit.EMPT(EMPT,info = 'alpha_analysis_plot') <- alpha_plot
-  .get.plot_specific.EMPT(EMPT) <- show
-  .get.estimate_group.EMPT(EMPT) <- estimate_group
-  .get.algorithm.EMPT(EMPT) <- 'alpha_analysis_plot'
-  .get.info.EMPT(EMPT) <- 'EMP_alpha_analysis_boxplot'
-  .get.history.EMPT(EMPT) <- call
-  class(EMPT) <- 'EMP_alpha_analysis_boxplot'
-  EMPT
-}
+# EMP_boxplot_alpha_2 <- function(EMPT,method = 'wilcox.test',estimate_group = NULL,shape=21,
+#                                 show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()') {
+#   primary <- value <- NULL
+#   call <- match.call()
+#   alpha_plot <- list()
+#   
+#   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+#   
+#   
+#   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
+#   
+#   alpha_data <- .get.result.EMPT(EMPT) %>%
+#     dplyr::full_join(mapping,by= 'primary')
+#   
+#   group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
+#   compare <- plyr::alply(group_combn,2)
+#   
+#   col_values <- .get.palette.EMPT(EMPT)
+#   alpha_data %<>%  tidyr::pivot_longer(cols = c(-primary,-!!dplyr::sym(estimate_group)),
+#                                        names_to = 'ID',
+#                                        values_to = 'value')
+#   
+#   alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
+#     geom_boxplot(outlier.color=NA,shape = shape,alpha=0.5) +
+#     ggiraph::geom_jitter_interactive(aes(tooltip = value),shape=21,position = position_jitter(height = .00000001))+
+#     ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
+#     facet_wrap(ID~., scales = 'free', strip.position = 'right') +
+#     xlab(NULL) +
+#     ylab("Alpha Metrics") +
+#     ggtitle('Alpha analysis Plot') +
+#     scale_fill_manual(values = col_values) +
+#     theme_bw() + eval(parse(text = paste0(mytheme))) +theme_few()
+#   
+#   
+#   alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
+#   
+#   .get.plot_deposit.EMPT(EMPT,info = 'alpha_analysis_plot') <- alpha_plot
+#   .get.plot_specific.EMPT(EMPT) <- show
+#   .get.estimate_group.EMPT(EMPT) <- estimate_group
+#   .get.algorithm.EMPT(EMPT) <- 'alpha_analysis_plot'
+#   .get.info.EMPT(EMPT) <- 'EMP_alpha_analysis_boxplot'
+#   .get.history.EMPT(EMPT) <- call
+#   class(EMPT) <- 'EMP_alpha_analysis_boxplot'
+#   EMPT
+# }
 
 
 

@@ -1,11 +1,11 @@
-Package: EasyMultiPlot
+Package: EasyMultiProfiler
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
 Authors@R: c( person(given = "Bingdong", family = "liu",       email = "382983280@qq.com", role = c("aut", "cre")),
               person(given = "Erqiang",  family = "Hu",        email = "13766876214@163.com", role = c("aut", "ctb")))
 Maintainer: Guangchuang Yu <xx@xx.com>
-Description: The EasyMulitiPlot package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from beginning to end.
+Description: The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from beginning to end.
 License: Artistic-2.0
 Encoding: UTF-8
 Imports: 

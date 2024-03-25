@@ -15,18 +15,45 @@ EMP_boxplot(obj, ...)
 
 \S4method{EMP_boxplot}{EMP_assay_data}(obj, ...)
 
-EMP_boxplot.EMP_alpha_analysis(EMPT, plot_category = 1, seed = 123, ...)
+EMP_boxplot.EMP_alpha_analysis(
+  EMPT,
+  plot_category = 1,
+  seed = 123,
+  method = "wilcox.test",
+  estimate_group = NULL,
+  group_level = "default",
+  ncol = NULL,
+  select_metrics = NULL,
+  show = "pic",
+  palette = NULL,
+  html_width = NULL,
+  html_height = NULL,
+  mytheme = "theme()"
+)
 
-EMP_boxplot.EMP_assay_data(EMPT, plot_category = 1, seed = 123, ...)
+EMP_boxplot.EMP_assay_data(
+  EMPT,
+  plot_category = 1,
+  seed = 123,
+  method = "wilcox.test",
+  estimate_group = NULL,
+  group_level = "default",
+  ncol = NULL,
+  show = "pic",
+  palette = NULL,
+  html_width = NULL,
+  html_height = NULL,
+  mytheme = "theme()"
+)
 }
 \arguments{
 \item{obj}{EMPT object}
 
-\item{...}{Other parametes:}
+\item{...}{...}
 
 \item{EMPT}{Object in EMPT format.}
 
-\item{plot_category}{An interger.More plot style.}
+\item{plot_category}{An interger.More plot style.(under constrution)}
 
 \item{seed}{An interger. Set the random seed to the plot.}
 
@@ -52,10 +79,6 @@ EMP_boxplot.EMP_assay_data(EMPT, plot_category = 1, seed = 123, ...)
 }
 \value{
 EMPT object
-
-xx object
-
-xx object
 }
 \description{
 EMP_boxplot

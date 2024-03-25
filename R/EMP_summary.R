@@ -140,7 +140,7 @@ EMP_summary <- function(obj) {
 
 
     ) %>%
-    kableExtra::kable("html", escape = F,caption = "EasyMultiPlot Summary") %>%
+    kableExtra::kable("html", escape = F,caption = "EasyMultiProfiler Summary") %>%
     kableExtra::kable_styling("hover", full_width = F,position = 'center') %>%
     kableExtra::column_spec(9, width = "10cm") %>%
     kableExtra::column_spec(4, width = "3cm")  %>%
@@ -150,7 +150,7 @@ EMP_summary <- function(obj) {
     padding: 15px; border: 15px solid transparent;
     background: linear-gradient(white,white), repeating-linear-gradient(45deg, #0072b2, #d9230f 10px, #f96352 10px, #f96352 20px);
     background-clip: padding-box, border-box;') %>%
-    kableExtra::footnote(general = "Typing for more information: help (EasyMultiPlot)",
+    kableExtra::footnote(general = "Typing for more information: help (EasyMultiProfiler)",
              general_title = "Note: ", number_title = "",
              alphabet_title = "Type II: ", symbol_title = "Type III: ",
              footnote_as_chunk = T, title_format = c("italic", "underline")
