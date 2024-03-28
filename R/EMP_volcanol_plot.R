@@ -1,14 +1,14 @@
-#' Title
+#' EMP volcanol plot
 #'
-#' @param EMPT wait_for_add
-#' @param y wait_for_add
-#' @param palette wait_for_add
-#' @param show wait_for_add
-#' @param html_width wait_for_add
-#' @param html_height wait_for_add
-#' @param mytheme wait_for_add
+#' @param EMPT EMPT object
+#' @param y A character string. Select the pvalue from the EMP_diff_analysis.
+#' @param palette A series of character string. Color palette.
+#' @param show A character string include pic (default), html.
+#' @param html_width An interger. Set the html width.
+#' @param html_height An interger. Set the html height.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples

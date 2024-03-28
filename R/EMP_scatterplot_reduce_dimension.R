@@ -12,26 +12,26 @@
 
 
 
-#' Title
+#' EMP scatterplot
 #'
-#' @param EMPT wait_for_add
-#' @param seed wait_for_add
-#' @param group_level wait_for_add
-#' @param show wait_for_add
-#' @param distance_for_adonis wait_for_add
-#' @param estimate_group wait_for_add
-#' @param palette wait_for_add
-#' @param method wait_for_add
-#' @param key_samples wait_for_add
-#' @param ellipse wait_for_add
-#' @param width wait_for_add
-#' @param height wait_for_add
-#' @param force_adonis force_adonis
+#' @param EMPT EMPT object
+#' @param seed An interger. Set the random seed to the plot.
+#' @param group_level A string vector. Set the group order in the plot.
+#' @param show A character string include pic (default), html.
+#' @param distance_for_adonis A character string.Set the distance for adonis. Detailed in the vegan::adonis.
+#' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
+#' @param palette A series of character string. Color palette.
+#' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
+#' @param key_samples A series of character string. To highlight your interested samples.
+#' @param ellipse A number from 0 to 1. Set the ellipse in the plot.
+#' @param html_width An interger. Set the html width.
+#' @param html_height An interger. Set the html height.
+#' @param force_adonis force the function run adnois analysis always.(default:FALSE)
 #' @importFrom ggpubr stat_compare_means
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
 #'
-#' @return xx object
+#' @return EMPT object
 #' @export
 #'
 #' @examples
@@ -40,7 +40,7 @@ EMP_scatterplot_reduce_dimension  <- function(EMPT,seed=123,group_level='default
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,
                                            estimate_group=NULL,palette=NULL,
                                            method='t.test',key_samples = NULL,
-                                           ellipse = NULL,width=15,height=15){
+                                           ellipse = NULL,html_width=15,html_height=15){
   primary <- Group <- NULL
   call <- match.call()
   deposit <- list()
@@ -334,16 +334,16 @@ EMP_scatterplot_reduce_dimension  <- function(EMPT,seed=123,group_level='default
   p12 <- p1 + p5 + p12 + p2 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   set.seed(seed)
-  p12_html=ggiraph::girafe(code = print(p12),width_svg = width,height_svg = height)
+  p12_html=ggiraph::girafe(code = print(p12),width_svg = html_width,height_svg = html_height)
   if (axis_num >= 3) {
   p23 <- p2_r + p5 + p23 + p3 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   p13 <- p1 + p5 + p13 + p3 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   set.seed(seed)
-  p13_html=ggiraph::girafe(code = print(p13),width_svg = width,height_svg = height)
+  p13_html=ggiraph::girafe(code = print(p13),width_svg = html_width,height_svg = html_height)
   set.seed(seed)
-  p23_html=ggiraph::girafe(code = print(p23),width_svg = width,height_svg = height)
+  p23_html=ggiraph::girafe(code = print(p23),width_svg = html_width,height_svg = html_height)
   }
 
 
