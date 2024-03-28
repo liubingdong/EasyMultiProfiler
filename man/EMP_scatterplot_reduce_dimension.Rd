@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_scatterplot_reduce_dimension.R
 \name{EMP_scatterplot_reduce_dimension}
 \alias{EMP_scatterplot_reduce_dimension}
-\title{Title}
+\title{EMP scatterplot}
 \usage{
 EMP_scatterplot_reduce_dimension(
   EMPT,
@@ -16,42 +16,42 @@ EMP_scatterplot_reduce_dimension(
   method = "t.test",
   key_samples = NULL,
   ellipse = NULL,
-  width = 15,
-  height = 15
+  html_width = 15,
+  html_height = 15
 )
 }
 \arguments{
-\item{EMPT}{wait_for_add}
+\item{EMPT}{EMPT object}
 
-\item{seed}{wait_for_add}
+\item{seed}{An interger. Set the random seed to the plot.}
 
-\item{group_level}{wait_for_add}
+\item{group_level}{A string vector. Set the group order in the plot.}
 
-\item{show}{wait_for_add}
+\item{show}{A character string include pic (default), html.}
 
-\item{distance_for_adonis}{wait_for_add}
+\item{distance_for_adonis}{A character string.Set the distance for adonis. Detailed in the vegan::adonis.}
 
-\item{force_adonis}{force_adonis}
+\item{force_adonis}{force the function run adnois analysis always.(default:FALSE)}
 
-\item{estimate_group}{wait_for_add}
+\item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
 
-\item{palette}{wait_for_add}
+\item{palette}{A series of character string. Color palette.}
 
-\item{method}{wait_for_add}
+\item{method}{A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).}
 
-\item{key_samples}{wait_for_add}
+\item{key_samples}{A series of character string. To highlight your interested samples.}
 
-\item{ellipse}{wait_for_add}
+\item{ellipse}{A number from 0 to 1. Set the ellipse in the plot.}
 
-\item{width}{wait_for_add}
+\item{html_width}{An interger. Set the html width.}
 
-\item{height}{wait_for_add}
+\item{html_height}{An interger. Set the html height.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+EMP scatterplot
 }
 \examples{
 # add example

@@ -2,7 +2,7 @@
 % Please edit documentation in R/EMP_volcanol_plot.R
 \name{EMP_volcanol_plot}
 \alias{EMP_volcanol_plot}
-\title{Title}
+\title{EMP volcanol plot}
 \usage{
 EMP_volcanol_plot(
   EMPT,
@@ -15,25 +15,25 @@ EMP_volcanol_plot(
 )
 }
 \arguments{
-\item{EMPT}{wait_for_add}
+\item{EMPT}{EMPT object}
 
-\item{y}{wait_for_add}
+\item{y}{A character string. Select the pvalue from the EMP_diff_analysis.}
 
-\item{palette}{wait_for_add}
+\item{palette}{A series of character string. Color palette.}
 
-\item{show}{wait_for_add}
+\item{show}{A character string include pic (default), html.}
 
-\item{html_width}{wait_for_add}
+\item{html_width}{An interger. Set the html width.}
 
-\item{html_height}{wait_for_add}
+\item{html_height}{An interger. Set the html height.}
 
-\item{mytheme}{wait_for_add}
+\item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
 }
 \value{
-xx object
+EMPT object
 }
 \description{
-Title
+EMP volcanol plot
 }
 \examples{
 # add example
