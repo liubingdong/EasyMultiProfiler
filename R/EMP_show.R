@@ -51,9 +51,6 @@ setMethod("show", "EMPT",
                    "EMP_alpha_analysis" = {
                      object@deposit$diversity_result %>% print()
                    },
-                   "EMP_beta_analysis" = {
-                     object@deposit$distance_result %>% print()
-                   },
                    "EMP_dimension_analysis" = {
                      .get.result.EMPT(object) %>% print()
                    },

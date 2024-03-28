@@ -8,9 +8,9 @@
 \usage{
 EMP_WGCNA_cor_analysis(obj, ...)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMPT}(obj, method, coldata_to_assay, ...)
+\S4method{EMP_WGCNA_cor_analysis}{EMPT}(obj, method = "spearman", coldata_to_assay = NULL, ...)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMP}(obj, select, method, ...)
+\S4method{EMP_WGCNA_cor_analysis}{EMP}(obj, select = NULL, method = "spearman", ...)
 }
 \arguments{
 \item{obj}{EMPT or MultiAssayExperiment object.}

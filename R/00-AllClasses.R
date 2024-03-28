@@ -98,18 +98,17 @@ setClass("EMPT",
            deposit_append = list(),
            deposit_info = data.frame(Result= c('diversity_result',
                                               'diff_analysis_result',
-                                              'distance_result',
                                               'sample_cluster_result',
                                               'feature_cluster_result',
                                               'feature_WGCNA_cluster_result',
                                               'enrich_data',
                                               'dimension_coordinate','dimension_axis','dimension_VIP'
                                               ),
-                                    affect_when_sample_changed= c(0,1,0,1,1,1,1,1,1,1),
-                                    affect_when_feature_changed=c(1,0,1,1,1,1,1,1,1,1),
-                                    attribute=c('primary','feature','primary','primary','feature','feature','all','primary','all','feature'),
-                                    attribute2=c('normal','normal','diagonal','normal','normal','normal','none','normal','none','normal'),
-                                    source=c('EMP_alpha_analysis','EMP_diff_analysis','EMP_beta_analysis',
+                                    affect_when_sample_changed= c(0,1,1,1,1,1,1,1,1),
+                                    affect_when_feature_changed=c(1,0,1,1,1,1,1,1,1),
+                                    attribute=c('primary','feature','primary','feature','feature','all','primary','all','feature'),
+                                    attribute2=c('normal','normal','normal','normal','normal','none','normal','none','normal'),
+                                    source=c('EMP_alpha_analysis','EMP_diff_analysis',
                                              'EMP_cluster_analysis','EMP_cluster_analysis','EMP_WGCNA_cluster_analysis',
                                              'EMP_GSEA_analysis or EMP_enrich_analysis',
                                              'EMP_dimension_analysis','EMP_dimension_analysis','EMP_dimension_analysis')
@@ -131,9 +130,6 @@ setClass("EMP_assay_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExp
 
 setClass("EMP_alpha_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_alpha_analysis_boxplot",contains = c("EMP_alpha_analysis","EMPT","SummarizedExperiment"))
-
-#setClass("EMP_beta_analysis",contains = c("EMPT","SummarizedExperiment"))
-#setClass("EMP_beta_analysis_boxplot",contains = c("EMP_beta_analysis","EMPT","SummarizedExperiment"))
 
 setClass("EMP_diff_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_diff_volcanol_plot",contains = c("EMP_diff_analysis","EMPT","SummarizedExperiment"))

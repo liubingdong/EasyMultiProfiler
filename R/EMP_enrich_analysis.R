@@ -2,7 +2,7 @@
 #'
 #' @param EMPT wait_for_add
 #' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05
-#' @param keyType A character string. Methods include ko, ec, cpd.
+#' @param keyType A character string. Methods include ko, ec, cpd and entrezid.
 #' @param minGSSize minimal size of genes annotated by Ontology term for testing.
 #' @param maxGSSize maximal size of genes annotated for testing.
 #' @param use_cache A boolean. Whether the function use the results in cache or re-compute.
@@ -19,8 +19,8 @@
   
   if (is.null(keyType)) {
     stop("keyType should be specified as ko, ec or cpd!")
-  }else if(!keyType %in% c('ko','ec','cpd')){
-    stop("keyType should be ko, ec or cpd!2")
+  }else if(!keyType %in% c('ko','ec','cpd','entrezid')){
+    stop("keyType should be ko, ec, cpd or entrezid!")
   }
 
   if(!KEGG_Type %in% c('KEGG','MKEGG')){

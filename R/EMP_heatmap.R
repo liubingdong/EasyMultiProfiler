@@ -1,22 +1,28 @@
-#' Title
-#'
-#' @param EMP wait_for_add
-#' @param palette wait_for_add
-#' @param show wait_for_add
-#' @param mytheme wait_for_add
+
+#' @param obj EMP object
+#' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
+#' @param show A character string. Show inluding all, sig and pvalue.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @rdname EMP_heatmap_plot
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_tile
 #' @importFrom ggplot2 geom_text
 #' @importFrom ggplot2 theme_minimal
 #'
-#' @return xx object
 #' @export
 #'
 #' @examples
 #' # add example
-EMP_heatmap_cor <- function(EMP,palette=c("steelblue","white","darkred"),
+EMP_heatmap_cor <- function(obj,palette=c("steelblue","white","darkred"),
                             show='all',mytheme = 'theme()'){
-  var1 <- var2 <- coefficient <- NULL
+  var1 <- var2 <- coefficient <- EMP <- NULL
+  
+  if (inherits(obj,"EMP")) {
+    EMP <- obj
+  }else{
+    stop('Please check the input data!')
+  }  
+
   result <- .get.result.EMP(EMP,info = 'EMP_cor_analysis')
 
   experiment_name <- result[["cor_info"]]
@@ -99,29 +105,28 @@ EMP_heatmap_cor <- function(EMP,palette=c("steelblue","white","darkred"),
 }
 
 
-#' Title
-#'
-#' @param x wait_for_add
-#' @param palette wait_for_add
-#' @param show wait_for_add
-#' @param mytheme wait_for_add
+
+#' @param obj EMPT or EMP object
+#' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
+#' @param show A character string. Show inluding all, sig and pvalue.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @rdname EMP_heatmap_plot
 #' @importFrom dplyr mutate
 #' @importFrom ggplot2 guides
 #'
-#' @return xx object
 #' @export
 #'
 #' @examples
 #' # add example
-EMP_heatmap_WGCNA <- function(x,palette=c("steelblue","white","darkred"),show='all',mytheme = 'theme()'){
+EMP_heatmap_WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show='all',mytheme = 'theme()'){
   WGCNA_color <- WGCNA_module_elements <- `.` <- var2 <- var1 <- coefficient <- NULL
   call <- match.call()
-  if (inherits(x,"EMP")) {
-    WGCNA_cluster_result <- .get.result.EMPT(x@ExperimentList[[1]],info = 'EMP_WGCNA_cluster_analysis')
-    result <- x@deposit[['WGCNA_cor_analysis_result']]
-  }else if(inherits(x,'EMPT')) {
-    result <- .get.result.EMPT(x,info = 'EMP_WGCNA_cor_analysis')
-    WGCNA_cluster_result <- .get.result.EMPT(x,info = 'EMP_WGCNA_cluster_analysis')
+  if (inherits(obj,"EMP")) {
+    WGCNA_cluster_result <- .get.result.EMPT(obj@ExperimentList[[1]],info = 'EMP_WGCNA_cluster_analysis')
+    result <- obj@deposit[['WGCNA_cor_analysis_result']]
+  }else if(inherits(obj,'EMPT')) {
+    result <- .get.result.EMPT(obj,info = 'EMP_WGCNA_cor_analysis')
+    WGCNA_cluster_result <- .get.result.EMPT(obj,info = 'EMP_WGCNA_cluster_analysis')
   }else {
     stop('Please check the input data!')
   }
@@ -210,15 +215,15 @@ EMP_heatmap_WGCNA <- function(x,palette=c("steelblue","white","darkred"),show='a
   }
 
 
-  if (inherits(x,"EMP")) {
-    EMP <- x
+  if (inherits(obj,"EMP")) {
+    EMP <- obj
     .get.plot_deposit.EMP(EMP,info='EMP_WGCNA_cor_heatmap') <- p1
     .get.info.EMP(EMP) <- 'EMP_WGCNA_cor_heatmap2'
     .get.history.EMP(EMP) <- call
     class(EMP) <- 'EMP_WGCNA_cor_heatmap2'
     return(EMP)
-  }else if(inherits(x,'EMPT')) {
-    EMPT <- x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
     .get.plot_deposit.EMPT(EMPT,info='EMP_WGCNA_cor_heatmap') <- p1
     .get.info.EMPT(EMPT) <- 'EMP_WGCNA_cor_heatmap'
     .get.history.EMPT(EMPT) <- call

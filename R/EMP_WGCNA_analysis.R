@@ -214,8 +214,15 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
 .EMP_WGCNA_cor_analysis_EMPT_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMPT)
 
 #' @importFrom WGCNA orderMEs
-.EMP_WGCNA_cor_analysis_EMP <- function(EMP,select=NULL,method='spearman'){
+.EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman'){
   var1 <- NULL
+
+  if (inherits(obj,"EMP")) {
+    EMP <- obj
+  }else{
+    stop('Please check the input data!')
+  }  
+
   if (is.null(select)) {
     data1 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%
       dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
@@ -255,8 +262,8 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   data1_sample_num <- rownames(data1) %>% unique %>% length()
   data2_sample_num <- rownames(data2) %>% unique %>% length()
 
-  data1 <- dplyr::filter(rownames(data1) %in% real_samples)
-  data2 <- dplyr::filter(rownames(data2) %in% real_samples)
+  data1 <- data1 %>% dplyr::filter(rownames(data1) %in% real_samples)
+  data2 <- data2 %>% dplyr::filter(rownames(data2) %in% real_samples)
 
   net <- EMP@ExperimentList[[1]]@deposit_append[['feature_WGCNA_cluster_result']]
   if(is.null(net)){

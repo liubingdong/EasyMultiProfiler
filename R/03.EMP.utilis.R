@@ -104,60 +104,32 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 })
 
 
-#' Title
+#' EMP heatmap plot
 #'
-#' @param obj x
+#' @param obj EMPT or EMP object
 #' @param ... ...
 #' @rdname EMP_heatmap_plot
 #'
-#' @return xx object
+#' @return EMPT or EMP object
 #' @export
 #'
 #' @examples
 #' #x
 setGeneric("EMP_heatmap_plot",function(obj, ...) standardGeneric("EMP_heatmap_plot"))
 
-#' Title
-#'
-#' @param EMP_cor_analysis x
-#' @param ... ...
+
 #' @rdname EMP_heatmap_plot
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # x
 setMethod("EMP_heatmap_plot","EMP_cor_analysis",function(obj, ...){
   EMP_heatmap_cor(obj, ...)
 })
 
-#' Title
-#'
-#' @param EMP_WGCNA_cor_analysis x
-#' @param ... ...
 #' @rdname EMP_heatmap_plot
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # x
 setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis",function(obj, ...){
   EMP_heatmap_WGCNA(obj, ...)
 })
 
-#' Title
-#'
-#' @param EMP_WGCNA_cor_analysis2 x
-#' @param ... ...
+
 #' @rdname EMP_heatmap_plot
-#'
-#' @return x object
-#' @export
-#'
-#' @examples
-#' # 
 setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj, ...){
   EMP_heatmap_WGCNA(obj, ...)
 })
@@ -181,7 +153,7 @@ setGeneric("EMP_WGCNA_cor_analysis",function(obj,...) standardGeneric("EMP_WGCNA
 #' @param ... Further parameters passed to the function agricolae::correlation
 #' @rdname EMP_WGCNA_cor_analysis
 
-setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj,method,coldata_to_assay,...){
+setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj,method='spearman',coldata_to_assay=NULL,...){
   .EMP_WGCNA_cor_analysis_EMPT_m(obj,method,coldata_to_assay,...)
 })
 
@@ -192,7 +164,7 @@ setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj,method,coldata_to_assay,.
 #' @rdname EMP_WGCNA_cor_analysis
 
 
-setMethod("EMP_WGCNA_cor_analysis","EMP",function(obj,select,method,...){
+setMethod("EMP_WGCNA_cor_analysis","EMP",function(obj,select=NULL,method='spearman',...){
   .EMP_WGCNA_cor_analysis_EMP_m(obj,select,method,...)
 })
 

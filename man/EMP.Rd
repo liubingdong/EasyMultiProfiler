@@ -16,7 +16,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
  	\item \code{\link{EMP_coldata_extract}}
  	\item \code{\link{EMP_rowdata_extract}}
 }
-{Data Preparetion} : 
+{Data Preparation} : 
 \itemize{
 	\item \code{\link{EMP_feature_convert}}
 	\item \code{\link{EMP_impute}} 
