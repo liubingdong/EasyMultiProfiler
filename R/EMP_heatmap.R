@@ -9,7 +9,6 @@
 #' @importFrom ggplot2 geom_text
 #' @importFrom ggplot2 theme_minimal
 #'
-#' @export
 #'
 #' @examples
 #' # add example
@@ -114,7 +113,6 @@ EMP_heatmap_cor <- function(obj,palette=c("steelblue","white","darkred"),
 #' @importFrom dplyr mutate
 #' @importFrom ggplot2 guides
 #'
-#' @export
 #'
 #' @examples
 #' # add example
@@ -180,14 +178,14 @@ EMP_heatmap_WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text() + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text() + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
@@ -199,7 +197,7 @@ EMP_heatmap_WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
     if (check_palette) {
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_text() + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
@@ -207,7 +205,7 @@ EMP_heatmap_WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
     }else{
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_text() + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))

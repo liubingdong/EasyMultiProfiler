@@ -184,7 +184,9 @@ setMethod("show", "EMP",
                      cat('EMP_cor_analysis:','\n')
                      cat('Cor-relationship matrix:',dim(object$correlation)[1],'x',dim(object$correlation)[2],'\n')
                      cat(object$cor_info[1],'observation:',object$n.obs[1],'\n')
-                     cat(object$cor_info[2],'observation:',object$n.obs[2],'\n')
+                     if (!is.na(object$cor_info[2])) {
+                      cat(object$cor_info[2],'observation:',object$n.obs[2],'\n')
+                     }
                      cat('Intersect observation:',object$n.obs[3])
                    },
                    "EMP_WGCNA_cor_analysis2" = {

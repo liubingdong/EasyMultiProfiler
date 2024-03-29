@@ -96,6 +96,8 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
     if (!is.null(pattern)) {
       deposit %<>% dplyr::filter(.pattern_Dectect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact))
     }
+  }else {
+    stop("Please check the input data!")
   }
   return(deposit)
 }
@@ -119,17 +121,26 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
 EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_name='undefined',action='get'){
     assay <- colname <- primary <- NULL
     call <- match.call()
-
-    colData(obj) %>% as.data.frame()%>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() -> coldata
-
-    if (!is.null(experiment)) {
-      real_colname <- obj[[experiment]] %>% colnames()
-      sampleMap <- obj@sampleMap %>% tibble::as_tibble() %>%
-        dplyr::filter(assay %in% experiment) %>%
-        dplyr::select(colname,primary) %>%
-        dplyr::filter(colname %in% real_colname) %>%
-        dplyr::pull(primary) -> real_sample
-      coldata %<>% dplyr::filter(primary %in% real_sample) %>% dplyr::select_if(~!all(is.na(.))) ## Delete any columns when all values are NA
+    
+    if (inherits(obj,'EMPT')) {
+      experiment <- .get.experiment.EMPT(obj)
+      coldata <- colData(obj) %>% 
+        as.data.frame() %>% 
+        tibble::rownames_to_column('primary') %>% 
+        tibble::as_tibble() 
+    }else if (inherits(obj,'MultiAssayExperiment')){
+      colData(obj) %>% as.data.frame()%>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() -> coldata
+      if (!is.null(experiment)) {
+        real_colname <- obj[[experiment]] %>% colnames()
+        sampleMap <- obj@sampleMap %>% tibble::as_tibble() %>%
+          dplyr::filter(assay %in% experiment) %>%
+          dplyr::select(colname,primary) %>%
+          dplyr::filter(colname %in% real_colname) %>%
+          dplyr::pull(primary) -> real_sample
+        coldata %<>% dplyr::filter(primary %in% real_sample) %>% dplyr::select_if(~!all(is.na(.))) ## Delete any columns when all values are NA
+      }
+    }else {
+      stop("Please check the input data!")
     }
 
     if (action == 'get') {
