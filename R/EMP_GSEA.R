@@ -191,7 +191,7 @@
 #' @param threshold A number. The alogarithm threshold used in method = "signal2Noise",filter out the feature below the signal2Noise threshold.
 #' @param threshold_r A number. The alogarithm threshold used in method = "cor",filter out the feature below the abusolte corffcient threshold.
 #' @param threshold_p A number. The alogarithm threshold used in method = "cor",filter out the feature above the cor test pavlue threshold.
-#' @param seed A boolean. 
+#' @param seed An interger. Set the random seed to the plot.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param keyType A character string. keyType include ko, ec, cpd, entrezid.
 #' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.

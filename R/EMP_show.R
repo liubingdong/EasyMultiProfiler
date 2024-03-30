@@ -51,6 +51,9 @@ setMethod("show", "EMPT",
                    "EMP_alpha_analysis" = {
                      object@deposit$diversity_result %>% print()
                    },
+                   "EMP_marker_analysis" = {
+                     .get.result.EMPT(object) %>% print()                  
+                   },
                    "EMP_dimension_analysis" = {
                      .get.result.EMPT(object) %>% print()
                    },
@@ -151,6 +154,29 @@ setMethod("show", "EMPT",
                    "EMP_WGCNA_cor_heatmap" = {
                     return(.get.plot_deposit.EMPT(object,info='EMP_WGCNA_cor_heatmap'))
                    },
+                    "EMP_marker_analysis" = {
+                            method <- .get.method.EMPT(object)
+                            deposit <- list()
+                            if(method == 'boruta') {
+                              deposit <- list(Boruta_model=object@deposit[['Boruta_model']],
+                                              Boruta_feature_importance=object@deposit[['Boruta_feature_importance']])
+                              return(deposit)
+                              }else if(method == 'randomforest'){
+                                deposit <- list(rf_model=object@deposit[['rf_model']],
+                                              rf_feature_importance=object@deposit[['rf_feature_importance']])
+                                return(deposit)                                
+                              }else if(method == 'xgboost'){
+                                deposit <- list(xgb_model=object@deposit[['xgb_model']],
+                                              xgb_feature_importance=object@deposit[['xgb_feature_importance']])
+                                return(deposit) 
+                              }else if(method == 'lasso'){
+                                deposit <- list(lasso_model=object@deposit[['lasso_model']],
+                                              lasso_feature_importance=object@deposit[['lasso_feature_importance']])
+                                return(deposit)                                 
+                              }else{
+                                print('method in EMP_marker_analysis is wrong!')
+                              }
+                   },                
                   {
                    print('No info is matched!')
                   }

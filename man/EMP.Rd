@@ -33,6 +33,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_diff_analysis}}
 	\item \code{\link{EMP_dimension_analysis}}
 	\item \code{\link{EMP_enrich_analysis}}
+	\item \code{\link{EMP_marker_analysis}}
 	\item \code{\link{EMP_GSEA_analysis}}
 	\item \code{\link{EMP_WGCNA_cluster_analysis}}
 	\item \code{\link{EMP_WGCNA_cor_analysis}}

@@ -1,0 +1,223 @@
+
+
+#' @importFrom Boruta Boruta
+
+.EMP_Boruta_analysis <- function(obj,seed=123,estimate_group,...) {
+  assay_data <- coldata <- tran_data <- Boruta_model <- feature_importance <- primary <-  NULL
+  assay_data <- obj %>% .get.assay.EMPT()
+  coldata <- obj %>% .get.mapping.EMPT() %>%
+    dplyr::select(primary,{{estimate_group}}) %>%
+    dplyr::rename(Group = {{estimate_group}})
+  
+  tran_data  <- dplyr::left_join(assay_data,coldata,by='primary') %>% 
+    tibble::column_to_rownames('primary')
+  tran_data$Group <- factor(tran_data$Group)
+  set.seed(seed)
+  Boruta_model <- Boruta(Group~.,data=tran_data,...)
+  feature_importance <- Boruta_model$finalDecision %>% 
+    as.data.frame() %>%
+    tibble::rownames_to_column('feature') %>%
+    tibble::as_tibble()
+  colnames(feature_importance) <- c('feature','Boruta_decision')
+  
+  obj@deposit[['Boruta_model']] <- Boruta_model
+  obj@deposit[['Boruta_feature_importance']] <- feature_importance
+  
+  .get.estimate_group.EMPT(obj) <- estimate_group
+  .get.method.EMPT(obj) <- 'boruta'
+  .get.algorithm.EMPT(obj) <- 'boruta'
+  .get.info.EMPT(obj) <- 'EMP_marker_analysis'
+  return(obj)
+}
+
+#' @importFrom randomForest randomForest
+
+.EMP_rf_analysis <- function(obj,seed=123,estimate_group,...) {
+  assay_data <- coldata <- tran_data <- randomforest_model <- feature_importance <- check_y <- primary <- NULL
+  IncNodePurity <- MeanDecreaseAccuracy <- MeanDecreaseGini<- NULL
+  assay_data <- obj %>% .get.assay.EMPT()
+  coldata <- obj %>% .get.mapping.EMPT() %>%
+    dplyr::select(primary,{{estimate_group}}) %>%
+    dplyr::rename(Group = {{estimate_group}})
+  feature_name <- colnames(assay_data)[-1]
+  tran_data  <- dplyr::left_join(assay_data,coldata,by='primary') %>% 
+    tibble::column_to_rownames('primary')
+  
+  
+  if (class(tran_data$Group) == 'numeric' | class(tran_data$Group) == 'integer') {
+    check_y <- 'regression'
+  }else if (class(tran_data$Group) == 'character' | class(tran_data$Group) == 'factor') {
+    check_y <- 'classify'
+    tran_data$Group <- factor(tran_data$Group)
+  }
+  
+  colnames(tran_data) <- c(paste0('V',1:(ncol(tran_data)-1)),'Group')
+  set.seed(seed)
+  randomforest_model <- randomForest(Group~.,data=tran_data,importance=TRUE,...)
+  if (check_y == 'classify') {
+    feature_importance <- randomforest_model$importance %>% as.data.frame() %>%
+      dplyr::select(MeanDecreaseAccuracy,MeanDecreaseGini) %>%
+      dplyr::rename(rf_MDA = MeanDecreaseAccuracy,rf_MDG = MeanDecreaseGini) %>%
+      tibble::rownames_to_column('feature') %>%
+      dplyr::mutate(feature = {{feature_name}}) %>% tibble::as_tibble()
+  }else if (check_y == 'regression') {
+    feature_importance <- randomforest_model$importance %>% as.data.frame() %>%
+      dplyr::select('%IncMSE','IncNodePurity') %>%
+      dplyr::rename(rf_IncMSE = '%IncMSE',rf_IncNodePurity = IncNodePurity) %>%
+      tibble::rownames_to_column('feature') %>%
+      dplyr::mutate(feature = {{feature_name}}) %>% tibble::as_tibble()
+  }else {
+    stop('check_y is wrong!')
+  }
+
+  obj@deposit[['rf_model']] <- randomforest_model
+  obj@deposit[['rf_feature_importance']] <- feature_importance
+  
+  .get.estimate_group.EMPT(obj) <- estimate_group
+  .get.method.EMPT(obj) <- 'randomforest'
+  .get.algorithm.EMPT(obj) <- 'randomforest'
+  .get.info.EMPT(obj) <- 'EMP_marker_analysis'
+  return(obj)
+}
+
+
+#' @importFrom xgboost xgb.DMatrix
+#' @importFrom xgboost xgboost
+#' @importFrom xgboost xgb.importance
+
+.EMP_xgb_analysis <- function(obj,seed=123,estimate_group,max.depth=6,eta=0.3,nrounds=50,objective="binary:logistic",verbose=0,...) {
+  assay_data <- row_data <- coldata_label <- tran_data <- xgb_model <- feature_importance <- primary <- feature <- NULL
+  Feature <- Gain <- Cover <- Frequency <-  Importance <- xgb_Gain <- xgb_Cover <- xgb_Frequency <- xgb_Importance <- nthread <- NULL
+  assay_data <- obj %>% 
+    .get.assay.EMPT() %>% 
+    tibble::column_to_rownames('primary') %>% 
+    as.matrix()
+  row_data <- obj %>% .get.row_info.EMPT() %>% dplyr::select(1:2)
+  coldata_label <- obj %>% .get.mapping.EMPT() %>%
+    dplyr::pull({{estimate_group}}) %>%
+    as.factor() %>% 
+    as.numeric() %>% -1
+  
+  nthread <- chectCores() - 1
+
+  traindata <- xgb.DMatrix(data = as.matrix(assay_data),label= coldata_label)
+  set.seed(seed)
+  xbg_model <- xgboost(data = traindata, 
+                       max.depth = max.depth, 
+                       eta = eta, 
+                       nthread = nthread, 
+                       nrounds = nrounds, 
+                       objective = objective,
+                       verbose=verbose,...)
+  feature_importance <- xgb.importance(colnames(traindata), model = xbg_model)
+  xgboost::xgb.plot.importance(feature_importance,plot=F) ## This step is necessary to add importance in the feature_importance
+  feature_importance <- feature_importance %>%
+    dplyr::rename(feature=Feature,xgb_Gain=Gain,xgb_Cover=Cover,xgb_Frequency=Frequency,xgb_Importance=Importance)
+  feature_importance <- dplyr::left_join(row_data,feature_importance,by='feature') %>%
+    dplyr::select(feature,xgb_Gain,xgb_Cover,xgb_Frequency,xgb_Importance) %>%
+    dplyr::mutate_all(~ifelse(is.na(.), 0, .)) 
+  
+  obj@deposit[['xgb_model']] <- xbg_model
+  obj@deposit[['xgb_feature_importance']] <- feature_importance
+  
+  .get.estimate_group.EMPT(obj) <- estimate_group
+  .get.method.EMPT(obj) <- 'xgboost'
+  .get.algorithm.EMPT(obj) <- 'xgboost'
+  .get.info.EMPT(obj) <- 'EMP_marker_analysis'
+  return(obj)
+}
+
+
+
+#' @importFrom glmnet cv.glmnet
+#' @importFrom stats coef
+
+.EMP_lasso_analysis <- function(obj,estimate_group,seed=123,nfolds=5,lambda_select='lambda.min',...) {
+  assay_data <- coldata <- tran_data <- lasso_model <- feature_importance <- primary <- NULL
+  
+  assay_data <- obj %>% 
+    .get.assay.EMPT() %>% 
+    tibble::column_to_rownames('primary') %>% 
+    as.matrix()
+  
+  coldata <- obj %>% .get.mapping.EMPT() %>%
+    dplyr::select(primary,{{estimate_group}}) %>%
+    dplyr::rename(Group = {{estimate_group}}) %>% 
+    tibble::column_to_rownames('primary') %>% 
+    as.matrix()
+  set.seed(seed)
+  lasso_model <- cv.glmnet(assay_data,coldata,type.measure='mse', family = "gaussian",nfolds = nfolds,alpha = 1,...)
+  
+  feature_importance <- coef(lasso_model,s=lasso_model[[lambda_select]]) %>% as.matrix()
+  feature_importance <- feature_importance[-1,] %>% 
+    as.data.frame() %>%
+    tibble::rownames_to_column('feature') %>% tibble::as_tibble()
+  colnames(feature_importance) <- c('feature','lasso_coe')
+  
+  obj@deposit[['lasso_model']] <- lasso_model
+  obj@deposit[['lasso_feature_importance']] <- feature_importance
+  
+  .get.estimate_group.EMPT(obj) <- estimate_group
+  .get.method.EMPT(obj) <- 'lasso'
+  .get.algorithm.EMPT(obj) <- 'lasso'
+  .get.info.EMPT(obj) <- 'EMP_marker_analysis'
+  return(obj)
+}
+
+
+#' Marker discover based on classify or regression model
+#'
+#' @param obj Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param method A character string. Method includs boruta, randomforest, xgboost, lasso.
+#' @param estimate_group A character string. Select the group name in the coldata to be calculated.
+#' @param seed An interger. Set the random seed to the plot.
+#' @param nfolds An interger. Only actived when method = 'lasso'. More imformation in glmnet::cv.glmnet.
+#' @param lambda_select A character string including lambda.min or lambda.1se. Only actived when method = 'lasso'. More imformation in glmnet::cv.glmnet.
+#' @param max.depth An interger (default:6). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param eta A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param nrounds An interger (default:50). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param objective An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param verbose An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param ... Further parameters passed to the function Boruta::Boruta, randomForest, xgboost::xgboost, glmnet::cv.glmnet.
+#'
+#' @return EMPT object
+#' @export
+#'
+#' @examples
+#' # add example
+EMP_marker_analysis <- function(obj,experiment,method,estimate_group,seed=123,nfolds=5,lambda_select='lambda.min',
+                                  max.depth=6,eta=0.3,nrounds=50,objective="binary:logistic",verbose=0,action='add',...){
+
+  call <- match.call()
+  if (inherits(obj,"MultiAssayExperiment")) {
+    EMPT <- .as.EMPT(obj,
+                     experiment = experiment)
+    .get.method.EMPT(EMPT) <- method
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <-obj
+    .get.method.EMPT(EMPT) <- method
+  }
+  
+  estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+
+  switch(method,
+         "boruta" = {EMPT <- .EMP_Boruta_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
+         "randomforest"  = {EMPT <- .EMP_rf_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
+         "xgboost"  = {EMPT <- .EMP_xgb_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,max.depth=max.depth,
+                                                      eta=eta,nrounds=nrounds,objective=objective,verbose=verbose,...)},
+         "lasso"  = {EMPT <- .EMP_lasso_analysis(obj=EMPT,estimate_group=estimate_group,seed=seed,nfolds=nfolds,lambda_select=lambda_select,...)},
+         )
+  class(EMPT) <- 'EMP_marker_analysis'
+  .get.history.EMPT(EMPT) <- call
+  if (action == 'add') {
+    return(EMPT)
+  }else if(action == 'get') {
+    return(.get.result.EMPT(EMPT))
+  }else{
+    warning('action should be one of add or get!')
+  }
+}
+
+

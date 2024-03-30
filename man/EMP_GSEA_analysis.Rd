@@ -56,7 +56,7 @@ EMP_GSEA_analysis(
 
 \item{threshold_p}{A number. The alogarithm threshold used in method = "cor",filter out the feature above the cor test pavlue threshold.}
 
-\item{seed}{A boolean.}
+\item{seed}{An interger. Set the random seed to the plot.}
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
