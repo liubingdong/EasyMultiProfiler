@@ -15,6 +15,7 @@ EMP_marker_analysis(
   max.depth = 6,
   eta = 0.3,
   nrounds = 50,
+  xgboost_run = "classify",
   objective = "binary:logistic",
   verbose = 0,
   action = "add",
@@ -42,7 +43,9 @@ EMP_marker_analysis(
 
 \item{nrounds}{An interger (default:50). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
 
-\item{objective}{An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
+\item{xgboost_run}{An character string (default:classify).Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.}
+
+\item{objective}{An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:linear for linear regression.}
 
 \item{verbose}{An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
 

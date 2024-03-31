@@ -75,7 +75,7 @@
   
   .get.estimate_group.EMPT(obj) <- estimate_group
   .get.method.EMPT(obj) <- 'randomforest'
-  .get.algorithm.EMPT(obj) <- 'randomforest'
+  .get.algorithm.EMPT(obj) <- check_y
   .get.info.EMPT(obj) <- 'EMP_marker_analysis'
   return(obj)
 }
@@ -85,22 +85,30 @@
 #' @importFrom xgboost xgboost
 #' @importFrom xgboost xgb.importance
 
-.EMP_xgb_analysis <- function(obj,seed=123,estimate_group,max.depth=6,eta=0.3,nrounds=50,objective="binary:logistic",verbose=0,...) {
-  assay_data <- row_data <- coldata_label <- tran_data <- xgb_model <- feature_importance <- primary <- feature <- NULL
+.EMP_xgb_analysis <- function(obj,seed=123,estimate_group,max.depth=6,eta=0.3,nrounds=50,objective="binary:logistic",xgboost_run='classify',verbose=0,...) {
+  assay_data <- row_data <- coldata <- tran_data <- xgb_model <- feature_importance <- primary <- feature <- NULL
   Feature <- Gain <- Cover <- Frequency <-  Importance <- xgb_Gain <- xgb_Cover <- xgb_Frequency <- xgb_Importance <- nthread <- NULL
   assay_data <- obj %>% 
     .get.assay.EMPT() %>% 
     tibble::column_to_rownames('primary') %>% 
     as.matrix()
   row_data <- obj %>% .get.row_info.EMPT() %>% dplyr::select(1:2)
-  coldata_label <- obj %>% .get.mapping.EMPT() %>%
-    dplyr::pull({{estimate_group}}) %>%
-    as.factor() %>% 
-    as.numeric() %>% -1
-  
+
+  if (xgboost_run == 'classify') {
+    coldata <- obj %>% .get.mapping.EMPT() %>%
+      dplyr::pull({{estimate_group}}) %>%
+      as.factor() %>% 
+      as.numeric() %>% -1
+  }else if (xgboost_run == 'regression') {
+    coldata <- obj %>% .get.mapping.EMPT() %>%
+      dplyr::pull({{estimate_group}})
+  }else {
+    stop('Parameter xgboost_run need specify classify or regression and select the suitable parameter objective!')
+  }
+
   nthread <- chectCores() - 1
 
-  traindata <- xgb.DMatrix(data = as.matrix(assay_data),label= coldata_label)
+  traindata <- xgb.DMatrix(data = as.matrix(assay_data),label= coldata)
   set.seed(seed)
   xbg_model <- xgboost(data = traindata, 
                        max.depth = max.depth, 
@@ -122,7 +130,7 @@
   
   .get.estimate_group.EMPT(obj) <- estimate_group
   .get.method.EMPT(obj) <- 'xgboost'
-  .get.algorithm.EMPT(obj) <- 'xgboost'
+  .get.algorithm.EMPT(obj) <- xgboost_run
   .get.info.EMPT(obj) <- 'EMP_marker_analysis'
   return(obj)
 }
@@ -159,7 +167,7 @@
   
   .get.estimate_group.EMPT(obj) <- estimate_group
   .get.method.EMPT(obj) <- 'lasso'
-  .get.algorithm.EMPT(obj) <- 'lasso'
+  .get.algorithm.EMPT(obj) <- 'regression'
   .get.info.EMPT(obj) <- 'EMP_marker_analysis'
   return(obj)
 }
@@ -177,7 +185,8 @@
 #' @param max.depth An interger (default:6). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param eta A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param nrounds An interger (default:50). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
-#' @param objective An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param xgboost_run An character string (default:classify).Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.
+#' @param objective An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:linear for linear regression.                                 
 #' @param verbose An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param ... Further parameters passed to the function Boruta::Boruta, randomForest, xgboost::xgboost, glmnet::cv.glmnet.
@@ -188,7 +197,7 @@
 #' @examples
 #' # add example
 EMP_marker_analysis <- function(obj,experiment,method,estimate_group,seed=123,nfolds=5,lambda_select='lambda.min',
-                                  max.depth=6,eta=0.3,nrounds=50,objective="binary:logistic",verbose=0,action='add',...){
+                                  max.depth=6,eta=0.3,nrounds=50,xgboost_run='classify',objective="binary:logistic",verbose=0,action='add',...){
 
   call <- match.call()
   if (inherits(obj,"MultiAssayExperiment")) {
@@ -206,7 +215,7 @@ EMP_marker_analysis <- function(obj,experiment,method,estimate_group,seed=123,nf
          "boruta" = {EMPT <- .EMP_Boruta_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
          "randomforest"  = {EMPT <- .EMP_rf_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
          "xgboost"  = {EMPT <- .EMP_xgb_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,max.depth=max.depth,
-                                                      eta=eta,nrounds=nrounds,objective=objective,verbose=verbose,...)},
+                                                      eta=eta,nrounds=nrounds,xgboost_run=xgboost_run,objective=objective,verbose=verbose,...)},
          "lasso"  = {EMPT <- .EMP_lasso_analysis(obj=EMPT,estimate_group=estimate_group,seed=seed,nfolds=nfolds,lambda_select=lambda_select,...)},
          )
   class(EMPT) <- 'EMP_marker_analysis'
