@@ -30,6 +30,8 @@
   return(obj)
 }
 
+.EMP_Boruta_analysis_m <- memoise::memoise(.EMP_Boruta_analysis)
+
 #' @importFrom randomForest randomForest
 
 .EMP_rf_analysis <- function(obj,seed=123,estimate_group,...) {
@@ -79,6 +81,8 @@
   .get.info.EMPT(obj) <- 'EMP_marker_analysis'
   return(obj)
 }
+
+.EMP_rf_analysis_m <- memoise::memoise(.EMP_rf_analysis)
 
 
 #' @importFrom xgboost xgb.DMatrix
@@ -135,6 +139,7 @@
   return(obj)
 }
 
+.EMP_xgb_analysis_m <- memoise::memoise(.EMP_xgb_analysis)
 
 
 #' @importFrom glmnet cv.glmnet
@@ -172,6 +177,8 @@
   return(obj)
 }
 
+.EMP_lasso_analysis_m <- memoise::memoise(.EMP_lasso_analysis)
+
 
 #' Marker discover based on classify or regression model
 #'
@@ -188,16 +195,17 @@
 #' @param xgboost_run An character string (default:classify).Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.
 #' @param objective An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:linear for linear regression.                                 
 #' @param verbose An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param ... Further parameters passed to the function Boruta::Boruta, randomForest, xgboost::xgboost, glmnet::cv.glmnet.
-#'
+#' @importFrom memoise forget
 #' @return EMPT object
 #' @export
 #'
 #' @examples
 #' # add example
 EMP_marker_analysis <- function(obj,experiment,method,estimate_group,seed=123,nfolds=5,lambda_select='lambda.min',
-                                  max.depth=6,eta=0.3,nrounds=50,xgboost_run='classify',objective="binary:logistic",verbose=0,action='add',...){
+                                  max.depth=6,eta=0.3,nrounds=50,xgboost_run='classify',objective="binary:logistic",verbose=0,use_cached=TRUE,action='add',...){
 
   call <- match.call()
   if (inherits(obj,"MultiAssayExperiment")) {
@@ -211,12 +219,19 @@ EMP_marker_analysis <- function(obj,experiment,method,estimate_group,seed=123,nf
   
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
+  if (use_cached == FALSE) {
+    memoise::forget(.EMP_Boruta_analysis_m) %>% invisible()
+    memoise::forget(.EMP_rf_analysis_m) %>% invisible()
+    memoise::forget(.EMP_xgb_analysis_m) %>% invisible()
+    memoise::forget(.EMP_lasso_analysis_m) %>% invisible()
+  }
+
   switch(method,
-         "boruta" = {EMPT <- .EMP_Boruta_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
-         "randomforest"  = {EMPT <- .EMP_rf_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
-         "xgboost"  = {EMPT <- .EMP_xgb_analysis(obj=EMPT,seed=seed,estimate_group=estimate_group,max.depth=max.depth,
+         "boruta" = {EMPT <- .EMP_Boruta_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
+         "randomforest"  = {EMPT <- .EMP_rf_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
+         "xgboost"  = {EMPT <- .EMP_xgb_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,max.depth=max.depth,
                                                       eta=eta,nrounds=nrounds,xgboost_run=xgboost_run,objective=objective,verbose=verbose,...)},
-         "lasso"  = {EMPT <- .EMP_lasso_analysis(obj=EMPT,estimate_group=estimate_group,seed=seed,nfolds=nfolds,lambda_select=lambda_select,...)},
+         "lasso"  = {EMPT <- .EMP_lasso_analysis_m(obj=EMPT,estimate_group=estimate_group,seed=seed,nfolds=nfolds,lambda_select=lambda_select,...)},
          )
   class(EMPT) <- 'EMP_marker_analysis'
   .get.history.EMPT(EMPT) <- call

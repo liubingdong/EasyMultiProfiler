@@ -20,6 +20,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 \itemize{
 	\item \code{\link{EMP_feature_convert}}
 	\item \code{\link{EMP_impute}} 
+	\item \code{\link{EMP_identify_assay}}	
 	\item \code{\link{EMP_rrarefy}}  
  	\item \code{\link{EMP_decostand}}
  	\item \code{\link{EMP_collapse}}
@@ -53,6 +54,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 {Data support} : 
 \itemize{
 	\item \code{\link{EMP_filter}} 
+	\item \code{\link{EMP_result}}	
 	\item \code{\link{EMP_summary}}
 	\item \code{\link{EMP_feature_convert}}    
 	\item \code{\link{EMP_taxonomy_import}} 

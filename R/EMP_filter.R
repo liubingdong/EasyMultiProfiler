@@ -125,7 +125,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
         message_info %<>% append(paste0(feature_filter_num,' of ',total_feature_num,' features were filterd out!'))
 
         # filter the result in the deposit
-        obj %<>% .filter.deposit.EMPT(real_sample,real_feature)
+        obj %<>% .filter.deposit.EMPT(real_sample,real_feature) %>% suppressMessages()
 
         .get.message_info.EMPT(obj) <- message_info
         deposit <- obj %>% .filter.EMPT(filterSample=real_sample,filterFeature=real_feature,action='select') ##  Here action must be select, dont change!
@@ -147,7 +147,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
           .get.info.EMPT(deposit) <- show_info
         }
         ## When result is empty, make sure the output is ok
-        check_result_empty <- .get.result.EMPT(deposit) %>% length() == 0
+        check_result_empty <- .get.result.EMPT(deposit) %>% length() == 0 | .get.result.EMPT(deposit) %>% is.null()
         if (check_result_empty) {
            class(deposit) <- 'EMP_assay_data'
           .get.info.EMPT(deposit) <- 'EMP_assay_data'         

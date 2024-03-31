@@ -18,6 +18,7 @@ EMP_marker_analysis(
   xgboost_run = "classify",
   objective = "binary:logistic",
   verbose = 0,
+  use_cached = TRUE,
   action = "add",
   ...
 )
@@ -48,6 +49,8 @@ EMP_marker_analysis(
 \item{objective}{An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:linear for linear regression.}
 
 \item{verbose}{An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
+
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 

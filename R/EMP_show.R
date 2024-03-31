@@ -174,7 +174,7 @@ setMethod("show", "EMPT",
                                               lasso_feature_importance=object@deposit[['lasso_feature_importance']])
                                 return(deposit)                                 
                               }else{
-                                print('method in EMP_marker_analysis is wrong!')
+                                return(NULL)
                               }
                    },                
                   {

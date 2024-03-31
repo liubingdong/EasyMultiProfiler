@@ -83,21 +83,53 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
   obj@deposit_info
 })
 
-setGeneric(".get.deposit.EMPT",function(obj,info) standardGeneric(".get.deposit.EMPT"))
-setMethod(".get.deposit.EMPT","EMPT",function(obj,info){
+
+
+#' Extract the existed result from EMPT or inject external result into EMPT
+#'
+#' @param obj EMPT or MultiAssayExperiment object.
+#' @param info A character string. Result or analysis name in the EMPT object.
+#' @rdname EMP_result
+#' @export
+#'
+#' @examples
+#' # xx
+
+setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
+setMethod("EMP_result","EMPT",function(obj,info){
   deposilt_info <- .get.deposit_info.EMPT(obj)
   if (info %in% deposilt_info$Result) {
     obj@deposit[[info]]
   }else if(info %in% deposilt_info$source){
     real_info <- deposilt_info$Result[deposilt_info$source %in% info]
-    obj@deposit[[real_info]]
+    result_list <- list()
+    for (i in real_info) {
+       result_list[[i]] <-obj@deposit[[i]]
+    }
+    return(result_list)
   }else{
     warning("please check the info!")
   }
 })
 
-setGeneric(".get.deposit.EMPT<-",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source, value) standardGeneric(".get.deposit.EMPT<-"))
-setMethod(".get.deposit.EMPT<-","EMPT",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source, value){
+
+#' @param obj EMPT or MultiAssayExperiment object.
+#' @param value A data frame or tibble from the external result.
+#' @param value_name A character string. Set the name of external result to inject into EMPT project.
+#' @param affect_when_sample_changed 0 or 1. 0 means that the result is not influenced by sample changes, while 1 means the contrary.
+#' @param affect_when_feature_changed 0 or 1. 0 means that the result is not influenced by feature changes, while 1 means the contrary.
+#' @param attribute A character string inculding primary, feature, all. This parameter indicates whether the result is about primary, feature or all.
+#' @param attribute2 A character string inculding normal, diagonal or none. This parameter indicates the format of result.
+#' @param source A character string. Set the name of the analysis which generate the result. (default: user_import)
+#' @rdname EMP_result
+#'
+#' @export
+#'
+#' @examples
+#' # xx
+
+setGeneric("EMP_result<-",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,value) standardGeneric("EMP_result<-"))
+setMethod("EMP_result<-","EMPT",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,value){
  deposilt_info <- .get.deposit_info.EMPT(obj)
  
  if (attribute2 == 'normal') {
@@ -131,7 +163,7 @@ setMethod(".get.deposit.EMPT<-","EMPT",function(obj,value_name,affect_when_sampl
    source <- 'user_import'
  }
  
- new_value_info <- data.frame(value=value_name,
+ new_value_info <- data.frame(Result=value_name,
                               affect_when_sample_changed=affect_when_sample_changed,
                               affect_when_feature_changed=affect_when_feature_changed,
                               attribute=attribute,
@@ -142,6 +174,10 @@ setMethod(".get.deposit.EMPT<-","EMPT",function(obj,value_name,affect_when_sampl
  obj@deposit[[value_name]] <- value
  return(obj)
 })
+
+
+
+
 
 
 setGeneric(".get.deposit_append.EMPT",function(obj,info) standardGeneric(".get.deposit_append.EMPT"))
