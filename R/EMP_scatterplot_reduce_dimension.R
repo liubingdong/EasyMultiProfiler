@@ -84,8 +84,13 @@ EMP_scatterplot_reduce_dimension  <- function(EMPT,seed=123,group_level='default
     stop("method should be t.test or wilcox.test! ")
   }
   group_combn=combn(as.character(unique(plotdata$Group)),2)
-  compare=plyr::alply(group_combn,2)
-
+  #compare=plyr::alply(group_combn,2)
+  compare <- list() 
+  for (i in 1:ncol(group_combn)) {
+    compare[[i]] <- group_combn[,i]
+  }
+  names(compare) <- 1:ncol(group_combn)
+  
 
   axis_name <- colnames(data)[-1]
   axis_num <- length(unique(axis_name))

@@ -22,8 +22,12 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
   data <-.get.result.EMPT(EMPT) %>% dplyr::left_join(mapping,by ='primary')
 
   group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
-  compare <- plyr::alply(group_combn,2)
-
+  #compare <- plyr::alply(group_combn,2)
+  compare <- list() 
+  for (i in 1:ncol(group_combn)) {
+    compare[[i]] <- group_combn[,i]
+  }
+  names(compare) <- 1:ncol(group_combn)
 
   data %<>%  tidyr::pivot_longer(cols = c(-primary,-!!dplyr::sym(estimate_group)),
                                        names_to = 'ID',
