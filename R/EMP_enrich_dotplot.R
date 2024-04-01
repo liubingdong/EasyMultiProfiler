@@ -1,16 +1,18 @@
-#' Title
+#' Dotplot for enrichment result
 #'
-#' @param EMPT wait_for_add
-#' @param plot_category wait_for_add
-#' @param seed wait_for_add
-#' @param ... wait_for_add
-#'
+#' @param EMPT EMPT object
+#' @param plot_category An interger.More plot style.(under constrution)
+#' @param seed An interger. Set the random seed to the plot.(default:123)
+#' @param color A character string. Variable that used to color enriched terms, e.g. 'pvalue', 'p.adjust' or 'qvalue'
+#' @param showCategory A number or a list of terms. If it is a number, the first n terms will be displayed. If it is a list of terms, the selected terms will be displayed.
+#' @param ... Further parameters passed to enrichplot::dotplot.
+#' @rdname EMP_dotplot
 #' @return xx object
 #' @export
 #'
 #' @examples
 #' # add example
-EMP_dotplot_enrich <- function(EMPT,plot_category = 1,seed =123,...) {
+EMP_dotplot_enrich <- function(EMPT,plot_category = 1,seed =123,color='p.adjust',showCategory=10,...) {
   call <- match.call()
   .get.plot_category.EMPT(EMPT) <- plot_category
   .get.history.EMPT(EMPT) <- call
@@ -28,21 +30,13 @@ EMP_dotplot_enrich <- function(EMPT,plot_category = 1,seed =123,...) {
 
 }
 
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param show wait_for_add
-#' @param ... wait_for_add
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
-EMP_dotplot_enrich_default <- function(EMPT,show='pic',...) {
+
+#' @importFrom enrichplot dotplot
+
+EMP_dotplot_enrich_default <- function(EMPT,show='pic',color='p.adjust',showCategory=10,...) {
   enrich_plot <- list()
-  p <- .get.result.EMPT(EMPT) %>%
-    enrichplot::dotplot(...)
+  p <- .get.result.EMPT(EMPT) %>% 
+    dotplot(color=color,showCategory=showCategory,...)
 
   enrich_plot[['pic']] <- p
   enrich_plot[['html']] <- plotly::ggplotly(p)

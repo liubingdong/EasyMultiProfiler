@@ -280,7 +280,7 @@ setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
 })
 
 
-#' Title
+#' Dotplot for enrichment result
 #'
 #' @param obj obj
 #' @param ... ...

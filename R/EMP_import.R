@@ -85,7 +85,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @param data A dataframe.The row must be the feature and the column is the sample.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
-#' @param sep The field separator character. Values on each line of the file are separated by this character. (defacult:'|')
+#' @param sep The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')
 #'
 #' @return SummmariseExperiment object
 #' @export
@@ -195,6 +195,7 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
   }else {
     data <- read.table(file=file,header = T,sep = '\t',quote="")
   }   
+  colnames(data)[1] <- 'feature'
   row_data <- data %>% dplyr::select(!all_of(!!sampleID))
   assay_data <- data %>% dplyr::select(feature,all_of(!!sampleID)) %>%
     tibble::column_to_rownames('feature')

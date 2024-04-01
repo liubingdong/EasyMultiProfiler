@@ -96,9 +96,7 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
 #' # xx
 setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
 
-#' Title
-#'
-#' @param EMPT EMPT class
+
 #' @rdname EMP_result
 #'
 #' @return xx
@@ -135,9 +133,7 @@ setMethod("EMP_result","EMPT",function(obj,info){
 #' # xx
 setGeneric("EMP_result<-",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,value) standardGeneric("EMP_result<-"))
 
-#' Title
-#'
-#' @param EMPT xx
+
 #' @rdname EMP_result
 #'
 #' @return xx

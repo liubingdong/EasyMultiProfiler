@@ -1,16 +1,6 @@
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param geneSetID wait_for_add
-#' @param show wait_for_add
-#' @param ... wait_for_add
+
 #' @importFrom enrichplot gseaplot2
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
+
 EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
   enrich_plot <- list()
   if(is.null(geneSetID)){
@@ -18,7 +8,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 
   }
   p <- .get.result.EMPT(EMPT) %>%
-    enrichplot::gseaplot2(geneSetID,...)
+    gseaplot2(geneSetID,...)
 
   enrich_plot[['pic']] <- p
   #enrich_plot[['html']] <- plotly::ggplotly(p)
@@ -31,10 +21,11 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
   EMPT
 }
 
-#' Title
+#' curveplot for enrichment result
 #'
 #' @param EMPT Object in EMPT format.
 #' @param plot_category An interger.More plot style.
+#' @param geneSetID geneSet ID
 #' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param ... Further parameters passed to the function enrichplot::gseaplot2
 #' @importFrom withr with_seed
@@ -44,7 +35,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 #'
 #' @examples
 #' # add example
-EMP_curveplot_enrich <- function(EMPT,plot_category = 1,seed =123,...) {
+EMP_curveplot_enrich <- function(EMPT,plot_category = 1,seed =123,geneSetID,...) {
   call <- match.call()
   .get.plot_category.EMPT(EMPT) <- plot_category
   .get.history.EMPT(EMPT) <- call

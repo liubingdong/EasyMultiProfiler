@@ -21,7 +21,7 @@ EMP_taxonomy_import(
 
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
 
-\item{sep}{The field separator character. Values on each line of the file are separated by this character. (defacult:'|')}
+\item{sep}{The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')}
 }
 \value{
 SummmariseExperiment object

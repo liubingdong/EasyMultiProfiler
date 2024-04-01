@@ -49,8 +49,6 @@ EMP_result(
 \item{source}{A character string. Set the name of the analysis which generate the result. (default: user_import)}
 
 \item{value}{A data frame or tibble from the external result.}
-
-\item{EMPT}{xx}
 }
 \value{
 xx
@@ -59,10 +57,6 @@ xx
 }
 \description{
 Extract the existed result from EMPT or inject external result into EMPT
-
-Title
-
-Title
 }
 \examples{
 # xx

@@ -7,6 +7,7 @@
 EMP_diff_analysis(
   x,
   experiment,
+  .formula,
   method = "wilcox.test",
   estimate_group = NULL,
   use_cached = TRUE,
@@ -21,7 +22,9 @@ EMP_diff_analysis(
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{A character string.Methods include t.test, wilcox_test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights}
+\item{.formula}{A formula representing the desired linear model. If there is more than one factor, they should be in the order factor of interest + additional factors.}
+
+\item{method}{A character string. Methods include t.test, wilcox_test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights}
 
 \item{estimate_group}{A character string. Select the group name in the coldata to be calculated.}
 

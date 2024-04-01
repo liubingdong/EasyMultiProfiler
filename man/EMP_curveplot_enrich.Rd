@@ -2,9 +2,9 @@
 % Please edit documentation in R/EMP_curveplot_enrich.R
 \name{EMP_curveplot_enrich}
 \alias{EMP_curveplot_enrich}
-\title{Title}
+\title{curveplot for enrichment result}
 \usage{
-EMP_curveplot_enrich(EMPT, plot_category = 1, seed = 123, ...)
+EMP_curveplot_enrich(EMPT, plot_category = 1, seed = 123, geneSetID, ...)
 }
 \arguments{
 \item{EMPT}{Object in EMPT format.}
@@ -13,13 +13,15 @@ EMP_curveplot_enrich(EMPT, plot_category = 1, seed = 123, ...)
 
 \item{seed}{An interger. Set the random seed to the plot.(default:123)}
 
+\item{geneSetID}{geneSet ID}
+
 \item{...}{Further parameters passed to the function enrichplot::gseaplot2}
 }
 \value{
 EMPT object
 }
 \description{
-Title
+curveplot for enrichment result
 }
 \examples{
 # add example

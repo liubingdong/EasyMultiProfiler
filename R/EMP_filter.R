@@ -71,7 +71,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
     raw_coldata_name <- .get.mapping.EMPT(obj) %>% colnames()
 
     # Temporarily merge the results in the deposit for filter below
-    obj %<>% .filter.merge.EMPT()
+    obj %<>% .filter.merge.EMPT() %>% suppressMessages()
   }
 
   total_sample_num <- obj %>% EMP_coldata_extract() %>% nrow()
@@ -128,7 +128,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
         obj %<>% .filter.deposit.EMPT(real_sample,real_feature) %>% suppressMessages()
 
         .get.message_info.EMPT(obj) <- message_info
-        deposit <- obj %>% .filter.EMPT(filterSample=real_sample,filterFeature=real_feature,action='select') ##  Here action must be select, dont change!
+        deposit <- obj %>% .filter.EMPT(filterSample=real_sample,filterFeature=real_feature,action='select') %>% suppressMessages() ##  Here action must be select, dont change!
         ### delete merged data used in the previous filter, and make sure the clean data
         .get.mapping.EMPT(deposit) <- .get.mapping.EMPT(deposit) %>% dplyr::select(dplyr::all_of(raw_coldata_name))
         .get.row_info.EMPT(deposit) <- .get.row_info.EMPT(deposit) %>% dplyr::select(dplyr::all_of(raw_rowdata_name))
@@ -147,7 +147,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
           .get.info.EMPT(deposit) <- show_info
         }
         ## When result is empty, make sure the output is ok
-        check_result_empty <- .get.result.EMPT(deposit) %>% length() == 0 | .get.result.EMPT(deposit) %>% is.null()
+        check_result_empty <- .get.result.EMPT(deposit) %>% suppressMessages() %>% length() == 0 | .get.result.EMPT(deposit) %>% suppressMessages() %>% is.null()
         if (check_result_empty) {
            class(deposit) <- 'EMP_assay_data'
           .get.info.EMPT(deposit) <- 'EMP_assay_data'         
