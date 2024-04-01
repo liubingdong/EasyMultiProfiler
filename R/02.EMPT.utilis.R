@@ -94,7 +94,6 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
 #'
 #' @examples
 #' # xx
-
 setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
 setMethod("EMP_result","EMPT",function(obj,info){
   deposilt_info <- .get.deposit_info.EMPT(obj)
@@ -127,7 +126,6 @@ setMethod("EMP_result","EMPT",function(obj,info){
 #'
 #' @examples
 #' # xx
-
 setGeneric("EMP_result<-",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,value) standardGeneric("EMP_result<-"))
 setMethod("EMP_result<-","EMPT",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,value){
  deposilt_info <- .get.deposit_info.EMPT(obj)
