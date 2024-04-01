@@ -2,12 +2,26 @@
 % Please edit documentation in R/02.EMPT.utilis.R
 \name{EMP_result}
 \alias{EMP_result}
+\alias{EMP_result,EMPT-method}
 \alias{EMP_result<-}
+\alias{EMP_result<-,EMPT-method}
 \title{Extract the existed result from EMPT or inject external result into EMPT}
 \usage{
 EMP_result(obj, info)
 
+\S4method{EMP_result}{EMPT}(obj, info)
+
 EMP_result(
+  obj,
+  value_name,
+  affect_when_sample_changed,
+  affect_when_feature_changed,
+  attribute,
+  attribute2,
+  source
+) <- value
+
+\S4method{EMP_result}{EMPT}(
   obj,
   value_name,
   affect_when_sample_changed,
@@ -35,9 +49,20 @@ EMP_result(
 \item{source}{A character string. Set the name of the analysis which generate the result. (default: user_import)}
 
 \item{value}{A data frame or tibble from the external result.}
+
+\item{EMPT}{xx}
+}
+\value{
+xx
+
+xx
 }
 \description{
 Extract the existed result from EMPT or inject external result into EMPT
+
+Title
+
+Title
 }
 \examples{
 # xx
