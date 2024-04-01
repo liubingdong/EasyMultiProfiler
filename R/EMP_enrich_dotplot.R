@@ -32,7 +32,6 @@ EMP_dotplot_enrich <- function(EMPT,plot_category = 1,seed =123,color='p.adjust'
 
 
 #' @importFrom enrichplot dotplot
-
 EMP_dotplot_enrich_default <- function(EMPT,show='pic',color='p.adjust',showCategory=10,...) {
   enrich_plot <- list()
   p <- .get.result.EMPT(EMPT) %>% 

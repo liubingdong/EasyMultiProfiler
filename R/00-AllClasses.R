@@ -254,11 +254,11 @@ setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
 
 #' Title
 #'
-#' @param obj obj
+#' @param obj object
 #' @param ... ...
 #' @rdname EMP_scatterplot
 #'
-#' @return xx object
+#' @return EMP_dimension_analysis_scatterplot object
 #' @export
 #'
 #' @examples
@@ -267,10 +267,9 @@ setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"
 
 #' Title
 #'
-#' @param EMP_dimension_analysis xx
 #' @rdname EMP_scatterplot
 #'
-#' @return xx object
+#' @return EMP_dimension_analysis_scatterplot object
 #' @export
 #'
 #' @examples
@@ -282,11 +281,11 @@ setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
 
 #' Dotplot for enrichment result
 #'
-#' @param obj obj
+#' @param obj object
 #' @param ... ...
 #' @rdname EMP_dotplot
 #'
-#' @return xx object
+#' @return EMP_enrich_analysis_dotplot object
 #' @export
 #'
 #' @examples
@@ -295,10 +294,10 @@ setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 
 #' Title
 #'
-#' @param EMP_enrich_analysis xx
+#' @param EMP_enrich_analysis EMP_enrich_analysis
 #' @rdname EMP_dotplot
 #'
-#' @return xx object
+#' @return EMP_enrich_analysis_dotplot object
 #' @export
 #'
 #' @examples
@@ -311,11 +310,11 @@ setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
 
 #' Title
 #'
-#' @param obj obj 
+#' @param obj object
 #' @param ... ...
 #' @rdname EMP_netplot
 #'
-#' @return xx object
+#' @return EMP_enrich_analysis_netplot object
 #' @export
 #'
 #' @examples
@@ -327,7 +326,7 @@ setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 #' @param EMP_enrich_analysis xx
 #' @rdname EMP_netplot
 #'
-#' @return xx object
+#' @return EMP_enrich_analysis_netplot object
 #' @export
 #'
 #' @examples
@@ -339,7 +338,7 @@ setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
 
 #' Title
 #'
-#' @param obj obj 
+#' @param obj object
 #' @param ... ...
 #' @rdname EMP_curveplot
 #'
@@ -354,7 +353,7 @@ setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 #'
 #' @rdname EMP_curveplot
 #'
-#' @return xx object
+#' @return EMP_enrich_analysis_curveplot object
 #' @export
 #'
 #' @examples

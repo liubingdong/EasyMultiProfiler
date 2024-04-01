@@ -10,16 +10,14 @@ EMP_scatterplot(obj, ...)
 \S4method{EMP_scatterplot}{EMP_dimension_analysis}(obj, ...)
 }
 \arguments{
-\item{obj}{obj}
+\item{obj}{object}
 
 \item{...}{...}
-
-\item{EMP_dimension_analysis}{xx}
 }
 \value{
-xx object
+EMP_dimension_analysis_scatterplot object
 
-xx object
+EMP_dimension_analysis_scatterplot object
 }
 \description{
 Title

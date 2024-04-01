@@ -20,7 +20,7 @@ EMP_netplot_enrich(
 )
 }
 \arguments{
-\item{obj}{obj}
+\item{obj}{object}
 
 \item{...}{Further parameters passed to enrichplot::cnetplot.}
 
@@ -37,9 +37,9 @@ EMP_netplot_enrich(
 \item{EMP_enrich_analysis}{xx}
 }
 \value{
-xx object
+EMP_enrich_analysis_netplot object
 
-xx object
+EMP_enrich_analysis_netplot object
 
 EMPT object
 }

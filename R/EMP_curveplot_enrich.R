@@ -1,6 +1,5 @@
 
 #' @importFrom enrichplot gseaplot2
-
 EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
   enrich_plot <- list()
   if(is.null(geneSetID)){
@@ -28,6 +27,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 #' @param geneSetID geneSet ID
 #' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param ... Further parameters passed to the function enrichplot::gseaplot2
+#' @rdname EMP_curveplot
 #' @importFrom withr with_seed
 #'
 #' @return EMPT object

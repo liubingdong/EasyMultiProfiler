@@ -20,7 +20,7 @@ EMP_dotplot_enrich(
 )
 }
 \arguments{
-\item{obj}{obj}
+\item{obj}{object}
 
 \item{...}{Further parameters passed to enrichplot::dotplot.}
 
@@ -34,12 +34,12 @@ EMP_dotplot_enrich(
 
 \item{showCategory}{A number or a list of terms. If it is a number, the first n terms will be displayed. If it is a list of terms, the selected terms will be displayed.}
 
-\item{EMP_enrich_analysis}{xx}
+\item{EMP_enrich_analysis}{EMP_enrich_analysis}
 }
 \value{
-xx object
+EMP_enrich_analysis_dotplot object
 
-xx object
+EMP_enrich_analysis_dotplot object
 
 xx object
 }
