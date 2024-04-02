@@ -273,6 +273,7 @@ setMethod(".get.assay.EMPT","EMPT",function(obj){
   t() %>% 
   as.data.frame() %>% 
   tibble::rownames_to_column('primary') %>% 
+  dplyr::arrange('primary') %>%
   tibble::as_tibble()
 })
 setGeneric(".get.assay.EMPT<-",function(obj,value) standardGeneric(".get.assay.EMPT<-"))

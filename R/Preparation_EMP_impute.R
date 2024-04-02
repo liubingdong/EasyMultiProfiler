@@ -5,6 +5,7 @@
 #' @param coldata A boolean. Whether the function use the coldata to impute or not.(default:TRUE)
 #' @param assay A boolean. Whether the function use the assay to impute or not.(default:FALSE)
 #' @param rowdata A boolean. Whether the function use the rowdata to impute or not.(default:FALSE)
+#' @param .formula A formula.A two-sided formula specifying variables to be imputed (left hand side) and variables used to impute (right hand side). Defaults to . ~ ., i.e., use all variables to impute all variables. For instance, if all variables (with missings) should be imputed by all variables except variable "ID", use . ~ . - ID. Note that a "." is evaluated separately for each side of the formula. Further note that variables with missings must appear in the left hand side if they should be used on the right hand side.
 #' @param pmm.k Number of candidate non-missing values to sample from in the predictive mean matching steps. 0 to avoid this step.
 #' @param num.trees Tree number.
 #' @param seed Integer seed to initialize the random generator.
@@ -18,7 +19,7 @@
 #'
 #' @examples
 #' # add example
-EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALSE,
+EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALSE,.formula=. ~ .,
                        pmm.k = 10, num.trees = 1000, seed = 123,verbose = 0,action='add',...){
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
@@ -32,7 +33,7 @@ EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALS
   if (coldata == T) {
     if (any(is.na(.get.mapping.EMPT(EMPT)))) {
       .get.mapping.EMPT(EMPT) <- .get.mapping.EMPT(EMPT) %>%
-        missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,...)
+        missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
       message('Coldata has not NA value!')
     }
@@ -41,7 +42,7 @@ EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALS
   if (rowdata == T) {
     if (any(is.na(.get.row_info.EMPT(EMPT)))) {
       .get.row_info.EMPT(EMPT) <- .get.row_info.EMPT(EMPT) %>%
-        missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,...)
+        missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
       message('Rowdata has not NA value!')
     }
@@ -50,7 +51,7 @@ EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALS
   if (assay == T) {
     if (any(is.na(.get.assay.EMPT(EMPT)))) {
       .get.assay.EMPT(EMPT) <- .get.assay.EMPT(EMPT) %>%
-        missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,...)
+        missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
       message('Assay data has not NA value!')
     }

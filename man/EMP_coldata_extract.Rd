@@ -21,7 +21,7 @@ EMP_coldata_extract(
 
 \item{assay_name}{A character string. The assay_name used in action = "add".(default:undefined)}
 
-\item{action}{A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
 \value{
 EMPT object or table

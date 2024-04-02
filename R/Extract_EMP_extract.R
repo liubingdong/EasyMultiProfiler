@@ -108,7 +108,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
 #' @param coldata_to_assay A series of character strings. The coldata_to_assay used in action = "add". Select which columns in the coldata to transfer into assay.
 #' @param assay_name A character string. The assay_name used in action = "add".(default:undefined)
-#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @importFrom SummarizedExperiment colData
 #' @importFrom dplyr any_of
 #' @importFrom methods new
@@ -127,6 +127,7 @@ EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_
       coldata <- colData(obj) %>% 
         as.data.frame() %>% 
         tibble::rownames_to_column('primary') %>% 
+        dplyr::arrange('primary') %>%
         tibble::as_tibble() 
     }else if (inherits(obj,'MultiAssayExperiment')){
       colData(obj) %>% as.data.frame()%>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() -> coldata

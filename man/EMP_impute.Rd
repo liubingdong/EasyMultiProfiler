@@ -10,6 +10,7 @@ EMP_impute(
   coldata = TRUE,
   assay = FALSE,
   rowdata = FALSE,
+  .formula = . ~ .,
   pmm.k = 10,
   num.trees = 1000,
   seed = 123,
@@ -28,6 +29,8 @@ EMP_impute(
 \item{assay}{A boolean. Whether the function use the assay to impute or not.(default:FALSE)}
 
 \item{rowdata}{A boolean. Whether the function use the rowdata to impute or not.(default:FALSE)}
+
+\item{.formula}{A formula.A two-sided formula specifying variables to be imputed (left hand side) and variables used to impute (right hand side). Defaults to . ~ ., i.e., use all variables to impute all variables. For instance, if all variables (with missings) should be imputed by all variables except variable "ID", use . ~ . - ID. Note that a "." is evaluated separately for each side of the formula. Further note that variables with missings must appear in the left hand side if they should be used on the right hand side.}
 
 \item{pmm.k}{Number of candidate non-missing values to sample from in the predictive mean matching steps. 0 to avoid this step.}
 

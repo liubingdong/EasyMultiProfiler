@@ -41,6 +41,8 @@ humann_function_import <- function(file=NULL,data=NULL,type) {
   }
   colnames(temp)[1] <- 'feature'
   temp %<>% dplyr::filter(!stringr::str_detect(feature,'\\|') & !stringr::str_detect(feature,'UN'))
+  temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
+  rownames(temp) <- NULL # necessary!
   temp2 <- dplyr::left_join(temp,ref,by = 'feature')
   temp_rowdata <- temp2 %>% dplyr::select(feature,Name)
   temp %<>% tibble::column_to_rownames('feature') %>% as.matrix()
@@ -70,6 +72,8 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
   }  
   colnames(temp)[1] <- 'feature'
   temp%<>%dplyr::filter(stringr::str_detect(feature,'\\|t_'))
+  temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
+  rownames(temp) <- NULL # necessary!
   temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep) -> temp_name
   colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
   temp_name <- data.frame(feature = temp$feature,temp_name)
@@ -103,6 +107,8 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
       temp <- read.table(file=file,header = T,sep = '\t',quote="")
     }     
     colnames(temp)[1] <- 'feature'
+    temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
+    rownames(temp) <- NULL # necessary!
     temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep) -> temp_name
     colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
     temp_name <- data.frame(feature = temp$feature,temp_name)
@@ -150,6 +156,8 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
     dplyr::rename(feature=from,Name = to)
     }
     colnames(temp)[1] <- 'feature'
+    temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!    
+    rownames(temp) <- NULL # necessary!
     temp2 <- dplyr::left_join(temp,ref,by = 'feature')
     temp_rowdata <- temp2 %>% dplyr::select(feature,Name)
     temp %<>% tibble::column_to_rownames('feature') %>% as.matrix()
@@ -196,6 +204,8 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
     data <- read.table(file=file,header = T,sep = '\t',quote="")
   }   
   colnames(data)[1] <- 'feature'
+  data <- data[rowSums(data[,sampleID]) != 0,] # filter away empty feature!
+  rownames(data) <- NULL # necessary!
   row_data <- data %>% dplyr::select(!all_of(!!sampleID))
   assay_data <- data %>% dplyr::select(feature,all_of(!!sampleID)) %>%
     tibble::column_to_rownames('feature')
