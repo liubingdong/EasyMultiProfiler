@@ -33,7 +33,6 @@ Imports:
     MultiAssayExperiment (>= 1.28.0),
     patchwork (>= 1.2.0),
     plotly (>= 4.10.3),
-    pROC (>= 1.18.5),
     purrr (>= 1.0.2),
     randomForest,
     rlang (>= 1.1.3),

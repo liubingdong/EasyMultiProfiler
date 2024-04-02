@@ -1,5 +1,3 @@
-#' Dotplot for enrichment result
-#'
 #' @param EMPT EMPT object
 #' @param plot_category An interger.More plot style.(under constrution)
 #' @param seed An interger. Set the random seed to the plot.(default:123)

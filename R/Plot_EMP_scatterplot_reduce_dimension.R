@@ -12,8 +12,7 @@
 
 
 
-#' EMP scatterplot
-#'
+
 #' @param EMPT EMPT object
 #' @param seed An interger. Set the random seed to the plot.
 #' @param group_level A string vector. Set the group order in the plot.
@@ -30,7 +29,7 @@
 #' @importFrom ggpubr stat_compare_means
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
-#'
+#' @rdname EMP_scatterplot
 #' @return EMPT object
 #' @export
 #'

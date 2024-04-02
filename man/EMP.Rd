@@ -54,6 +54,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 {Data support} : 
 \itemize{
 	\item \code{\link{EMP_filter}} 
+	\item \code{\link{EMP_history}} 
 	\item \code{\link{EMP_result}}	
 	\item \code{\link{EMP_summary}}
 	\item \code{\link{EMP_feature_convert}}    

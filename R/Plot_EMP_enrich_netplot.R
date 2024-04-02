@@ -1,5 +1,3 @@
-#' Netplot for enrichment result
-#'
 #' @param EMPT EMPT object
 #' @param plot_category wait_for_add
 #' @param seed An interger. Set the random seed to the plot.(default:123)

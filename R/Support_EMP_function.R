@@ -219,3 +219,34 @@ as.EMP <- function(object,select=NULL) {
   return(string_vector)
 }
 
+
+#' Get history from EMPT or EMP object
+#'
+#' @param obj Object in EMPT or EMP format.
+#'
+#' @return EMPT object
+#' @export
+#'
+#' @examples
+#' # add example
+
+EMP_history <- function(obj) {
+  if (inherits(obj,"EMP")) {
+    his_info2 <- .get.history.EMP(obj,all = T) 
+    his_names <- names(his_info2)
+    for (i in 1:length(his_info2)) {
+      his_info_each <- his_info2[[i]] 
+      for (j in 1:length(his_info_each)) {
+        his_info_each[j] <- gsub('\"', '', his_info_each[j])
+      }
+      his_info2[[his_names[i]]] <- his_info_each %>% unlist()
+    }
+    return(his_info2)
+  }else if(inherits(obj,'EMPT')) {
+    his_info <- .get.history.EMPT(obj) %>% as.character()
+    for (i in 1:length(his_info)) {
+      his_info[i] <-  gsub('\"', '', his_info[i])
+    }
+    return(his_info)
+  }
+}

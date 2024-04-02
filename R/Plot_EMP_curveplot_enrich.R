@@ -20,8 +20,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
   EMPT
 }
 
-#' curveplot for enrichment result
-#'
+
 #' @param EMPT Object in EMPT format.
 #' @param plot_category An interger.More plot style.
 #' @param geneSetID geneSet ID

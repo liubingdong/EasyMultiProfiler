@@ -222,7 +222,7 @@ setMethod("EMP_assay_extract","EMPT",function(obj,pattern_ref,pattern,exact,acti
 
 
 
-#' EMP_boxplot
+#' Boxplot for EMPT result
 #'
 #' @param ... ...
 #' @rdname EMP_boxplot
@@ -252,24 +252,21 @@ setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
 })
 
 
-#' Title
+#' Scatterplot for EMPT result
 #'
 #' @param obj object
 #' @param ... ...
 #' @rdname EMP_scatterplot
 #'
-#' @return EMP_dimension_analysis_scatterplot object
 #' @export
 #'
 #' @examples
 #' # 
 setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"))
 
-#' Title
-#'
+
 #' @rdname EMP_scatterplot
 #'
-#' @return EMP_dimension_analysis_scatterplot object
 #' @export
 #'
 #' @examples
@@ -285,19 +282,16 @@ setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
 #' @param ... ...
 #' @rdname EMP_dotplot
 #'
-#' @return EMP_enrich_analysis_dotplot object
 #' @export
 #'
 #' @examples
 #' # 
 setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 
-#' Title
-#'
+
 #' @param EMP_enrich_analysis EMP_enrich_analysis
 #' @rdname EMP_dotplot
 #'
-#' @return EMP_enrich_analysis_dotplot object
 #' @export
 #'
 #' @examples
@@ -308,22 +302,19 @@ setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
 
 
 
-#' Title
-#'
+#' Netplot for enrichment result
 #' @param obj object
 #' @param ... ...
 #' @rdname EMP_netplot
 #'
-#' @return EMP_enrich_analysis_netplot object
 #' @export
 #'
 #' @examples
 #' # 
 setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 
-#' Title
-#'
-#' @param EMP_enrich_analysis xx
+
+
 #' @rdname EMP_netplot
 #'
 #' @return EMP_enrich_analysis_netplot object
@@ -336,24 +327,21 @@ setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
 })
 
 
-#' Title
+#' Curveplot for enrichment result
 #'
 #' @param obj object
 #' @param ... ...
 #' @rdname EMP_curveplot
 #'
-#' @return xx object
 #' @export
 #'
 #' @examples
 #' #
 setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 
-#' Title
-#'
+
 #' @rdname EMP_curveplot
 #'
-#' @return EMP_enrich_analysis_curveplot object
 #' @export
 #'
 #' @examples
@@ -362,26 +350,17 @@ setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
   EMP_curveplot_enrich(obj,...)
 })
 
-#' Title
-#'
-#' @param e1 An object of class EMPT.
-#' @param e2 An object of class EMPT or EMP.
-#' @param ... ...
+
+
 #' @export
-#' @method + EMPT
 `+.EMPT` <- function(e1, e2, ...) {
   data_list <- list(e1, e2, ...) %>% unlist()
   result <- as.EMP(data_list)
   return(result)
 }
 
-#' Title
-#'
-#' @param e1 An object of class EMP.
-#' @param e2 An object of class EMPT or EMP.
-#' @param ... ...
+
 #' @export
-#' @method + EMP
 `+.EMP` <- function(e1, e2, ...) {
   data_list <- list(e1, e2, ...) %>% unlist()
   result <- as.EMP(data_list)

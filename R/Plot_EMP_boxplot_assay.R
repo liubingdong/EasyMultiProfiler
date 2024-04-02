@@ -67,8 +67,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 
 
 
-#' Title
-#'
+
 #' @param EMPT Object in EMPT format.
 #' @param plot_category An interger.More plot style.(under constrution)
 #' @param seed An interger. Set the random seed to the plot.
