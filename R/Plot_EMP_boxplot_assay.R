@@ -1,4 +1,5 @@
 #' @import ggthemes
+#' @import ggplot2
 EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                ncol = NULL,show = 'pic',palette = NULL,
