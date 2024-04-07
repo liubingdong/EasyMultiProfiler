@@ -91,6 +91,10 @@
 EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',
                              use_cached = TRUE,...) {
   call <- match.call()
+  
+  if (!inherits(EMP,"EMP")) {
+    stop("Please input the EMP format!")
+  }
 
   if (use_cached == F) {
     memoise::forget(.EMP_cor_analysis_m) %>% invisible()

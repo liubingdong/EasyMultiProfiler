@@ -4,12 +4,27 @@
 \alias{EMP_rrarefy}
 \title{Rarefaction abundance or experssion Richness}
 \usage{
-EMP_rrarefy(x, experiment, use_cached = TRUE, action = "add", ...)
+EMP_rrarefy(
+  x,
+  experiment,
+  raresize = NULL,
+  seed = 123,
+  only_show_depth = FALSE,
+  use_cached = TRUE,
+  action = "add",
+  ...
+)
 }
 \arguments{
 \item{x}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
+
+\item{raresize}{An interger. Subsample size for rarefying community.}
+
+\item{seed}{An interger. Set the random seed to the plot.(default:123)}
+
+\item{only_show_depth}{A boolean. Whether the function only show the depth or not.}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 

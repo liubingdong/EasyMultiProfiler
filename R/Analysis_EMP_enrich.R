@@ -13,9 +13,11 @@
 #' @noRd
 .EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500,keyType=NULL,KEGG_Type='KEGG',species = "all",...){
   deposit <- list()
+  sign_group <- NULL
   condition <- dplyr::enquo(condition)
   df <- .get.result.EMPT(EMPT,info='EMP_diff_analysis') %>% suppressMessages() %>%
-    dplyr::filter(!!condition)
+    dplyr::filter(!!condition) %>%
+    tidyr::drop_na(sign_group) ## filter NA or the result will add NA group!
   
   if (is.null(keyType)) {
     stop("keyType should be specified as ko, ec or cpd!")
@@ -27,13 +29,13 @@
     stop("keyType should be KEGG or MKEGG!")
   }
 
-  gason_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species)
+  gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species)
   
-  message('KEGG database version: ',gason_data@version)
-  message('Species: ',gason_data@species)
+  message('KEGG database version: ',gson_data@version)
+  message('Species: ',gson_data@species)
 
   enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
-        fun=clusterProfiler::enricher, gson=gason_data, 
+        fun=clusterProfiler::enricher, gson=gson_data, 
         minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
 
   EMPT@deposit[['enrich_data']] <- enrich.data

@@ -22,7 +22,7 @@ setMethod("show", "EMPT",
                      .get.result.EMPT(object) %>% print()
                    },
                    "EMP_enrich_analysis" = {
-                     object@deposit[["enrich_data"]] %>% tibble::as_tibble() %>% print(n=Inf)
+                     object@deposit[["enrich_data"]]@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf)
                    },
                    "EMP_assay_data" = {
                      .get.result.EMPT(object) %>% print()
@@ -229,6 +229,27 @@ setMethod("show", "EMP",
                     "EMP_cor_heatmap" = {
                       .get.result.EMP(object) %>% print()
                    },
+                   "EMP_multi_same_df" = {
+                      .get.result.EMP(object) %>% print()
+                   },
+                   "EMP_multi_diff_enrich" = {
+                      .get.result.EMP(object) %>% tibble::as_tibble() %>% print(n=Inf)
+                   },
+                   "EMP_multi_same_enrich" = {
+                      .get.result.EMP(object) %>% tibble::as_tibble() %>% print(n=Inf)
+                   },
+                   "EMP_multi_diff_enrich_dotplot" = {
+                      .get.result.EMP(object) %>% print()
+                   },
+                   "EMP_multi_same_enrich_dotplot" = {
+                      .get.result.EMP(object) %>% print()
+                   },
+                   "EMP_multi_diff_enrich_netplot" = {
+                      .get.result.EMP(object) %>% print()
+                   },
+                   "EMP_multi_same_enrich_netplot" = {
+                      .get.result.EMP(object) %>% print()
+                   },
                    {
                      print('No info is matched!')
                    }
@@ -265,11 +286,33 @@ setMethod("show", "EMP",
                    },
                   "EMP_WGCNA_cor_heatmap2" = {
                      return(.get.plot_deposit.EMP(object,info='EMP_WGCNA_cor_heatmap')) ## here not EMP_WGCNA_cor_heatmap2
-                   }
+                   },
+                  "EMP_multi_same_df" = {
+                     return(object@deposit[['multi_same_df']]) 
+                   },
+                   "EMP_multi_diff_enrich" = {
+                     try(return(object@deposit[['multi_diff_enrich']]@compareClusterResult),silent=TRUE)
+                     try(return(object@deposit[['multi_diff_enrich']]@result),silent=TRUE)
+                   },
+                   "EMP_multi_same_enrich" = {
+                     try(return(object@deposit[['multi_same_enrich']]@compareClusterResult),silent=TRUE)
+                     try(return(object@deposit[['multi_same_enrich']]@result),silent=TRUE)                   
+                   },
+                  "EMP_multi_diff_enrich_dotplot" = {
+                     .show_EMP_dotplot_enrich(object,.get.plot_specific.EMP(object))
+                   },
+                  "EMP_multi_same_enrich_dotplot" = {
+                     .show_EMP_dotplot_enrich(object,.get.plot_specific.EMP(object))
+                   },
+                  "EMP_multi_diff_enrich_netplot" = {
+                     .show_EMP_netplot_enrich(object,.get.plot_specific.EMP(object))
+                   },
+                  "EMP_multi_same_enrich_netplot" = {
+                     .show_EMP_netplot_enrich(object,.get.plot_specific.EMP(object))
+                   }  
 
   )
 }
-
 
 
 

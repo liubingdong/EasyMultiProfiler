@@ -105,6 +105,7 @@
 #' @param x Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include t.test, wilcox_test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights
+#' @param p.adjust A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)
 #' @param .formula A formula representing the desired linear model. If there is more than one factor, they should be in the order factor of interest + additional factors.
 #' @param estimate_group A character string. Select the group name in the coldata to be calculated.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
@@ -120,7 +121,7 @@
 #' @examples
 #' # add example
 EMP_diff_analysis <- function(x,experiment,.formula,
-                              method = 'wilcox.test',estimate_group=NULL,
+                              method = 'wilcox.test',p.adjust='fdr',estimate_group=NULL,
                               use_cached = TRUE,action='add',group_level=NULL,
                               core=NULL,...){
   call <- match.call()
@@ -136,13 +137,19 @@ EMP_diff_analysis <- function(x,experiment,.formula,
     memoise::forget(.EMP_diff_analysis_m) %>% invisible()
     memoise::forget(.EMP_diff_analysis_tidybulk_m) %>% invisible()
   }
+
+  # avoid typo for users
+  if (method == 'deseq2') {
+    method <- 'DESeq2'
+  }
+
   switch(method,
-         "edgeR_quasi_likelihood" = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,group_level=group_level,.formula=.formula,...)},
-         "edgeR_likelihood_ratio"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,group_level=group_level,.formula=.formula,...)},
-         "edger_robust_likelihood_ratio"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,group_level=group_level,.formula=.formula,...)},
-         "DESeq2"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,group_level=group_level,.formula=.formula,...)},
-         "limma_voom"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,group_level=group_level,.formula=.formula,...)},
-         "limma_voom_sample_weights"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,group_level=group_level,.formula=.formula,...)},
+         "edgeR_quasi_likelihood" = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
+         "edgeR_likelihood_ratio"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
+         "edger_robust_likelihood_ratio"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
+         "DESeq2"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
+         "limma_voom"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
+         "limma_voom_sample_weights"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
          {
            EMPT <- .EMP_diff_analysis_m(EMPT = EMPT,method=method,group_level=group_level,estimate_group=estimate_group,core=core,...)
          }

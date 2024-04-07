@@ -178,12 +178,17 @@ setClass("EMP_cor_analysis",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_analysis2",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
-
 setClass("EMP_cor_heatmap",contains = c("EMP"))
 
+setClass("EMP_multi_same_df",contains = c("EMP"))
 
+setClass("EMP_multi_diff_enrich",contains = c("EMP"))
+setClass("EMP_multi_diff_enrich_dotplot",contains = c("EMP","EMP_multi_diff_enrich"))
+setClass("EMP_multi_diff_enrich_netplot",contains = c("EMP","EMP_multi_diff_enrich"))
 
-
+setClass("EMP_multi_same_enrich",contains = c("EMP"))
+setClass("EMP_multi_same_enrich_dotplot",contains = c("EMP","EMP_multi_same_enrich"))
+setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enrich"))
 
 
 #' Extract assay data
@@ -293,12 +298,35 @@ setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 #' @rdname EMP_dotplot
 #'
 #' @export
-#'
+#' @return Enrichment dotplot
 #' @examples
 #' #
 setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
+
+#' @param EMP_enrich_analysis EMP_multi_enrich
+#' @rdname EMP_dotplot
+#'
+#' @export
+#'
+#' @examples
+#' #
+setMethod("EMP_dotplot","EMP_multi_diff_enrich",function(obj,...){
+  EMP_dotplot_enrich(obj,...)
+})
+
+#' @param EMP_enrich_analysis EMP_multi_enrich
+#' @rdname EMP_dotplot
+#'
+#' @export
+#'
+#' @examples
+#' #
+setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
+  EMP_dotplot_enrich(obj,...)
+})
+
 
 
 
@@ -316,8 +344,7 @@ setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 
 
 #' @rdname EMP_netplot
-#'
-#' @return EMP_enrich_analysis_netplot object
+#' @return Enrichment netplot object
 #' @export
 #'
 #' @examples
@@ -325,6 +352,28 @@ setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
+
+
+#' @rdname EMP_netplot
+#' @export
+#'
+#' @examples
+#' #
+setMethod("EMP_netplot","EMP_multi_same_enrich",function(obj,...){
+  EMP_netplot_enrich(obj,...)
+})
+
+
+#' @rdname EMP_netplot
+#' @export
+#'
+#' @examples
+#' #
+setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
+  EMP_netplot_enrich(obj,...)
+})
+
+
 
 
 #' Curveplot for enrichment result

@@ -3,6 +3,8 @@
 \name{EMP_dotplot}
 \alias{EMP_dotplot}
 \alias{EMP_dotplot,EMP_enrich_analysis-method}
+\alias{EMP_dotplot,EMP_multi_diff_enrich-method}
+\alias{EMP_dotplot,EMP_multi_same_enrich-method}
 \alias{EMP_dotplot_enrich}
 \title{Dotplot for enrichment result}
 \usage{
@@ -10,8 +12,12 @@ EMP_dotplot(obj, ...)
 
 \S4method{EMP_dotplot}{EMP_enrich_analysis}(obj, ...)
 
+\S4method{EMP_dotplot}{EMP_multi_diff_enrich}(obj, ...)
+
+\S4method{EMP_dotplot}{EMP_multi_same_enrich}(obj, ...)
+
 EMP_dotplot_enrich(
-  EMPT,
+  obj,
   plot_category = 1,
   seed = 123,
   color = "p.adjust",
@@ -20,11 +26,9 @@ EMP_dotplot_enrich(
 )
 }
 \arguments{
-\item{obj}{object}
+\item{obj}{EMPT or EMP object}
 
 \item{...}{Further parameters passed to enrichplot::dotplot.}
-
-\item{EMPT}{EMPT object}
 
 \item{plot_category}{An interger.More plot style.(under constrution)}
 
@@ -34,16 +38,18 @@ EMP_dotplot_enrich(
 
 \item{showCategory}{A number or a list of terms. If it is a number, the first n terms will be displayed. If it is a list of terms, the selected terms will be displayed.}
 
-\item{EMP_enrich_analysis}{EMP_enrich_analysis}
+\item{EMP_enrich_analysis}{EMP_multi_enrich}
 }
 \value{
-xx object
+Enrichment dotplot
 }
 \description{
 Dotplot for enrichment result
 }
 \examples{
 # 
+#
+#
 #
 # add example
 }

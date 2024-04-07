@@ -68,6 +68,9 @@
 #'
 #' @param x Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param raresize An interger. Subsample size for rarefying community.
+#' @param seed An interger. Set the random seed to the plot.(default:123)
+#' @param only_show_depth A boolean. Whether the function only show the depth or not.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param ... Further parameters passed to the function vegan::rrarefy.
@@ -77,7 +80,7 @@
 #'
 #' @examples
 #' # add example
-EMP_rrarefy <- function(x,experiment,use_cached = TRUE,action = 'add',...) {
+EMP_rrarefy <- function(x,experiment,raresize=NULL,seed=123,only_show_depth=FALSE,use_cached = TRUE,action = 'add',...) {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     x <- .as.EMPT(x,
@@ -91,7 +94,12 @@ EMP_rrarefy <- function(x,experiment,use_cached = TRUE,action = 'add',...) {
   if (use_cached == F) {
     memoise::forget(.EMP_rrarefy_m) %>% invisible()
   }
-  EMPT <- .EMP_rrarefy_m(EMPT=x,...)
+  
+  if (.get.assay_name.EMPT(x) != 'counts') {
+     warning("If assay data was not raw counts, EMP_rrarefy may not work correctly! ")
+  }
+
+  EMPT <- .EMP_rrarefy_m(EMPT=x,raresize=raresize,seed=seed,only_show_depth=only_show_depth,...)
   # in case that .EMP_rrarefy only return depth message
   if (inherits(EMPT,'EMPT')) {
     .get.history.EMPT(EMPT) <- call

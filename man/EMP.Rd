@@ -38,7 +38,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_GSEA_analysis}}
 	\item \code{\link{EMP_WGCNA_cluster_analysis}}
 	\item \code{\link{EMP_WGCNA_cor_analysis}}
-	\item \code{\link{EMP_multienrich_analysis}}
+	\item \code{\link{EMP_multi_analysis}}
  }
 {Data Virtualization} : 
 \itemize{

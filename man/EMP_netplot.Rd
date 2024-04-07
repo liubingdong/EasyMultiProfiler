@@ -3,6 +3,8 @@
 \name{EMP_netplot}
 \alias{EMP_netplot}
 \alias{EMP_netplot,EMP_enrich_analysis-method}
+\alias{EMP_netplot,EMP_multi_same_enrich-method}
+\alias{EMP_netplot,EMP_multi_diff_enrich-method}
 \alias{EMP_netplot_enrich}
 \title{Netplot for enrichment result}
 \usage{
@@ -10,32 +12,27 @@ EMP_netplot(obj, ...)
 
 \S4method{EMP_netplot}{EMP_enrich_analysis}(obj, ...)
 
-EMP_netplot_enrich(
-  EMPT,
-  plot_category = 1,
-  seed = 123,
-  layout = "kk",
-  showCategory = 5,
-  ...
-)
+\S4method{EMP_netplot}{EMP_multi_same_enrich}(obj, ...)
+
+\S4method{EMP_netplot}{EMP_multi_diff_enrich}(obj, ...)
+
+EMP_netplot_enrich(obj, plot_category = 1, seed = 123, showCategory = 10, ...)
 }
 \arguments{
 \item{obj}{object}
 
 \item{...}{Further parameters passed to enrichplot::cnetplot.}
 
-\item{EMPT}{EMPT object}
-
-\item{plot_category}{wait_for_add}
+\item{plot_category}{An interger. More plot style.(under constrution)}
 
 \item{seed}{An interger. Set the random seed to the plot.(default:123)}
 
-\item{layout}{Layout of the map, e.g. 'star', 'circle', 'gem', 'dh', 'graphopt', 'grid', 'mds', 'randomly', 'fr', 'kk', 'drl' or 'lgl'.}
-
 \item{showCategory}{A number or a vector of terms. If it is a number, the first n terms will be displayed. If it is a vector of terms, the selected terms will be displayed.}
+
+\item{EMPT}{EMPT object}
 }
 \value{
-EMP_enrich_analysis_netplot object
+Enrichment netplot object
 
 EMPT object
 }
@@ -44,6 +41,8 @@ Netplot for enrichment result
 }
 \examples{
 # 
+#
+#
 #
 # add example
 }
