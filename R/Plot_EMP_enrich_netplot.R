@@ -1,10 +1,10 @@
-#' @param EMPT EMPT object
+#' @param obj EMP or EMPT object
 #' @param plot_category An interger. More plot style.(under constrution)
 #' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param showCategory A number or a vector of terms. If it is a number, the first n terms will be displayed. If it is a vector of terms, the selected terms will be displayed.
 #' @param ... Further parameters passed to enrichplot::cnetplot.
 #' @rdname EMP_netplot
-#' @return EMPT object
+#' @return Enrichment netplot object
 #' @export
 #'
 #' @examples
