@@ -61,6 +61,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_taxonomy_import}} 
 	\item \code{\link{EMP_function_import}} 
 	\item \code{\link{EMP_normal_import}} 
+	\item \code{\link{EMP_easy_import}} 
  }
 }
 

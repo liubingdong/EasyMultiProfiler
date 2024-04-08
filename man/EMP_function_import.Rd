@@ -13,7 +13,7 @@ EMP_function_import(
 )
 }
 \arguments{
-\item{file}{A file path.}
+\item{file}{A file path. The file should be deposited in txt format.}
 
 \item{data}{A dataframe.The row must be the feature and the column is the sample.}
 

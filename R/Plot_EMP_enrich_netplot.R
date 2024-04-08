@@ -16,7 +16,7 @@ EMP_netplot_enrich <- function(obj,plot_category = 1,seed =123,showCategory=10,.
     .get.history.EMP(obj) <- call
     switch(.get.plot_category.EMP(obj),
          "1" = {
-           withr::with_seed(seed,EMP_netplot_enrich_default(obj,...))
+           withr::with_seed(seed,EMP_netplot_enrich_default(obj,showCategory=showCategory,...))
          },
          "2" = {
            # where is EMP_dotplot_enrich_2?
@@ -29,7 +29,7 @@ EMP_netplot_enrich <- function(obj,plot_category = 1,seed =123,showCategory=10,.
     .get.history.EMPT(obj) <- call
     switch(.get.plot_category.EMPT(obj),
          "1" = {
-           withr::with_seed(seed,EMP_netplot_enrich_default(obj,...))
+           withr::with_seed(seed,EMP_netplot_enrich_default(obj,showCategory=showCategory,...))
          },
          "2" = {
            # where is EMP_dotplot_enrich_2?

@@ -1,6 +1,7 @@
 #' @importFrom rlang `:=`
 #' @importFrom dplyr last_col
 #' @importFrom dplyr matches
+#' @importFrom dplyr n_distinct
 .EMP_diff_analysis_tidybulk <- function(EMPT,method,.formula,p.adjust='fdr',group_level=NULL,...) {
   pvalue <- feature <- Estimate_group <- sign_group <- vs <- log2FC <- Estimate_group <- fold_change <- `.` <- NULL
   batch_effect <- NULL
@@ -20,6 +21,12 @@
     stop("The group_level parameter must have exactly 2 factors!")
   }
 
+  melt_EMPT <- EMPT %>% tidybulk::tidybulk()
+  check_group <- melt_EMPT %>% dplyr::pull(estimate_group) %>% dplyr::n_distinct() == 2
+  if(!check_group ) {
+    stop('For ',method,' only support supports two-category group!')
+  }
+
   if (!is.null(group_level)) {
     switch(method,
            "edgeR_quasi_likelihood" = {group_level <- paste0(estimate_group,group_level[1],'-',estimate_group,group_level[2])},
@@ -34,7 +41,7 @@
     )
   }
 
-  result <- EMPT %>% tidybulk::tidybulk() %>%
+  result <- melt_EMPT %>%
     tidybulk::test_differential_abundance(
       .formula,
       method = method,action='get',contrasts=group_level,...) %>%

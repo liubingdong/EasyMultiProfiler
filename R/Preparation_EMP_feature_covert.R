@@ -12,31 +12,31 @@
 #' @noRd
 
 .feature_convert_gene <- function(feature, from = "SYMBOL", to = "ENTREZID", species = "none", OrgDb = NULL) {
-    if (!(species %in% c("Human", "Mouse", "Pig", "Zebrafish"))) {
-        if (is.null(OrgDb)) {
-            stop("The species is not within the built-in species range, OrgDb needs to be provided for conversion.")
-        }
-        result <- AnnotationDbi::select(x = OrgDb, keys = feature, keytype = from, columns = c(to))
-        return(result)
-    }
-    data_df <- switch(species,
-                      "Human" = res_Hs,
-                      "Mouse" = res_Mm,
-                      "Pig" = res_Ss,
-                      "Zebrafish" = res_Dr
-                      )
-    from <- match.arg(from, colnames(data_df))
-    to <- match.arg(to, colnames(data_df))
-    result <- data_df[data_df[, from] %in% feature, c(from, to)]
-    na_feature <- setdiff(feature, result[, 1])
-    if (length(na_feature) > 0) {
-        result2 <- data.frame(from = na_feature, to = NA)
-        colnames(result2) <- colnames(result)
-        result <- rbind(result, result2)
-    }
-    result <- dplyr::distinct(result)
-    result <- result[!duplicated(result[, 1]), ]
-    return(result)  
+  if (!(species %in% c("Human", "Mouse", "Pig", "Zebrafish"))) {
+      if (is.null(OrgDb)) {
+          stop("The species is not within the built-in species range, OrgDb needs to be provided for conversion.")
+      }
+      result <- AnnotationDbi::select(x = OrgDb, keys = feature, keytype = from, columns = c(to))
+      return(result)
+  }
+  data_df <- switch(species,
+                    "Human" = res_Hs,
+                    "Mouse" = res_Mm,
+                    "Pig" = res_Ss,
+                    "Zebrafish" = res_Dr
+                    )
+  from <- match.arg(from, colnames(data_df))
+  to <- match.arg(to, colnames(data_df))
+  result <- data_df[data_df[, from] %in% feature, c(from, to)]
+  na_feature <- setdiff(feature, result[, 1])
+  if (length(na_feature) > 0) {
+      result2 <- data.frame(from = na_feature, to = NA)
+      colnames(result2) <- colnames(result)
+      result <- rbind(result, result2)
+  }
+  result <- dplyr::distinct(result)
+  result <- result[!duplicated(result[, 1]), ]
+  return(result)  
 }    
 
 
@@ -53,7 +53,7 @@
 #'
 #' @noRd
 
-.EMP_feature_convert_gene <- function(EMPT,method='mean',from,to,species = "Human", OrgDb = NULL) {
+.EMP_feature_convert_gene <- function(EMPT,method='mean',from,to,species = "none", OrgDb = NULL) {
   feature <- NULL
   raw_feature <- .get.row_info.EMPT(EMPT) %>% dplyr::pull(feature)
   ref_data <- .feature_convert_gene(feature=raw_feature, 
@@ -117,7 +117,7 @@
 #' @examples
 #' #
 
-EMP_feature_convert <- function(x,experiment,method='mean',from,to,species = "Human",OrgDb = NULL,action='add'){
+EMP_feature_convert <- function(x,experiment,method='mean',from,to,species = "none",OrgDb = NULL,action='add'){
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -125,6 +125,10 @@ EMP_feature_convert <- function(x,experiment,method='mean',from,to,species = "Hu
   }else if(inherits(x,'EMPT')) {
     EMPT <-x
   }
+  
+  # Tolerate differences in capitalization.
+  from <- toupper(from)  
+  to <- toupper(to)  
   
   cpd_names_total <- c("CAS", "DTXSID", "DTXCID", "SID", "CID", "KEGG", "ChEBI", "HMDB", "Drugbank")
   gene_names_total <- c('SYMBOL','ENSEMBL','ENTREZID')

@@ -19,7 +19,7 @@ EMP_netplot(obj, ...)
 EMP_netplot_enrich(obj, plot_category = 1, seed = 123, showCategory = 10, ...)
 }
 \arguments{
-\item{obj}{object}
+\item{obj}{EMP or EMPT object}
 
 \item{...}{Further parameters passed to enrichplot::cnetplot.}
 
@@ -28,13 +28,11 @@ EMP_netplot_enrich(obj, plot_category = 1, seed = 123, showCategory = 10, ...)
 \item{seed}{An interger. Set the random seed to the plot.(default:123)}
 
 \item{showCategory}{A number or a vector of terms. If it is a number, the first n terms will be displayed. If it is a vector of terms, the selected terms will be displayed.}
-
-\item{EMPT}{EMPT object}
 }
 \value{
 Enrichment netplot object
 
-EMPT object
+Enrichment netplot object
 }
 \description{
 Netplot for enrichment result

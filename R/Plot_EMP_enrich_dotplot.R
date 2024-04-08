@@ -5,7 +5,6 @@
 #' @param showCategory A number or a list of terms. If it is a number, the first n terms will be displayed. If it is a list of terms, the selected terms will be displayed.
 #' @param ... Further parameters passed to enrichplot::dotplot.
 #' @rdname EMP_dotplot
-#' @export
 #'
 #' @examples
 #' # add example
@@ -16,7 +15,7 @@ EMP_dotplot_enrich <- function(obj,plot_category = 1,seed =123,color='p.adjust',
     .get.history.EMP(obj) <- call
     switch(.get.plot_category.EMP(obj),
          "1" = {
-           withr::with_seed(seed,EMP_dotplot_enrich_default(obj,...))
+           withr::with_seed(seed,EMP_dotplot_enrich_default(obj,color=color,showCategory=showCategory,...))
          },
          "2" = {
            # where is EMP_dotplot_enrich_2?
@@ -29,7 +28,7 @@ EMP_dotplot_enrich <- function(obj,plot_category = 1,seed =123,color='p.adjust',
     .get.history.EMPT(obj) <- call
     switch(.get.plot_category.EMPT(obj),
          "1" = {
-           withr::with_seed(seed,EMP_dotplot_enrich_default(obj,...))
+           withr::with_seed(seed,EMP_dotplot_enrich_default(obj,color=color,showCategory=showCategory,...))
          },
          "2" = {
            # where is EMP_dotplot_enrich_2?

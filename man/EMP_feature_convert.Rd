@@ -10,7 +10,7 @@ EMP_feature_convert(
   method = "mean",
   from,
   to,
-  species = "Human",
+  species = "none",
   OrgDb = NULL,
   action = "add"
 )

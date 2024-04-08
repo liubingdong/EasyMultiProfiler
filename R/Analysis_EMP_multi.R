@@ -90,7 +90,11 @@ EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enri
     deposit_enrichment <- .diff_enrich(list_compareCluster=input_list,combineMethod=combineMethod,p.adjust=p.adjust)
 
     if (action=='get') {
-        return(deposit_enrichment@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf))
+        if (combineGroup==FALSE) {
+            return(deposit_enrichment@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf))
+        }else if (combineGroup==TRUE) {
+            return(deposit_enrichment@result %>% tibble::as_tibble() %>% print(n=Inf))
+        }
     }else if(action=='add') {
         EMP@deposit[['multi_diff_enrich']] <- deposit_enrichment
         .get.history.EMP(EMP) <- call
@@ -108,7 +112,11 @@ EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enri
                          gson=gson_data,combineLevel=combineLevel,p.adjust=p.adjust,minGSSize=minGSSize,maxGSSize=maxGSSize,...) %>% suppressWarnings()
 
     if (action=='get') {
-        return(deposit_enrichment@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf))
+        if (combineGroup==FALSE) {
+            return(deposit_enrichment@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf))
+        }else if (combineGroup==TRUE) {
+            return(deposit_enrichment@result %>% tibble::as_tibble() %>% print(n=Inf))
+        }
     }else if(action=='add') {
         EMP@deposit[['multi_same_enrich']] <- deposit_enrichment
         .get.history.EMP(EMP) <- call
