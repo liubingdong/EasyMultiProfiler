@@ -13,9 +13,10 @@ Imports:
     bigstatsr (>= 1.5.12),
     Boruta (>= 8.0.0),
     clusterProfiler (>= 4.10.0),
-    dplyr (>= 1.1.4),
+    dplyr (>= 1.1.4),  
     dynamicTreeCut (>= 1.63.1),
     enrichplot (>= 1.22.0),
+    fastcluster (>= 1.2.6),    
     formattable (>= 0.2.1),
     glmnet (>= 4.1.8),
     ggiraph (>= 0.8.9),
@@ -59,9 +60,8 @@ Imports:
     yulab.utils (>= 0.1.4)
 RoxygenNote: 7.3.1
 Suggests: 
-    dendextend,
     knitr,
-    fastcluster,
+    dendextend,  
     rmarkdown,
     AnnotationDbi
 VignetteBuilder: knitr
@@ -70,5 +70,5 @@ Packaged: 2024-03-06 17:14:44 UTC; 13766
 Author: Bingdong liu [aut, cre],
   Erqiang Hu [aut, ctb]
 Depends: 
-    R (>= 2.10)
+    R (>= 4.3.1)
 LazyData: FALSE

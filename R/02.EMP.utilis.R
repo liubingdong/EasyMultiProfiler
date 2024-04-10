@@ -120,18 +120,18 @@ setGeneric("EMP_heatmap_plot",function(obj, ...) standardGeneric("EMP_heatmap_pl
 
 #' @rdname EMP_heatmap_plot
 setMethod("EMP_heatmap_plot","EMP_cor_analysis",function(obj, ...){
-  EMP_heatmap_cor(obj, ...)
+  EMP_heatmap.EMP_cor_analysis(obj, ...)
 })
 
 #' @rdname EMP_heatmap_plot
 setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis",function(obj, ...){
-  EMP_heatmap_WGCNA(obj, ...)
+  EMP_heatmap.WGCNA(obj, ...)
 })
 
 
 #' @rdname EMP_heatmap_plot
 setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj, ...){
-  EMP_heatmap_WGCNA(obj, ...)
+  EMP_heatmap.WGCNA(obj, ...)
 })
 
 #' EMP_WGCNA_cor_analysis

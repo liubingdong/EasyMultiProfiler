@@ -6,12 +6,21 @@
 #' @param to to
 #' @param species species 
 #' @param OrgDb OrgDb
-#'
 #' @return data.frame
 #'
 #' @noRd
 
 .feature_convert_gene <- function(feature, from = "SYMBOL", to = "ENTREZID", species = "none", OrgDb = NULL) {
+  
+  # Check if package is installed, otherwise install
+  if (find.package("AnnotationDbi", quiet = TRUE) %>% length %>% equals(0)) {
+    message("EMP_feature_convert need install package AnnotationDbi!")
+    if (!requireNamespace("BiocManager", quietly = TRUE))
+      install.packages("BiocManager", repos = "https://cloud.r-project.org")
+    BiocManager::install("AnnotationDbi", ask = FALSE)
+  }  
+
+
   if (!(species %in% c("Human", "Mouse", "Pig", "Zebrafish"))) {
       if (is.null(OrgDb)) {
           stop("The species is not within the built-in species range, OrgDb needs to be provided for conversion.")

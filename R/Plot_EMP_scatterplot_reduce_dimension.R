@@ -12,7 +12,6 @@
 
 
 
-
 #' @param EMPT EMPT object
 #' @param seed An interger. Set the random seed to the plot.
 #' @param group_level A string vector. Set the group order in the plot.
@@ -26,16 +25,13 @@
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param force_adonis force the function run adnois analysis always.(default:FALSE)
-#' @importFrom ggpubr stat_compare_means
-#' @importFrom ggplot2 coord_flip
-#' @importFrom ggplot2 geom_boxplot
 #' @rdname EMP_scatterplot
 #' @return EMPT object
 #' @export
-#'
-#' @examples
-#' # add example
-EMP_scatterplot_reduce_dimension  <- function(EMPT,seed=123,group_level='default',
+#' @importFrom ggpubr stat_compare_means
+#' @importFrom ggplot2 coord_flip
+#' @importFrom ggplot2 geom_boxplot
+EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,
                                            estimate_group=NULL,palette=NULL,
                                            method='t.test',key_samples = NULL,

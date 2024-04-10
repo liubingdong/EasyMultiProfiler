@@ -4,14 +4,14 @@
 \name{EMP_scatterplot}
 \alias{EMP_scatterplot}
 \alias{EMP_scatterplot,EMP_dimension_analysis-method}
-\alias{EMP_scatterplot_reduce_dimension}
+\alias{EMP_scatterplot.EMP_dimension_analysis}
 \title{Scatterplot for EMPT result}
 \usage{
 EMP_scatterplot(obj, ...)
 
 \S4method{EMP_scatterplot}{EMP_dimension_analysis}(obj, ...)
 
-EMP_scatterplot_reduce_dimension(
+EMP_scatterplot.EMP_dimension_analysis(
   EMPT,
   seed = 123,
   group_level = "default",
@@ -66,6 +66,6 @@ Scatterplot for EMPT result
 }
 \examples{
 # 
-#
 # add example
+# 
 }

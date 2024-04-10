@@ -5,8 +5,8 @@
 \alias{EMP_heatmap_plot,EMP_cor_analysis-method}
 \alias{EMP_heatmap_plot,EMP_WGCNA_cor_analysis-method}
 \alias{EMP_heatmap_plot,EMP_WGCNA_cor_analysis2-method}
-\alias{EMP_heatmap_cor}
-\alias{EMP_heatmap_WGCNA}
+\alias{EMP_heatmap.EMP_cor_analysis}
+\alias{EMP_heatmap.WGCNA}
 \title{EMP heatmap plot}
 \usage{
 EMP_heatmap_plot(obj, ...)
@@ -17,14 +17,14 @@ EMP_heatmap_plot(obj, ...)
 
 \S4method{EMP_heatmap_plot}{EMP_WGCNA_cor_analysis2}(obj, ...)
 
-EMP_heatmap_cor(
+EMP_heatmap.EMP_cor_analysis(
   obj,
   palette = c("steelblue", "white", "darkred"),
   show = "all",
   mytheme = "theme()"
 )
 
-EMP_heatmap_WGCNA(
+EMP_heatmap.WGCNA(
   obj,
   palette = c("steelblue", "white", "darkred"),
   show = "all",

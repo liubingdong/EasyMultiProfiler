@@ -270,14 +270,18 @@ setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
 setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"))
 
 
+#' @examples
+#' # add example
+#' @param obj object
+#' @param ... ...
 #' @rdname EMP_scatterplot
 #'
 #' @export
 #'
 #' @examples
-#' #
+#' # 
 setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
-  EMP_scatterplot_reduce_dimension(obj,...)
+  EMP_scatterplot.EMP_dimension_analysis(obj,...)
 })
 
 
