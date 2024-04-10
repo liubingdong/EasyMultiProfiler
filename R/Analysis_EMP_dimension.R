@@ -79,7 +79,7 @@
            
            opsda_raw <- ropls::opls(assay_data,
                                     group_info,
-                                    orthoI=NA,
+                                    orthoI=3,
                                     predI=1,scaleC = 'none',fig.pdfC='none',info.txtC='none')
            
            
