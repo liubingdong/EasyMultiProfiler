@@ -25,7 +25,7 @@ EMP_modify_assay(
 
 \item{select_feature}{A character string. Choose which feature to modify.}
 
-\item{pseudocount}{A number. Set the pseudocount data will change into. (default: '==0')}
+\item{pseudocount}{A number. Set the pseudocount data will change into. (default: '0.0001')}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }

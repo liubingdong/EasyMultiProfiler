@@ -1,7 +1,7 @@
 \docType{package}
 \name{EasyMultiProfiler}
 \alias{EasyMultiProfiler}
-\title{EasyMultiProfiler: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization for Clinical Study}
+\title{EasyMultiProfiler: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization}
 
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
