@@ -18,13 +18,14 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 }
 {Data Preparation} : 
 \itemize{
+ 	\item \code{\link{EMP_adjust_abudance}}
+ 	\item \code{\link{EMP_collapse}}
+ 	\item \code{\link{EMP_decostand}} 	
 	\item \code{\link{EMP_feature_convert}}
 	\item \code{\link{EMP_impute}} 
-	\item \code{\link{EMP_identify_assay}}	
+	\item \code{\link{EMP_identify_assay}}
+	\item \code{\link{EMP_modify_assay}}		
 	\item \code{\link{EMP_rrarefy}}  
- 	\item \code{\link{EMP_decostand}}
- 	\item \code{\link{EMP_collapse}}
- 	\item \code{\link{EMP_adjust_abudance}}
 }
 {Data Analysis} : 
 \itemize{
