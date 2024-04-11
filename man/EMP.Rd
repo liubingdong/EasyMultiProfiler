@@ -58,7 +58,6 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_history}} 
 	\item \code{\link{EMP_result}}	
 	\item \code{\link{EMP_summary}}
-	\item \code{\link{EMP_feature_convert}}    
 	\item \code{\link{EMP_taxonomy_import}} 
 	\item \code{\link{EMP_function_import}} 
 	\item \code{\link{EMP_normal_import}} 
