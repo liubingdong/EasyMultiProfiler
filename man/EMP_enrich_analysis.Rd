@@ -2,7 +2,7 @@
 % Please edit documentation in R/Analysis_EMP_enrich.R
 \name{EMP_enrich_analysis}
 \alias{EMP_enrich_analysis}
-\title{KEGG enrichment for the KO, EC and compound}
+\title{KEGG enrichment for EMPT object}
 \usage{
 EMP_enrich_analysis(
   x,
@@ -39,7 +39,7 @@ EMP_enrich_analysis(
 EMPT object
 }
 \description{
-KEGG enrichment for the KO, EC and compound
+KEGG enrichment for EMPT object
 }
 \examples{
 # add example

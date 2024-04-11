@@ -11,6 +11,7 @@ Encoding: UTF-8
 Imports: 
     ActivePathways (>= 2.0.3),
     bigstatsr (>= 1.5.12),
+    BiocManager (>= 1.30.22),    
     Boruta (>= 8.0.0),
     clusterProfiler (>= 4.10.0),
     dplyr (>= 1.1.4),  

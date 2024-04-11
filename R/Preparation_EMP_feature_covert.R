@@ -6,6 +6,8 @@
 #' @param to to
 #' @param species species 
 #' @param OrgDb OrgDb
+#' @importFrom BiocManager install
+#' @importFrom utils install.packages
 #' @return data.frame
 #'
 #' @noRd
@@ -13,7 +15,7 @@
 .feature_convert_gene <- function(feature, from = "SYMBOL", to = "ENTREZID", species = "none", OrgDb = NULL) {
   
   # Check if package is installed, otherwise install
-  if (find.package("AnnotationDbi", quiet = TRUE) %>% length %>% equals(0)) {
+  if (find.package("AnnotationDbi", quiet = TRUE) %>% length() == 0) {
     message("EMP_feature_convert need install package AnnotationDbi!")
     if (!requireNamespace("BiocManager", quietly = TRUE))
       install.packages("BiocManager", repos = "https://cloud.r-project.org")
@@ -128,6 +130,7 @@
 
 EMP_feature_convert <- function(x,experiment,method='mean',from,to,species = "none",OrgDb = NULL,action='add'){
   call <- match.call()
+  check_result <- NULL
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
@@ -150,6 +153,17 @@ EMP_feature_convert <- function(x,experiment,method='mean',from,to,species = "no
     stop('Pleast check the parameter from and to!')
   }
   
+  # Due to the feature change, result should be removed
+  # deposit2 is deposited the inherent information, do not remove
+  check_result <- length(EMPT@deposit)!=0 | length(EMPT@deposit_append)!=0 | length(EMPT@plot_deposit)!=0
+
+  if (check_result) {
+    message('Due to the feature change, all results should be re-run if needed.')
+    EMPT@deposit <- NULL
+    EMPT@deposit_append <- NULL
+    EMPT@plot_deposit <- NULL
+  }
+
   .get.history.EMPT(EMPT) <- call
   .get.method.EMPT(EMPT) <- 'feature_covert'
   .get.algorithm.EMPT(EMPT) <- 'feature_covert'

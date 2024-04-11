@@ -44,7 +44,7 @@
   return(EMPT) 
 }
 
-#' KEGG enrichment for the KO, EC and compound
+#' KEGG enrichment for EMPT object
 #'
 #' @param x Object in EMPT or MultiAssayExperiment format.
 #' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05

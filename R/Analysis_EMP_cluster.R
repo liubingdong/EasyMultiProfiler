@@ -12,6 +12,8 @@
 #' @importFrom stats hclust
 #' @importFrom vegan vegdist
 #' @importFrom graphics abline
+#' @importFrom BiocManager install
+#' @importFrom utils install.packages
 #'
 #' @return EMPT object
 #' @export
@@ -22,7 +24,7 @@ EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,
                                  method='average',h=NULL,groupLabels=TRUE,action='add') {
   
   # Check if package is installed, otherwise install
-  if (find.package("dendextend", quiet = TRUE) %>% length %>% equals(0)) {
+  if (find.package("dendextend", quiet = TRUE) %>% length() == 0) {
     message("EMP_cluster_analysis need install package dendextend!")
     if (!requireNamespace("BiocManager", quietly = TRUE))
       install.packages("BiocManager", repos = "https://cloud.r-project.org")
