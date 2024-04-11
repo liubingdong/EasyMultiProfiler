@@ -41,7 +41,7 @@ EMP_curveplot_enrich <- function(EMPT,plot_category = 1,seed =123,geneSetID,...)
 
   switch(.get.plot_category.EMPT(EMPT),
          "1" = {
-           withr::with_seed(seed,EMP_curveplot_enrich_default(EMPT,...))
+           withr::with_seed(seed,EMP_curveplot_enrich_default(EMPT,geneSetID,...))
          },
          "2" = {
            # withr::with_seed(seed,EMP_curveplot_enrich_2(EMPT,...))
