@@ -1,13 +1,33 @@
 
-#' Title
-#'
-#' @param object wait_for_add
-#'
-#' @return xx object
-##' @importFrom methods show
-##' @exportMethod show
-#' @examples
-#' # add example
+setMethod("show", "MultiAssayExperiment", function(object) {
+  o_class <- class(object)
+  o_len <- length(object)
+  o_names <- names(object)
+  if (!length(o_names)) {
+    o_names <- "none"
+  }
+  c_elist <- class(MultiAssayExperiment::experiments(object))
+  c_mp <- class(MultiAssayExperiment::colData(object))
+  c_sm <- class(MultiAssayExperiment::sampleMap(object))
+  cat(sprintf("A %s", o_class),
+      "object of", o_len, "listed\n",
+      ifelse(o_len == 1L, "experiment", "experiments"),
+      "with",
+      ifelse(identical(o_names, "none"), "no user-defined names",
+             ifelse(length(o_names) == 1L, "a user-defined name",
+                    "user-defined names")),
+      ifelse(length(o_len) == 0L, "or", "and"),
+      ifelse(length(o_len) == 0L, "classes.",
+             ifelse(o_len == 1L,
+                    "respective class.\n", "respective classes.\n")),
+      "Containing an ")
+  show(experiments(object))
+  cat("Functionality:\n ","For more information, please type help(EasyMultiProfiler)"
+)
+})
+
+
+
 setMethod("show", "EMPT",
           function(object) {
             info <- .get.info.EMPT(object)
@@ -184,15 +204,6 @@ setMethod("show", "EMPT",
 }
 
 
-#' Title
-#'
-#' @param object wait_for_add
-#'
-#' @return xx object
-#' @export
-#'
-#' @examples
-#' # add example
 setMethod("show", "EMP",
           function(object) {
             info <- .get.info.EMP(object)
