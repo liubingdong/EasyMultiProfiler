@@ -201,6 +201,11 @@ EMP_diff_analysis <- function(x,experiment,.formula,
     assay_data %<>% dplyr::filter(!!dplyr::sym(estimate_group) %in% subgroup)
   }
 
+  
+  # When feature num is not many, core = 1 will be more efficient
+  if (is.null(core) & length(feature_name) < 500) {
+    core <- 1
+  }
 
   diff_result <- .multi_compare(fun=method,data=assay_data,
                 feature=feature_name,factorNames=estimate_group,
