@@ -17,22 +17,28 @@
   assay_data <- .get.assay.EMPT(EMPT) %>%
     tibble::column_to_rownames('primary') %>%
     as.matrix()
-  # print("here 2_1 over")
+
   sft <- spsUtil::quiet(WGCNA::pickSoftThreshold(assay_data, powerVector = powers,
                           RsquaredCut=RsquaredCut, removeFirst = removeFirst, nBreaks = nBreaks, blockSize = blockSize,
                           # corFnc = corFnc, corOptions = corOptions,
                           networkType = networkType,
                           moreNetworkConcepts = moreNetworkConcepts,
                           gcInterval = gcInterval),print_cat = TRUE, message = TRUE, warning = TRUE)
-  # print("here 2_2 over")
+
   check_best_power <- sft[['powerEstimate']]
 
   if (is.na(check_best_power)) {
     stop("No best soft power,please reset the RsquaredCut or other parameter!")
   }
-  save(assay_data, check_best_power, TOMType, minModuleSize, reassignThreshold, mergeCutHeight, numericLabels, pamRespectsDendro, saveTOMs, file = "test.Rdata")
+
+  # WGCNA_blockwiseModules can only be applied to a 'numeric', not a 'integer'
+  if (is.integer(assay_data)) {
+    assay_data <- apply(assay_data, 2, as.numeric)
+  }
+
+  #save(assay_data, check_best_power, TOMType, minModuleSize, reassignThreshold, mergeCutHeight, numericLabels, pamRespectsDendro, saveTOMs, file = "test.Rdata")
   # net = WGCNA::blockwiseModules(assay_data, power = check_best_power,
-  net = WGCNA_blockwiseModules(assay_data, power = check_best_power,
+  net <- WGCNA_blockwiseModules(assay_data, power = check_best_power,
                          TOMType = TOMType, minModuleSize = minModuleSize,
                          reassignThreshold = reassignThreshold, mergeCutHeight = mergeCutHeight,
                          numericLabels = numericLabels, pamRespectsDendro = pamRespectsDendro,
@@ -40,18 +46,18 @@
                          saveTOMs = saveTOMs)
 
   mergedColors = WGCNA::labels2colors(net$colors)
-  # print("here 2_3 over")
+
   WGCNA::plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]], "Module colors",
                       dendroLabels = FALSE, hang = 0.03,
                       addGuide = TRUE, guideHang = 0.05,
                       abHeight=mergeCutHeight)
 
   mergedColors = WGCNA::labels2colors(net$colors)
-  # print("here 2_4 over")
+
   WGCNA_module_elements <- table(WGCNA::labels2colors(net$colors)) %>%
                 as.data.frame() %>%
                 dplyr::rename(WGCNA_color=Var1,WGCNA_module_elements=Freq)
-  # print("here 2_5 over")
+
   feature_modules <- data.frame(WGCNA_cluster=net$unmergedColors,WGCNA_color=mergedColors) %>% tibble::rownames_to_column('feature') %>%
     tibble::as_tibble() %>% dplyr::left_join(WGCNA_module_elements,by='WGCNA_color')
 
@@ -122,7 +128,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   if (use_cached == F) {
     memoise::forget(.EMP_WGCNA_cluster_analysis_m) %>% invisible()
   }
-  # print("here 1_1 over")
+
   EMPT <- .EMP_WGCNA_cluster_analysis_m(EMPT=x,powers=powers,
                                         RsquaredCut=RsquaredCut, removeFirst = removeFirst, nBreaks = nBreaks, blockSize = blockSize,
                                         # corFnc = corFnc, corOptions = corOptions,
@@ -134,7 +140,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
                                         numericLabels = numericLabels, pamRespectsDendro = pamRespectsDendro,
                                         # saveTOMs = saveTOMs,...)
                                         saveTOMs = saveTOMs)
-  # print("here 1_2 over")                                        
+                                      
 
   .get.history.EMPT(EMPT) <- call
   .get.info.EMPT(EMPT) <- 'EMP_WGCNA_cluster_analysis'
@@ -151,7 +157,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
 }
 
 #' @importFrom dplyr where
-.EMP_WGCNA_cor_analysis_EMPT <-function(EMPT,method='spearman',coldata_to_assay=NULL){
+.EMP_WGCNA_cor_analysis_EMPT <-function(EMPT,method='spearman',coldata_to_assay=NULL,action='add'){
   var1 <- NULL
   call <- match.call()
   experiment_name <- .get.experiment.EMPT(EMPT)
@@ -203,18 +209,24 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   df.cor.p[["n.obs"]] <- c(data1_sample_num,data2_sample_num,length(real_samples))
   df.cor.p[['cor_p']] <- df
 
-  EMPT@deposit_append[['WGCNA_cor_result']] <- df.cor.p
-  .get.info.EMPT(EMPT) <-'EMP_WGCNA_cor_analysis'
-  .get.method.EMPT(EMPT) <- method
-  .get.history.EMPT(EMPT) <- call
-  class(EMPT) <- 'EMP_WGCNA_cor_analysis'
-  return(EMPT)
+  if (action == 'add') {
+    EMPT@deposit_append[['WGCNA_cor_result']] <- df.cor.p
+    .get.info.EMPT(EMPT) <-'EMP_WGCNA_cor_analysis'
+    .get.method.EMPT(EMPT) <- method
+    .get.history.EMPT(EMPT) <- call
+    class(EMPT) <- 'EMP_WGCNA_cor_analysis'
+    return(EMPT)
+  }else if(action == 'get') {
+    return(df.cor.p)
+  }else{
+    warning('action should be one of add or get!')
+  }  
 }
 
 .EMP_WGCNA_cor_analysis_EMPT_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMPT)
 
 #' @importFrom WGCNA orderMEs
-.EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman'){
+.EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman',action='add'){
   var1 <- NULL
 
   if (inherits(obj,"EMP")) {
@@ -296,13 +308,19 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   df.cor.p[['cor_info']] <- cor_info
   df.cor.p[["n.obs"]] <- c(data1_sample_num,data2_sample_num,length(real_samples))
   df.cor.p[['cor_p']] <- df
+  
 
-  EMP@deposit[['WGCNA_cor_analysis_result']] <- df.cor.p
-  .get.info.EMP(EMP) <-'EMP_WGCNA_cor_analysis2'
-  .get.method.EMP(EMP) <- method
-  class(EMP) <- 'EMP_WGCNA_cor_analysis2'
-  return(EMP)
-
+  if (action == 'add') {
+    EMP@deposit[['WGCNA_cor_analysis_result']] <- df.cor.p
+    .get.info.EMP(EMP) <-'EMP_WGCNA_cor_analysis2'
+    .get.method.EMP(EMP) <- method
+    class(EMP) <- 'EMP_WGCNA_cor_analysis2'
+    return(EMP)
+  }else if(action == 'get') {
+    return(df.cor.p)
+  }else{
+    warning('action should be one of add or get!')
+  }  
 }
 
 .EMP_WGCNA_cor_analysis_EMP_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMP)

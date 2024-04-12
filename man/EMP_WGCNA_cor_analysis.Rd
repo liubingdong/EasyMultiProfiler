@@ -8,9 +8,21 @@
 \usage{
 EMP_WGCNA_cor_analysis(obj, ...)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMPT}(obj, method = "spearman", coldata_to_assay = NULL, ...)
+\S4method{EMP_WGCNA_cor_analysis}{EMPT}(
+  obj,
+  method = "spearman",
+  coldata_to_assay = NULL,
+  action = "add",
+  ...
+)
 
-\S4method{EMP_WGCNA_cor_analysis}{EMP}(obj, select = NULL, method = "spearman", ...)
+\S4method{EMP_WGCNA_cor_analysis}{EMP}(
+  obj,
+  select = NULL,
+  method = "spearman",
+  action = "add",
+  ...
+)
 }
 \arguments{
 \item{obj}{EMPT or MultiAssayExperiment object.}
@@ -20,6 +32,8 @@ EMP_WGCNA_cor_analysis(obj, ...)
 \item{method}{A character string. Methods include pearson (default), spearman and kendall.}
 
 \item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate.}
+
+\item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
 \item{select}{A character string. The experiment name in the EMP object.}
 }
