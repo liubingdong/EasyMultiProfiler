@@ -16,7 +16,7 @@ EMP_multi_analysis(
   p.adjust = "fdr",
   minGSSize = 10,
   maxGSSize = 500,
-  keyType = "ko",
+  keyType,
   KEGG_Type = "KEGG",
   species = "all",
   action = "add",

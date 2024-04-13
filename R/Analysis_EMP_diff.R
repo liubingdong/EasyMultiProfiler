@@ -321,7 +321,8 @@ EMP_diff_analysis <- function(x,experiment,.formula,
     dplyr::group_by(feature) %>%
     dplyr::top_n(1, abundance) %>%
     dplyr::rename(sign_group = !!estimate_group) %>%
-    dplyr::select(-abundance) -> deposit
+    dplyr::select(-abundance) %>%
+    dplyr::distinct(feature, .keep_all = TRUE) -> deposit  ## filter the same data in some extreme same feature
 
 
   if (length(subgroup) == 2 & assay_name %in% c('relative','counts','integer','coldata')) {

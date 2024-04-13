@@ -26,7 +26,7 @@
 EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enricher',
                                  pvalueCutoff=0.05,combineMethod='fisher',combineGroup=FALSE,
                                  combineLevel='gene',p.adjust='fdr',minGSSize=10,maxGSSize=500,
-                                 keyType = "ko", KEGG_Type = "KEGG", species = "all",action='add',...) {
+                                 keyType, KEGG_Type = "KEGG", species = "all",action='add',...) {
   experment_num <- deposit <- ExperimentList <- experment_num <- feature <- pvalue <- deposit_enrichment <- gson_data <- input_list_each <- NULL
   
   if (!inherits(EMP,"EMP")) {
