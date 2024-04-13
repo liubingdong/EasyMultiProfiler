@@ -5,15 +5,15 @@
 \alias{EMP_prepare_data}
 \title{EMP_prepare_data}
 \format{
-data.frame
+list
 }
 \usage{
 EMP_prepare_data
 }
 \value{
-data.frame
+list
 }
 \description{
-A data.frame xx
+This data set contains the EMP_prepare_data data.
 }
 \keyword{datasets}

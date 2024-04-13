@@ -5,15 +5,15 @@
 \alias{MAE}
 \title{MAE}
 \format{
-data.frame
+MultiAssayExperiment
 }
 \usage{
 MAE
 }
 \value{
-data.frame
+MultiAssayExperiment
 }
 \description{
-A data.frame xx
+This data set contains the MAE data.
 }
 \keyword{datasets}

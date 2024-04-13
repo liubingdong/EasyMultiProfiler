@@ -1,19 +1,19 @@
 #' EMP_prepare_data
 #'
-#' A data.frame xx
+#' This data set contains the EMP_prepare_data data.
 #'
-#' @format data.frame
+#' @format list
 #'
-#' @return data.frame
+#' @return list
 #' 
 "EMP_prepare_data"
 
 #' MAE
 #'
-#' A data.frame xx
+#' This data set contains the MAE data.
 #'
-#' @format data.frame
+#' @format MultiAssayExperiment
 #'
-#' @return data.frame
+#' @return MultiAssayExperiment
 #' 
 "MAE"
