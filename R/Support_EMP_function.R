@@ -250,3 +250,32 @@ EMP_history <- function(obj) {
     return(his_info)
   }
 }
+
+
+.merge_tax_value <- function(row) {
+  last_non_na <- NA
+  unclassified_count <- 0
+  for (i in 1:length(row)) {
+    if (!is.na(row[i])) {
+      last_non_na <- row[i]
+      unclassified_count <- 0
+    } else {
+      if (!is.na(last_non_na)) {
+        unclassified_count <- unclassified_count + 1
+        unclassified <- paste(rep("unclassified", unclassified_count), collapse = "_")
+        row[i] <- paste(last_non_na, unclassified, sep = "_")
+      }
+    }
+  }
+  return(row)
+}
+
+.impute_tax <- function(df) {
+  # 逐行应用函数
+  df_merged <- t(apply(df, 1, .merge_tax_value))
+  
+  # 更新数据框
+  df <- as.data.frame(df_merged)
+  
+  return(df)
+}

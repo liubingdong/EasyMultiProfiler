@@ -43,6 +43,7 @@ humann_function_import <- function(file=NULL,data=NULL,type) {
 
 
 #' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom stringr str_replace_all
 humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
   feature <- `.` <- NULL
   if (!is.null(data)) {
@@ -54,9 +55,12 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
   temp%<>%dplyr::filter(stringr::str_detect(feature,'\\|t_'))
   temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
   rownames(temp) <- NULL # necessary!
+  temp %<>%
+      dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_"))  # Space in the value will lead to unexperted error  
   temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep) -> temp_name
   colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
-  temp_name <- data.frame(feature = temp$feature,temp_name)
+  temp_name <- data.frame(feature = temp$feature,temp_name) %>%
+    .impute_tax() ## impute the NA tax
   temp %<>% tibble::column_to_rownames('feature') %>% as.matrix()
   deposit <- SummarizedExperiment(assays=list(counts=temp),
                                   rowData = temp_name)
@@ -71,6 +75,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param sep The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')
 #' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom stringr str_replace_all
 #' @return SummmariseExperiment object
 #' @export
 #'
@@ -89,9 +94,12 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
     colnames(temp)[1] <- 'feature'
     temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
     rownames(temp) <- NULL # necessary!
+    temp %<>%
+      dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_"))  # Space in the value will lead to unexperted error 
     temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep) -> temp_name
     colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
-    temp_name <- data.frame(feature = temp$feature,temp_name)
+    temp_name <- data.frame(feature = temp$feature,temp_name) %>%
+      .impute_tax() ## impute the NA tax
     temp  %<>% tibble::column_to_rownames('feature') %>% as.matrix()
     deposit <- SummarizedExperiment(assays=list(counts=temp),
                                     rowData = temp_name)
