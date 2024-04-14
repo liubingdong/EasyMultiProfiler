@@ -15,7 +15,7 @@
 #' @param EMPT EMPT object
 #' @param seed An interger. Set the random seed to the plot.
 #' @param group_level A string vector. Set the group order in the plot.
-#' @param show A character string include pic (default), html.
+#' @param show A character string include pic (default), html. This could display graphical results on 3 axes. eg. p12,p12html,p23,p23html
 #' @param distance_for_adonis A character string.Set the distance for adonis. Detailed in the vegan::adonis.
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
 #' @param palette A series of character string. Color palette.
