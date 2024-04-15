@@ -27,7 +27,7 @@
       if (is.null(OrgDb)) {
           stop("The species is not within the built-in species range, OrgDb needs to be provided for conversion.")
       }
-      result <- AnnotationDbi::select(x = OrgDb, keys = feature, keytype = from, columns = c(to))
+      result <- AnnotationDbi::select(x = OrgDb, keys = feature, keytype = from, columns = c(to)) %>% suppressMessages()
       return(result)
   }
   data_df <- switch(species,
