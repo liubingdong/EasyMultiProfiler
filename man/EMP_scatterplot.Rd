@@ -38,7 +38,7 @@ EMP_scatterplot.EMP_dimension_analysis(
 
 \item{group_level}{A string vector. Set the group order in the plot.}
 
-\item{show}{A character string include pic (default), html.}
+\item{show}{A character string include pic (default), html. This could display graphical results on 3 axes. eg. p12,p12html,p23,p23html}
 
 \item{distance_for_adonis}{A character string.Set the distance for adonis. Detailed in the vegan::adonis.}
 
