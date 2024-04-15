@@ -10,8 +10,6 @@
 #' @importFrom ggplot2 theme_minimal
 #'
 #'
-#' @examples
-#' # add example
 EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","darkred"),
                             show='all',mytheme = 'theme()'){
   var1 <- var2 <- coefficient <- EMP <- NULL
@@ -114,8 +112,6 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
 #' @importFrom ggplot2 guides
 #'
 #'
-#' @examples
-#' # add example
 EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show='all',mytheme = 'theme()'){
   WGCNA_color <- WGCNA_module_elements <- `.` <- var2 <- var1 <- coefficient <- NULL
   call <- match.call()

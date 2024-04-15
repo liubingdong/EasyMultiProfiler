@@ -102,7 +102,7 @@ setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
 #' ## obtain the result from EMPT
 #' MAE |>
 #'   EMP_assay_extract('geno_ec') |>
-#'   EMP_alpha_analysis|> 
+#'   EMP_alpha_analysis() |> 
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
 #'   EMP_enrich_analysis(pvalue<0.05,keyType='ec',pvalueCutoff=0.05) -> result
 #' 

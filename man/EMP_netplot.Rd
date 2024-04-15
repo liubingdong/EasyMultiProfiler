@@ -31,8 +31,6 @@ EMP_netplot_enrich(obj, plot_category = 1, seed = 123, showCategory = 10, ...)
 }
 \value{
 Enrichment netplot object
-
-Enrichment netplot object
 }
 \description{
 Netplot for enrichment result
@@ -44,5 +42,4 @@ MAE |>
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
   EMP_netplot(showCategory=10) 
-# add example
 }

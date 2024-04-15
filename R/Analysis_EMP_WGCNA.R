@@ -9,7 +9,7 @@
                                         reassignThreshold = 0, mergeCutHeight = 0.25,
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
                                         # saveTOMs = T,...) {
-                                        saveTOMs = T) {
+                                        saveTOMs = FALSE) {
   deposit <- list()
   Var1 <- Freq <- NULL
   #enableWGCNAThreads()
@@ -119,7 +119,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
                                         reassignThreshold = 0, mergeCutHeight = 0.25,
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
                                         # saveTOMs = T,action='add',...) {
-                                        saveTOMs = TRUE,action='add') {
+                                        saveTOMs = FALSE,action='add') {
 
   call <- match.call()
 

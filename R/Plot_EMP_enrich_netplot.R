@@ -4,11 +4,8 @@
 #' @param showCategory A number or a vector of terms. If it is a number, the first n terms will be displayed. If it is a vector of terms, the selected terms will be displayed.
 #' @param ... Further parameters passed to enrichplot::cnetplot.
 #' @rdname EMP_netplot
-#' @return Enrichment netplot object
 #' @export
 #'
-#' @examples
-#' # add example
 EMP_netplot_enrich <- function(obj,plot_category = 1,seed =123,showCategory=10,...) {
   call <- match.call()
   if (inherits(obj,c('EMP_multi_diff_enrich','EMP_multi_same_enrich'))) {  

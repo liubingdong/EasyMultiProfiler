@@ -78,6 +78,4 @@ MAE |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
   EMP_heatmap_plot(palette = 'Spectral') 
-# add example
-# add example
 }

@@ -251,7 +251,7 @@ setMethod("EMP_assay_extract","EMPT",function(obj,pattern_ref,pattern,exact,acti
 #' data(MAE)
 #' ## from assay
 #' MAE |> 
-#'   EMP_assay_extract('host_gene',pattern = 'HIF',pattern_ref = 'feature') |>
+#'   EMP_assay_extract('host_gene',pattern = 'A1BG',pattern_ref = 'feature') |>
 #'   EMP_boxplot(method='t.test',estimate_group='Group')
 #' 
 #' ## from alpha analysis

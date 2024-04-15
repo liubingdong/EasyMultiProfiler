@@ -61,7 +61,7 @@
 #' 
 #' ## Visualization
 #' (k1+k2) |>
-#'   EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') %>%
+#'   EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') |>
 #'   EMP_dotplot()
 EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enricher',
                                  pvalueCutoff=0.05,combineMethod='fisher',combineGroup=FALSE,
