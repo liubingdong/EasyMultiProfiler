@@ -30,5 +30,15 @@ EMPT object or table
 Extract coldata
 }
 \examples{
-# add example
+data(MAE)
+## Extract the coldata/meta-data/sample-info/patient-info of one existed experiment from MultiAssaayExperiment
+MAE |>
+  EMP_coldata_extract('taxonomy')
+
+## Extract all coldata
+MAE |>
+  EMP_coldata_extract(action = 'get')  # when action = get, output is a tibble.
+
+MAE |>
+  EMP_coldata_extract(action = 'add')  # when action = add, output is a EMPT object for downstreanm analysis.
 }

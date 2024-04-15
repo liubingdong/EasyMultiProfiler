@@ -101,7 +101,14 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85)
+#' 
+#' MAE |>
+#'   EMP_assay_extract('geno_ko') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.8,mergeCutHeight=0.4)
 EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, seq(from = 12, to=20, by=2)),
                                         RsquaredCut=0.85, removeFirst = FALSE, nBreaks = 10, blockSize = NULL,
                                         # corFnc = WGCNA::cor, corOptions = list(use = 'p'),

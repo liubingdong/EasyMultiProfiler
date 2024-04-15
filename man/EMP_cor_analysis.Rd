@@ -33,5 +33,19 @@ EMPT object
 Correlation analysis
 }
 \examples{
-# add example
+data(MAE)
+k1 <- MAE |>
+  EMP_assay_extract('taxonomy') |>
+  EMP_collapse(estimate_group = 'Genus',collapse_by = 'row') |>
+  EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+  EMP_filter(feature_condition = pvalue<0.05)
+
+k2 <- MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
+               estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |>
+  EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+  EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 1.5)
+
+(k1 + k2) |> EMP_cor_analysis(method = 'spearman') |>
+  EMP_heatmap_plot() ## Visualization
 }

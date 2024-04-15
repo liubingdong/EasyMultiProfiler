@@ -202,7 +202,45 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## based on cor analysis
+#' MAE |>
+#'   EMP_GSEA_analysis(experiment = 'geno_ko',method='cor',
+#'                     estimate_group = 'BMI',cor_method = 'spearman',
+#'                     threshold_r = 0.3,threshold_p = 0.05, ## filter by coe and pvalue
+#'                     pvalueCutoff = 0.05,keyType = 'ko')
+#' ## based on diff analysis
+#' MAE |>
+#'   EMP_diff_analysis(experiment = 'geno_ko',method='DESeq2',.formula = ~0+Group,
+#'                     group_level=c('Group_A','Group_B')) |>
+#'   EMP_GSEA_analysis(method='log2FC',pvalue<0.05,
+#'                     keyType = 'ko',KEGG_Type = 'KEGG')
+#' 
+#' ## based on signal2Noise
+#' MAE |>
+#'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                     estimate_group = 'Group',
+#'                     pvalueCutoff = 0.05,keyType = 'ko')
+#' 
+#' 
+#' ## Visualization
+#' MAE |>
+#'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                     estimate_group = 'Group',
+#'                     pvalueCutoff = 0.05,keyType = 'ko') |>
+#'   EMP_curveplot(geneSetID='map00680')
+#'   
+#' MAE |>
+#'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                     estimate_group = 'Group',
+#'                     pvalueCutoff = 0.05,keyType = 'ko') |>
+#'   EMP_dotplot(color='p.adjust',showCategory=10) 
+#' 
+#' MAE |>
+#'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                     estimate_group = 'Group',
+#'                     pvalueCutoff = 0.05,keyType = 'ko') |>
+#'   EMP_netplot(showCategory=5) 
 EMP_GSEA_analysis <- function(x,condition,experiment,estimate_group=NULL,method,cor_method='pearson',group_level=NULL,
                                keyType=NULL,KEGG_Type='KEGG',species = "all",
                                pseudocount=0.0001,pvalueCutoff=1,threshold=NULL,

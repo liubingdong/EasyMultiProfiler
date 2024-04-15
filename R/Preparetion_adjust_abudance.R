@@ -54,7 +54,22 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+## combat_seq method 
+#' MAE |>
+#'   EMP_assay_extract(experiment='geno_ko') |>
+#'   EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+#'                       method = 'combat_seq',action = 'add') 
+#' ## combat method 
+#' MAE |>
+#'   EMP_assay_extract(experiment='geno_ko') |>
+#'   EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+#'                       method = 'combat',action = 'add') 
+#' ## limma_remove_batch_effect
+#' MAE |>
+#'   EMP_assay_extract(experiment='geno_ko') |>
+#'   EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+#'                       method = 'limma_remove_batch_effect') 
 EMP_adjust_abudance <- function(x,experiment,
                                 method='combat_seq',use_cached=TRUE,
                                 .factor_unwanted,.factor_of_interest,action='add',...) {

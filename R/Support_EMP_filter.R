@@ -42,7 +42,31 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## from MultiAssayExperiment
+#' MAE |>
+#'   EMP_filter(sample_condition = BMI>20 & Sex == 'M') |>
+#'   EMP_summary()
+#' 
+#' ## from EMPT
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'host_gene') |>
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+#'   EMP_filter(feature_condition = fdr < 0.05)
+#'   
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'taxonomy') |>
+#'   EMP_alpha_analysis() |>
+#'   EMP_filter(sample_condition = shannon >3 | invsimpson >19)
+#' 
+#' ## Precise selection
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'taxonomy') |>
+#'   EMP_alpha_analysis() |>
+#'   EMP_filter(sample_condition = shannon >3 | invsimpson >19,
+#'              filterSample = c('P11774','P31579'),action = 'kick') # Accurately kick samples based on satisfying sample_condition
+
 EMP_filter <- function(obj,sample_condition,feature_condition,
                        filterSample=NULL,filterFeature=NULL,experiment=NULL,
                        show_info=NULL,action='select'){

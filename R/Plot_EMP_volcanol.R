@@ -12,7 +12,11 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'geno_ec') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(show='html')
 EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
                            html_width=NULL,html_height=NULL,
                            mytheme = 'theme()') {

@@ -63,5 +63,37 @@ EMPT object
 Marker discover based on classify or regression model
 }
 \examples{
-# add example
+data(MAE)
+## To estimate the improtance of feature by Boruta algorithm
+MAE |>
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'boruta',
+                      estimate_group = 'Group') |>
+  EMP_filter(feature_condition = Boruta_decision!= 'Rejected') ## select the Confirmed and Tentative feature
+
+## regression or classify by randomforest
+MAE |>
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'randomforest',
+                      estimate_group = 'Group') 
+
+MAE |>
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'randomforest',
+                      estimate_group = 'Education_Years') 
+
+## regression or classify by randomforest
+MAE |>
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+                      estimate_group = 'Education_Years',objective = 'reg:linear')
+### For two categories classify
+MAE |>
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+                      estimate_group = 'Group',objective = 'binary:logistic')
+### For multible categories classify
+MAE |>
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+                      estimate_group = 'Status',objective = 'multi:softmax',
+                      num_class=3) ## num_class is necessary
+## Lasso regression
+MAE |>
+  EMP_marker_analysis(experiment = 'geno_ko',method = 'lasso',estimate_group = 'Education_Years') |>
+  EMP_filter(feature_condition = lasso_coe >0) # Select the imprortant feature
 }

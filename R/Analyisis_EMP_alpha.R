@@ -54,7 +54,14 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis)
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' MAE |>
+#'   EMP_assay_extract(experiment='taxonomy')|> 
+#'   EMP_alpha_analysis()
+#' 
+#' MAE |>
+#'   EMP_assay_extract(experiment='geno_ec') |> 
+#'   EMP_alpha_analysis()
 EMP_alpha_analysis <- function(x,experiment,use_cached = TRUE,action='add',...) {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

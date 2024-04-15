@@ -126,7 +126,31 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## t.test or wilcox.test
+#' MAE |>
+#'   EMP_decostand(experiment = 'taxonomy',method = 'relative',pseudocount=0.0001) |>
+#'   EMP_diff_analysis(method = 't.test',estimate_group = 'Group',p.adjust = 'fdr')
+#' 
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'taxonomy') |>
+#'   EMP_diff_analysis(method = 'wilcox.test',estimate_group = 'Group',p.adjust = 'BH')
+#' 
+#' ## DESeq2
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  
+#' 
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Region+Group)  ## Eliminate the batch_effect in DESeq2
+#' 
+#' 
+#' ### edgeR_quasi_likelihood
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'geno_ec') |>
+#'   EMP_diff_analysis(method='edgeR_quasi_likelihood',
+#'                     .formula = ~0+Group,estimate_group = c('Group_B','Group_A')) ## Set the comparison order.
 EMP_diff_analysis <- function(x,experiment,.formula,
                               method = 'wilcox.test',p.adjust='fdr',estimate_group=NULL,
                               use_cached = TRUE,action='add',group_level=NULL,

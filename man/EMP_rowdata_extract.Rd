@@ -30,5 +30,16 @@ table
 Extract rowdata
 }
 \examples{
-# add example
+data(MAE)
+## Extract the rowdata of one existed experiment from MultiAssaayExperiment
+MAE |>
+  EMP_rowdata_extract('taxonomy')
+
+MAE |>
+  EMP_rowdata_extract('geno_ko')  
+  
+## Extract the rowdata of MultiAssaayExperiment
+MAE |>
+  EMP_rowdata_extract(experiment = NULL) -> total_row_data
+dim(total_row_data)
 }

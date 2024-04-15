@@ -84,7 +84,17 @@ EMPT object
 Boxplot for EMPT result
 }
 \examples{
-# xx
+data(MAE)
+## from assay
+MAE |> 
+  EMP_assay_extract('host_gene',pattern = 'HIF',pattern_ref = 'feature') |>
+  EMP_boxplot(method='t.test',estimate_group='Group')
+
+## from alpha analysis
+MAE |> 
+  EMP_assay_extract('taxonomy') |> 
+  EMP_alpha_analysis()|>
+  EMP_boxplot(method='t.test',estimate_group='Group')
 # add example
 # add example
 }

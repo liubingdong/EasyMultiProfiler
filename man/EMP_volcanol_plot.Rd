@@ -36,5 +36,9 @@ EMPT object
 EMP volcanol plot
 }
 \examples{
-# add example
+data(MAE)
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+  EMP_volcanol_plot(show='html')
 }

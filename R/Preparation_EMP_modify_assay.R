@@ -13,7 +13,17 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## For some special cases, to modify the assay data and EMP_identify_assay works better in most cases.
+#' ## Change the expression value which is 0 into 0.0001
+#' MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_modify_assay('==0',pseudocount=0.0001)
+#' 
+#' ## Change the counts which is below 
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_modify_assay('<10',pseudocount=0) 
 
 EMP_modify_assay <- function(obj,experiment,condition='==0',select_sample='all',select_feature='all',pseudocount=0.0001,action='add') {
   call <- match.call()

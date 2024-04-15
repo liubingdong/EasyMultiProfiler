@@ -91,15 +91,25 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
 #' @param info A character string. Result or analysis name in the EMPT object.
 #' @rdname EMP_result
 #' @export
-#'
-#' @examples
-#' # xx
+
+
 setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
 
 
 #' @rdname EMP_result
-#'
-#' @return xx
+#' @examples
+#' data(MAE)
+#' ## obtain the result from EMPT
+#' MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_alpha_analysis|> 
+#'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
+#'   EMP_enrich_analysis(pvalue<0.05,keyType='ec',pvalueCutoff=0.05) -> result
+#' 
+#' diff_re <- result |> EMP_result(info = 'EMP_diff_analysis')
+#' alpha_re <- result |> EMP_result(info = 'EMP_alpha_analysis')
+#' enrich_re <- result |> EMP_result(info = 'EMP_enrich_analysis')
+#' @return list
 setMethod("EMP_result","EMPT",function(obj,info){
   deposilt_info <- .get.deposit_info.EMPT(obj)
   if (info %in% deposilt_info$Result) {
@@ -130,13 +140,40 @@ setMethod("EMP_result","EMPT",function(obj,info){
 #' @export
 #'
 #' @examples
-#' # xx
+#' ## inject external result into EMPT
+#' ### get a EMPT object
+#' MAE |> 
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_collapse(estimate_group = 'Genus',method = 'sum',
+#'                collapse_by = 'row',action = 'add') -> obj  
+#' 
+#' ### get the raw data from the EMPT
+#' MAE |> 
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_collapse(estimate_group = 'Genus',method = 'sum',
+#'                collapse_by = 'row',action = 'get') -> assay_data  
+#' 
+#' ### caculate the result from other packages
+#' assay_data <- assay_data |> tibble::column_to_rownames('primary')
+#' shannon_index <- vegan::diversity(assay_data,index = 'shannon') 
+#' new_result <- tibble::tibble(primary=names(shannon_index),new_shannon=shannon_index)
+#' 
+#' ### inject the new result into EMPT object
+#' EMP_result(obj,
+#'            value_name = 'new_alpha',
+#'            affect_when_sample_changed=0,
+#'            affect_when_feature_changed=1,
+#'            attribute='primary',
+#'            attribute2='normal',source='user_import') <- new_result
+#' 
+#' obj |> 
+#'   EMP_filter(sample_condition  = new_shannon >2)
 setGeneric("EMP_result<-",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,value) standardGeneric("EMP_result<-"))
 
 
 #' @rdname EMP_result
 #'
-#' @return xx
+#' @return EMPT object
 setMethod("EMP_result<-","EMPT",function(obj,value_name,affect_when_sample_changed,affect_when_feature_changed,attribute,attribute2,source,value){
  deposilt_info <- .get.deposit_info.EMPT(obj)
  

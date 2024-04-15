@@ -36,5 +36,27 @@ EMPT object
 Dimension reduction of the abundance or experssion data
 }
 \examples{
-# add example
+data(MAE)
+## PCA
+MAE |>
+  EMP_dimension_analysis(experiment = 'taxonomy',method = 'pca') 
+## Pcoa
+MAE |>
+  EMP_dimension_analysis(experiment = 'taxonomy',method = 'pcoa',distance = 'bray')
+## Pls
+MAE |>
+  EMP_dimension_analysis(experiment = 'untarget_metabol',
+                         method = 'pls',estimate_group = 'Group')
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
+               estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |> ## Get the kegg compound
+  EMP_dimension_analysis(method = 'pls',estimate_group = 'Group')
+## OPLS
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
+               estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+  EMP_filter(feature_condition = pvalue < 0.05) |>
+  EMP_dimension_analysis(method = 'opls',estimate_group = 'Sex') |>
+  EMP_scatterplot(estimate_group='Sex',show='p12html',ellipse=0.6) ## Visualization
 }

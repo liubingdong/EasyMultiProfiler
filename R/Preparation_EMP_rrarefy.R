@@ -79,7 +79,17 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## rarefythe data according to the lowest abundance.
+#' MAE |>
+#'   EMP_rrarefy(experiment = 'taxonomy')
+#' ## 
+#' MAE |>
+#'   EMP_rrarefy(experiment = 'taxonomy',only_show_depth=T) # only show the depth
+#' 
+#' MAE |>
+#'   EMP_rrarefy(experiment = 'taxonomy',raresize=1000) # Set a specific threshold
+
 EMP_rrarefy <- function(x,experiment,raresize=NULL,seed=123,only_show_depth=FALSE,use_cached = TRUE,action = 'add',...) {
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

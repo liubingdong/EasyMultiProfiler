@@ -42,5 +42,18 @@ EMPT object
 Aggregates abundace or experssion from the same attributes in the coldata or rowdata
 }
 \examples{
-# add example
+##  merge assay data accoding to duplicate coldata.
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',collapse_by='col',
+               estimate_group = 'Group',method = 'mean',collapse_sep = '+') 
+##  merge assay data accoding to duplicate rowdata.
+MAE |> EMP_rowdata_extract('untarget_metabol')
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',collapse_by='row',na_string = c("NA", "null", "","-"),
+               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') 
+## combie two collapse method
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',collapse_by='row',na_string = c("NA", "null", "","-"),
+               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
+  EMP_collapse(collapse_by='col',estimate_group = 'Group',method = 'mean',collapse_sep = '+')
 }

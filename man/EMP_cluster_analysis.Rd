@@ -39,5 +39,29 @@ EMPT object
 Identify clusters for sample or feature
 }
 \examples{
-# add example
+data(MAE)
+## Cluster the samples according to the assay data
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_cluster_analysis()
+
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_cluster_analysis(h=0.15) # identify the outlier samples
+
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_cluster_analysis(h=0.15) |>
+  EMP_filter(sample_condition = cluster != 1) # filter away the outlier
+
+## Cluster the samples according to the coldata
+MAE |> 
+  EMP_coldata_extract(action = 'add') |> # transfer the coldata to asaay
+  EMP_impute(assay = T) |> # impute missing value
+  EMP_cluster_analysis(method = 'ward.D2',distance='clark',h=0.2) 
+
+## Cluster the features according to the assay data
+MAE |> 
+  EMP_assay_extract(experiment = 'geno_ec',pattern='1.1.1.1',pattern_ref='feature') |>
+  EMP_cluster_analysis(rowdata = T,h=0.8)
 }

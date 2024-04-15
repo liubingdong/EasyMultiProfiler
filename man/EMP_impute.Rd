@@ -51,5 +51,22 @@ EMPT object
 Fast Imputation of Missing Values by Chained Random Forests
 }
 \examples{
-# add example
+data(MAE)
+## For coldata
+MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_impute(assay=F,coldata=T,rowdata=F)
+###
+MAE |>
+  EMP_coldata_extract(action ='add') |>
+  EMP_impute(.formula = SAS+SDS ~ .,action = 'get') ## Support formula, such as only impute SAS and SDS
+## For assay
+MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_impute(assay=T,coldata=F,rowdata=F)
+
+## For rowdata (Not Not recommended)
+MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_impute(assay=F,coldata=F,rowdata=T)
 }

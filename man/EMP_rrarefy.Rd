@@ -39,5 +39,14 @@ EMPT object
 Rarefaction abundance or experssion Richness
 }
 \examples{
-# add example
+data(MAE)
+## rarefythe data according to the lowest abundance.
+MAE |>
+  EMP_rrarefy(experiment = 'taxonomy')
+## 
+MAE |>
+  EMP_rrarefy(experiment = 'taxonomy',only_show_depth=T) # only show the depth
+
+MAE |>
+  EMP_rrarefy(experiment = 'taxonomy',raresize=1000) # Set a specific threshold
 }

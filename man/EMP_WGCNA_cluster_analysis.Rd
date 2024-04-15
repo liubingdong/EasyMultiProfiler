@@ -72,5 +72,12 @@ EMPT object
 WGCNA cluster analysis
 }
 \examples{
-# add example
+data(MAE)
+MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85)
+
+MAE |>
+  EMP_assay_extract('geno_ko') |>
+  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.8,mergeCutHeight=0.4)
 }

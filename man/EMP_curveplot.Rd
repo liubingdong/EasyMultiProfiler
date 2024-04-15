@@ -32,7 +32,11 @@ EMPT object
 Curveplot for enrichment result
 }
 \examples{
-#
-#
+data(MAE)
+MAE |>
+ EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+                   estimate_group = 'Group',
+                   pvalueCutoff = 0.05,keyType = 'ko') |>
+ EMP_curveplot(geneSetID='map00680')
 # add example
 }

@@ -59,7 +59,18 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## Transfer data into relative format.
+#' MAE |>
+#'   EMP_decostand(experiment = 'taxonomy',method = 'relative') 
+#' 
+#' ## Transfer data into centered log ratio ("clr") format.
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ko',method = 'clr',pseudocount=0.0001)
+#' 
+#' ## Transfer data into logformat.
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'log',logbase = 2) 
 EMP_decostand <- function(x,experiment,method,bySample=T,logbase =2,use_cached = T,pseudocount=0.0000001,action='add',...){
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

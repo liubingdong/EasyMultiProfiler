@@ -201,7 +201,19 @@ setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enri
 #' @export
 #'
 #' @examples
-#' # xx
+#' data(MAE)
+#' ## Extract the assay data of one existed experiment from MultiAssaayExperiment
+#' MAE |>
+#'  EMP_assay_extract('taxonomy')
+  
+#' MAE |>
+#'  EMP_assay_extract('geno_ko') 
+#' ##  Search for specific features according to the rowdata
+#' MAE |>
+#'   EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = T)
+#' MAE |>
+#'   EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = F)
+
 setGeneric("EMP_assay_extract",function(obj,experiment,pattern_ref='Name',pattern=NULL,exact=FALSE,action='add',...) standardGeneric("EMP_assay_extract"))
 
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
@@ -236,7 +248,17 @@ setMethod("EMP_assay_extract","EMPT",function(obj,pattern_ref,pattern,exact,acti
 #' @export
 #'
 #' @examples
-#' # xx
+#' data(MAE)
+#' ## from assay
+#' MAE |> 
+#'   EMP_assay_extract('host_gene',pattern = 'HIF',pattern_ref = 'feature') |>
+#'   EMP_boxplot(method='t.test',estimate_group='Group')
+#' 
+#' ## from alpha analysis
+#' MAE |> 
+#'   EMP_assay_extract('taxonomy') |> 
+#'   EMP_alpha_analysis()|>
+#'   EMP_boxplot(method='t.test',estimate_group='Group')
 setGeneric("EMP_boxplot",function(obj, ...) standardGeneric("EMP_boxplot"))
 
 
@@ -266,20 +288,21 @@ setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
 #' @export
 #'
 #' @examples
-#' # 
+#' data(MAE)
+#' MAE |> 
+#'   EMP_assay_extract('taxonomy') |> 
+#'   EMP_collapse(estimate_group = 'Species',collapse_by = 'row')|>
+#'   EMP_dimension_analysis(method = 'pcoa',distance = 'bray',estimate_group = 'Group')|>
+#'   EMP_scatterplot(show='p12html') # eg. p12,p12html,p23,p23html
 setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"))
 
-
-#' @examples
-#' # add example
 #' @param obj object
 #' @param ... ...
 #' @rdname EMP_scatterplot
 #'
 #' @export
 #'
-#' @examples
-#' # 
+
 setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
   EMP_scatterplot.EMP_dimension_analysis(obj,...)
 })
@@ -294,7 +317,12 @@ setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
 #' @export
 #'
 #' @examples
-#' # 
+#' data(MAE)
+#' MAE |>
+#'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                     estimate_group = 'Group',
+#'                     pvalueCutoff = 0.05,keyType = 'ko') |>
+#'   EMP_dotplot(color='p.adjust',showCategory=10) 
 setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 
 
@@ -303,8 +331,7 @@ setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 #'
 #' @export
 #' @return Enrichment dotplot
-#' @examples
-#' #
+
 setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
@@ -314,8 +341,6 @@ setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
 #'
 #' @export
 #'
-#' @examples
-#' #
 setMethod("EMP_dotplot","EMP_multi_diff_enrich",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
@@ -325,8 +350,6 @@ setMethod("EMP_dotplot","EMP_multi_diff_enrich",function(obj,...){
 #'
 #' @export
 #'
-#' @examples
-#' #
 setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
@@ -342,7 +365,12 @@ setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
 #' @export
 #'
 #' @examples
-#' # 
+#' data(MAE)
+#' MAE |>
+#'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                     estimate_group = 'Group',
+#'                     pvalueCutoff = 0.05,keyType = 'ko') |>
+#'   EMP_netplot(showCategory=10) 
 setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 
 
@@ -351,8 +379,7 @@ setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 #' @return Enrichment netplot object
 #' @export
 #'
-#' @examples
-#' #
+
 setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
@@ -361,8 +388,7 @@ setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
 #' @rdname EMP_netplot
 #' @export
 #'
-#' @examples
-#' #
+
 setMethod("EMP_netplot","EMP_multi_same_enrich",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
@@ -371,8 +397,7 @@ setMethod("EMP_netplot","EMP_multi_same_enrich",function(obj,...){
 #' @rdname EMP_netplot
 #' @export
 #'
-#' @examples
-#' #
+
 setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
@@ -389,7 +414,12 @@ setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
 #' @export
 #'
 #' @examples
-#' #
+#'data(MAE)
+#'MAE |>
+#'  EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                    estimate_group = 'Group',
+#'                    pvalueCutoff = 0.05,keyType = 'ko') |>
+#'  EMP_curveplot(geneSetID='map00680')
 setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 
 
@@ -397,8 +427,7 @@ setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 #'
 #' @export
 #'
-#' @examples
-#' #
+
 setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
   EMP_curveplot_enrich(obj,...)
 })

@@ -39,5 +39,19 @@ EMPT object
 Adjust experssion or abundance for unexpected bias or batch effect
 }
 \examples{
-# add example
+data(MAE)
+MAE |>
+  EMP_assay_extract(experiment='geno_ko') |>
+  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+                      method = 'combat_seq',action = 'add') 
+## combat method 
+MAE |>
+  EMP_assay_extract(experiment='geno_ko') |>
+  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+                      method = 'combat',action = 'add') 
+## limma_remove_batch_effect
+MAE |>
+  EMP_assay_extract(experiment='geno_ko') |>
+  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+                      method = 'limma_remove_batch_effect') 
 }

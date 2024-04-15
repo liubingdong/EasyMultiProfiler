@@ -65,7 +65,10 @@ EMPT object
 Scatterplot for EMPT result
 }
 \examples{
-# 
-# add example
-# 
+data(MAE)
+MAE |> 
+  EMP_assay_extract('taxonomy') |> 
+  EMP_collapse(estimate_group = 'Species',collapse_by = 'row')|>
+  EMP_dimension_analysis(method = 'pcoa',distance = 'bray',estimate_group = 'Group')|>
+  EMP_scatterplot(show='p12html') # eg. p12,p12html,p23,p23html
 }

@@ -104,7 +104,16 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#'data(MAE)
+#'## from MultiAssayExperiment
+#'MAE |>
+#'  EMP_summary()
+#'## from EMP object
+#'k1 <- MAE |>
+#'  EMP_assay_extract('geno_ec')
+#'k2 <- MAE |>
+#'  EMP_assay_extract('geno_ko')
+#'(k1+k2) |> EMP_summary()
 EMP_summary <- function(obj) {
   Sample <- Feature <- `Sample_atrr.` <- `Feature_atrr.` <- Assay <- Assay_status <- Sample_status <- Feature_status <- NULL
   if (inherits(obj,"MultiAssayExperiment")) {

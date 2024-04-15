@@ -36,5 +36,15 @@ EMPT object
 Modify assay in condition for some special cases
 }
 \examples{
-# add example
+data(MAE)
+## For some special cases, to modify the assay data and EMP_identify_assay works better in most cases.
+## Change the expression value which is 0 into 0.0001
+MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_modify_assay('==0',pseudocount=0.0001)
+
+## Change the counts which is below 
+MAE |>
+  EMP_assay_extract('taxonomy') |>
+  EMP_modify_assay('<10',pseudocount=0) 
 }

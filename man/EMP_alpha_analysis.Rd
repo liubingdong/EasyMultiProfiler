@@ -24,5 +24,12 @@ EMPT object
 Diversity Indices
 }
 \examples{
-# add example
+data(MAE)
+MAE |>
+  EMP_assay_extract(experiment='taxonomy')|> 
+  EMP_alpha_analysis()
+
+MAE |>
+  EMP_assay_extract(experiment='geno_ec') |> 
+  EMP_alpha_analysis()
 }

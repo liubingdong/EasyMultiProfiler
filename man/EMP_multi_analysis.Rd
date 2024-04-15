@@ -63,5 +63,45 @@ EMPT object
 Multi analysis for diff reslut or enrichment
 }
 \examples{
-# add example
+data(MAE)
+## prepare the result
+k1 <- MAE |> 
+  EMP_assay_extract('geno_ec') |> 
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |> 
+  EMP_enrich_analysis(pvalue < 0.05,keyType = 'ec')
+
+## Use different differential analysis methods to mimic the statistical results 
+## of the same feature across different cohorts.
+k2 <- MAE |>
+  EMP_assay_extract('geno_ec') |> 
+  EMP_diff_analysis(method = 'wilcox.test',estimate_group = 'Group') |>
+  EMP_enrich_analysis(pvalue < 0.05,keyType = 'ec')
+
+k3 <- MAE |> 
+  EMP_assay_extract('geno_ko')|> 
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |> 
+  EMP_enrich_analysis(pvalue < 0.05,keyType = 'ko')
+
+k4 <- MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
+               estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |>
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |> 
+  EMP_enrich_analysis(pvalue < 0.05,keyType = 'cpd')
+
+## Melt diff analysis of the same feature from two result
+(k1+k2) |> 
+  EMP_multi_analysis(method = 'feature',combineMethod='edgington',p.adjust = 'BH') 
+
+## Melt diff analysis of the same feature from two result and make a combine enrichment
+(k1+k2) |> 
+  EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways')  
+
+## Melt diff analysis of the different feature from multi-results and make a combine enrichment
+(k1+k4) |> 
+  EMP_multi_analysis(method = 'diff_feature_enrich')  
+
+## Visualization
+(k1+k2) |>
+  EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') \%>\%
+  EMP_dotplot()
 }

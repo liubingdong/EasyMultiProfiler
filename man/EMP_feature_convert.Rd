@@ -39,5 +39,20 @@ EMPT object
 Covert featureID of gene experssion or compund abundance
 }
 \examples{
-#
+data(MAE)
+## for gene ID convert
+MAE |>
+  EMP_feature_convert(experiment = 'host_gene',from = 'SYMBOL',to='ENTREZID',species = 'Human')
+
+## The built-in database only supports Human, Mouse, Pig, Zebrafish
+## Other species could utilize OrgDb to convert
+#library(org.Hs.eg.db)
+#MAE |>
+#  EMP_feature_convert(experiment = 'host_gene',from = 'SYMBOL',to='ENTREZID',OrgDb = org.Hs.eg.db)
+
+## for compound ID convert
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
+               estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |> ## get the compound in KEGG format
+  EMP_feature_convert(from = 'KEGG',to='HMDB')
 }

@@ -38,9 +38,11 @@ Enrichment netplot object
 Netplot for enrichment result
 }
 \examples{
-# 
-#
-#
-#
+data(MAE)
+MAE |>
+  EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+                    estimate_group = 'Group',
+                    pvalueCutoff = 0.05,keyType = 'ko') |>
+  EMP_netplot(showCategory=10) 
 # add example
 }

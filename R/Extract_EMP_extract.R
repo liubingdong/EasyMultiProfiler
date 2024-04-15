@@ -66,7 +66,18 @@
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## Extract the rowdata of one existed experiment from MultiAssaayExperiment
+#' MAE |>
+#'   EMP_rowdata_extract('taxonomy')
+#'
+#' MAE |>
+#'   EMP_rowdata_extract('geno_ko')  
+#'   
+#' ## Extract the rowdata of MultiAssaayExperiment
+#' MAE |>
+#'   EMP_rowdata_extract(experiment = NULL) -> total_row_data
+#' dim(total_row_data)
 EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern = NULL,exact=FALSE){
 
   if (inherits(obj,"MultiAssayExperiment")) {
@@ -117,7 +128,18 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
 #' @export
 #'
 #' @examples
-#' # add example
+#' data(MAE)
+#' ## Extract the coldata/meta-data/sample-info/patient-info of one existed experiment from MultiAssaayExperiment
+#' MAE |>
+#'   EMP_coldata_extract('taxonomy')
+#' 
+#' ## Extract all coldata
+#' MAE |>
+#'   EMP_coldata_extract(action = 'get')  # when action = get, output is a tibble.
+#' 
+#' MAE |>
+#'   EMP_coldata_extract(action = 'add')  # when action = add, output is a EMPT object for downstreanm analysis.
+
 EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_name='undefined',action='get'){
     assay <- colname <- primary <- NULL
     call <- match.call()

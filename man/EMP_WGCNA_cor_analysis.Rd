@@ -44,5 +44,45 @@ EMP object
 EMP_WGCNA_cor_analysis
 }
 \examples{
-#x
+data(MAE)
+## from one experiment
+WGCNA_COR_result <- MAE |>
+  EMP_assay_extract('geno_ec')  |> 
+  EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+  EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),
+                         method='spearman',action='add') # If want the detailed result, set action = 'get'
+
+## Visualization
+MAE |>
+  EMP_assay_extract('geno_ec')  |> 
+  EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+  EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+  EMP_heatmap_plot(palette = 'Spectral')
+
+## Filter the interesting module and make the enrichment analysis
+MAE |>
+  EMP_assay_extract('geno_ec')  |> 
+  EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+  EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+  EMP_heatmap_plot(palette = 'Spectral') |>
+  EMP_filter(feature_condition = WGCNA_color == 'brown' ) |> 
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
+  EMP_enrich_analysis(keyType = 'ec',KEGG_Type = 'MKEGG') |>
+  EMP_dotplot()
+
+## from two different experiments
+k1 <- MAE |>
+  EMP_assay_extract('geno_ec')  |> 
+  EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)
+
+k2 <- MAE |>
+  EMP_assay_extract('host_gene',pattern = c('A1BG','A1CF','A2MP1','AACS'),pattern_ref = 'feature')
+
+(k1 + k2) |>
+  EMP_WGCNA_cor_analysis(method='spearman') |>
+  EMP_heatmap_plot(palette = 'Spectral') 
 }

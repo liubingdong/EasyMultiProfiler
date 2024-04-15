@@ -42,5 +42,32 @@ EMPT object
 KEGG enrichment for EMPT object
 }
 \examples{
-# add example
+data(MAE)
+## Make the enrichment after EMP_diff_analysis
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+  EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') 
+
+## Make the enrichment after EMP_diff_analysis and Visualization
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+  EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') |>
+  EMP_dotplot()
+
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+  EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') |>
+  EMP_netplot()
+
+
+## Transcriptomic data
+MAE |>
+  EMP_assay_extract(experiment = 'host_gene') |>
+  EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
+  EMP_enrich_analysis(keyType ='entrezid',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=0.05,species = 'hsa') |>
+  EMP_dotplot()
 }

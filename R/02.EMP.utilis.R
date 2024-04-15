@@ -114,7 +114,36 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 #' @export
 #'
 #' @examples
-#' #x
+#'data(MAE)
+#'MAE |>
+#'  EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
+#'                    estimate_group = 'Group',
+#'                    pvalueCutoff = 0.05,keyType = 'ko') |>
+#'  EMP_curveplot(geneSetID='map00680')
+# EMP_heatmap_plot
+#' data(MAE)
+#' ## for cor analysis
+#' k1 <- MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_collapse(estimate_group = 'Genus',collapse_by = 'row') |>
+#'   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+#'   EMP_filter(feature_condition = pvalue<0.05)
+#' 
+#' k2 <- MAE |>
+#'   EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
+#'                estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |>
+#'   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+#'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 1.5)
+#' 
+#' (k1 + k2) %>% EMP_cor_analysis(method = 'spearman') |>
+#'   EMP_heatmap_plot() ## Visualization
+#' ## for WGCNA
+#' MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+#'   EMP_heatmap_plot(palette = 'Spectral') 
 setGeneric("EMP_heatmap_plot",function(obj, ...) standardGeneric("EMP_heatmap_plot"))
 
 
@@ -143,7 +172,47 @@ setMethod("EMP_heatmap_plot","EMP_WGCNA_cor_analysis2",function(obj, ...){
 #' @export
 #'
 #' @examples
-#' #x
+#' data(MAE)
+#' ## from one experiment
+#' WGCNA_COR_result <- MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),
+#'                          method='spearman',action='add') # If want the detailed result, set action = 'get'
+#' 
+#' ## Visualization
+#' MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+#'   EMP_heatmap_plot(palette = 'Spectral')
+#' 
+#' ## Filter the interesting module and make the enrichment analysis
+#' MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+#'   EMP_heatmap_plot(palette = 'Spectral') |>
+#'   EMP_filter(feature_condition = WGCNA_color == 'brown' ) |> 
+#'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
+#'   EMP_enrich_analysis(keyType = 'ec',KEGG_Type = 'MKEGG') |>
+#'   EMP_dotplot()
+#' 
+#' ## from two different experiments
+#' k1 <- MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)
+#' 
+#' k2 <- MAE |>
+#'   EMP_assay_extract('host_gene',pattern = c('A1BG','A1CF','A2MP1','AACS'),pattern_ref = 'feature')
+#' 
+#' (k1 + k2) |>
+#'   EMP_WGCNA_cor_analysis(method='spearman') |>
+#'   EMP_heatmap_plot(palette = 'Spectral') 
 setGeneric("EMP_WGCNA_cor_analysis",function(obj,...) standardGeneric("EMP_WGCNA_cor_analysis"))
 
 
