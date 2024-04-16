@@ -1,6 +1,13 @@
 
 
-## EasyMultiProfiler TuTorial
+## EasyMultiProfiler: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization
+<a href="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png"><img src="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png" width=150 align="right" ></a>
+![](https://img.shields.io/badge/R%20language->=4.3-brightgreen.svg)
+![](https://img.shields.io/badge/Mac%20OSX%20&%20Windows-Available-brightgreen.svg)
+![](https://img.shields.io/badge/Release%20version-0.1.0-brightgreen.svg)
+[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/liubingdong/EasyMultiProfier)
+
+The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from start to finish.
 
 ### Install
 
@@ -20,8 +27,9 @@ setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/b
 options(timeout = 600000000) 
 install.packages("remotes")
 install.packages("BiocManager")
-install.packages("dendextend")
-install.packages("AnnotationDbi")
+BiocManager::install("dendextend")
+BiocManager::install("AnnotationDbi")
+BiocManager::install("clusterProfiler")
 remotes::install_github("liubingdong/EasyMultiProfier")
 ```
 
@@ -29,7 +37,9 @@ remotes::install_github("liubingdong/EasyMultiProfier")
 
 [**demo data files is in the EMP_demo_data.7z**](https://github.com/liubingdong/EasyMultiProfier/blob/main/EMP_demo_data.7z) 
 
-1. Complete import model
+1. Completely import model
+
+   NOTE: The Completely import model is designed for users handling multiple omics data in a corhort simultaneously, enabling efficient and rapid execution of various multi-omics analysis methods from start to finish.
 
    ```R
    meta_data <- read.table('col.txt',header = T,row.names = 1)
@@ -59,6 +69,8 @@ remotes::install_github("liubingdong/EasyMultiProfier")
 
 2. Quickly import model ( Only for one single omics data)
 
+   NOTE: This function is specifically designed to enable users with single-omics datasets to efficiently apply various analysis methods in the EasyMultiProfiler package easily.
+
    ```R
    meta_data <- read.table('col.txt',header = T,row.names = 1)
    tran_data <- EMP_easy_import('tran.txt',coldata = meta_data,type = 'normal')
@@ -70,9 +82,13 @@ remotes::install_github("liubingdong/EasyMultiProfier")
 Data(MAE)
 ```
 
-### EMP_assay_extract
+### Data Extract :
 
-1. Extract the assay data of one existed experiment from MultiAssaayExperiment
+This module is designed to assist users in extracting relevant omics data and its associated information from MAE objects for subsequent downstream analysis.
+
+#### EMP_assay_extract
+
+1. Extract one assay data of the existed experiments from MultiAssaayExperiment
 
  ```R
  MAE |>
@@ -82,7 +98,7 @@ MAE |>
  ```
 
 
-2. Search for specific features according to the rowdata
+2. Search for specific feature according to the rowdata
 
 ```R
 MAE |>
@@ -102,24 +118,24 @@ MAE |>
   EMP_rowdata_extract('geno_ko')  
 ```
 
-###### 2. Extract the rowdata of MultiAssaayExperiment
+2. Extract  the rowdata of  all the experiments in the MultiAssaayExperiment
 
 ```R
 MAE |>
-  EMP_rowdata_extract(experiment = NULL) -> total_row_data
+  EMP_rowdata_extract() -> total_row_data
 dim(total_row_data)
 ```
 
 ### EMP_coldata_extract
 
-1. Extract the coldata/meta-data/sample-info/patient-info of one existed experiment from MultiAssaayExperiment
+1. Extract the coldata/meta-data/sample-info/patient-info of one existed experiment in the MultiAssaayExperiment
 
 ```R
 MAE |>
   EMP_coldata_extract('taxonomy')
 ```
 
-2. Extract all coldata
+2. Extract the coldata of all the experiments in the MultiAssaayExperiment
 
 ```R
 MAE |>
@@ -128,10 +144,43 @@ MAE |>
   EMP_coldata_extract(action = 'add')  ### when action = add, output is a EMPT object 
 ```
 
+### Data Preparation :
 
-### EMP_feature_convert
+This module is designed to assist users in various mainstream data preprocessing steps, including standardization, batch correction, filtering analysis, feature convert, and feature collapse, etc.
 
-1. for gene ID convert
+#### EMP_adjust_abudance
+
+combat_seq method 
+
+```R
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',
+               collapse_by='row',na_string = c("NA", "null", "","-"),
+               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
+  EMP_collapse(collapse_by='col',estimate_group = 'Group',method = 'mean',collapse_sep = '+')
+```
+
+combat method 
+
+```R
+MAE |>
+  EMP_assay_extract(experiment='geno_ko') |>
+  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+                      method = 'combat',action = 'add') 
+```
+
+limma_remove_batch_effect
+
+```R
+MAE |>
+  EMP_assay_extract(experiment='geno_ko') |>
+  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+                      method = 'limma_remove_batch_effect') 
+```
+
+#### EMP_feature_convert
+
+1. For gene ID convert
 
 ```R
 MAE |>
@@ -139,9 +188,7 @@ MAE |>
                       from = 'SYMBOL',to='ENTREZID',species = 'Human')
 ```
 
-The built-in database only supports Human, Mouse, Pig, Zebrafish.
-Other species could utilize OrgDb to convert.
-More OrgDb is on the  https://bioconductor.org/packages/release/BiocViews.html#___OrgDb
+The built-in database only supports Human, Mouse, Pig, Zebrafish.Other species could utilize OrgDb to convert. More OrgDb is on the  https://bioconductor.org/packages/release/BiocViews.html#___OrgDb
 
 ```R
 library(org.Hs.eg.db)
@@ -150,7 +197,7 @@ MAE |>
                       from = 'SYMBOL',to='ENTREZID',OrgDb = org.Hs.eg.db)
 ```
 
-2. for compound ID convert
+2. For compound ID convert
 
 ```R
 MAE |>
@@ -159,7 +206,61 @@ MAE |>
   EMP_feature_convert(from = 'KEGG',to='HMDB')
 ```
 
-### EMP_impute
+#### EMP_collapse
+
+merge assay data accoding to duplicate coldata.
+
+```R
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',collapse_by='col',
+               estimate_group = 'Group',method = 'mean',collapse_sep = '+') 
+```
+
+merge assay data accoding to duplicate rowdata.
+
+```R
+MAE |> EMP_rowdata_extract('untarget_metabol')
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',
+               collapse_by='row',na_string = c("NA", "null", "","-"),
+               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') 
+```
+
+combie two collapse method
+
+```R
+MAE |>
+  EMP_collapse(experiment = 'untarget_metabol',
+               collapse_by='row',na_string = c("NA", "null", "","-"),
+               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
+  EMP_collapse(collapse_by='col',estimate_group = 'Group',
+               method = 'mean',collapse_sep = '+')
+```
+
+#### EMP_decostand
+
+Transfer data into relative format.
+
+```R
+MAE |>
+  EMP_decostand(experiment = 'taxonomy',method = 'relative') 
+```
+
+Transfer data into centered log ratio ("clr") format.
+
+```R
+MAE |>
+  EMP_decostand(experiment = 'geno_ko',method = 'clr',pseudocount=0.0001)
+```
+
+Transfer data into logformat.
+
+```R
+MAE |>
+  EMP_decostand(experiment = 'geno_ec',method = 'log',logbase = 2) 
+```
+
+#### EMP_impute
 
 1. For coldata
 
@@ -194,11 +295,10 @@ MAE |>
 ```
 
 
+#### EMP_identify_assay
 
-
-### EMP_identify_assay
-
-1. Consider the minnum relative abundance and min ratio specilally for microbial data. First, the abundance below this threshold will be converted to 0 according to the set minimum species relative abundance. Secondly, the core species will be required to meet the requirement that the occurrence rate of the species group in at least one group is higher than the preset threshold, and the remaining species will Then it will be judged as "rare species" and filtered.
+1. Taking into account the specifics of microbial data, we introduce two parameters: 'minnum' for the minimum relative abundance and 'min ratio' for the minimum occurrence ratio of core species within a group. Initially, any abundance below the specified threshold is converted to 0 based on the minimum species relative abundance. Subsequently, the core species are required to meet the condition that their occurrence rate within at least one group exceeds the preset threshold. Any remaining species are categorized as 'rare species' and filtered out.
+   
    Note: If absolute abundance is provided as input, it will be automatically converted to relative abundance for filtering purposes during calculations. However, the output will remain in absolute abundance.
 
 ```R
@@ -211,7 +311,7 @@ MAE |>
   EMP_identify_assay(method = 'default') ### consider all samples belong to one group
 ```
 
-2. Consider the minnum counts abundance and min ratio specially for expression data
+2. Consider the minnum counts abundance and min ratio specially for expression data, according to edgeR::filterByExpr.
 
 ```R
 MAE |>
@@ -220,7 +320,7 @@ MAE |>
 ```
 
 
-### EMP_modify_assay
+#### EMP_modify_assay
 
 For some special cases, to modify the assay data and EMP_identify_assay works better in most cases.
 
@@ -241,7 +341,7 @@ MAE |>
   ```
 
 
-### EMP_rrarefy
+#### EMP_rrarefy
 
 Rarefythe data according to the lowest abundance.
 
@@ -264,94 +364,11 @@ MAE |>
   EMP_rrarefy(experiment = 'taxonomy',raresize=1000) 
 ```
 
+### Data Analysis :
 
-### EMP_decostand
+This module is designed to aid users in conducting various popular  multi-omics analyses, including differential analysis, enrichment analysis, dimension reduction,  feature selection, and omics integration, etc.
 
-Transfer data into relative format.
-
-```R
-MAE |>
-  EMP_decostand(experiment = 'taxonomy',method = 'relative') 
-```
-
-Transfer data into centered log ratio ("clr") format.
-
-```R
-MAE |>
-  EMP_decostand(experiment = 'geno_ko',method = 'clr',pseudocount=0.0001)
-```
-
-Transfer data into logformat.
-
-```R
-MAE |>
-  EMP_decostand(experiment = 'geno_ec',method = 'log',logbase = 2) 
-```
-
-### EMP_collapse
-
-merge assay data accoding to duplicate coldata.
-
-```R
-MAE |>
-  EMP_collapse(experiment = 'untarget_metabol',collapse_by='col',
-               estimate_group = 'Group',method = 'mean',collapse_sep = '+') 
-```
-
-merge assay data accoding to duplicate rowdata.
-
-```R
-MAE |> EMP_rowdata_extract('untarget_metabol')
-MAE |>
-  EMP_collapse(experiment = 'untarget_metabol',
-               collapse_by='row',na_string = c("NA", "null", "","-"),
-               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') 
-```
-
-combie two collapse method
-
-```R
-MAE |>
-  EMP_collapse(experiment = 'untarget_metabol',
-               collapse_by='row',na_string = c("NA", "null", "","-"),
-               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
-  EMP_collapse(collapse_by='col',estimate_group = 'Group',
-               method = 'mean',collapse_sep = '+')
-```
-
-### EMP_adjust_abudance
-
-combat_seq method 
-
-```R
-MAE |>
-  EMP_collapse(experiment = 'untarget_metabol',
-               collapse_by='row',na_string = c("NA", "null", "","-"),
-               estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
-  EMP_collapse(collapse_by='col',estimate_group = 'Group',method = 'mean',collapse_sep = '+')
-```
-
-combat method 
-
-```R
-MAE |>
-  EMP_assay_extract(experiment='geno_ko') |>
-  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
-                      method = 'combat',action = 'add') 
-```
-
-limma_remove_batch_effect
-
-```R
-MAE |>
-  EMP_assay_extract(experiment='geno_ko') |>
-  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
-                      method = 'limma_remove_batch_effect') 
-```
-
-
-
-### EMP_alpha_analysis
+#### EMP_alpha_analysis
 
 ```R
 MAE |>
@@ -362,7 +379,7 @@ MAE |>
   EMP_alpha_analysis()
 ```
 
-### EMP_cluster_analysis
+#### EMP_cluster_analysis
 
 1. Cluster the samples according to the assay data
 
@@ -394,7 +411,7 @@ MAE |>
   EMP_cluster_analysis(rowdata = T,h=0.8)
   ```
 
-### EMP_cor_analysis
+#### EMP_cor_analysis
 
 ```R
 k1 <- MAE |>
@@ -413,7 +430,7 @@ k2 <- MAE |>
 ```
 
 
-### EMP_diff_analysis
+#### EMP_diff_analysis
 
 t.test or wilcox.test
 
@@ -452,7 +469,7 @@ MAE |>
                     estimate_group = c('Group_B','Group_A')) # Set the comparison order.
 ```
 
-### EMP_dimension_analysis
+#### EMP_dimension_analysis
 
 PCA
 
@@ -495,7 +512,7 @@ MAE |>
   EMP_scatterplot(estimate_group='Sex',show='p12html',ellipse=0.6) ###### Visualization
 ```
 
-### EMP_enrich_analysis
+#### EMP_enrich_analysis
 
 Make the enrichment after EMP_diff_analysis
 
@@ -540,7 +557,7 @@ MAE |>
 ```
 
 
-### EMP_marker_analysis
+#### EMP_marker_analysis
 
 To estimate the improtance of feature by Boruta algorithm
 
@@ -563,6 +580,8 @@ MAE |>
 ```
 
 regression or classify by xgboost
+
+Note: xgboost_run should be defined as regression or classify correctly, or the wrong parameter may lead to unexpected error results.
 
 1. regression
 
@@ -602,7 +621,7 @@ MAE |>
   EMP_filter(feature_condition = lasso_coe >0) ### Select the imprortant feature
 ```
 
-### EMP_GSEA_analysis
+#### EMP_GSEA_analysis
 
 Based on cor analysis
 
@@ -653,7 +672,7 @@ MAE |>
   EMP_netplot(showCategory=5) 
 ```
 
-### EMP_WGCNA_cluster_analysis
+#### EMP_WGCNA_cluster_analysis
 
 ```R
 MAE |>
@@ -664,7 +683,7 @@ MAE |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.8,mergeCutHeight=0.4)
 ```
 
-### EMP_WGCNA_cor_analysis
+#### EMP_WGCNA_cor_analysis
 
 From one experiment
 
@@ -689,7 +708,7 @@ MAE |>
   EMP_heatmap_plot(palette = 'Spectral')
 ```
 
-Filter the interesting module and make the enrichment analysis
+Select the interesting module and make the enrichment analysis
 
 ```R
 MAE |>
@@ -721,20 +740,17 @@ k2 <- MAE |>
   EMP_heatmap_plot(palette = 'Spectral') 
 ```
 
-### EMP_multi_analysis
+#### EMP_multi_analysis
 
-prepare the result
+Prepare the results
 
 ```R
 k1 <- MAE |> 
   EMP_assay_extract('geno_ec') |> 
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |> 
   EMP_enrich_analysis(pvalue < 0.05,keyType = 'ec')
-```
 
-Use different differential analysis methods to mimic the statistical results of the same feature across different cohorts.
-
-```R
+# Use different differential analysis methods to mimic the statistical results of the same feature across different cohorts.
 k2 <- MAE |> 
   EMP_assay_extract('geno_ec') |> 
   EMP_diff_analysis(method = 'wilcox.test',estimate_group = 'Group') |>
@@ -780,8 +796,8 @@ Visualization
   EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') |>
   EMP_dotplot()
 ```
-
-### EMP_boxplot
+### Data Virtualization :
+#### EMP_boxplot
 
 For assay
 
@@ -800,7 +816,7 @@ MAE |>
   EMP_boxplot(method='t.test',estimate_group='Group') 
 ```
 
-### EMP_scatterplot
+#### EMP_scatterplot
 
 ```R
 MAE |> 
@@ -810,7 +826,7 @@ MAE |>
  EMP_scatterplot(show='p12html') ### eg. p12,p12html,p23,p23htm
 ```
 
-### EMP_dotplot
+#### EMP_dotplot
 
 ```R
 MAE |> 
@@ -820,7 +836,7 @@ MAE |>
  EMP_scatterplot(show='p12html') ### eg. p12,p12html,p23,p23htm
 ```
 
-### EMP_netplot
+#### EMP_netplot
 
 ```R
 MAE |>
@@ -830,7 +846,7 @@ MAE |>
   EMP_netplot(showCategory=10) 
 ```
 
-### EMP_curveplot
+#### EMP_curveplot
 
 ```R
 MAE|>
@@ -840,7 +856,7 @@ MAE|>
   EMP_curveplot(geneSetID='map00680')
 ```
 
-### EMP_heatmap_plot
+#### EMP_heatmap_plot
 
 For cor analysis
 
@@ -872,7 +888,7 @@ MAE |>
   EMP_heatmap_plot(palette = 'Spectral') 
 ````
 
-### EMP_volcanol_plot
+#### EMP_volcanol_plot
 
 ```R
 MAE |>
@@ -881,9 +897,14 @@ MAE |>
   EMP_volcanol_plot(show='html')
 ```
 
-### EMP_filter
 
-For  MultiAssayExperiment
+
+### Data support :
+
+
+#### EMP_filter
+
+For MultiAssayExperiment
 
 ```R
 MAE |>
@@ -891,7 +912,7 @@ MAE |>
   EMP_summary()
 ```
 
-For  EMPT
+For EMPT
 
 ```R
 MAE |>
@@ -917,9 +938,9 @@ MAE |>
              action = 'kick') # Accurately kick samples after sample_condition
 ```
 
-### EMP_history
+#### EMP_history
 
-###### from EMPT
+from EMPT
 
 ```R
 MAE |>
@@ -928,7 +949,7 @@ MAE |>
   EMP_history()
 ```
 
-###### from EMP
+from EMP
 
 ```R
 k1 <- MAE |>
@@ -965,11 +986,9 @@ alpha_re <- result |> EMP_result(info = 'EMP_alpha_analysis')
 enrich_re <- result |> EMP_result(info = 'EMP_enrich_analysis')
 ```
 
-
-
 Inject external result into EMPT
 
-1. get a EMPT object
+1. Get a EMPT object
 
 ```R
 MAE |> 
@@ -978,7 +997,7 @@ MAE |>
                collapse_by = 'row',action = 'add') -> obj  
 ```
 
-2. get the raw data from the EMPT
+2. Get the raw data from the EMPT
 
 ```R 
 MAE |> 
@@ -987,7 +1006,7 @@ MAE |>
                collapse_by = 'row',action = 'get') -> assay_data  
 ```
 
-3. caculate the result from other packages
+3. Caculate the result from other packages
 
 ```R
 assay_data <- assay_data |> tibble::column_to_rownames('primary')
@@ -995,7 +1014,9 @@ shannon_index <- vegan::diversity(assay_data,index = 'shannon')
 new_result <- tibble::tibble(primary=names(shannon_index),new_shannon=shannon_index)
 ```
 
-4. inject the new result into EMPT object
+4. Inject the new result into EMPT object
+
+   NOTE: When injecting external result into EMPT, users need read the   parameter carefully to make sure EMP_filter work correctly
 
 ```R
 EMP_result(obj,
@@ -1009,3 +1030,31 @@ obj |>
   EMP_filter(sample_condition  = new_shannon >2)
 ```
 
+#### EMP_summary
+```R
+## from MultiAssayExperiment
+MAE |>
+ EMP_summary()
+## from EMP object
+k1 <- MAE |>
+ EMP_assay_extract('geno_ec')
+k2 <- MAE |>
+ EMP_assay_extract('geno_ko')
+(k1+k2) |> EMP_summary()
+```
+
+#### EMP_taxonomy_import
+
+Detailed example could be found in the section **Import data** above. 
+
+#### EMP_function_import
+
+Detailed example could be found in the section **Import data** above. 
+
+#### EMP_normal_import
+
+Detailed example could be found in the section **Import data** above. 
+
+#### EMP_easy_import
+
+Detailed example could be found in the section **Import data** above. 
