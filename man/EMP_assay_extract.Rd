@@ -50,7 +50,7 @@ MAE |>
  EMP_assay_extract('geno_ko') 
 ##  Search for specific features according to the rowdata
 MAE |>
-  EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = T)
+  EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = TRUE)
 MAE |>
-  EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = F)
+  EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = FALSE)
 }

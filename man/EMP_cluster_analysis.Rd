@@ -39,6 +39,7 @@ EMPT object
 Identify clusters for sample or feature
 }
 \examples{
+\dontrun{
 data(MAE)
 ## Cluster the samples according to the assay data
 MAE |>
@@ -64,4 +65,5 @@ MAE |>
 MAE |> 
   EMP_assay_extract(experiment = 'geno_ec',pattern='1.1.1.1',pattern_ref='feature') |>
   EMP_cluster_analysis(rowdata = T,h=0.8)
+}
 }

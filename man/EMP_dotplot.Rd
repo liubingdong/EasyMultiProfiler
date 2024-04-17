@@ -47,11 +47,13 @@ Enrichment dotplot
 Dotplot for enrichment result
 }
 \examples{
+\dontrun{
 data(MAE)
 MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
   EMP_dotplot(color='p.adjust',showCategory=10) 
+}
 # add example
 }

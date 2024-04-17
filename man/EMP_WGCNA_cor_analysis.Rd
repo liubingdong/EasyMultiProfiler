@@ -44,6 +44,7 @@ EMP object
 EMP_WGCNA_cor_analysis
 }
 \examples{
+\dontrun{
 data(MAE)
 ## from one experiment
 WGCNA_COR_result <- MAE |>
@@ -85,4 +86,5 @@ k2 <- MAE |>
 (k1 + k2) |>
   EMP_WGCNA_cor_analysis(method='spearman') |>
   EMP_heatmap_plot(palette = 'Spectral') 
+}
 }

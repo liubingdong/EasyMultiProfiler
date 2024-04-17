@@ -69,6 +69,7 @@ EMPT object
 Gene set enrichment analysis.
 }
 \examples{
+\dontrun{
 data(MAE)
 ## based on cor analysis
 MAE |>
@@ -108,4 +109,5 @@ MAE |>
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
   EMP_netplot(showCategory=5) 
+}
 }

@@ -72,6 +72,7 @@ EMPT object
 WGCNA cluster analysis
 }
 \examples{
+\dontrun{
 data(MAE)
 MAE |>
   EMP_assay_extract('geno_ec') |>
@@ -80,4 +81,5 @@ MAE |>
 MAE |>
   EMP_assay_extract('geno_ko') |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.8,mergeCutHeight=0.4)
+}
 }

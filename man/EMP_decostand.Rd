@@ -8,9 +8,9 @@ EMP_decostand(
   x,
   experiment,
   method,
-  bySample = T,
+  bySample = TRUE,
   logbase = 2,
-  use_cached = T,
+  use_cached = TRUE,
   pseudocount = 1e-07,
   action = "add",
   ...

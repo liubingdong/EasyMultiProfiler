@@ -210,9 +210,9 @@ setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enri
 #'  EMP_assay_extract('geno_ko') 
 #' ##  Search for specific features according to the rowdata
 #' MAE |>
-#'   EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = T)
+#'   EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = TRUE)
 #' MAE |>
-#'   EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = F)
+#'   EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = FALSE)
 
 setGeneric("EMP_assay_extract",function(obj,experiment,pattern_ref='Name',pattern=NULL,exact=FALSE,action='add',...) standardGeneric("EMP_assay_extract"))
 
@@ -317,12 +317,14 @@ setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(MAE)
 #' MAE |>
 #'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                     estimate_group = 'Group',
 #'                     pvalueCutoff = 0.05,keyType = 'ko') |>
 #'   EMP_dotplot(color='p.adjust',showCategory=10) 
+#' }
 setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
 
 
@@ -365,12 +367,14 @@ setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(MAE)
 #' MAE |>
 #'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                     estimate_group = 'Group',
 #'                     pvalueCutoff = 0.05,keyType = 'ko') |>
 #'   EMP_netplot(showCategory=10) 
+#' }
 setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
 
 
@@ -414,12 +418,14 @@ setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #'data(MAE)
 #'MAE |>
 #'  EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                    estimate_group = 'Group',
 #'                    pvalueCutoff = 0.05,keyType = 'ko') |>
 #'  EMP_curveplot(geneSetID='map00680')
+#' }
 setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 
 

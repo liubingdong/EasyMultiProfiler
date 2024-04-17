@@ -49,12 +49,7 @@ EMPT or EMP object
 EMP heatmap plot
 }
 \examples{
-data(MAE)
-MAE |>
- EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
-                   estimate_group = 'Group',
-                   pvalueCutoff = 0.05,keyType = 'ko') |>
- EMP_curveplot(geneSetID='map00680')
+\dontrun{
 data(MAE)
 ## for cor analysis
 k1 <- MAE |>
@@ -78,4 +73,5 @@ MAE |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
   EMP_heatmap_plot(palette = 'Spectral') 
+}
 }

@@ -202,6 +202,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(MAE)
 #' ## based on cor analysis
 #' MAE |>
@@ -241,6 +242,7 @@
 #'                     estimate_group = 'Group',
 #'                     pvalueCutoff = 0.05,keyType = 'ko') |>
 #'   EMP_netplot(showCategory=5) 
+#' }
 EMP_GSEA_analysis <- function(x,condition,experiment,estimate_group=NULL,method,cor_method='pearson',group_level=NULL,
                                keyType=NULL,KEGG_Type='KEGG',species = "all",
                                pseudocount=0.0001,pvalueCutoff=1,threshold=NULL,

@@ -64,6 +64,7 @@ Multi analysis for diff reslut or enrichment
 }
 \examples{
 data(MAE)
+\dontrun{
 ## prepare the result
 k1 <- MAE |> 
   EMP_assay_extract('geno_ec') |> 
@@ -104,4 +105,5 @@ k4 <- MAE |>
 (k1+k2) |>
   EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') |>
   EMP_dotplot()
+}
 }

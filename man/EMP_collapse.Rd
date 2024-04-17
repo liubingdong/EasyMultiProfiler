@@ -42,6 +42,7 @@ EMPT object
 Aggregates abundace or experssion from the same attributes in the coldata or rowdata
 }
 \examples{
+data(MAE)
 ##  merge assay data accoding to duplicate coldata.
 MAE |>
   EMP_collapse(experiment = 'untarget_metabol',collapse_by='col',

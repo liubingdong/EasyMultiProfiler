@@ -286,6 +286,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @export
 #'
 #' @examples
+#' data(MAE)
 #' ##  merge assay data accoding to duplicate coldata.
 #' MAE |>
 #'   EMP_collapse(experiment = 'untarget_metabol',collapse_by='col',

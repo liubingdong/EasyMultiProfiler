@@ -51,11 +51,12 @@ EMPT object
 Fast Imputation of Missing Values by Chained Random Forests
 }
 \examples{
+\dontrun{
 data(MAE)
 ## For coldata
 MAE |>
   EMP_assay_extract('geno_ec') |>
-  EMP_impute(assay=F,coldata=T,rowdata=F)
+  EMP_impute(assay=FALSE,coldata=TRUE,rowdata=FALSE)
 ###
 MAE |>
   EMP_coldata_extract(action ='add') |>
@@ -63,10 +64,11 @@ MAE |>
 ## For assay
 MAE |>
   EMP_assay_extract('geno_ec') |>
-  EMP_impute(assay=T,coldata=F,rowdata=F)
+  EMP_impute(assay=TRUE,coldata=FALSE,rowdata=FALSE)
 
 ## For rowdata (Not Not recommended)
 MAE |>
   EMP_assay_extract('geno_ec') |>
-  EMP_impute(assay=F,coldata=F,rowdata=T)
+  EMP_impute(assay=FALSE,coldata=FALSE,rowdata=TRUE)
+}
 }

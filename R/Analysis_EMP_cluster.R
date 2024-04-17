@@ -19,6 +19,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(MAE)
 #' ## Cluster the samples according to the assay data
 #' MAE |>
@@ -44,6 +45,7 @@
 #' MAE |> 
 #'   EMP_assay_extract(experiment = 'geno_ec',pattern='1.1.1.1',pattern_ref='feature') |>
 #'   EMP_cluster_analysis(rowdata = T,h=0.8)
+#' }
 EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,
                                  method='average',h=NULL,groupLabels=TRUE,action='add') {
   
