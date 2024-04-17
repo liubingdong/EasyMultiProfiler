@@ -27,11 +27,11 @@ Due to the inclusion of many polular analysis tools, the EMP package relies on d
 setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/bioc",
                   BioCann = "https://bioconductor.org/packages/3.18/data/annotation"))  
 options(timeout = 600000000) 
-install.packages("remotes")
-install.packages("BiocManager")
-BiocManager::install("dendextend")
-BiocManager::install("AnnotationDbi")
-BiocManager::install("clusterProfiler")
+install.packages("remotes") # remotes (>= 2.5.0)
+install.packages("BiocManager") # BiocManager (>= 1.30.22)
+BiocManager::install("dendextend") # dendextend (>= 1.17.1)
+BiocManager::install("AnnotationDbi") # AnnotationDbi (>= 1.64.1)
+BiocManager::install("clusterProfiler") # clusterProfiler (>= 4.10.0)
 remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
