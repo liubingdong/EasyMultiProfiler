@@ -14,6 +14,9 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 Easily install
 
 ```R
+setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/bioc",
+                  BioCann = "https://bioconductor.org/packages/3.18/data/annotation"))  
+options(timeout = 600000000) 
 if (!requireNamespace("remotes", quietly=TRUE))
     install.packages("remotes")
 remotes::install_github("liubingdong/EasyMultiProfier")
