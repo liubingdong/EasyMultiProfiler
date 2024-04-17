@@ -32,7 +32,7 @@ install.packages("BiocManager")
 BiocManager::install("dendextend")
 BiocManager::install("AnnotationDbi")
 BiocManager::install("clusterProfiler")
-remotes::install_github("liubingdong/EasyMultiProfier")
+remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 
