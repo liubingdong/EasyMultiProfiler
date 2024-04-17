@@ -20,7 +20,9 @@ library(EasyMultiProfiler)
 ```
 
 **Completely install**
+
 Due to the inclusion of many polular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for your patience during installation, and we do believe EMP could largely speed up your research work.
+
 ```R
 setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/bioc",
                   BioCann = "https://bioconductor.org/packages/3.18/data/annotation"))  
