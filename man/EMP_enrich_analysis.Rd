@@ -13,6 +13,7 @@ EMP_enrich_analysis(
   KEGG_Type = "KEGG",
   species = "all",
   action = "add",
+  combineGroup = FALSE,
   ...
 )
 }
@@ -33,7 +34,9 @@ EMP_enrich_analysis(
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{Further parameters passed to clusterProfiler::compareCluster.}
+\item{combineGroup}{A boolean. Whether the function combine the enrichment or not.}
+
+\item{...}{Further parameters passed to clusterProfiler::compareCluster or clusterProfiler::enricher.}
 }
 \value{
 EMPT object

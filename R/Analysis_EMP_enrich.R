@@ -11,7 +11,7 @@
 #' @importFrom clusterProfiler enricher
 #'
 #' @noRd
-.EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500,keyType=NULL,KEGG_Type='KEGG',species = "all",...){
+.EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500,keyType=NULL,KEGG_Type='KEGG',species = "all",combineGroup=FALSE,...){
   deposit <- list()
   sign_group <- NULL
   condition <- dplyr::enquo(condition)
@@ -33,10 +33,13 @@
   
   message('KEGG database version: ',gson_data@version)
   message('Species: ',gson_data@species)
-
-  enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
-        fun=clusterProfiler::enricher, gson=gson_data, 
-        minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+  if (combineGroup == TRUE) {
+    enrich.data <- clusterProfiler::enricher(gene=df$feature, gson=gson_data,minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+  }else{
+    enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
+          fun=clusterProfiler::enricher, gson=gson_data, 
+          minGSSize=minGSSize, maxGSSize=maxGSSize,...)     
+  }
 
   EMPT@deposit[['enrich_data']] <- enrich.data
   .get.algorithm.EMPT(EMPT) <- 'enrich_analysis'
@@ -53,8 +56,9 @@
 #' @param keyType A character string. keyType include ko, ec, cpd, entrezid.
 #' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.
 #' @param species A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'
+#' @param combineGroup A boolean. Whether the function combine the enrichment or not.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to clusterProfiler::compareCluster.
+#' @param ... Further parameters passed to clusterProfiler::compareCluster or clusterProfiler::enricher.
 #'
 #' @return EMPT object
 #' @export
@@ -88,7 +92,7 @@
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
 #'   EMP_enrich_analysis(keyType ='entrezid',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=0.05,species = 'hsa') |>
 #'   EMP_dotplot()
-EMP_enrich_analysis <- function(x,condition,minGSSize=1,maxGSSize=500,keyType=NULL,KEGG_Type='KEGG',species = "all",action='add',...){
+EMP_enrich_analysis <- function(x,condition,minGSSize=1,maxGSSize=500,keyType=NULL,KEGG_Type='KEGG',species = "all",action='add',combineGroup=FALSE,...){
   call <- match.call()
 
   if(!is.null(.get.result.EMPT(x,info='EMP_diff_analysis'))) {
@@ -98,7 +102,7 @@ EMP_enrich_analysis <- function(x,condition,minGSSize=1,maxGSSize=500,keyType=NU
   }
 
 
-  EMPT <- .EMP_enrich_analysis(EMPT,{{condition}},minGSSize=minGSSize,maxGSSize=maxGSSize,keyType=keyType,KEGG_Type=KEGG_Type,species=species,...)
+  EMPT <- .EMP_enrich_analysis(EMPT,{{condition}},minGSSize=minGSSize,maxGSSize=maxGSSize,keyType=keyType,KEGG_Type=KEGG_Type,species=species,combineGroup=combineGroup,...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_enrich_analysis'
   if (action == 'add') {
