@@ -11,19 +11,16 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 ### Install
 
-Easily install
-
+**Easily install**
 ```R
-setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/bioc",
-                  BioCann = "https://bioconductor.org/packages/3.18/data/annotation"))  
-options(timeout = 600000000) 
-if (!requireNamespace("remotes", quietly=TRUE))
-    install.packages("remotes")
-remotes::install_github("liubingdong/EasyMultiProfier")
+if (!requireNamespace("pak", quietly=TRUE))
+    install.packages("pak")
+pak::pak("liubingdong/EasyMultiProfiler")
+library(EasyMultiProfiler)
 ```
 
-Recommend install
-
+**Completely install**
+Due to the inclusion of many polular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for your patience during installation, and we do believe EMP could largely speed up your research work.
 ```R
 setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/bioc",
                   BioCann = "https://bioconductor.org/packages/3.18/data/annotation"))  
@@ -34,6 +31,7 @@ BiocManager::install("dendextend")
 BiocManager::install("AnnotationDbi")
 BiocManager::install("clusterProfiler")
 remotes::install_github("liubingdong/EasyMultiProfier")
+library(EasyMultiProfiler)
 ```
 
 ### Import data 
