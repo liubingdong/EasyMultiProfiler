@@ -89,7 +89,7 @@ EMP_decostand <- function(x,experiment,method,bySample=TRUE,logbase =2,use_cache
   }
   EMPT <- .EMP_decostand_m(EMPT=x,bySample=bySample,logbase=logbase,pseudocount=pseudocount,...)
   .get.history.EMPT(EMPT) <- call
-  class(EMPT) <- 'EMP_cluster_analysis'
+  class(EMPT) <- 'EMP_decostand'
   if (action == 'add') {
     return(EMPT)
   }else if(action == 'get') {

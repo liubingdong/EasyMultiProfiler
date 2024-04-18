@@ -159,9 +159,10 @@ setClass("EMP_diff_volcanol_plot",contains = c("EMP_diff_analysis","EMPT","Summa
 setClass("EMP_dimension_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_dimension_analysis_scatterplot",contains = c("EMPT","SummarizedExperiment"))
 
+setClass("EMP_decostand",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_marker_analysis",contains = c("EMPT","SummarizedExperiment"))
-
 setClass("EMP_cluster_analysis",contains = c("EMPT","SummarizedExperiment"))
+
 setClass("EMP_WGCNA_cluster_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_WGCNA_cor_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_WGCNA_cor_heatmap",contains = c("EMP_WGCNA_cor_analysis","EMPT","SummarizedExperiment"))
