@@ -18,6 +18,17 @@ if (!requireNamespace("pak", quietly=TRUE))
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
+NOTE: For some region with unstable network, users could change the local mirrors to avoid unexperted errors before installation.
+```R
+## For china main land users could use this
+local({r <- getOption("repos")
+r["CRAN"] <- "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
+options(repos=r)}
+)
+options(BioC_mirror="https://mirrors.ustc.edu.cn/bioc/")
+options("download.file.method"="libcurl")
+options("url.method"="libcurl")
+```
 
 **Completely install**
 
