@@ -64,9 +64,7 @@ library(EasyMultiProfiler)
    
    tax_data <- EMP_taxonomy_import('tax.txt')
    ko_data <- EMP_function_import('ko.txt',type = 'ko')
-   
    ec_data <- EMP_function_import('ec.txt',type = 'ec')
-   
    metbol_data <- EMP_normal_import('metabol.txt',
                                     dfmap = dfmap,assay  = 'untarget_metabol')
    
