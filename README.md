@@ -86,7 +86,7 @@ library(EasyMultiProfiler)
 
    ```R
    meta_data <- read.table('col.txt',header = T,row.names = 1)
-   tran_data <- EMP_easy_import('tran.txt',coldata = meta_data,type = 'normal')
+   MAE <- EMP_easy_import('tran.txt',coldata = meta_data,type = 'normal')
    ```
 
 ### Prepare the demo data from EasyMultiProfiler
