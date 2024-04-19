@@ -13,6 +13,10 @@
 #' @noRd
 mitch_method <- function(multiGene, TERM2GENE, TERM2NAME = NULL, minGSSize, 
                          pvalueCutoff = 0.05, pAdjustMethod = "BH", qvalueCutoff = 0.25, ...) {
+    
+    rlang::check_installed(c('BiocManager'), reason = 'for mitch_method().', action = install.packages)  
+    rlang::check_installed(c('mitch'), reason = 'for mitch_method().', action = BiocManager::install)
+
     PATHID2EXTID <- split(as.character(TERM2GENE[,2]), as.character(TERM2GENE[,1]))
     results <- mitch::mitch_calc(x = multiGene, genesets = PATHID2EXTID,
         minsetsize = minGSSize, ...)

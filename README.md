@@ -13,8 +13,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 **Easily install**
 ```R
-if (!requireNamespace("pak", quietly=TRUE))
-    install.packages("pak")
+if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
@@ -41,7 +40,7 @@ setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/b
 options(timeout = 600000000) 
 install.packages("remotes") # remotes (>= 2.5.0)
 install.packages("BiocManager") # BiocManager (>= 1.30.22)
-BiocManager::install("dendextend") # dendextend (>= 1.17.1)
+BiocManager::install("base64enc") # base64enc (>= 0.1.3)
 BiocManager::install("AnnotationDbi") # AnnotationDbi (>= 1.64.1)
 BiocManager::install("clusterProfiler") # clusterProfiler (>= 4.10.0)
 remotes::install_github("liubingdong/EasyMultiProfiler")
