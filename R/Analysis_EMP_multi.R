@@ -70,7 +70,8 @@ EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enri
                                  combineLevel='gene',p.adjust='fdr',minGSSize=10,maxGSSize=500,
                                  keyType, KEGG_Type = "KEGG", species = "all",action='add',...) {
   experment_num <- deposit <- ExperimentList <- experment_num <- feature <- pvalue <- deposit_enrichment <- gson_data <- input_list_each <- NULL
-  
+  rlang::check_installed(c('metap'), reason = 'for EMP_multi_analysis().', action = BiocManager::install)
+
   if (!inherits(EMP,"EMP")) {
     stop("Please input the EMP format!")
   }
@@ -176,12 +177,6 @@ EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enri
 }
 
 
-
-
-
-#' @importFrom metap sumlog
-#' @importFrom metap sump
-#' @importFrom metap sumz
 #' @noRd
 .EMP_multi_feature <- function(list_df, combineMethod = "fisher", 
                            p.adjust = "fdr") {
@@ -199,9 +194,9 @@ EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enri
         if (length(pp) == 1) {
             pvalue[i] <- pp
         } else {
-            if (combineMethod == "fisher") pvalue[i] <- sumlog(pp)$p %>% suppressWarnings() # for all NA of pvalue
-            if (combineMethod == "edgington") pvalue[i] <- sump(pp)$p %>% suppressWarnings()
-            if (combineMethod == "stouffer") pvalue[i] <- sumz(pp) %>% suppressWarnings()
+            if (combineMethod == "fisher") pvalue[i] <- metap::sumlog(pp)$p %>% suppressWarnings() # for all NA of pvalue
+            if (combineMethod == "edgington") pvalue[i] <- metap::sump(pp)$p %>% suppressWarnings()
+            if (combineMethod == "stouffer") pvalue[i] <- metap::sumz(pp) %>% suppressWarnings()
         }
 
     }
@@ -242,17 +237,13 @@ EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enri
 
 
 
-
-#' @importFrom metap sumlog
-#' @importFrom metap sump
-#' @importFrom metap sumz
 combine_pvalue_for_diff_enrich <- function(x, combineMethod = "fisher") {
     if (length(x) == 1) { 
        return(x)
     } else {
-        if (combineMethod == "fisher") x <- sumlog(x)$p %>% suppressWarnings() # for all NA of pvalue
-        if (combineMethod == "edgington") x <- sump(x)$p %>% suppressWarnings() # for all NA of pvalue
-        if (combineMethod == "stouffer") x <- sumz(x)  %>% suppressWarnings() # for all NA of pvalue
+        if (combineMethod == "fisher") x <- metap::sumlog(x)$p %>% suppressWarnings() # for all NA of pvalue
+        if (combineMethod == "edgington") x <- metap::sump(x)$p %>% suppressWarnings() # for all NA of pvalue
+        if (combineMethod == "stouffer") x <- metap::sumz(x)  %>% suppressWarnings() # for all NA of pvalue
         return(x)
     }
 }

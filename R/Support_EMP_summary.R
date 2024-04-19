@@ -108,6 +108,7 @@
 #'  EMP_assay_extract('geno_ko')
 #'(k1+k2) |> EMP_summary()
 EMP_summary <- function(obj) {
+  rlang::check_installed(c('BiocManager'), reason = 'for EMP_summary().', action = install.packages)  
   rlang::check_installed(c('formattable','kableExtra'), reason = 'for EMP_summary().', action = BiocManager::install)
   Sample <- Feature <- `Sample_atrr.` <- `Feature_atrr.` <- Assay <- Assay_status <- Sample_status <- Feature_status <- NULL
   if (inherits(obj,"MultiAssayExperiment")) {

@@ -145,6 +145,7 @@
 #' @importFrom stats coef
 
 .EMP_lasso_analysis <- function(obj,estimate_group,seed=123,nfolds=5,lambda_select='lambda.min',...) {
+  rlang::check_installed(c('BiocManager'), reason = 'for .EMP_lasso_analysis().', action = install.packages) 
   rlang::check_installed(c('glmnet'), reason = 'for .EMP_lasso_analysis().', action = BiocManager::install)
   assay_data <- coldata <- tran_data <- lasso_model <- feature_importance <- primary <- NULL
   
@@ -159,7 +160,7 @@
     tibble::column_to_rownames('primary') %>% 
     as.matrix()
   set.seed(seed)
-  lasso_model <- cv.glmnet(assay_data,coldata,type.measure='mse', family = "gaussian",nfolds = nfolds,alpha = 1,...)
+  lasso_model <- glmnet::cv.glmnet(assay_data,coldata,type.measure='mse', family = "gaussian",nfolds = nfolds,alpha = 1,...)
   
   feature_importance <- coef(lasso_model,s=lasso_model[[lambda_select]]) %>% as.matrix()
   feature_importance <- feature_importance[-1,] %>% 

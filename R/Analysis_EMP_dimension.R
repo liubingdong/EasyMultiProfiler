@@ -1,7 +1,6 @@
 #' @importFrom bigstatsr big_SVD
 #' @importFrom vegan vegdist
 #' @importFrom stats cmdscale
-#' @importFrom ropls opls
 .EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL){
   p1 <- p2 <- p3 <- R2X <- NULL
   deposit <- list()
@@ -43,6 +42,8 @@
            axis_value <- round((pca_result$eig / sum(pca_result$eig))[1:3] * 100,digits = 2)
          },
          "pls" = {
+           rlang::check_installed(c('BiocManager'), reason = 'for EMP_dimension_analysis().', action = install.packages) 
+           rlang::check_installed(c('ropls'), reason = 'for EMP_dimension_analysis().', action = BiocManager::install)            
            if(!is.null(distance)){
              message("Parameter distance in pls is useless!")
              distance <- NULL
@@ -66,6 +67,8 @@
            
          },
          "opls" = {
+           rlang::check_installed(c('BiocManager'), reason = 'for EMP_dimension_analysis().', action = install.packages) 
+           rlang::check_installed(c('ropls'), reason = 'for EMP_dimension_analysis().', action = BiocManager::install)       
            if(!is.null(distance)){
              message("Parameter distance in opls is useless!")
              distance <- NULL

@@ -1,4 +1,4 @@
-
+#' @importFrom methods show    
 setMethod("show", "MultiAssayExperiment", function(object) {
   o_class <- class(object)
   o_len <- length(object)
@@ -27,7 +27,7 @@ setMethod("show", "MultiAssayExperiment", function(object) {
 })
 
 
-
+#' @importFrom methods show 
 setMethod("show", "EMPT",
           function(object) {
             info <- .get.info.EMPT(object)
