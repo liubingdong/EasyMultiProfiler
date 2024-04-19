@@ -142,10 +142,10 @@
 .EMP_xgb_analysis_m <- memoise::memoise(.EMP_xgb_analysis)
 
 
-#' @importFrom glmnet cv.glmnet
 #' @importFrom stats coef
 
 .EMP_lasso_analysis <- function(obj,estimate_group,seed=123,nfolds=5,lambda_select='lambda.min',...) {
+  rlang::check_installed(c('glmnet'), reason = 'for .EMP_lasso_analysis().', action = BiocManager::install)
   assay_data <- coldata <- tran_data <- lasso_model <- feature_importance <- primary <- NULL
   
   assay_data <- obj %>% 

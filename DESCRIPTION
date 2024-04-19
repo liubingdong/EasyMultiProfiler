@@ -18,8 +18,6 @@ Imports:
     dynamicTreeCut (>= 1.63.1),
     enrichplot (>= 1.22.0),
     fastcluster (>= 1.2.6),    
-    formattable (>= 0.2.1),
-    glmnet (>= 4.1.8),
     ggiraph (>= 0.8.9),
     ggplot2 (>= 3.5.0),
     ggsignif (>= 0.6.4),
@@ -28,7 +26,6 @@ Imports:
     gson (>= 0.1.0),
     impute (>= 1.76.0),
     infotheo (>= 1.2.0.1),
-    kableExtra (>= 1.3.4),
     magrittr (>= 2.0.3),
     Matrix (>= 1.6.5),
     memoise (>= 2.0.1),
@@ -63,7 +60,10 @@ Suggests:
     knitr,
     dendextend,  
     rmarkdown,
-    AnnotationDbi
+    AnnotationDbi,
+    kableExtra (>= 1.3.4),
+    formattable (>= 0.2.1),
+    glmnet (>= 4.1.8)
 VignetteBuilder: knitr
 NeedsCompilation: no
 Packaged: 2024-03-06 17:14:44 UTC; 13766

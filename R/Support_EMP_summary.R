@@ -92,13 +92,6 @@
 #' Visual charts for MultiAssayExperiment or EMP object
 #'
 #' @param obj MultiAssayExperiment or EMP object
-#' @importFrom formattable proportion_bar
-#' @importFrom kableExtra cell_spec
-#' @importFrom kableExtra kable_styling
-#' @importFrom kableExtra column_spec
-#' @importFrom kableExtra add_header_above
-#' @importFrom kableExtra scroll_box
-#' @importFrom kableExtra footnote
 #'
 #' @return view object
 #' @export
@@ -115,6 +108,7 @@
 #'  EMP_assay_extract('geno_ko')
 #'(k1+k2) |> EMP_summary()
 EMP_summary <- function(obj) {
+  rlang::check_installed(c('formattable','kableExtra'), reason = 'for EMP_summary().', action = BiocManager::install)
   Sample <- Feature <- `Sample_atrr.` <- `Feature_atrr.` <- Assay <- Assay_status <- Sample_status <- Feature_status <- NULL
   if (inherits(obj,"MultiAssayExperiment")) {
     dt <- .creat_MAE_summary(obj)
