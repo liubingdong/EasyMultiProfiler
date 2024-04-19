@@ -23,11 +23,14 @@
 #' ## For coldata
 #' MAE |>
 #'   EMP_assay_extract('geno_ec') |>
-#'   EMP_impute(assay=FALSE,coldata=TRUE,rowdata=FALSE)
-#' ###
+#'   EMP_impute(assay=FALSE,coldata=TRUE,rowdata=FALSE) |>
+#'   EMP_coldata_extract()
+#' ## Support formula, such as only impute SAS and SDS
 #' MAE |>
-#'   EMP_coldata_extract(action ='add') |>
-#'   EMP_impute(.formula = SAS+SDS ~ .,action = 'get') ## Support formula, such as only impute SAS and SDS
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_impute(.formula = HAMA+HAMD ~ .) |>
+#'   EMP_coldata_extract()
+#' 
 #' ## For assay
 #' MAE |>
 #'   EMP_assay_extract('geno_ec') |>

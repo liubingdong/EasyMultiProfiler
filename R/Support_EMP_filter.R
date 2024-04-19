@@ -149,7 +149,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
         message_info %<>% append(paste0(feature_filter_num,' of ',total_feature_num,' features were filterd out!'))
 
         # filter the result in the deposit
-        obj %<>% .filter.deposit.EMPT(real_sample,real_feature) %>% suppressMessages()
+        obj %<>% .filter.deposit.EMPT(real_sample,real_feature)
 
         .get.message_info.EMPT(obj) <- message_info
         deposit <- obj %>% .filter.EMPT(filterSample=real_sample,filterFeature=real_feature,action='select') %>% suppressMessages() ##  Here action must be select, dont change!
