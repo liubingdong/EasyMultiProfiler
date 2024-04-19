@@ -25,7 +25,7 @@
 #'   EMP_assay_extract('taxonomy') |>
 #'   EMP_modify_assay('<10',pseudocount=0) 
 
-EMP_modify_assay <- function(obj,experiment,condition='==0',select_sample='all',select_feature='all',pseudocount=0.0001,action='add') {
+EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',select_feature='all',pseudocount=0.0001,action='add') {
   call <- match.call()
   
   . <- NULL

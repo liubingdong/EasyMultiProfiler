@@ -6,8 +6,8 @@
 \usage{
 EMP_modify_assay(
   obj,
-  experiment,
   condition = "==0",
+  experiment,
   select_sample = "all",
   select_feature = "all",
   pseudocount = 1e-04,
@@ -17,9 +17,9 @@ EMP_modify_assay(
 \arguments{
 \item{obj}{MAE or EMPT objetc}
 
-\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
-
 \item{condition}{A character string. Set the condition data will modify.(default: '==0')}
+
+\item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
 \item{select_sample}{A character string. Choose which sample to modify.}
 
