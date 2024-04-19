@@ -28,7 +28,7 @@
 #' @rdname EMP_scatterplot
 #' @return EMPT object
 #' @export
-#' @importFrom ggpubr stat_compare_means
+#' @importFrom ggsignif geom_signif
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
 EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='default',
@@ -94,7 +94,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='d
   #相须图绘制
   p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
     geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
-    ggpubr::stat_compare_means(comparisons = compare,method= method)+
+    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1)+
     coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[1]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
@@ -108,7 +108,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='d
 
   p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
     geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
-    ggpubr::stat_compare_means(comparisons = compare,method=method)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
+    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
           axis.ticks = element_line(color='black'),
@@ -122,7 +122,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='d
 
   p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
     geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
-    ggpubr::stat_compare_means(comparisons = compare,method=method)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
+    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
           axis.ticks = element_line(color='black'),
@@ -137,7 +137,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='d
   if (axis_num == 3) {
     p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA) +
-      ggpubr::stat_compare_means(comparisons = compare,method=method) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
+      ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
       theme_bw()+
       theme(axis.ticks.length = unit(0.4,"lines"),
             axis.ticks = element_line(color='black'),
@@ -189,7 +189,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='d
   if (axis_num >= 3) {
     p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA) +
-      ggpubr::stat_compare_means(comparisons = compare,method=method) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
+      ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
       theme_bw()+
       theme(axis.ticks.length = unit(0.4,"lines"),
             axis.ticks = element_line(color='black'),

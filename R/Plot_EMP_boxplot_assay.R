@@ -1,5 +1,7 @@
 #' @import ggthemes
 #' @import ggplot2
+#' @importFrom ggiraph geom_jitter_interactive
+#' @importFrom ggsignif geom_signif
 EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                ncol = NULL,show = 'pic',palette = NULL,

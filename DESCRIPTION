@@ -22,7 +22,6 @@ Imports:
     glmnet (>= 4.1.8),
     ggiraph (>= 0.8.9),
     ggplot2 (>= 3.5.0),
-    ggpubr (>= 0.6.0),
     ggsignif (>= 0.6.4),
     ggthemes (>= 5.1.0),
     glue (>= 1.7.0),
