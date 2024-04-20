@@ -31,6 +31,7 @@
 #' @importFrom ggsignif geom_signif
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
+#' @importFrom patchwork plot_layout
 EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,
                                            estimate_group=NULL,palette=NULL,
