@@ -281,6 +281,8 @@ combine_geneClusters <- function(geneClusters_list) {
     return(geneClusters_result)
 }
 
+
+#' @importFrom clusterProfiler merge_result
 .same_enrich <- function(obj,combineFun='enricher',pvalueCutoff=0.05,combineMethod='fisher',combineGroup=FALSE,
                          gson,combineLevel='gene',p.adjust='fdr',minGSSize=10,maxGSSize=500,...) {
   

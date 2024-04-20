@@ -43,6 +43,7 @@
   return(result)
 }
 
+#' @importFrom clusterProfiler GSEA
 .EMP_GSEA_analysis_Signal2Noise <- function(EMPT,estimate_group,group_level=NULL,keyType=NULL,KEGG_Type='KEGG',species = "all",
                                              pseudocount=0.0001,pvalueCutoff=1,threshold=NULL,seed=T,...){
     Signal2Noise <- vs <- NULL

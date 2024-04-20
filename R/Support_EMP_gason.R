@@ -1,4 +1,5 @@
 #' @importFrom utils getFromNamespace
+#' @importFrom clusterProfiler gson_KEGG
 kegg_rest <- getFromNamespace("kegg_rest", "clusterProfiler")
 
 #########

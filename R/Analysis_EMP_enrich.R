@@ -7,7 +7,8 @@
 #' @param maxGSSize maximal size of genes annotated for testing.
 #' @param use_cache A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to clusterProfiler::compareCluster.
-#'
+#' @importFrom clusterProfiler enricher
+#' @importFrom clusterProfiler compareCluster
 #' @noRd
 .EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500,keyType=NULL,KEGG_Type='KEGG',species = "all",combineGroup=FALSE,...){
   deposit <- list()
