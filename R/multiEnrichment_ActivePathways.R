@@ -28,6 +28,9 @@ ActivePathways_method <- function(multiGene,
                                   TERM2NAME = NULL,
                                   combineMethod = "fisher",
                                   ...) {
+    rlang::check_installed(c('BiocManager'), reason = 'for ActivePathways_method().', action = install.packages)  
+    rlang::check_installed(c('ActivePathways'), reason = 'for ActivePathways_method().', action = BiocManager::install)
+    
     TERM2GENE$term <- as.character(TERM2GENE[, 1])
     TERM2GENE$gene <- as.character(TERM2GENE[, 2])
     geneSets <- split(TERM2GENE$gene, TERM2GENE$term)

@@ -9,7 +9,6 @@ Description: The EasyMultiProfiler package aims to offer a user-friendly and eff
 License: Artistic-2.0
 Encoding: UTF-8
 Imports: 
-    ActivePathways (>= 2.0.3),
     bigstatsr (>= 1.5.12),
     BiocManager (>= 1.30.22),    
     Boruta (>= 8.0.0),
@@ -60,6 +59,7 @@ Suggests:
     metap (>= 1.9),
     AnnotationDbi,
     clusterProfiler (>= 4.10.0),
+    ActivePathways (>= 2.0.3),
     mitch (>= 1.14.0),
     kableExtra (>= 1.3.4),
     formattable (>= 0.2.1),
