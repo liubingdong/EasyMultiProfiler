@@ -30,7 +30,6 @@ Imports:
     methods (>= 4.3.1),
     missRanger (>= 2.4.0),
     MultiAssayExperiment (>= 1.28.0),
-    patchwork (>= 1.2.0),
     purrr (>= 1.0.2),
     qvalue (>= 2.34.0),
     randomForest (>= 4.7.1.1),

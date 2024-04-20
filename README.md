@@ -17,7 +17,7 @@ if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
-NOTE: For some region with unstable network, users could change the local mirrors to avoid unexperted errors before installation.
+NOTE: For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
 ```R
 ## For china main land users could use this
 local({r <- getOption("repos")
@@ -41,6 +41,7 @@ options(timeout = 600000000)
 install.packages("remotes") # remotes (>= 2.5.0)
 install.packages("BiocManager") # BiocManager (>= 1.30.22)
 BiocManager::install("base64enc") # base64enc (>= 0.1.3)
+BiocManager::install("WGCNA") # WGCNA (>= 1.72.5)
 BiocManager::install("AnnotationDbi") # AnnotationDbi (>= 1.64.1)
 BiocManager::install("clusterProfiler") # clusterProfiler (>= 4.10.0)
 remotes::install_github("liubingdong/EasyMultiProfiler")
