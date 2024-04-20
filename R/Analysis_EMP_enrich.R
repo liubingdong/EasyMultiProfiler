@@ -7,8 +7,6 @@
 #' @param maxGSSize maximal size of genes annotated for testing.
 #' @param use_cache A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to clusterProfiler::compareCluster.
-#' @importFrom clusterProfiler compareCluster
-#' @importFrom clusterProfiler enricher
 #'
 #' @noRd
 .EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500,keyType=NULL,KEGG_Type='KEGG',species = "all",combineGroup=FALSE,...){
@@ -95,6 +93,10 @@
 #'   EMP_dotplot()
 #' }
 EMP_enrich_analysis <- function(x,condition,minGSSize=1,maxGSSize=500,keyType=NULL,KEGG_Type='KEGG',species = "all",action='add',combineGroup=FALSE,...){
+  
+  rlang::check_installed(c('BiocManager'), reason = 'for EMP_enrich_analysis().', action = install.packages) 
+  rlang::check_installed(c('clusterProfiler'), reason = 'for EMP_enrich_analysis().', action = BiocManager::install)  
+
   call <- match.call()
 
   if(!is.null(.get.result.EMPT(x,info='EMP_diff_analysis'))) {

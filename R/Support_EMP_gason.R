@@ -131,7 +131,6 @@ gson_KEGG2 <- function(keyType = "ko", KEGG_Type = "KEGG", species = "all") {
 #' @param keyType A character string. keyType include ko, ec, cpd, entrezid.
 #' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.
 #' @param species A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'
-#' @importFrom clusterProfiler gson_KEGG
 #'
 #' @return gson object
 #' @export
@@ -159,7 +158,7 @@ build_gson <- function(keyType = "ko", KEGG_Type = "KEGG", species = "hsa") {
         if (species == "all") {
             stop("When keyType is 'entrezid', a specific species must be specified, not 'all'.")
         } else {
-            return(gson_KEGG(species = species, KEGG_Type = KEGG_Type, keyType = "kegg"))
+            return(clusterProfiler::gson_KEGG(species = species, KEGG_Type = KEGG_Type, keyType = "kegg"))
         }
         
     }

@@ -22,7 +22,6 @@
 #' "fisher", "edgington", "stouffer" and "Brown"(only used in ActivePathways method).
 #' @param stoufferWeights weights of stouffer combine method.
 #' @param output output class, one of "enrichResult", "compareClusterResult" and "list".
-#' @importFrom clusterProfiler compareCluster
 #' @export
 multiNetEnrich <- function(multiGene, network, p = 0, TERM2GENE = NULL,
                       TERM2NAME = NULL, threshold = 1e-9, n = 10, 

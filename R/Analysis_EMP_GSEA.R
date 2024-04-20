@@ -247,6 +247,9 @@ EMP_GSEA_analysis <- function(x,condition,experiment,estimate_group=NULL,method,
                                keyType=NULL,KEGG_Type='KEGG',species = "all",
                                pseudocount=0.0001,pvalueCutoff=1,threshold=NULL,
                                threshold_r=0,threshold_p=0.05,seed=TRUE,action='add',...){
+
+  rlang::check_installed(c('BiocManager'), reason = 'for EMP_GSEA_analysis().', action = install.packages) 
+  rlang::check_installed(c('clusterProfiler'), reason = 'for EMP_GSEA_analysis().', action = BiocManager::install)    
   
   call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {

@@ -59,7 +59,7 @@ multi_enricher <- function(multiGene,
     }   
     if (output == "compareClusterResult") {
         multiGeneList2 <- lapply(multiGeneList, function(x) x[x$pvalue < cutoff, "gene"])
-        em <- compareCluster(multiGeneList2, fun = clusterProfiler::enricher,
+        em <- clusterProfiler::compareCluster(multiGeneList2, fun = clusterProfiler::enricher,
                       TERM2GENE = TERM2GENE,
                       TERM2NAME = TERM2NAME, 
                       pvalueCutoff = pvalueCutoff, 
@@ -147,7 +147,7 @@ multi_GSEA <- function(multiGene,
             names(genelist) <- x$gene
             sort(genelist, decreasing = TRUE)
         })
-        em <- compareCluster(multiGeneList2, fun = clusterProfiler::GSEA,
+        em <- clusterProfiler::compareCluster(multiGeneList2, fun = clusterProfiler::GSEA,
                       TERM2GENE = TERM2GENE,
                       TERM2NAME = TERM2NAME, 
                       pvalueCutoff = pvalueCutoff, 
