@@ -29,7 +29,7 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-**Completely install**
+**Completely install (Recommended)** 
 
 Due to the inclusion of many polular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for your patience during installation, and we do believe EMP could largely speed up your research work.
 
