@@ -18,8 +18,8 @@ pak::pkg_install("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 #### 1. Common error about the timeout
-
-For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
+Solution method:
+>For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
 ```R
 ## For china main land users could use this
 local({r <- getOption("repos")
@@ -32,7 +32,9 @@ options("url.method"="libcurl")
 ```
 #### 2. Common error about the <u>pkgbuild::check build tools(debug = TRUE)</u>
 
-For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (For R 4.3.x need rtool43, for R 4.4.x need rtool44, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
+Solution method:
+
+>For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (For R 4.3.x need rtool43, for R 4.4.x need rtool44, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
 
 <img src="Installation_figs/rtool.jpg" alt="rtool" style="zoom:40%;" />
 
@@ -51,17 +53,18 @@ remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 #### 1. Common error about the timeout.
-Because EasyMultiProfiler incluld many necessary data to provide comprehensive tools, the package size (~10MB) may lead to install timeout error for some users in bad network region. Users could reset the Max linktime to make sure the installation success.
-Solution method:
 
+Solution method:
+>Because EasyMultiProfiler incluld many necessary data to provide comprehensive tools, the package size (~10MB) may lead to install timeout error for some users in bad network region. Users could reset the Max linktime to make sure the installation success.
 ```R
 options(timeout = 600000000) 
 ```
 
 #### 2. Common error about the can't find the bioconductor repository by install_github
 
-Users could set the correct repository handly to make the installation.
 Solution method:
+
+>Users could set the correct repository handly to make the installation.
 
 ```R
 setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/bioc",
@@ -78,11 +81,11 @@ Because the patchwork has two version to lead unexpercted conflict in the packag
 
 Solution method 1:
 
-During the installation process, be careful that not upgrade patchwork to version 2.4.
+>During the installation process, be careful that not upgrade patchwork to version 2.4.
 
 Solution method 2:
 
-If conflict already occuered, users could check the patchwork version and re-install patchwork at the version 1.2.0.
+>If conflict already occuered, users could check the patchwork version and re-install patchwork at the version 1.2.0.
 
 <img src="Installation_figs/patchwork_error2.jpg" alt="patchwork_error2" style="zoom:40%;" />
 
