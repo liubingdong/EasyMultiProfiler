@@ -47,7 +47,8 @@ remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 
-More installation error and solution: 
+More installation error and solution: [**Click this**](https://github.com/liubingdong/EasyMultiProfiler/blob/main/tutorial_related/Installation.md)
+
 
 ### Import data 
 
