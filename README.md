@@ -51,7 +51,7 @@ More installation error and solution:
 
 ### Import data 
 
-[**demo data files is in the EMP_demo_data.7z**](https://github.com/liubingdong/EasyMultiProfier/blob/main/EMP_demo_data.7z) 
+[**demo data files is in the EMP_demo_data.7z**](https://github.com/liubingdong/EasyMultiProfiler/tree/main/tutorial_related/EMP_demo_data.7z) 
 
 1. Completely import model
 
