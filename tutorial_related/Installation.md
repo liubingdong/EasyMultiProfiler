@@ -90,6 +90,7 @@ Solution method 2:
 
 ```R
 remotes::install_version("patchwork",version='1.2.0',force = TRUE)
+pak::pkg_install("liubingdong/EasyMultiProfiler") ## After restart R
 ```
 
 
