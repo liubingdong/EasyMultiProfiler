@@ -2,7 +2,7 @@
 
 ## EasyMultiProfiler: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization
 <a href="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png"><img src="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png" width=150 align="right" ></a>
-![](https://img.shields.io/badge/R%20language->=4.2.0-brightgreen.svg)
+![](https://img.shields.io/badge/R%20language->=4.3.0-brightgreen.svg)
 ![](https://img.shields.io/badge/Mac%20OSX%20&%20Windows-Available-brightgreen.svg)
 ![](https://img.shields.io/badge/Release%20version-0.1.0-brightgreen.svg)
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/liubingdong/EasyMultiProfier)
@@ -34,7 +34,7 @@ options("url.method"="libcurl")
 
 Solution method:
 
->For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (eg. for R 4.2.x need RTool4.2, for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
+>For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
 
 <img src="Installation_figs/rtool.jpg" height="300" width="750" />
 
