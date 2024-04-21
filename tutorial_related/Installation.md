@@ -81,13 +81,13 @@ Because the patchwork has two version to lead unexpercted conflict in the packag
 
 Solution method 1:
 
+<img src="Installation_figs/patchwork_error2.jpg" alt="patchwork_error2" style="zoom:40%;" />
+
 >During the installation process, be careful that not upgrade patchwork to version 2.4.
 
 Solution method 2:
 
 >If conflict already occuered, users could check the patchwork version and re-install patchwork at the version 1.2.0.
-
-<img src="Installation_figs/patchwork_error2.jpg" alt="patchwork_error2" style="zoom:40%;" />
 
 ```R
 remotes::install_version("patchwork",version='1.2.0',force = TRUE)
