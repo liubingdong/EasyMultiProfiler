@@ -14,7 +14,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 **Easily install**
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
-pak::pak("liubingdong/EasyMultiProfiler")
+pak::pkg_install("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 NOTE: For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
@@ -29,7 +29,7 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-**Completely install (Recommended)** 
+**Completely install** 
 
 Due to the inclusion of many polular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for your patience during installation, and we do believe EMP could largely speed up your research work.
 
@@ -46,6 +46,8 @@ BiocManager::install("clusterProfiler") # clusterProfiler (>= 4.10.0)
 remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
+
+More installation error and solution: 
 
 ### Import data 
 
