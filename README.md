@@ -29,7 +29,11 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-NOTE 2: For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.0~4.1.3 need RTool4.0, for R 4.2.x need RTool4.2, for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```
+NOTE 2: For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.0~4.1.3 need RTool4.0, for R 4.2.x need RTool4.2, for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try below:
+
+```R
+pak::pkg_install("liubingdong/EasyMultiProfiler")
+```
 
 **Completely install** 
 
