@@ -36,7 +36,7 @@ Solution method:
 
 >For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (For R 4.3.x need rtool43, for R 4.4.x need rtool44, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
 
-<img src="Installation_figs/rtool.jpg" alt="rtool" style="zoom:40%;" />
+<img src="Installation_figs/rtool.jpg" height="300" width="750" />
 
 **Completely install** 
 ```R
@@ -81,9 +81,8 @@ Because the patchwork has two version to lead unexpercted conflict in the packag
 
 Solution method 1:
 
-<img src="Installation_figs/patchwork_error2.jpg" alt="patchwork_error2" style="zoom:40%;" />
-
 >During the installation process, be careful that not upgrade patchwork to version 2.4.
+<img src="Installation_figs/patchwork_error2.jpg" height="360" width="820" />
 
 Solution method 2:
 
