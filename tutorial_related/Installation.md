@@ -39,7 +39,7 @@ Solution method:
 <img src="Installation_figs/rtool.jpg" height="300" width="750" />
 
 #### 3. Common error about "Cannot open lock file: Permission denied"
-<img src="Installation_figs/pak_error1.jpg" height="300" width="750" />
+<img src="Installation_figs/pak_error1.jpg" >
 
 >For this situation, users could delete the un-downloaded files in the R
 
