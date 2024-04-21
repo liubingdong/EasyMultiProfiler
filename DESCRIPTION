@@ -70,5 +70,5 @@ Packaged: 2024-03-06 17:14:44 UTC; 13766
 Author: Bingdong liu [aut, cre],
   Erqiang Hu [aut, ctb]
 Depends: 
-    R (>= 4.1.0)
+    R (>= 4.2.0)
 LazyData: FALSE

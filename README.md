@@ -2,7 +2,7 @@
 
 ## EasyMultiProfiler: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization
 <a href="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png"><img src="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png" width=150 align="right" ></a>
-![](https://img.shields.io/badge/R%20language->=4.0.0-brightgreen.svg)
+![](https://img.shields.io/badge/R%20language->=4.2.0-brightgreen.svg)
 ![](https://img.shields.io/badge/Mac%20OSX%20&%20Windows-Available-brightgreen.svg)
 ![](https://img.shields.io/badge/Release%20version-0.1.0-brightgreen.svg)
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/liubingdong/EasyMultiProfier)
@@ -29,7 +29,7 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-NOTE 2: For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.0~4.1.3 need RTool4.0, for R 4.2.x need RTool4.2, for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try below:
+NOTE 2: For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.2.x need RTool4.2, for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try below:
 
 ```R
 pak::pkg_install("liubingdong/EasyMultiProfiler")
