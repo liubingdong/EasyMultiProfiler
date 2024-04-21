@@ -17,7 +17,7 @@ if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
 pak::pkg_install("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
-NOTE: For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
+NOTE 1: For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
 ```R
 ## For china main land users could use this
 local({r <- getOption("repos")
@@ -28,6 +28,8 @@ options(BioC_mirror="https://mirrors.ustc.edu.cn/bioc/")
 options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
+
+NOTE 2: For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.0~4.1.3 need RTool4.0, for R 4.2.x need RTool4.2, for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```
 
 **Completely install** 
 

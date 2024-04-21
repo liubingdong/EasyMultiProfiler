@@ -34,7 +34,7 @@ options("url.method"="libcurl")
 
 Solution method:
 
->For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (For R 4.3.x need rtool43, for R 4.4.x need rtool44, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
+>For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (eg. for R 4.0~4.1.3 need RTool4.0, for R 4.2.x need RTool4.2, for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
 
 <img src="Installation_figs/rtool.jpg" height="300" width="750" />
 
