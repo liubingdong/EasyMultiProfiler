@@ -30,13 +30,23 @@ options(BioC_mirror="https://mirrors.ustc.edu.cn/bioc/")
 options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
-#### 2. Common error about the <u>pkgbuild::check build tools(debug = TRUE)</u>
+#### 2. Common error about the "pkgbuild::check build tools(debug = TRUE)"
 
 Solution method:
 
 >For Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (For R 4.3.x need rtool43, for R 4.4.x need rtool44, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
 
 <img src="Installation_figs/rtool.jpg" height="300" width="750" />
+
+#### 3. Common error about "Cannot open lock file: Permission denied"
+<img src="Installation_figs/pak_error1.jpg" height="300" width="750" />
+
+>For this situation, users could delete the un-downloaded files in the R
+
+```R
+## For mac
+rm -rf /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/_cache/*
+```
 
 **Completely install** 
 ```R
