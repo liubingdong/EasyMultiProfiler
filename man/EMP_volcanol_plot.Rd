@@ -52,12 +52,12 @@ MAE |>
 MAE |>
   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-  EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64')) 
+  EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19')) 
 
 # Addtionl parameters will pass into ggrepel::geom_text_repel.
 MAE |>
   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-  EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64'),color = "white",
+  EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),color = "white",
                     bg.color = "grey30",bg.r = 0.15)
 }
