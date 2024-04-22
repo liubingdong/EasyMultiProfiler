@@ -28,7 +28,7 @@ Imports:
     magrittr (>= 2.0.3),
     Matrix (>= 1.6.5),
     memoise (>= 2.0.1),
-    methods (>= 4.3.1),
+    methods (>= 4.3.0),
     missRanger (>= 2.4.0),
     MultiAssayExperiment (>= 1.28.0),
     patchwork (== 1.2.0),
