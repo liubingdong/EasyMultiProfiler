@@ -32,6 +32,11 @@
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
 #'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),color = "white",
 #'                     bg.color = "grey30",bg.r = 0.15)
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),
+#'                     min.segment.length = 0, seed = 42, box.padding = 0.5) ## Add arrow
 
 EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
                            html_width=NULL,html_height=NULL,key_feature=NULL,
