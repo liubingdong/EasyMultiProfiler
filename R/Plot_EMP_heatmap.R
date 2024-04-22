@@ -109,7 +109,6 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_heatmap_plot
 #' @importFrom dplyr mutate
-#' @importFrom ggplot2 guides
 #'
 #'
 EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show='all',mytheme = 'theme()'){
@@ -225,3 +224,82 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
     return(EMPT)
   }
 }
+
+
+#' @param obj EMPT or EMP object
+#' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
+#' @param rotate A boolean. Whether rotate the heatmap or not. (Only activated for EMP_assay_data)
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @rdname EMP_heatmap_plot
+
+EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkred"),rotate=FALSE,
+                                         mytheme = 'theme()'){
+  
+  primary <- value <- NULL
+  
+  if (inherits(obj,"EMPT")) {
+    EMPT <- obj
+  }else{
+    stop('Please check the input data!')
+  } 
+  
+  result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data')
+  
+  df <- result %>% tidyr::pivot_longer(
+    cols =  -primary,
+    names_to = 'feature',
+    values_to = "value"
+  )
+  
+  
+  if (rotate == FALSE) {
+    xy_name <- c('feature','primary')
+  }else{
+    xy_name <- c('primary','feature')
+  }
+  
+  if (length(palette) >= 3) {
+    p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
+      geom_tile(color = "white") +
+      scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + 
+      theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
+      #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+      eval(parse(text = paste0(mytheme)))
+  }else if(length(palette) == 2){
+    p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
+      geom_tile(color = "white") +
+      scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + 
+      theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
+      #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+      eval(parse(text = paste0(mytheme)))
+  }else if(length(palette) == 1){
+    check_palette <- palette %in% c('BrBG', 'PiYG', 'PRGn', 'PuOr', 'RdBu', 'RdGy', 'RdYlBu', 'RdYlGn', 'Spectral',
+                                    'Accent', 'Dark2', 'Paired', 'Pastel1', 'Pastel2', 'Set1', 'Set2', 'Set3',
+                                    'Blues', 'BuGn', 'BuPu', 'GnBu', 'Greens', 'Greys', 'Oranges', 'OrRd', 'PuBu',
+                                    'PuBuGn', 'PuRd', 'Purples', 'RdPu', 'Reds', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd')
+    if (check_palette) {
+      p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
+        geom_tile(color = "white") +
+        scale_fill_distiller(palette=palette) +  
+        theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
+        #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+        eval(parse(text = paste0(mytheme)))
+      
+    }else{
+      p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
+        geom_tile(color = "white") +
+        scale_fill_steps(low = 'white',high = palette) + 
+        theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
+        #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
+        eval(parse(text = paste0(mytheme)))
+    }
+  }
+  
+  .get.plot_deposit.EMPT(EMPT,info='EMP_assay_heatmap') <- p1
+  .get.info.EMPT(EMPT) <- 'EMP_assay_heatmap'
+  .get.history.EMPT(EMPT) <- call
+  class(EMPT) <- 'EMP_assay_heatmap'
+  return(EMPT)
+}  
+
+

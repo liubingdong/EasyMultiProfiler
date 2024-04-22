@@ -2,14 +2,18 @@
 % Please edit documentation in R/02.EMP.utilis.R, R/Plot_EMP_heatmap.R
 \name{EMP_heatmap_plot}
 \alias{EMP_heatmap_plot}
+\alias{EMP_heatmap_plot,EMP_assay_heatmap_union-method}
 \alias{EMP_heatmap_plot,EMP_cor_analysis-method}
 \alias{EMP_heatmap_plot,EMP_WGCNA_cor_analysis-method}
 \alias{EMP_heatmap_plot,EMP_WGCNA_cor_analysis2-method}
 \alias{EMP_heatmap.EMP_cor_analysis}
 \alias{EMP_heatmap.WGCNA}
+\alias{EMP_heatmap.EMP_assay_data}
 \title{EMP heatmap plot}
 \usage{
 EMP_heatmap_plot(obj, ...)
+
+\S4method{EMP_heatmap_plot}{EMP_assay_heatmap_union}(obj, ...)
 
 \S4method{EMP_heatmap_plot}{EMP_cor_analysis}(obj, ...)
 
@@ -30,6 +34,13 @@ EMP_heatmap.WGCNA(
   show = "all",
   mytheme = "theme()"
 )
+
+EMP_heatmap.EMP_assay_data(
+  obj,
+  palette = c("steelblue", "white", "darkred"),
+  rotate = FALSE,
+  mytheme = "theme()"
+)
 }
 \arguments{
 \item{obj}{EMPT or EMP object}
@@ -41,6 +52,8 @@ EMP_heatmap.WGCNA(
 \item{show}{A character string. Show inluding all, sig and pvalue.}
 
 \item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
+
+\item{rotate}{A boolean. Whether rotate the heatmap or not. (Only activated for EMP_assay_data)}
 }
 \value{
 EMPT or EMP object
@@ -51,6 +64,21 @@ EMP heatmap plot
 \examples{
 \dontrun{
 data(MAE)
+## for assay
+MAE \%>\%
+  EMP_assay_extract('geno_ec') \%>\%
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) \%>\%
+  EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) \%>\%
+  EMP_decostand(method = 'clr') \%>\%
+  EMP_heatmap_plot(rotate=FALSE,palette='Spectral')
+
+MAE \%>\%
+  EMP_assay_extract('geno_ec') \%>\%
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) \%>\%
+  EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) \%>\%
+  EMP_collapse(estimate_group = 'Group',collapse_by = 'col') \%>\% # collapse the data by group
+  EMP_heatmap_plot(rotate=TRUE,palette='Spectral')
+
 ## for cor analysis
 k1 <- MAE |>
   EMP_assay_extract('taxonomy') |>
@@ -66,6 +94,7 @@ k2 <- MAE |>
 
 (k1 + k2) \%>\% EMP_cor_analysis(method = 'spearman') |>
   EMP_heatmap_plot() ## Visualization
+
 ## for WGCNA
 MAE |>
   EMP_assay_extract('geno_ec')  |> 

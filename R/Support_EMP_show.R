@@ -98,6 +98,9 @@ setMethod("show", "EMPT",
                    },
                    "EMP_diff_volcanol_plot" = {
                      .show_EMP_diff_volcanol_plot(object,.get.plot_specific.EMPT(object))
+                   },
+                   "EMP_assay_heatmap" = {
+                     .get.result.EMPT(object) %>% print()
                    }
                    )
           }
@@ -197,6 +200,9 @@ setMethod("show", "EMPT",
                               }else{
                                 return(NULL)
                               }
+                   },
+                   "EMP_assay_heatmap" = {
+                      return(.get.plot_deposit.EMPT(object,info='EMP_assay_heatmap'))
                    },                
                   {
                    print('No info is matched!')

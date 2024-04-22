@@ -116,6 +116,21 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 #' @examples
 #' \dontrun{
 #' data(MAE)
+#' ## for assay
+#' MAE %>%
+#'   EMP_assay_extract('geno_ec') %>%
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) %>%
+#'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) %>%
+#'   EMP_decostand(method = 'clr') %>%
+#'   EMP_heatmap_plot(rotate=FALSE,palette='Spectral')
+#'
+#' MAE %>%
+#'   EMP_assay_extract('geno_ec') %>%
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) %>%
+#'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) %>%
+#'   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') %>% # collapse the data by group
+#'   EMP_heatmap_plot(rotate=TRUE,palette='Spectral')
+#'
 #' ## for cor analysis
 #' k1 <- MAE |>
 #'   EMP_assay_extract('taxonomy') |>
@@ -131,6 +146,7 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 #' 
 #' (k1 + k2) %>% EMP_cor_analysis(method = 'spearman') |>
 #'   EMP_heatmap_plot() ## Visualization
+#'
 #' ## for WGCNA
 #' MAE |>
 #'   EMP_assay_extract('geno_ec')  |> 
@@ -141,6 +157,10 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 #' }
 setGeneric("EMP_heatmap_plot",function(obj, ...) standardGeneric("EMP_heatmap_plot"))
 
+#' @rdname EMP_heatmap_plot
+setMethod("EMP_heatmap_plot","EMP_assay_heatmap_union",function(obj, ...){
+  EMP_heatmap.EMP_assay_data(obj, ...)
+})
 
 #' @rdname EMP_heatmap_plot
 setMethod("EMP_heatmap_plot","EMP_cor_analysis",function(obj, ...){
