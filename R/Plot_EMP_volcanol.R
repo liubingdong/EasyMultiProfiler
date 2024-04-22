@@ -3,11 +3,13 @@
 #' @param EMPT EMPT object
 #' @param y A character string. Select the pvalue from the EMP_diff_analysis.
 #' @param palette A series of character string. Color palette.
+#' @param key_feature A series of character string. Label the some feature.
 #' @param show A character string include pic (default), html.
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
-#'
+#' @param ... Further parameters passed to ggrepel::geom_text_repel.
+#' @importFrom ggrepel geom_text_repel
 #' @return EMPT object
 #' @export
 #'
@@ -17,10 +19,24 @@
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
 #'   EMP_volcanol_plot(show='html')
+#'
+#' # label feature
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64')) 
+#'
+#' # Addtionl parameters will pass into ggrepel::geom_text_repel.
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64'),color = "white",
+#'                     bg.color = "grey30",bg.r = 0.15)
+
 EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
-                           html_width=NULL,html_height=NULL,
-                           mytheme = 'theme()') {
-  sign_group <- log2FC <- feature <- color <- NULL
+                           html_width=NULL,html_height=NULL,key_feature=NULL,
+                           mytheme = 'theme()',...) {
+  sign_group <- log2FC <- feature <- color <- key <- NULL
   if (is.null(palette)) {
     col_values <- .get.palette.EMPT(EMPT)
   }else {
@@ -66,25 +82,49 @@ EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
   xlim_break <- xlim_break[1:idx]
   xlim_break <- c(xlim_break,xlim_break*-1) %>% unique() %>% sort()
 
+  # set the key feature
+  data <- data %>% dplyr::mutate(key = ifelse(feature %in% key_feature,'key',NA))
+  if (is.null(key_feature)) {
+      p1 <- ggplot(data, aes(x = log2FC, y = -log10(!!dplyr::sym(y)))) +
+          ggiraph::geom_jitter_interactive(aes(tooltip = paste0(feature,' : ',log2FC,' ',!!dplyr::sym(y)),
+                                               color = factor(color)), size = 1.75, alpha = 0.8, na.rm = T)+
+          # add gene points
+          ggtitle(label = title_info) +  # add title
+          xlab(expression(log[2]("fold change"))) + # x-axis label
+          ylab(substitute(-log[10](x), list(x = as.name(y)))) + # y-axis label
+          geom_vline(xintercept = 0, colour = "black") + # add line at 0
+          geom_hline(yintercept = 1.3, colour = "black") + # p(0.05) = 1.3
+          scale_x_continuous(breaks=xlim_break,limits = c(min(xlim_break),max(xlim_break))) +  # set x axis
+          # 根据需要调节纵坐标
+          scale_y_continuous(breaks = ylim_break,limits = c(min(ylim_break),max(ylim_break)),trans = "log1p") + # set y axis
 
-  p1 <- ggplot(data, aes(x = log2FC, y = -log10(!!dplyr::sym(y)))) +
-    ggiraph::geom_jitter_interactive(aes(tooltip = paste0(feature,' : ',log2FC,' ',!!dplyr::sym(y)),
-                                         color = factor(color)), size = 1.75, alpha = 0.8, na.rm = T)+
-    # add gene points
-    ggtitle(label = title_info) +  # add title
-    xlab(expression(log[2]("fold change"))) + # x-axis label
-    ylab(substitute(-log[10](x), list(x = as.name(y)))) + # y-axis label
-    geom_vline(xintercept = 0, colour = "black") + # add line at 0
-    geom_hline(yintercept = 1.3, colour = "black") + # p(0.05) = 1.3
-    scale_x_continuous(breaks=xlim_break,limits = c(min(xlim_break),max(xlim_break))) +  # set x axis
-    # 根据需要调节纵坐标
-    scale_y_continuous(breaks = ylim_break,limits = c(min(ylim_break),max(ylim_break)),trans = "log1p") + # set y axis
+          scale_color_manual(values = c("UP" = col_values[1],
+                                        "DOWN" = col_values[2],
+                                        "none" = "#636363")) +
+          theme_bw() + # clean up theme
+          theme(legend.position = "none")
+  }else{
+      p1 <- ggplot(data, aes(x = log2FC, y = -log10(!!dplyr::sym(y)),label = feature)) +
+            ggrepel::geom_text_repel(data=subset(data,key == 'key'),...) +
+            ggiraph::geom_jitter_interactive(aes(tooltip = paste0(feature,' : ',log2FC,' ',!!dplyr::sym(y)),
+                                                 color = factor(color)), size = 1.75, alpha = 0.8, na.rm = T)+
+            # add gene points
+            ggtitle(label = title_info) +  # add title
+            xlab(expression(log[2]("fold change"))) + # x-axis label
+            ylab(substitute(-log[10](x), list(x = as.name(y)))) + # y-axis label
+            geom_vline(xintercept = 0, colour = "black") + # add line at 0
+            geom_hline(yintercept = 1.3, colour = "black") + # p(0.05) = 1.3
+            scale_x_continuous(breaks=xlim_break,limits = c(min(xlim_break),max(xlim_break))) +  # set x axis
+            # 根据需要调节纵坐标
+            scale_y_continuous(breaks = ylim_break,limits = c(min(ylim_break),max(ylim_break)),trans = "log1p") + # set y axis
 
-    scale_color_manual(values = c("UP" = col_values[1],
-                                  "DOWN" = col_values[2],
-                                  "none" = "#636363")) +
-    theme_bw() + # clean up theme
-    theme(legend.position = "none")
+            scale_color_manual(values = c("UP" = col_values[1],
+                                          "DOWN" = col_values[2],
+                                          "none" = "#636363")) +
+            theme_bw() + # clean up theme
+            theme(legend.position = "none")
+  }
+ 
 
   data_plot <- list()
   data_plot[['pic']] <- p1

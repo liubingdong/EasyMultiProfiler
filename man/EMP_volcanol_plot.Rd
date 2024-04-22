@@ -11,7 +11,9 @@ EMP_volcanol_plot(
   show = "pic",
   html_width = NULL,
   html_height = NULL,
-  mytheme = "theme()"
+  key_feature = NULL,
+  mytheme = "theme()",
+  ...
 )
 }
 \arguments{
@@ -27,7 +29,11 @@ EMP_volcanol_plot(
 
 \item{html_height}{An interger. Set the html height.}
 
+\item{key_feature}{A series of character string. Label the some feature.}
+
 \item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
+
+\item{...}{Further parameters passed to ggrepel::geom_text_repel.}
 }
 \value{
 EMPT object
@@ -41,4 +47,17 @@ MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
   EMP_volcanol_plot(show='html')
+
+# label feature
+MAE |>
+  EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+  EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64')) 
+
+# Addtionl parameters will pass into ggrepel::geom_text_repel.
+MAE |>
+  EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+  EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64'),color = "white",
+                    bg.color = "grey30",bg.r = 0.15)
 }

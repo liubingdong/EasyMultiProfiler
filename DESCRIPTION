@@ -21,6 +21,7 @@ Imports:
     ggplot2 (>= 3.5.0),
     ggsignif (>= 0.6.4),
     ggthemes (>= 5.1.0),
+    ggrepel,
     glue (>= 1.7.0),
     gson (>= 0.1.0),
     impute (>= 1.76.0),
