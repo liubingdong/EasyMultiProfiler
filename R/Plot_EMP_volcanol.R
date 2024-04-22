@@ -8,7 +8,7 @@
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
-#' @param ... Further parameters passed to ggrepel::geom_text_repel.
+#' @param ... Further parameters passed to ggrepel::geom_text_repel
 #' @importFrom ggrepel geom_text_repel
 #' @return EMPT object
 #' @export
@@ -24,13 +24,13 @@
 #' MAE |>
 #'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64')) 
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19')) 
 #'
 #' # Addtionl parameters will pass into ggrepel::geom_text_repel.
 #' MAE |>
 #'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','3.6.1.64'),color = "white",
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),color = "white",
 #'                     bg.color = "grey30",bg.r = 0.15)
 
 EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
