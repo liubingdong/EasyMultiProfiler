@@ -3,7 +3,7 @@
 #' @importFrom dplyr matches
 #' @importFrom dplyr n_distinct
 .EMP_diff_analysis_tidybulk <- function(EMPT,method,.formula,p.adjust='fdr',group_level=NULL,...) {
-  pvalue <- feature <- Estimate_group <- sign_group <- vs <- log2FC <- Estimate_group <- fold_change <- `.` <- NULL
+  pvalue <- feature <- sign_group <- vs <- log2FC <- estimate_group <- fold_change <- `.` <- NULL
   batch_effect <- NULL
   Group_info <- as.list(.formula)[[2]]
   estimate_group <- as.list(Group_info)[[length(Group_info)]] %>% as.character()
@@ -27,6 +27,8 @@
     stop('For ',method,' only support supports two-category group!')
   }
 
+  origin_group_level <- group_level
+
   if (!is.null(group_level)) {
     switch(method,
            "edgeR_quasi_likelihood" = {group_level <- paste0(estimate_group,group_level[1],'-',estimate_group,group_level[2])},
@@ -49,18 +51,19 @@
 
 
   if (!is.null(group_level)) {
-    design_raw_info <- result %>%
-      dplyr::select(last_col()) %>% colnames() %>%
-      strsplit(.,split = '___') %>% unlist()
-
-    design_fix <- paste0('___',design_raw_info[2])
-
-    result %<>%
-      dplyr::rename_with(~stringr::str_remove(., design_fix))
-
-    design_info <- design_raw_info[2]
-    design_info %<>% gsub(estimate_group, "",.) %>% trimws() %>%
-      gsub("-", " vs ",.)
+    #  design_raw_info <- result %>%
+    #    dplyr::select(last_col()) %>% colnames() %>%
+    #    strsplit(.,split = '___') %>% unlist()
+    #  
+    #  design_fix <- paste0('___',design_raw_info[2])
+    #  
+    #  result %<>%
+    #    dplyr::rename_with(~stringr::str_remove(., design_fix))
+    #  
+    #  design_info <- design_raw_info[2]
+    #  design_info %<>% gsub(estimate_group, "",.) %>% trimws() %>%
+    #    gsub("-", " vs ",.)
+    design_info <- paste0(origin_group_level[1],' vs ', origin_group_level[2])
     design_info_detail <- strsplit(design_info,'vs') %>% unlist() %>% trimws()
   }else {
     design_raw_info <- factor(colData(EMPT)[[estimate_group]]) %>% unique()
@@ -200,7 +203,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
 .EMP_diff_analysis <- function(EMPT,experiment,assay_name,method,
                                estimate_group=NULL,feature_name=NULL,
                                p.adjust='fdr',group_level=NULL,core=NULL,...){
-  primary <- pvalue <- feature <- Estimate_group <- sign_group <- vs <- NULL
+  primary <- pvalue <- feature <- sign_group <- vs <- NULL
   message_info <- list()
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
