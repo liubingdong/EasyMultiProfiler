@@ -1346,21 +1346,66 @@ MAE |>
 
 2. Cluster the samples according to the coldata
 
-  ```R
+```R
 MAE |> 
   EMP_coldata_extract(action = 'add') |> ### transfer the coldata to asaay
   EMP_impute(assay = T) |> ### impute missing value
   EMP_cluster_analysis(method = 'ward.D2',distance='clark',h=0.2) 
-  ```
+```
+<img src="tutorial_related/tutorial_figs/clust3.jpg" alt="clust3" style="zoom:100%;" />
+
+    $sample_cluster_result
+    # A tibble: 20 × 2
+       primary cluster
+       <chr>     <int>
+     1 P52630        1
+     2 P96518        2
+     3 P31579        3
+     4 P75656        4
+     5 P40725        5
+     6 P94346        6
+     7 P66101        7
+     8 P68071        8
+     9 P33531        8
+    10 P40923        9
+    11 P36987       10
+    12 P11774       10
+    13 P70597       11
+    14 P54631       12
+    15 P95158       12
+    16 P60426       13
+    17 P69489       13
+    18 P51956       14
+    19 P51467       14
+    20 P84567       14
+
 
 3. Cluster the features according to the assay data
 
-  ```R
+```R
 MAE |> 
   EMP_assay_extract(experiment = 'geno_ec',
                     pattern='1.1.1.1',pattern_ref='feature') |>
   EMP_cluster_analysis(rowdata = T,h=0.8)
-  ```
+```
+
+    $feature_cluster_result
+    # A tibble: 21 × 2
+       feature   cluster
+       <chr>       <int>
+     1 1.1.1.102       1
+     2 1.1.1.105       2
+     3 1.1.1.141       3
+     4 1.1.1.1         4
+     5 1.1.1.17        4
+     6 1.1.1.169       4
+     7 1.1.1.193       4
+     8 1.1.1.133       4
+     9 1.1.1.14        4
+    10 1.1.1.18        4
+    # ℹ 11 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
 
 #### EMP_cor_analysis
 
@@ -1379,6 +1424,7 @@ k2 <- MAE |>
 (k1 + k2) |> EMP_cor_analysis(method = 'spearman') |>
   EMP_heatmap_plot() ###### Visualization
 ```
+<img src="tutorial_related/tutorial_figs/cor1.jpg" alt="cor1" style="zoom:100%;" />
 
 
 #### EMP_diff_analysis
@@ -1390,12 +1436,43 @@ MAE |>
   EMP_decostand(experiment = 'taxonomy',method = 'relative',pseudocount=0.0001) |>
   EMP_diff_analysis(method = 't.test',estimate_group = 'Group',p.adjust = 'fdr')
 ```
+    # A tibble: 445 × 9
+       feature                         Estimate_group pvalue   fdr sign_group method vs    fold_change   log2FC
+       <chr>                           <chr>           <dbl> <dbl> <chr>      <chr>  <chr>       <dbl>    <dbl>
+     1 Archaea;Candidatus_Thermoplasm… Group           0.343 0.741 Group_B    Welch… Grou…    1000      9.97   
+     2 Archaea;Euryarchaeota;Methanob… Group           0.206 0.741 Group_B    Welch… Grou…    1000      9.97   
+     3 Bacteria;Actinobacteria;Actino… Group           0.343 0.741 Group_A    Welch… Grou…       0.001 -9.97   
+     4 Bacteria;Actinobacteria;Actino… Group           0.398 0.773 Group_A    Welch… Grou…       0.548 -0.867  
+     5 Bacteria;Actinobacteria;Actino… Group           0.392 0.773 Group_A    Welch… Grou…       0.417 -1.26   
+     6 Bacteria;Actinobacteria;Actino… Group           0.999 1.00  Group_A    Welch… Grou…       0.999 -0.00188
+     7 Bacteria;Actinobacteria;Actino… Group           0.749 0.950 Group_A    Welch… Grou…       0.769 -0.378  
+     8 Bacteria;Actinobacteria;Actino… Group           0.587 0.880 Group_B    Welch… Grou…       2.00   1.00   
+     9 Bacteria;Actinobacteria;Actino… Group           0.669 0.933 Group_A    Welch… Grou…       0.723 -0.468  
+    10 Bacteria;Actinobacteria;Actino… Group           0.436 0.785 Group_B    Welch… Grou…       3.06   1.62   
+    # ℹ 435 more rows
+    # ℹ Use `print(n = ...)` to see more rows
 
 ```R
 MAE |>
   EMP_decostand(experiment = 'taxonomy',method = 'relative',pseudocount=0.0001) |>
-  EMP_diff_analysis(method = 't.test',estimate_group = 'Group',p.adjust = 'fdr')
+  EMP_diff_analysis(method = 'wilcox.test',estimate_group = 'Group',p.adjust = 'fdr')
 ```
+    # A tibble: 445 × 9
+       feature                         Estimate_group pvalue   fdr sign_group method vs    fold_change   log2FC
+       <chr>                           <chr>           <dbl> <dbl> <chr>      <chr>  <chr>       <dbl>    <dbl>
+     1 Archaea;Candidatus_Thermoplasm… Group           0.368 0.766 Group_B    Wilco… Grou…    1000      9.97   
+     2 Archaea;Euryarchaeota;Methanob… Group           0.168 0.766 Group_B    Wilco… Grou…    1000      9.97   
+     3 Bacteria;Actinobacteria;Actino… Group           0.368 0.766 Group_A    Wilco… Grou…       0.001 -9.97   
+     4 Bacteria;Actinobacteria;Actino… Group           0.649 0.958 Group_A    Wilco… Grou…       0.548 -0.867  
+     5 Bacteria;Actinobacteria;Actino… Group           0.780 1     Group_A    Wilco… Grou…       0.417 -1.26   
+     6 Bacteria;Actinobacteria;Actino… Group           1     1     Group_A    Wilco… Grou…       0.999 -0.00188
+     7 Bacteria;Actinobacteria;Actino… Group           1     1     Group_A    Wilco… Grou…       0.769 -0.378  
+     8 Bacteria;Actinobacteria;Actino… Group           0.957 1     Group_B    Wilco… Grou…       2.00   1.00   
+     9 Bacteria;Actinobacteria;Actino… Group           0.704 0.983 Group_A    Wilco… Grou…       0.723 -0.468  
+    10 Bacteria;Actinobacteria;Actino… Group           0.905 1     Group_B    Wilco… Grou…       3.06   1.62   
+    # ℹ 435 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
 
 DESeq2
 
@@ -1403,12 +1480,46 @@ DESeq2
 MAE |>
   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  
+```
 
+    # A tibble: 2,424 × 9
+       feature   Estimate_group pvalue   fdr sign_group method vs                 fold_change  log2FC
+       <chr>     <chr>           <dbl> <dbl> <fct>      <chr>  <chr>                    <dbl>   <dbl>
+     1 1.1.1.1   Group          0.747  0.993 Group_A    DESeq2 Group_A vs Group_B       1.04   0.0585
+     2 1.1.1.100 Group          0.194  0.765 Group_A    DESeq2 Group_A vs Group_B       1.49   0.578 
+     3 1.1.1.102 Group          0.903  0.993 Group_B    DESeq2 Group_A vs Group_B       0.775 -0.369 
+     4 1.1.1.103 Group          0.195  0.765 Group_B    DESeq2 Group_A vs Group_B       0.614 -0.704 
+     5 1.1.1.105 Group          0.531  0.968 Group_B    DESeq2 Group_A vs Group_B       0.270 -1.89  
+     6 1.1.1.108 Group          0.0846 0.591 Group_A    DESeq2 Group_A vs Group_B       2.71   1.44  
+     7 1.1.1.11  Group          0.664  0.993 Group_B    DESeq2 Group_A vs Group_B       0.613 -0.706 
+     8 1.1.1.122 Group          0.623  0.993 Group_B    DESeq2 Group_A vs Group_B       0.356 -1.49  
+     9 1.1.1.130 Group          0.0676 0.541 Group_A    DESeq2 Group_A vs Group_B       1.93   0.950 
+    10 1.1.1.132 Group          0.692  0.993 Group_A    DESeq2 Group_A vs Group_B       1.30   0.384 
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
+```R
 MAE |>
   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
   EMP_diff_analysis(method='DESeq2',
                     .formula = ~Region+Group)  # Eliminate the batch_effect in DESeq2
 ```
+
+    # A tibble: 2,424 × 10
+       feature   Estimate_group batch_effect pvalue   fdr sign_group method vs               fold_change log2FC
+       <chr>     <chr>          <chr>         <dbl> <dbl> <fct>      <chr>  <chr>                  <dbl>  <dbl>
+     1 1.1.1.1   Group          Region       0.152      1 Group_A    DESeq2 Group_A vs Grou…      1.20    0.264
+     2 1.1.1.100 Group          Region       0.304      1 Group_B    DESeq2 Group_A vs Grou…      0.714  -0.486
+     3 1.1.1.102 Group          Region       0.917      1 Group_B    DESeq2 Group_A vs Grou…      0.796  -0.329
+     4 1.1.1.103 Group          Region       0.108      1 Group_B    DESeq2 Group_A vs Grou…      0.540  -0.889
+     5 1.1.1.105 Group          Region       0.962      1 Group_B    DESeq2 Group_A vs Grou…      0.901  -0.150
+     6 1.1.1.108 Group          Region       0.860      1 Group_B    DESeq2 Group_A vs Grou…      0.896  -0.158
+     7 1.1.1.11  Group          Region       0.0305     1 Group_B    DESeq2 Group_A vs Grou…      0.0886 -3.50 
+     8 1.1.1.122 Group          Region       0.672      1 Group_B    DESeq2 Group_A vs Grou…      0.397  -1.33 
+     9 1.1.1.130 Group          Region       0.175      1 Group_A    DESeq2 Group_A vs Grou…      1.65    0.719
+    10 1.1.1.132 Group          Region       0.816      1 Group_B    DESeq2 Group_A vs Grou…      0.840  -0.251
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
 
 edgeR_quasi_likelihood
 
@@ -1417,8 +1528,24 @@ MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='edgeR_quasi_likelihood',
                     .formula = ~0+Group,
-                    estimate_group = c('Group_B','Group_A')) # Set the comparison order.
+                    group_level = c('Group_B','Group_A')) # Set the comparison order.
 ```
+
+    # A tibble: 2,424 × 9
+       feature   Estimate_group pvalue   fdr sign_group method                 vs                 fold_change  log2FC
+       <chr>     <chr>           <dbl> <dbl> <chr>      <chr>                  <chr>                    <dbl>   <dbl>
+     1 1.1.1.1   Group          0.838  0.944 Group_B    edgeR_quasi_likelihood Group_B vs Group_A       1.02   0.0343
+     2 1.1.1.100 Group          0.245  0.581 Group_B    edgeR_quasi_likelihood Group_B vs Group_A       1.50   0.584 
+     3 1.1.1.102 Group          0.228  0.581 Group_A    edgeR_quasi_likelihood Group_B vs Group_A       0.549 -0.864 
+     4 1.1.1.103 Group          0.200  0.581 Group_A    edgeR_quasi_likelihood Group_B vs Group_A       0.606 -0.723 
+     5 1.1.1.105 Group          0.0159 0.404 Group_A    edgeR_quasi_likelihood Group_B vs Group_A       0.161 -2.64  
+     6 1.1.1.108 Group          0.0834 0.472 Group_B    edgeR_quasi_likelihood Group_B vs Group_A       2.60   1.38  
+     7 1.1.1.11  Group          0.532  0.788 Group_A    edgeR_quasi_likelihood Group_B vs Group_A       0.648 -0.626 
+     8 1.1.1.122 Group          0.0269 0.404 Group_A    edgeR_quasi_likelihood Group_B vs Group_A       0.204 -2.30  
+     9 1.1.1.130 Group          0.0964 0.477 Group_B    edgeR_quasi_likelihood Group_B vs Group_A       1.87   0.902 
+    10 1.1.1.132 Group          0.151  0.547 Group_B    edgeR_quasi_likelihood Group_B vs Group_A       2.66   1.41  
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
 
 #### EMP_dimension_analysis
 
@@ -1429,6 +1556,34 @@ MAE |>
   EMP_dimension_analysis(experiment = 'taxonomy',method = 'pca') 
 ```
 
+    $dimension_coordinate
+    # A tibble: 20 × 4
+       primary     PC1     PC2     PC3
+       <chr>     <dbl>   <dbl>   <dbl>
+     1 P11774  -0.159   0.304   0.109 
+     2 P31579  -0.151   0.200   0.0612
+     3 P33531  -0.182   0.258   0.320 
+     4 P36987  -0.412  -0.282   0.0987
+     5 P40725  -0.119   0.204  -0.216 
+     6 P40923  -0.177   0.345   0.430 
+     7 P51467  -0.126   0.105  -0.179 
+     8 P51956  -0.0577  0.206  -0.163 
+     9 P52630  -0.0955  0.173  -0.116 
+    10 P54631  -0.388  -0.185  -0.168 
+    11 P60426  -0.186   0.162   0.0472
+    12 P66101  -0.0982  0.266  -0.554 
+    13 P68071  -0.199   0.236   0.160 
+    14 P69489  -0.0563  0.176  -0.203 
+    15 P70597  -0.208  -0.0625  0.0548
+    16 P75656  -0.454  -0.348   0.124 
+    17 P84567  -0.354  -0.160  -0.143 
+    18 P94346  -0.204   0.0187 -0.258 
+    19 P95158  -0.108   0.287   0.126 
+    20 P96518  -0.0985  0.159  -0.207 
+
+    $dimension_axis
+    [1] 57.57 24.58 17.85
+
 Pcoa
 
 ```R
@@ -1436,12 +1591,87 @@ MAE |>
   EMP_dimension_analysis(experiment = 'taxonomy',method = 'pcoa',distance = 'bray')
 ```
 
+    $dimension_coordinate
+       primary        PCoA1        PCoA2       PCoA3
+    1   P11774  0.004101622 -0.219926994  0.09159443
+    2   P31579  0.023514158 -0.147319164  0.02071926
+    3   P33531  0.054036219 -0.230044101  0.03902967
+    4   P36987  0.238096960  0.148201768 -0.03073729
+    5   P40725 -0.171466199  0.018713925 -0.22821785
+    6   P40923 -0.017583826 -0.224562064 -0.04071953
+    7   P51467 -0.285094111  0.207554032  0.04329776
+    8   P51956 -0.385446565  0.095535092 -0.03733299
+    9   P52630 -0.217748926  0.005531636  0.06247941
+    10  P54631  0.307461883  0.167761882  0.10730142
+    11  P60426  0.015935377 -0.146685650 -0.08596156
+    12  P66101  0.145107584 -0.010579636  0.24540364
+    13  P68071  0.003578938 -0.158887519 -0.05831650
+    14  P69489 -0.373006187  0.144111252  0.08385357
+    15  P70597  0.183525914  0.020369985 -0.03454309
+    16  P75656  0.316845121  0.187448812  0.08189323
+    17  P84567  0.297297071  0.165088352  0.03105270
+    18  P94346  0.148312403  0.088701094 -0.43595252
+    19  P95158  0.008474471 -0.241883088  0.06270487
+    20  P96518 -0.295941908  0.130870386  0.08245137
+
+    $dimension_axis
+    [1] 34.34 17.63 13.36
+
+
 Pls
 
 ```R
 MAE |>
   EMP_dimension_analysis(experiment = 'untarget_metabol',
                          method = 'pls',estimate_group = 'Group')
+```
+
+    $dimension_coordinate
+    # A tibble: 20 × 4
+       primary        t1        t2        t3
+       <chr>       <dbl>     <dbl>     <dbl>
+     1 P11774  30317415.  -485647.  1112671.
+     2 P31579  23073876. -3154074. -1561236.
+     3 P33531  41586039.  2274052.  -218469.
+     4 P36987  24001657. -3705934.    73593.
+     5 P40725  29963622.   443779. -2503344.
+     6 P40923  20493156. -5043751. -1217493.
+     7 P51467  42762386.  3914821.   831260.
+     8 P51956  32442328.   946215.   751152.
+     9 P52630  23304045. -1711374.  -123850.
+    10 P54631  25310943. -1882605.  -316750.
+    11 P60426  26056504.  -782059.  3646996.
+    12 P66101  29423188.  -896887.   629807.
+    13 P68071  28259261.   378843.   908272.
+    14 P69489  19440822. -2491971.  1129851.
+    15 P70597  29495328.  8275661. -2098066.
+    16 P75656  26520534. -3582383.  -487312.
+    17 P84567  30019107.   451548.   675429.
+    18 P94346  19015693. -1446437. -1516377.
+    19 P95158  34532584.  1931160.   648033.
+    20 P96518  22610752. -2474239. -1753448.
+
+    $dimension_VIP
+    # A tibble: 710 × 2
+       feature         VIP
+       <chr>         <dbl>
+     1 pos-M61T41  0.00253
+     2 pos-M61T147 0.00268
+     3 pos-M61T51  0.00756
+     4 pos-M62T41  0.00162
+     5 pos-M63T552 0.00550
+     6 pos-M63T551 0.00119
+     7 pos-M65T551 0.00201
+     8 pos-M65T148 0.00564
+     9 pos-M66T41  0.00173
+    10 pos-M67T178 0.00360
+    # ℹ 700 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
+    $dimension_axis
+    [1] 96.400  0.968  0.218
+
+```R
 MAE |>
   EMP_collapse(experiment = 'untarget_metabol',
                na_string=c('NA','null','','-'),
@@ -1450,6 +1680,51 @@ MAE |>
   EMP_dimension_analysis(method = 'pls',estimate_group = 'Group')
 ```
 
+    $dimension_coordinate
+    # A tibble: 20 × 4
+       primary        t1         t2        t3
+       <chr>       <dbl>      <dbl>     <dbl>
+     1 P11774  71825010.   1449190.  -896964.
+     2 P31579  57854806.  -6840135.  -259301.
+     3 P33531  93967497.   9353928. -2458657.
+     4 P36987  58065643.  -7554557. -1001074.
+     5 P40725  64953621.  -2583117. -4083072.
+     6 P40923  49317437. -16100960. -1343397.
+     7 P51467  94531587.  15784738.  1237971.
+     8 P51956  73558938.   -960156. -1523990.
+     9 P52630  53161481.  -5744750.   437193.
+    10 P54631  63597342.  -3929692. -1222343.
+    11 P60426  65907286.   2530232.  7718840.
+    12 P66101  69301960.   2247136.    78185.
+    13 P68071  68988945.   2876256.  3252336.
+    14 P69489  46616005.  -7887130.  2712534.
+    15 P70597  64393609.  13773373.  -311948.
+    16 P75656  63002182.  -9669140.  2230182.
+    17 P84567  68488383.   2547632.  -647486.
+    18 P94346  43868117.  -7950264. -2226006.
+    19 P95158  79129887.   6812869. -2104301.
+    20 P96518  50692582. -16744960.  1435004.
+
+    $dimension_VIP
+    # A tibble: 192 × 2
+       feature      VIP
+       <chr>      <dbl>
+     1 C00020  0.0119  
+     2 C00022  0.000977
+     3 C00025  0.00139 
+     4 C00047  0.00611 
+     5 C00051  0.00185 
+     6 C00062  0.0102  
+     7 C00064  0.00713 
+     8 C00072  0.00442 
+     9 C00073  0.00427 
+    10 C00074  0.00592 
+    # ℹ 182 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
+    $dimension_axis
+    [1] 98.800  1.060  0.104
+
 
 OPLS
 
@@ -1457,11 +1732,13 @@ OPLS
 MAE |>
   EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
                estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |>
-  EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
-  EMP_filter(feature_condition = pvalue < 0.05) |>
-  EMP_dimension_analysis(method = 'opls',estimate_group = 'Sex') |>
-  EMP_scatterplot(estimate_group='Sex',show='p12html',ellipse=0.6) ###### Visualization
+  EMP_dimension_analysis(method = 'opls',estimate_group = 'Group') |>
+  EMP_scatterplot(show='p12html',ellipse=0.3) ###### Visualization
 ```
+
+<img src="tutorial_related/tutorial_figs/opls.jpg" alt="opls" style="zoom:100%;" />
+
+
 
 #### EMP_enrich_analysis
 
@@ -1472,8 +1749,25 @@ MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',
-                      pvalue<0.05,pvalueCutoff=1,species = 'all') 
+                      pvalue<0.05,pvalueCutoff=0.05,species = 'all') 
 ```
+
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/ec/pathway"...
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway"...
+    KEGG database version: Release 110.0+/04-25, Apr 24
+    Species: all
+    # A tibble: 9 × 11
+      Cluster sign_group ID       Description       GeneRatio BgRatio  pvalue p.adjust  qvalue geneID Count
+      <fct>   <chr>      <chr>    <chr>             <chr>     <chr>     <dbl>    <dbl>   <dbl> <chr>  <int>
+    1 Group_A Group_A    map00785 Lipoic acid meta… 6/92      14/3825 4.23e-7  2.83e-5 2.49e-5 1.2.4…     6
+    2 Group_A Group_A    map00531 Glycosaminoglyca… 4/92      15/3825 3.49e-4  1.17e-2 1.03e-2 3.1.6…     4
+    3 Group_A Group_A    map00520 Amino sugar and … 10/92     127/38… 8.15e-4  1.82e-2 1.60e-2 2.6.1…    10
+    4 Group_A Group_A    map00280 Valine, leucine … 5/92      36/3825 1.51e-3  2.53e-2 2.22e-2 1.2.4…     5
+    5 Group_A Group_A    map00030 Pentose phosphat… 6/92      59/3825 2.65e-3  3.56e-2 3.13e-2 1.1.1…     6
+    6 Group_B Group_B    map00970 Aminoacyl-tRNA b… 9/78      31/3825 5.35e-9  2.27e-7 2.05e-7 6.1.1…     9
+    7 Group_B Group_B    map00550 Peptidoglycan bi… 8/78      23/3825 7.96e-9  2.27e-7 2.05e-7 2.3.2…     8
+    8 Group_B Group_B    map00730 Thiamine metabol… 5/78      28/3825 2.11e-4  4.01e-3 3.63e-3 2.2.1…     5
+    9 Group_B Group_B    map00250 Alanine, asparta… 6/78      50/3825 4.61e-4  6.57e-3 5.94e-3 1.4.1…     6
 
 Make the enrichment after EMP_diff_analysis and Visualization
 
@@ -1482,16 +1776,21 @@ MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',
-                      pvalue<0.05,pvalueCutoff=1,species = 'all') |>
+                      pvalue<0.05,pvalueCutoff=0.05,species = 'all') |>
   EMP_dotplot()
+```
+<img src="tutorial_related/tutorial_figs/enrich1.jpg" alt="enrich1" style="zoom:100%;" />
 
+
+```R
 MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',
-                      pvalue<0.05,pvalueCutoff=1,species = 'all') |>
+                      pvalue<0.05,pvalueCutoff=0.05,species = 'all') |>
   EMP_netplot()
 ```
+<img src="tutorial_related/tutorial_figs/enrich2.jpg" alt="enrich2" style="zoom:100%;" />
 
 Transcriptomic data
 
@@ -1506,6 +1805,7 @@ MAE |>
                       pvalueCutoff=0.05,species = 'hsa') |>
   EMP_dotplot()
 ```
+<img src="tutorial_related/tutorial_figs/enrich3.jpg" alt="enrich3" style="zoom:100%;" />
 
 
 #### EMP_marker_analysis
@@ -1519,16 +1819,108 @@ MAE |>
   EMP_filter(feature_condition = Boruta_decision!= 'Rejected') ###### select the Confirmed and Tentative feature
 ```
 
+    If any features in the experiment have changed, the Boruta_model will become NULL and
+    EMP_marker_analysis should be re-run if needed.
+    If any features in the experiment have changed, the Boruta_feature_importance will become NULL
+    and EMP_marker_analysis should be re-run if needed.
+    0 of 20 samples were filterd out!
+    2416 of 2424 features were filterd out!
+    # A tibble: 20 × 9
+       primary `2.1.1.181` `2.3.1.59` `3.1.1.31` `3.1.3.85` `3.1.6.1` `3.4.21.81` `4.1.3.45`
+       <chr>         <int>      <int>      <int>      <int>     <int>       <int>      <int>
+     1 P11774           13        126        633         64       160           0         12
+     2 P31579           69        212        621         70       443           8         39
+     3 P33531          101        349        634         19       634           0         59
+     4 P36987            2         28        384        225       134          27          3
+     5 P40725            6         55        392        124        74          21          8
+     6 P40923            3         37        430        186       145           9          5
+     7 P51467           30        155        583         49       333          92         18
+     8 P51956           12        221        561         61       181           0         11
+     9 P52630            4         55        472        377        96          61          1
+    10 P54631            6        104        473         72       115          14          8
+    11 P60426           28        109        527         81       175          66         20
+    12 P66101            6         54        441         96       148           1          6
+    13 P68071           93        373        663         17       658           0         74
+    14 P69489           13        190        460         50       271           0         11
+    15 P70597           12        134        511         40       162           2         12
+    16 P75656            5         23        434        170       122          49          2
+    17 P84567            2         79        381        203        41           1          7
+    18 P94346            7         92        473        135       136          46          6
+    19 P95158            8         68        496        194       150           0          5
+    20 P96518            5          3        341        205        94          37          4
+    # ℹ 1 more variable: `6.2.1.30` <int>
+
 regression or classify by randomforest
 
 ```R
 MAE |>
   EMP_marker_analysis(experiment = 'geno_ec',method = 'randomforest',
                       estimate_group = 'Group') 
+```
+    $rf_model
+
+    Call:
+     randomForest(formula = Group ~ ., data = tran_data, importance = TRUE) 
+                   Type of random forest: classification
+                         Number of trees: 500
+    No. of variables tried at each split: 49
+
+            OOB estimate of  error rate: 40%
+    Confusion matrix:
+            Group_A Group_B class.error
+    Group_A       6       4         0.4
+    Group_B       4       6         0.4
+
+    $rf_feature_importance
+    # A tibble: 2,424 × 3
+       feature    rf_MDA rf_MDG
+       <chr>       <dbl>  <dbl>
+     1 1.1.1.1    0      0     
+     2 1.1.1.100  0      0     
+     3 1.1.1.102  0      0     
+     4 1.1.1.103  0      0     
+     5 1.1.1.105  0      0     
+     6 1.1.1.108  0      0     
+     7 1.1.1.11   0      0     
+     8 1.1.1.122  0      0.0036
+     9 1.1.1.130  0      0     
+    10 1.1.1.132 -0.0006 0.0134
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
+```R
 MAE |>
   EMP_marker_analysis(experiment = 'geno_ec',method = 'randomforest',
                       estimate_group = 'Education_Years') 
 ```
+
+    $rf_model
+
+    Call:
+     randomForest(formula = Group ~ ., data = tran_data, importance = TRUE) 
+                   Type of random forest: regression
+                         Number of trees: 500
+    No. of variables tried at each split: 808
+
+              Mean of squared residuals: 7.481647
+                        % Var explained: 23.66
+
+    $rf_feature_importance
+    # A tibble: 2,424 × 3
+       feature   rf_IncMSE rf_IncNodePurity
+       <chr>         <dbl>            <dbl>
+     1 1.1.1.1     0                 0.638 
+     2 1.1.1.100   0                 0.003 
+     3 1.1.1.102   0                 0     
+     4 1.1.1.103   0.00514           0.0519
+     5 1.1.1.105   0                 0     
+     6 1.1.1.108   0                 0     
+     7 1.1.1.11    0                 0.163 
+     8 1.1.1.122   0                 0     
+     9 1.1.1.130   0                 0.938 
+    10 1.1.1.132   0                 0.225 
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
 
 regression or classify by xgboost
 
@@ -1544,6 +1936,52 @@ MAE |>
 
 ```
 
+    [00:28:18] WARNING: src/objective/regression_obj.cu:213: reg:linear is now deprecated in favor of reg:squarederror.
+    $xgb_model
+    ##### xgb.Booster
+    raw: 46.8 Kb 
+    call:
+      xgb.train(params = params, data = dtrain, nrounds = nrounds, 
+        watchlist = watchlist, verbose = verbose, print_every_n = print_every_n, 
+        early_stopping_rounds = early_stopping_rounds, maximize = maximize, 
+        save_period = save_period, save_name = save_name, xgb_model = xgb_model, 
+        callbacks = callbacks, max.depth = ..1, eta = ..2, nthread = ..3, 
+        objective = ..4)
+    params (as set within xgb.train):
+      max_depth = "6", eta = "0.3", nthread = "7", objective = "reg:linear", validate_parameters = "TRUE"
+    xgb.attributes:
+      niter
+    callbacks:
+      cb.evaluation.log()
+    # of features: 2424 
+    niter: 50
+    nfeatures : 2424 
+    evaluation_log:
+         iter   train_rmse
+        <num>        <num>
+            1 11.452530720
+            2  8.336914334
+    ---                   
+           49  0.001281180
+           50  0.001100391
+
+    $xgb_feature_importance
+    # A tibble: 2,424 × 5
+       feature       xgb_Gain xgb_Cover xgb_Frequency xgb_Importance
+       <chr>            <dbl>     <dbl>         <dbl>          <dbl>
+     1 1.1.1.1   0.000434       0.0227        0.0672    0.000434    
+     2 1.1.1.100 0.000536       0.0148        0.0299    0.000536    
+     3 1.1.1.102 0              0             0         0           
+     4 1.1.1.103 0.0488         0.361         0.291     0.0488      
+     5 1.1.1.105 0              0             0         0           
+     6 1.1.1.108 0.0000000403   0.00278       0.00746   0.0000000403
+     7 1.1.1.11  0.0943         0.0171        0.0224    0.0943      
+     8 1.1.1.122 0              0             0         0           
+     9 1.1.1.130 0.267          0.00925       0.00746   0.267       
+    10 1.1.1.132 0              0             0         0           
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
 2. For two categories classify
 
 ```R
@@ -1552,6 +1990,51 @@ MAE |>
                       xgboost_run = "classify",
                       estimate_group = 'Group',objective = 'binary:logistic')
 ```
+
+    $xgb_model
+    ##### xgb.Booster
+    raw: 39.2 Kb 
+    call:
+      xgb.train(params = params, data = dtrain, nrounds = nrounds, 
+        watchlist = watchlist, verbose = verbose, print_every_n = print_every_n, 
+        early_stopping_rounds = early_stopping_rounds, maximize = maximize, 
+        save_period = save_period, save_name = save_name, xgb_model = xgb_model, 
+        callbacks = callbacks, max.depth = ..1, eta = ..2, nthread = ..3, 
+        objective = ..4)
+    params (as set within xgb.train):
+      max_depth = "6", eta = "0.3", nthread = "7", objective = "binary:logistic", validate_parameters = "TRUE"
+    xgb.attributes:
+      niter
+    callbacks:
+      cb.evaluation.log()
+    # of features: 2424 
+    niter: 50
+    nfeatures : 2424 
+    evaluation_log:
+         iter train_logloss
+        <num>         <num>
+            1     0.5706268
+            2     0.4927883
+    ---                    
+           49     0.1233436
+           50     0.1233436
+
+    $xgb_feature_importance
+    # A tibble: 2,424 × 5
+       feature   xgb_Gain xgb_Cover xgb_Frequency xgb_Importance
+       <chr>        <dbl>     <dbl>         <dbl>          <dbl>
+     1 1.1.1.1          0         0             0              0
+     2 1.1.1.100        0         0             0              0
+     3 1.1.1.102        0         0             0              0
+     4 1.1.1.103        0         0             0              0
+     5 1.1.1.105        0         0             0              0
+     6 1.1.1.108        0         0             0              0
+     7 1.1.1.11         0         0             0              0
+     8 1.1.1.122        0         0             0              0
+     9 1.1.1.130        0         0             0              0
+    10 1.1.1.132        0         0             0              0
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
 
 3. For multible categories classify
 
@@ -1562,6 +2045,51 @@ MAE |>
                       estimate_group = 'Status',objective = 'multi:softmax',
                       num_class=3) ###### num_class is necessary
 ```
+    $xgb_model
+    ##### xgb.Booster
+    raw: 109.3 Kb 
+    call:
+      xgb.train(params = params, data = dtrain, nrounds = nrounds, 
+        watchlist = watchlist, verbose = verbose, print_every_n = print_every_n, 
+        early_stopping_rounds = early_stopping_rounds, maximize = maximize, 
+        save_period = save_period, save_name = save_name, xgb_model = xgb_model, 
+        callbacks = callbacks, max.depth = ..1, eta = ..2, nthread = ..3, 
+        objective = ..4, num_class = 3)
+    params (as set within xgb.train):
+      max_depth = "6", eta = "0.3", nthread = "7", objective = "multi:softmax", num_class = "3", validate_parameters = "TRUE"
+    xgb.attributes:
+      niter
+    callbacks:
+      cb.evaluation.log()
+    # of features: 2424 
+    niter: 50
+    nfeatures : 2424 
+    evaluation_log:
+         iter train_mlogloss
+        <num>          <num>
+            1     0.81524238
+            2     0.62473397
+    ---                     
+           49     0.08043040
+           50     0.08043039
+
+    $xgb_feature_importance
+    # A tibble: 2,424 × 5
+       feature    xgb_Gain xgb_Cover xgb_Frequency xgb_Importance
+       <chr>         <dbl>     <dbl>         <dbl>          <dbl>
+     1 1.1.1.1   0            0             0           0        
+     2 1.1.1.100 0            0             0           0        
+     3 1.1.1.102 0            0             0           0        
+     4 1.1.1.103 0            0             0           0        
+     5 1.1.1.105 0            0             0           0        
+     6 1.1.1.108 0.00177      0.0108        0.0169      0.00177  
+     7 1.1.1.11  0            0             0           0        
+     8 1.1.1.122 0            0             0           0        
+     9 1.1.1.130 0            0             0           0        
+    10 1.1.1.132 0.0000638    0.0143        0.0169      0.0000638
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
 
 Lasso regression
 
@@ -1571,6 +2099,37 @@ MAE |>
                       method = 'lasso',estimate_group = 'Education_Years') |>
   EMP_filter(feature_condition = lasso_coe >0) ### Select the imprortant feature
 ```
+
+    If any features in the experiment have changed, the lasso_model will become NULL and
+    EMP_marker_analysis should be re-run if needed.
+    If any features in the experiment have changed, the lasso_feature_importance will become NULL
+    and EMP_marker_analysis should be re-run if needed.
+    0 of 20 samples were filterd out!
+    7627 of 7629 features were filterd out!
+    # A tibble: 20 × 3
+       primary K03565 K06177
+       <chr>    <int>  <int>
+     1 P11774     242    493
+     2 P31579     203    446
+     3 P33531     185    455
+     4 P36987     267    503
+     5 P40725     226    434
+     6 P40923     260    477
+     7 P51467     180    361
+     8 P51956     208    483
+     9 P52630     290    522
+    10 P54631     174    378
+    11 P60426     173    394
+    12 P66101     183    439
+    13 P68071     184    386
+    14 P69489     201    436
+    15 P70597     167    382
+    16 P75656     239    470
+    17 P84567     194    400
+    18 P94346     318    506
+    19 P95158     290    520
+    20 P96518     210    432
+
 
 #### EMP_GSEA_analysis
 
