@@ -2851,7 +2851,7 @@ k2 <- MAE |>
     [3] "EMP_filter(obj = EMP_diff_analysis(EMP_collapse(MAE, experiment = untarget_metabol, na_string = c(NA, null, , -), estimate_group = MS2kegg, method = sum, collapse_by = row), method = DESeq2, .formula = ~Group), feature_condition = pvalue < 0.05 & abs(fold_change) > 1.5)"
 
 
-### EMP_result
+#### EMP_result
 
 Obtain the result from EMPT
 
