@@ -18,7 +18,7 @@ Imports:
     enrichplot (>= 1.22.0),
     fastcluster (>= 1.2.6),    
     ggiraph (>= 0.8.9),
-    ggplot2 (>= 3.5.0),
+    ggplot2,
     ggsignif (>= 0.6.4),
     ggthemes (>= 5.1.0),
     ggrepel,
