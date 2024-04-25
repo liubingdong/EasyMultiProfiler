@@ -1,6 +1,6 @@
 
 #' @param obj EMP object
-#' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
+#' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred).
 #' @param show A character string. Show inluding all, sig and pvalue.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_heatmap_plot

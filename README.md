@@ -2142,16 +2142,45 @@ MAE |>
                     threshold_r = 0.3,threshold_p = 0.05, ###### filter by coe and pvalue
                     pvalueCutoff = 0.05,keyType = 'ko')
 ```
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/ko/pathway"...
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway"...
+    preparing geneSet collections...
+    GSEA analysis...
+    leading edge analysis...
+    done...
+    Correlation analysis based on BMI
+    The correlation analysis values are arranged in descending order.
+    # A tibble: 2 × 11
+      ID       Description  setSize enrichmentScore   NES  pvalue p.adjust  qvalue  rank leading_edge
+      <chr>    <chr>          <int>           <dbl> <dbl>   <dbl>    <dbl>   <dbl> <dbl> <chr>       
+    1 map02010 ABC transpo…      25           0.417  2.26 9.30e-4  0.00465 0.00294    81 tags=68%, l…
+    2 map01100 Metabolic p…      65          -0.242 -2.03 4.32e-3  0.0108  0.00683    76 tags=51%, l…
+    # ℹ 1 more variable: core_enrichment <chr>
+
 
 Based on diff analysis
 
 ```R
 MAE |>
-  EMP_diff_analysis(experiment = 'geno_ko',method='DESeq2',.formula = ~0+Group,
+  EMP_diff_analysis(experiment = 'geno_ec',method='DESeq2',.formula = ~0+Group,
                     group_level=c('Group_A','Group_B')) |>
   EMP_GSEA_analysis(method='log2FC',pvalue<0.05,
-                    keyType = 'ko',KEGG_Type = 'KEGG')
+                    keyType = 'ec',KEGG_Type = 'KEGG',pvalueCutoff = 0.05)
 ```
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/ec/pathway"...
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway"...
+    preparing geneSet collections...
+    GSEA analysis...
+    leading edge analysis...
+    done...
+    VS info: Group_A vs Group_B
+    The log2FC values are arranged in descending order.
+    # A tibble: 1 × 11
+      ID       Description   setSize enrichmentScore   NES  pvalue p.adjust qvalue  rank leading_edge
+      <chr>    <chr>           <int>           <dbl> <dbl>   <dbl>    <dbl>  <dbl> <dbl> <chr>       
+    1 map01110 Biosynthesis…      46          -0.393 -1.64 0.00901   0.0451 0.0379    71 tags=41%, l…
+    # ℹ 1 more variable: core_enrichment <chr>
+
 
 Based on signal2Noise
 
@@ -2161,6 +2190,41 @@ MAE |>
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko')
 ```
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/ko/pathway"...
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway"...
+    preparing geneSet collections...
+    GSEA analysis...
+    leading edge analysis...
+    done...
+    VS info: Group_A vs Group_B
+    The Signal2Noise values are arranged in descending order.
+    # A tibble: 23 × 11
+       ID      Description setSize enrichmentScore   NES   pvalue p.adjust  qvalue  rank leading_edge
+       <chr>   <chr>         <int>           <dbl> <dbl>    <dbl>    <dbl>   <dbl> <dbl> <chr>       
+     1 map006… Methane me…     138           0.708  2.19 1   e-10  1.95e-8 1.74e-8   599 tags=31%, l…
+     2 map030… ATP-depend…      11          -0.942 -1.88 2.17e- 7  2.12e-5 1.89e-5   419 tags=82%, l…
+     3 map050… Alcoholism       12          -0.931 -1.88 6.40e- 7  4.16e-5 3.71e-5   419 tags=67%, l…
+     4 map050… Huntington…      52          -0.754 -2.01 1.54e- 6  6.02e-5 5.37e-5   493 tags=46%, l…
+     5 map012… Carbon met…     253           0.530  1.75 1.45e- 6  6.02e-5 5.37e-5   599 tags=17%, l…
+     6 map046… Neutrophil…      10          -0.932 -1.80 5.15e- 6  1.67e-4 1.49e-4   419 tags=70%, l…
+     7 map050… Amyotrophi…      49          -0.719 -1.89 1.48e- 4  4.12e-3 3.67e-3   493 tags=43%, l…
+     8 map041… Endocytosis      16          -0.839 -1.79 5.69e- 4  1.23e-2 1.10e-2   458 tags=75%, l…
+     9 map050… Alzheimer …      45          -0.687 -1.79 5.39e- 4  1.23e-2 1.10e-2   493 tags=42%, l…
+    10 map030… Nucleocyto…      14          -0.839 -1.74 8.18e- 4  1.59e-2 1.42e-2   361 tags=64%, l…
+    11 map050… Pathways o…      53          -0.665 -1.77 1.09e- 3  1.94e-2 1.72e-2   493 tags=40%, l…
+    12 map050… Prion dise…      43          -0.670 -1.73 1.50e- 3  2.44e-2 2.17e-2   493 tags=40%, l…
+    13 map041… Efferocyto…      12          -0.843 -1.70 1.67e- 3  2.50e-2 2.23e-2   290 tags=42%, l…
+    14 map040… MAPK signa…      11          -0.834 -1.66 2.89e- 3  4.02e-2 3.58e-2   487 tags=91%, l…
+    15 map047… Thermogene…      42          -0.675 -1.74 3.44e- 3  4.47e-2 3.98e-2   417 tags=36%, l…
+    16 map009… Aminoacyl-…      36           0.669  1.67 3.75e- 3  4.57e-2 4.07e-2  1801 tags=58%, l…
+    17 map050… Spinocereb…      17          -0.790 -1.71 5.29e- 3  4.81e-2 4.29e-2   425 tags=65%, l…
+    18 map051… Pathogenic…      15          -0.794 -1.68 5.68e- 3  4.81e-2 4.29e-2   493 tags=47%, l…
+    19 map047… Synaptic v…      12          -0.820 -1.66 5.09e- 3  4.81e-2 4.29e-2   440 tags=75%, l…
+    20 map054… Diabetic c…      39          -0.650 -1.65 5.51e- 3  4.81e-2 4.29e-2   417 tags=28%, l…
+    21 map041… Meiosis - …      11          -0.819 -1.63 5.16e- 3  4.81e-2 4.29e-2   417 tags=73%, l…
+    22 map012… Degradatio…      69          -0.577 -1.59 5.53e- 3  4.81e-2 4.29e-2   471 tags=12%, l…
+    23 map007… Carbon fix…      75           0.545  1.55 5.01e- 3  4.81e-2 4.29e-2   723 tags=20%, l…
+    # ℹ 1 more variable: core_enrichment <chr>
 
 Visualization
 
@@ -2170,11 +2234,29 @@ MAE |>
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
   EMP_curveplot(geneSetID='map00680')
+```
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/ko/pathway"...
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway"...
+    preparing geneSet collections...
+    GSEA analysis...
+    leading edge analysis...
+    done...
+    VS info: Group_A vs Group_B
+    The Signal2Noise values are arranged in descending order.
+
+<img src="tutorial_related/tutorial_figs/gsea1.jpg" alt="gsea1" style="zoom:100%;" />
+
+```R
 MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
   EMP_dotplot(color='p.adjust',showCategory=10) 
+```
+<img src="tutorial_related/tutorial_figs/gsea2.jpg" alt="gsea2" style="zoom:100%;" />
+
+
+```R
 MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
@@ -2182,16 +2264,75 @@ MAE |>
   EMP_netplot(showCategory=5) 
 ```
 
+<img src="tutorial_related/tutorial_figs/gsea3.jpg" alt="gsea3" style="zoom:100%;" />
+
 #### EMP_WGCNA_cluster_analysis
 
 ```R
 MAE |>
   EMP_assay_extract('geno_ec') |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85)
-MAE |>
-  EMP_assay_extract('geno_ko') |>
-  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.8,mergeCutHeight=0.4)
 ```
+
+    Module
+           black         blue        brown         cyan    darkgreen      darkred        green 
+             116          291          248           61           31           40          140 
+     greenyellow         grey       grey60    lightcyan   lightgreen  lightyellow      magenta 
+              75           73           51           58           48           43          107 
+    midnightblue         pink       purple          red    royalblue       salmon          tan 
+              59          110           80          126           43           71           72 
+       turquoise       yellow 
+             304          177 
+    # A tibble: 2,424 × 4
+       feature   WGCNA_cluster WGCNA_color WGCNA_module_elements
+       <chr>             <dbl> <chr>                       <int>
+     1 1.1.1.1               1 turquoise                     304
+     2 1.1.1.100             0 grey                           73
+     3 1.1.1.102            13 salmon                         71
+     4 1.1.1.103            15 cyan                           61
+     5 1.1.1.105            16 lightcyan                      58
+     6 1.1.1.108             0 grey                           73
+     7 1.1.1.11              9 green                         140
+     8 1.1.1.122            18 grey60                         51
+     9 1.1.1.130             1 turquoise                     304
+    10 1.1.1.132            20 lightyellow                    43
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
+<img src="tutorial_related/tutorial_figs/wgcna_clust1.jpg" alt="wgcna_clust1" style="zoom:100%;" />
+
+
+```R
+MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4) # adjust parameter to modify the module result
+```
+    Module
+           black         blue        brown         cyan        green  greenyellow         grey 
+             126          304          291           59          147           74           73 
+          grey60    lightcyan   lightgreen      magenta midnightblue         pink       purple 
+              48           51           43          116           58          120          107 
+             red       salmon          tan    turquoise       yellow 
+             140           61           71          358          177 
+    # A tibble: 2,424 × 4
+       feature   WGCNA_cluster WGCNA_color  WGCNA_module_elements
+       <chr>             <dbl> <chr>                        <int>
+     1 1.1.1.1               1 blue                           304
+     2 1.1.1.100             0 grey                            73
+     3 1.1.1.102            13 tan                             71
+     4 1.1.1.103            15 salmon                          61
+     5 1.1.1.105            16 midnightblue                    58
+     6 1.1.1.108             0 grey                            73
+     7 1.1.1.11              9 red                            140
+     8 1.1.1.122            18 lightcyan                       51
+     9 1.1.1.130             1 blue                           304
+    10 1.1.1.132            20 greenyellow                     74
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
+<img src="tutorial_related/tutorial_figs/wgcna_clust2.jpg" alt="wgcna_clust2" style="zoom:100%;" />
+
+
 
 #### EMP_WGCNA_cor_analysis
 
@@ -2204,7 +2345,14 @@ WGCNA_COR_result <-MAE |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),
                          method='spearman') 
+WGCNA_COR_result
 ```
+
+    EMP_WGCNA_cor_analysis: 
+    Cor-relationship matrix: 6 x 10 
+    geno_ec observation: 20 
+    geno_ec_codata observation: 20 
+    Intersect observation: 20
 
 Visualization
 
@@ -2217,6 +2365,8 @@ MAE |>
                          method='spearman') |>
   EMP_heatmap_plot(palette = 'Spectral')
 ```
+
+<img src="tutorial_related/tutorial_figs/wgcna_cor1.jpg" alt="wgcna_cor1" style="zoom:100%;" />
 
 Select the interesting module and make the enrichment analysis
 
@@ -2234,6 +2384,19 @@ MAE |>
   EMP_dotplot()
 ```
 
+    If any features in the experiment have changed, the feature_WGCNA_cluster_result will become NULL
+    and EMP_WGCNA_cluster_analysis should be re-run if needed.
+    Because condtion has changed, all plot results will be removed!
+    0 of 20 samples were filterd out!
+    1170 of 1301 features were filterd out!
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/ec/module"...
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/module"...
+    KEGG database version: Release 110.0+/04-25, Apr 24
+    Species: all
+
+<img src="tutorial_related/tutorial_figs/wgcna_cor2.jpg" alt="wgcna_cor2" style="zoom:100%;" />
+
+
 From two different experiments
 
 ```R
@@ -2249,6 +2412,8 @@ k2 <- MAE |>
   EMP_WGCNA_cor_analysis(method='spearman') |>
   EMP_heatmap_plot(palette = 'Spectral') 
 ```
+<img src="tutorial_related/tutorial_figs/wgcna_cor3.jpg" alt="wgcna_cor3" style="zoom:100%;" />
+
 
 #### EMP_multi_analysis
 
@@ -2285,12 +2450,51 @@ Melt diff analysis of the same feature from two result
   EMP_multi_analysis(method = 'feature',combineMethod='edgington',p.adjust = 'BH') 
 ```
 
+    # A tibble: 2,424 × 3
+       feature   pvalue    BH
+       <chr>      <dbl> <dbl>
+     1 1.1.1.1   0.838  1.00 
+     2 1.1.1.100 0.0714 0.371
+     3 1.1.1.102 0.734  1.00 
+     4 1.1.1.103 0.431  0.957
+     5 1.1.1.105 0.244  0.710
+     6 1.1.1.108 0.0218 0.192
+     7 1.1.1.11  0.770  1.00 
+     8 1.1.1.122 0.491  1.00 
+     9 1.1.1.130 0.121  0.496
+    10 1.1.1.132 0.943  1.00 
+    # ℹ 2,414 more rows
+    # ℹ Use `print(n = ...)` to see more rows
+
 Melt diff analysis of the same feature from two result and make a combine enrichment
 
 ```R
 (k1+k2) |> 
   EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') 
 ```
+
+    Reading KEGG annotation online: "https://rest.kegg.jp/link/ec/pathway"...
+    Reading KEGG annotation online: "https://rest.kegg.jp/list/pathway"...
+    685 rows were removed from scores because they are not found in the background
+    743 rows were removed from scores because they are not found in the background
+    # A tibble: 15 × 10
+       Cluster ID       Description                      GeneRatio BgRatio  pvalue p.adjust  qvalue geneID Count
+       <fct>   <chr>    <chr>                            <chr>     <chr>     <dbl>    <dbl>   <dbl> <chr>  <dbl>
+     1 Group_A map00785 Lipoic acid metabolism           3/1546    14/3825 6.62e-5  4.95e-3 4.51e-3 1.2.4…     3
+     2 Group_A map00500 Starch and sucrose metabolism    3/1546    76/3825 7.33e-5  4.95e-3 4.51e-3 2.4.1…     3
+     3 Group_A map00020 Citrate cycle (TCA cycle)        3/1546    26/3825 2.13e-4  7.50e-3 6.84e-3 6.2.1…     3
+     4 Group_A map00640 Propanoate metabolism            4/1546    52/3825 2.22e-4  7.50e-3 6.84e-3 6.2.1…     4
+     5 Group_A map00531 Glycosaminoglycan degradation    3/1546    15/3825 5.48e-4  1.48e-2 1.35e-2 3.2.1…     3
+     6 Group_A map00280 Valine, leucine and isoleucine … 3/1546    36/3825 1.19e-3  2.68e-2 2.45e-2 1.2.4…     3
+     7 Group_A map00010 Glycolysis / Gluconeogenesis     4/1546    50/3825 1.83e-3  3.54e-2 3.23e-2 1.2.7…     4
+     8 Group_B map00550 Peptidoglycan biosynthesis       7/1674    23/3825 5.63e-9  7.60e-7 6.81e-7 2.3.2…     7
+     9 Group_B map00785 Lipoic acid metabolism           4/1674    14/3825 3.97e-5  2.68e-3 2.40e-3 1.2.4…     4
+    10 Group_B map00010 Glycolysis / Gluconeogenesis     3/1674    50/3825 2.37e-4  1.06e-2 9.54e-3 2.7.9…     3
+    11 Group_B map00640 Propanoate metabolism            5/1674    52/3825 5.09e-4  1.72e-2 1.54e-2 1.2.7…     5
+    12 Group_B map00710 Carbon fixation in photosynthet… 2/1674    22/3825 6.52e-4  1.76e-2 1.58e-2 2.7.9…     2
+    13 Group_B map00500 Starch and sucrose metabolism    5/1674    76/3825 1.04e-3  2.16e-2 1.93e-2 2.4.1…     5
+    14 Group_B map00280 Valine, leucine and isoleucine … 4/1674    36/3825 1.12e-3  2.16e-2 1.93e-2 1.2.4…     4
+    15 Group_B map00720 Carbon fixation pathways in pro… 3/1674    54/3825 2.20e-3  3.71e-2 3.32e-2 2.7.9…     3
 
  Melt diff analysis of the different feature from multi-results and make a combine enrichment
 
@@ -2299,6 +2503,39 @@ Melt diff analysis of the same feature from two result and make a combine enrich
   EMP_multi_analysis(method = 'diff_feature_enrich')
 ```
 
+    # A tibble: 29 × 11
+       Cluster sign_group ID       Description           GeneRatio BgRatio  pvalue p.adjust  qvalue geneID Count
+       <fct>   <chr>      <chr>    <chr>                 <chr>     <chr>     <dbl>    <dbl>   <dbl> <chr>  <int>
+     1 Group_A Group_A    map00785 Lipoic acid metaboli… 6/131     14/3825 4.23e-7  6.34e-6 2.49e-5 1.2.4…     6
+     2 Group_A Group_A    map00531 Glycosaminoglycan de… 4/131     15/3825 3.49e-4  2.62e-3 1.03e-2 3.1.6…     4
+     3 Group_A Group_A    map00520 Amino sugar and nucl… 10/131    127/38… 8.15e-4  4.08e-3 1.60e-2 2.6.1…    10
+     4 Group_A Group_A    map00280 Valine, leucine and … 5/131     36/3825 1.51e-3  4.53e-3 2.22e-2 1.2.4…     5
+     5 Group_A Group_A    map00030 Pentose phosphate pa… 6/131     59/3825 2.65e-3  5.69e-3 3.13e-2 1.1.1…     6
+     6 Group_A Group_A    map00564 Glycerophospholipid … 2/131     56/6430 1.09e-3  4.10e-3 6.90e-3 C0423…     2
+     7 Group_A Group_A    map00627 Aminobenzoate degrad… 2/131     86/6430 2.56e-3  5.69e-3 8.09e-3 C0014…     2
+     8 Group_A Group_A    map04979 Cholesterol metaboli… 1/131     10/6430 9.30e-3  1.62e-2 1.17e-2 C00422     1
+     9 Group_A Group_A    map05231 Choline metabolism i… 1/131     11/6430 1.02e-2  1.62e-2 1.17e-2 C04230     1
+    10 Group_A Group_A    map04975 Fat digestion and ab… 1/131     13/6430 1.21e-2  1.62e-2 1.17e-2 C00422     1
+    11 Group_A Group_A    map04923 Regulation of lipoly… 1/131     14/6430 1.30e-2  1.62e-2 1.17e-2 C00422     1
+    12 Group_A Group_A    map05417 Lipid and atheroscle… 1/131     14/6430 1.30e-2  1.62e-2 1.17e-2 C00422     1
+    13 Group_A Group_A    map04931 Insulin resistance    1/131     19/6430 1.76e-2  2.03e-2 1.34e-2 C00422     1
+    14 Group_A Group_A    map04148 Efferocytosis         1/131     21/6430 1.94e-2  2.08e-2 1.34e-2 C04230     1
+    15 Group_A Group_A    map04714 Thermogenesis         1/131     23/6430 2.13e-2  2.13e-2 1.34e-2 C00422     1
+    16 Group_B Group_B    map00970 Aminoacyl-tRNA biosy… 9/128     31/3825 5.35e-9  5.97e-8 2.05e-7 6.1.1…     9
+    17 Group_B Group_B    map00550 Peptidoglycan biosyn… 8/128     23/3825 7.96e-9  5.97e-8 2.05e-7 2.3.2…     8
+    18 Group_B Group_B    map00730 Thiamine metabolism   5/128     28/3825 2.11e-4  4.52e-4 3.63e-3 2.2.1…     5
+    19 Group_B Group_B    map00250 Alanine, aspartate a… 6/128     50/3825 4.61e-4  8.64e-4 5.94e-3 1.4.1…     6
+    20 Group_B Group_B    map04136 Autophagy - other     2/128     3/6430  5.22e-6  1.96e-5 6.05e-5 C0035…     2
+    21 Group_B Group_B    map04138 Autophagy - yeast     2/128     3/6430  5.22e-6  1.96e-5 6.05e-5 C0035…     2
+    22 Group_B Group_B    map00563 Glycosylphosphatidyl… 2/128     4/6430  1.04e-5  3.13e-5 8.06e-5 C0035…     2
+    23 Group_B Group_B    map04140 Autophagy - animal    2/128     6/6430  2.60e-5  6.51e-5 1.51e-4 C0035…     2
+    24 Group_B Group_B    map00571 Lipoarabinomannan (L… 1/128     2/6430  2.80e-3  4.20e-3 1.08e-2 C01194     1
+    25 Group_B Group_B    map05130 Pathogenic Escherich… 1/128     3/6430  4.19e-3  5.72e-3 1.39e-2 C00350     1
+    26 Group_B Group_B    map05132 Salmonella infection  1/128     5/6430  6.98e-3  8.06e-3 1.80e-2 C01194     1
+    27 Group_B Group_B    map05167 Kaposi sarcoma-assoc… 1/128     5/6430  6.98e-3  8.06e-3 1.80e-2 C00350     1
+    28 Group_B Group_B    map00402 Benzoxazinoid biosyn… 1/128     9/6430  1.25e-2  1.25e-2 2.64e-2 C12312     1
+    29 Group_B Group_B    map05152 Tuberculosis          1/128     9/6430  1.25e-2  1.25e-2 2.64e-2 C01194     1
+
 Visualization
 
 ```R
@@ -2306,6 +2543,9 @@ Visualization
   EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') |>
   EMP_dotplot()
 ```
+<img src="tutorial_related/tutorial_figs/multi_analysis1.jpg" alt="multi_analysis1" style="zoom:100%;" />
+
+
 ### Data Virtualization :
 #### EMP_boxplot
 
@@ -2316,6 +2556,8 @@ MAE |>
   EMP_assay_extract('host_gene',pattern = 'A1BG',pattern_ref = 'feature') |>
   EMP_boxplot(method='t.test',estimate_group='Group')
 ```
+<img src="tutorial_related/tutorial_figs/boxplot1.jpg" alt="boxplot1" style="zoom:100%;" />
+
 
 For alpha analysis
 
@@ -2326,6 +2568,9 @@ MAE |>
   EMP_boxplot(method='t.test',estimate_group='Group') 
 ```
 
+<img src="tutorial_related/tutorial_figs/boxplot2.jpg" alt="boxplot2" style="zoom:100%;" />
+
+
 #### EMP_scatterplot
 
 ```R
@@ -2335,16 +2580,21 @@ MAE |>
  EMP_dimension_analysis(method = 'pcoa',distance = 'bray',estimate_group = 'Group') |>
  EMP_scatterplot(show='p12html') ### eg. p12,p12html,p23,p23htm
 ```
+<img src="tutorial_related/tutorial_figs/scatterplot1.jpg" alt="scatterplot1" style="zoom:100%;" />
+
 
 #### EMP_dotplot
 
 ```R
 MAE |> 
- EMP_assay_extract('taxonomy') |> 
- EMP_collapse(estimate_group = 'Species',collapse_by = 'row') |>
- EMP_dimension_analysis(method = 'pcoa',distance = 'bray',estimate_group = 'Group') |>
- EMP_scatterplot(show='p12html') ### eg. p12,p12html,p23,p23htm
+  EMP_assay_extract('geno_ko') |> 
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |> 
+  EMP_enrich_analysis(pvalue < 0.05,keyType = 'ko') |>
+  EMP_dotplot(showCategory=5,x = "GeneRatio",color = "p.adjust") # more paramter will pass into enrichplot::dotplot
 ```
+
+<img src="tutorial_related/tutorial_figs/dotplot.jpg" alt="dotplot" style="zoom:100%;" />
+
 
 #### EMP_netplot
 
@@ -2353,8 +2603,11 @@ MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
-  EMP_netplot(showCategory=10) 
+  EMP_netplot(showCategory=5) 
 ```
+<img src="tutorial_related/tutorial_figs/netplot.jpg" alt="netplot" style="zoom:100%;" />
+
+
 
 #### EMP_curveplot
 
@@ -2363,8 +2616,10 @@ MAE|>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
-  EMP_curveplot(geneSetID='map00680')
+  EMP_curveplot(geneSetID='map03082')
 ```
+<img src="tutorial_related/tutorial_figs/curveplot1.jpg" alt="curveplot1" style="zoom:100%;" />
+
 
 #### EMP_heatmap_plot
 
@@ -2376,7 +2631,11 @@ MAE %>%
   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) %>% # Select your interested feature
   EMP_decostand(method = 'clr') %>%
   EMP_heatmap_plot(rotate=FALSE,palette='Spectral')
+```
+<img src="tutorial_related/tutorial_figs/heatmap1.jpg" alt="heatmap1" style="zoom:100%;" />
 
+
+```R
 MAE %>%
   EMP_assay_extract('geno_ec') %>%
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) %>%
@@ -2384,15 +2643,16 @@ MAE %>%
   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') %>% # collapse the data by group
   EMP_heatmap_plot(rotate=TRUE,palette='Spectral')
 ```
+<img src="tutorial_related/tutorial_figs/heatmap2.jpg" alt="heatmap2" style="zoom:100%;" />
+
 
 For cor analysis
 
 ```R
 k1 <- MAE |>
-  EMP_assay_extract('taxonomy') |>
-  EMP_collapse(estimate_group = 'Genus',collapse_by = 'row') |>
+  EMP_assay_extract('geno_ec') |>
   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
-  EMP_filter(feature_condition = pvalue<0.05)
+  EMP_filter(feature_condition = pvalue<0.001 & abs(fold_change)>2)
 
 k2 <- MAE |>
   EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
@@ -2401,8 +2661,10 @@ k2 <- MAE |>
   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 1.5)
 
 (k1 + k2) |> EMP_cor_analysis(method = 'spearman') |>
-  EMP_heatmap_plot() ###### Visualization
+  EMP_heatmap_plot(palette='RdBu') ###### Visualization
 ```
+<img src="tutorial_related/tutorial_figs/heatmap3.jpg" alt="heatmap3" style="zoom:100%;" />
+
 
 For WGCNA
 
@@ -2415,6 +2677,9 @@ MAE |>
   EMP_heatmap_plot(palette = 'Spectral') 
 ````
 
+<img src="tutorial_related/tutorial_figs/wgcna_cor1.jpg" alt="wgcna_cor1" style="zoom:100%;" />
+
+
 #### EMP_volcanol_plot
 
 ```R
@@ -2423,6 +2688,8 @@ MAE |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
   EMP_volcanol_plot(show='html')
 ```
+<img src="tutorial_related/tutorial_figs/vocanol1.jpg" alt="vocanol1" style="zoom:100%;" />
+
 
 Addtionl parameters will pass into ggrepel::geom_text_repel.
 
@@ -2433,6 +2700,7 @@ MAE |>
   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),color = "white",
                     bg.color = "grey30",bg.r = 0.15)
 ```
+<img src="tutorial_related/tutorial_figs/vocanol2.jpg" alt="vocanol2" style="zoom:100%;" />
 
 ```R
 MAE |>
@@ -2441,6 +2709,8 @@ MAE |>
   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),
                     min.segment.length = 0, seed = 42, box.padding = 0.5) ## Add arrow
 ```
+<img src="tutorial_related/tutorial_figs/vocanol3.jpg" alt="vocanol3" style="zoom:100%;" />
+
 
 ### Data support :
 
@@ -2454,6 +2724,8 @@ MAE |>
   EMP_filter(sample_condition = BMI>20 & Sex == 'M') |>
   EMP_summary()
 ```
+<img src="tutorial_related/tutorial_figs/EMP_summary1.jpg" alt="EMP_summary1" style="zoom:100%;" />
+
 
 For EMPT
 
@@ -2463,12 +2735,41 @@ MAE |>
   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
   EMP_filter(feature_condition = fdr < 0.05)
+```
+    0 of 20 samples were filterd out!
+    270 of 272 features were filterd out!
+    # A tibble: 2 × 9
+      feature Estimate_group    pvalue     fdr sign_group method vs                 fold_change log2FC
+      <chr>   <chr>              <dbl>   <dbl> <fct>      <chr>  <chr>                    <dbl>  <dbl>
+    1 ACVR1C  Group          0.0000127 0.00345 Group_A    DESeq2 Group_A vs Group_B       8.29    3.05
+    2 ACY3    Group          0.000240  0.0326  Group_B    DESeq2 Group_A vs Group_B       0.105  -3.26
 
+```R
 MAE |>
   EMP_assay_extract(experiment = 'taxonomy') |>
   EMP_alpha_analysis() |>
   EMP_filter(sample_condition = shannon >3 | invsimpson >19)
 ```
+
+    # A tibble: 16 × 7
+       primary shannon simpson invsimpson observerd_index chao1   ACE
+       <chr>     <dbl>   <dbl>      <dbl>           <dbl> <dbl> <dbl>
+     1 P11774     3.63   0.948       19.0             172   172   172
+     2 P31579     3.83   0.955       22.0             184   184   184
+     3 P33531     3.54   0.938       16.1             168   168   168
+     4 P40725     4.05   0.953       21.3             238   238   238
+     5 P40923     3.33   0.918       12.2             180   180   180
+     6 P51467     3.78   0.956       22.5             195   195   195
+     7 P51956     4.40   0.975       40.0             278   278   278
+     8 P52630     4.12   0.974       38.5             178   178   178
+     9 P60426     3.81   0.951       20.6             191   191   191
+    10 P66101     3.10   0.912       11.4              98    98    98
+    11 P68071     3.57   0.939       16.3             170   170   170
+    12 P69489     4.21   0.970       33.0             238   238   238
+    13 P70597     3.56   0.935       15.4             146   146   146
+    14 P94346     3.44   0.911       11.3             224   224   224
+    15 P95158     3.98   0.961       25.8             231   231   231
+    16 P96518     4.03   0.968       31.7             222   222   222
 
 Precise selection
 
@@ -2481,6 +2782,24 @@ MAE |>
              action = 'kick') # Accurately kick samples after sample_condition
 ```
 
+    # A tibble: 14 × 7
+       primary shannon simpson invsimpson observerd_index chao1   ACE
+       <chr>     <dbl>   <dbl>      <dbl>           <dbl> <dbl> <dbl>
+     1 P33531     3.54   0.938       16.1             168   168   168
+     2 P40725     4.05   0.953       21.3             238   238   238
+     3 P40923     3.33   0.918       12.2             180   180   180
+     4 P51467     3.78   0.956       22.5             195   195   195
+     5 P51956     4.40   0.975       40.0             278   278   278
+     6 P52630     4.12   0.974       38.5             178   178   178
+     7 P60426     3.81   0.951       20.6             191   191   191
+     8 P66101     3.10   0.912       11.4              98    98    98
+     9 P68071     3.57   0.939       16.3             170   170   170
+    10 P69489     4.21   0.970       33.0             238   238   238
+    11 P70597     3.56   0.935       15.4             146   146   146
+    12 P94346     3.44   0.911       11.3             224   224   224
+    13 P95158     3.98   0.961       25.8             231   231   231
+    14 P96518     4.03   0.968       31.7             222   222   222
+
 #### EMP_history
 
 from EMPT
@@ -2491,6 +2810,9 @@ MAE |>
   EMP_alpha_analysis() |>
   EMP_history()
 ```
+    [1] ".EMP_assay_extract_EMPT(EMPT = ., pattern_ref = pattern_ref, pattern = pattern, exact = exact, action = add)"
+    [2] "EMP_alpha_analysis(x = EMP_assay_extract(MAE, experiment = taxonomy))"   
+
 
 from EMP
 
@@ -2511,6 +2833,22 @@ k2 <- MAE |>
   EMP_heatmap_plot()  |>
   EMP_history()  ###### get all the history about what happened to the object
 ```
+
+    $total
+    [1] "as.EMP(object = data_list)"                          
+    [2] "EMP_cor_analysis(EMP = (k1 + k2), method = spearman)"
+    [3] ".Primitive(call)"                                    
+
+    $taxonomy
+    [1] ".EMP_assay_extract_EMPT(EMPT = ., pattern_ref = pattern_ref, pattern = pattern, exact = exact, action = add)"                                                                                         
+    [2] "EMP_collapse_byrow(x = x, experiment = experiment, estimate_group = estimate_group, method = method, na_string = na_string, collapse_sep = collapse_sep, action = action)"                            
+    [3] "EMP_diff_analysis(x = EMP_collapse(EMP_assay_extract(MAE, taxonomy), estimate_group = Genus, collapse_by = row), .formula = ~Group, method = DESeq2)"                                                 
+    [4] "EMP_filter(obj = EMP_diff_analysis(EMP_collapse(EMP_assay_extract(MAE, taxonomy), estimate_group = Genus, collapse_by = row), method = DESeq2, .formula = ~Group), feature_condition = pvalue < 0.05)"
+
+    $untarget_metabol
+    [1] "EMP_collapse_byrow(x = x, experiment = experiment, estimate_group = estimate_group, method = method, na_string = na_string, collapse_sep = collapse_sep, action = action)"                                                                                                     
+    [2] "EMP_diff_analysis(x = EMP_collapse(MAE, experiment = untarget_metabol, na_string = c(NA, null, , -), estimate_group = MS2kegg, method = sum, collapse_by = row), .formula = ~Group, method = DESeq2)"                                                                          
+    [3] "EMP_filter(obj = EMP_diff_analysis(EMP_collapse(MAE, experiment = untarget_metabol, na_string = c(NA, null, , -), estimate_group = MS2kegg, method = sum, collapse_by = row), method = DESeq2, .formula = ~Group), feature_condition = pvalue < 0.05 & abs(fold_change) > 1.5)"
 
 
 ### EMP_result
@@ -2555,7 +2893,31 @@ MAE |>
 assay_data <- assay_data |> tibble::column_to_rownames('primary')
 shannon_index <- vegan::diversity(assay_data,index = 'shannon') 
 new_result <- tibble::tibble(primary=names(shannon_index),new_shannon=shannon_index)
+new_result
 ```
+    # A tibble: 20 × 2
+       primary new_shannon
+       <chr>         <dbl>
+     1 P11774         2.28
+     2 P31579         2.55
+     3 P33531         2.19
+     4 P36987         2.02
+     5 P40725         3.11
+     6 P40923         2.15
+     7 P51467         2.36
+     8 P51956         3.01
+     9 P52630         2.80
+    10 P54631         1.74
+    11 P60426         2.73
+    12 P66101         1.47
+    13 P68071         2.32
+    14 P69489         2.71
+    15 P70597         2.24
+    16 P75656         1.50
+    17 P84567         1.96
+    18 P94346         2.93
+    19 P95158         2.76
+    20 P96518         2.59
 
 4. Inject the new result into EMPT object
 
@@ -2573,6 +2935,36 @@ obj |>
   EMP_filter(sample_condition  = new_shannon >2)
 ```
 
+    4 of 20 samples were filterd out!
+    0 of 217 features were filterd out!
+    # A tibble: 16 × 218
+       primary Acetoanaerobium Acetobacterium Acidaminococcus Adlercreutzia Akkermansia Algoriphagus
+       <chr>             <int>          <int>           <int>         <int>       <int>        <int>
+     1 P11774                0              0               4             0           9            0
+     2 P31579                0              3               0             0           4            0
+     3 P33531                0              0               0             0           7            0
+     4 P36987                0              0              14             0           8            0
+     5 P40725                3              5              10             0           4            0
+     6 P40923                0              0               0             0           4            0
+     7 P51467                0              0               0             0           5            2
+     8 P51956                2              4              19             8          72            2
+     9 P52630                0              0               6             0         167            0
+    10 P60426                0              3               2             0           4            0
+    11 P68071                0              0               2             0           8            0
+    12 P69489                0              3               6             6           6            0
+    13 P70597                0              0               0             0           3            0
+    14 P94346                2              7              10             0           3            0
+    15 P95158                2              6               5             0           4            0
+    16 P96518                0              0               7             0           5            3
+    # ℹ 211 more variables: Alistipes <int>, Alkaliphilus <int>, Alkalitalea <int>,
+    #   Alloprevotella <int>, Amedibacterium <int>, Aminipila <int>, Anaerobutyricum <int>,
+    #   Anaerocolumna <int>, Anaerostipes <int>, Anaerotignum <int>, Anoxybacter <int>,
+    #   Anseongella <int>, Apibacter <int>, Arachidicoccus <int>, Arenibacter <int>, Bacteroides <int>,
+    #   Barnesiella <int>, Belliella <int>, Bifidobacterium <int>, Blautia <int>, Bulleidia <int>,
+    #   Butyricimonas <int>, Butyrivibrio <int>, Caldithrix <int>, Caloramator <int>,
+    #   Caloranaerobacter <int>, Calothrix <int>, Campylobacter <int>, …
+    # ℹ Use `colnames()` to see all variable names
+
 #### EMP_summary
 ```R
 ## from MultiAssayExperiment
@@ -2585,6 +2977,8 @@ k2 <- MAE |>
  EMP_assay_extract('geno_ko')
 (k1+k2) |> EMP_summary()
 ```
+<img src="tutorial_related/tutorial_figs/EMP_summary2.jpg" alt="EMP_summary2" style="zoom:100%;" />
+
 
 #### EMP_taxonomy_import
 
