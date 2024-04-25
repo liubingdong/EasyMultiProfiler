@@ -61,6 +61,19 @@ EMPT or EMP object
 \description{
 EMP heatmap plot
 }
+\section{Palettes}{
+
+The following palettes are available for use with these scales:
+\describe{
+  BrBG, PiYG, PRGn, PuOr, RdBu, RdGy, RdYlBu, RdYlGn, Spectral,
+  Accent, Dark2, Paired, Pastel1, Pastel2, Set1, Set2, Set3
+  Blues, BuGn, BuPu, GnBu, Greens, Greys, Oranges, OrRd, PuBu, 
+  PuBuGn, PuRd, Purples, RdPu, Reds, YlGn, YlGnBu, YlOrBr, YlOrRd
+}
+
+Modify the palette through the `palette` argument.
+}
+
 \examples{
 \dontrun{
 data(MAE)

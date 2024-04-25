@@ -3,6 +3,16 @@
 #' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred).
 #' @param show A character string. Show inluding all, sig and pvalue.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @section Palettes:
+#' The following palettes are available for use with these scales:
+#' \describe{
+#'   BrBG, PiYG, PRGn, PuOr, RdBu, RdGy, RdYlBu, RdYlGn, Spectral,
+#'   Accent, Dark2, Paired, Pastel1, Pastel2, Set1, Set2, Set3
+#'   Blues, BuGn, BuPu, GnBu, Greens, Greys, Oranges, OrRd, PuBu, 
+#'   PuBuGn, PuRd, Purples, RdPu, Reds, YlGn, YlGnBu, YlOrBr, YlOrRd
+#' }
+#'
+#' Modify the palette through the `palette` argument.
 #' @rdname EMP_heatmap_plot
 #' @importFrom ggplot2 ggplot
 #' @importFrom ggplot2 geom_tile
