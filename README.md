@@ -139,10 +139,10 @@ MAE |>
     19 P95158                            2                      0                      0                      4
     20 P96518                            0                      0                      0                      2
     # ℹ abbreviated names:
-    #   ¹​`Archaea;Candidatus_Thermoplasmatota;Thermoplasmata;Methanomassiliicoccales;Methanomassiliicoccaceae;Methanomassiliicoccus;Candidatus_Methanomassiliicoccus_intestinalis;`,
-    #   ²​`Archaea;Euryarchaeota;Methanobacteria;Methanobacteriales;Methanobacteriaceae;Methanobrevibacter;Methanobrevibacter_smithii;`,
-    #   ³​`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_meyeri;`,
-    #   ⁴​`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_odontolytica;`
+    #   ¹`Archaea;Candidatus_Thermoplasmatota;Thermoplasmata;Methanomassiliicoccales;Methanomassiliicoccaceae;Methanomassiliicoccus;Candidatus_Methanomassiliicoccus_intestinalis;`,
+    #   ²`Archaea;Euryarchaeota;Methanobacteria;Methanobacteriales;Methanobacteriaceae;Methanobrevibacter;Methanobrevibacter_smithii;`,
+    #   ³`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_meyeri;`,
+    #   ⁴`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_odontolytica;`
     # ℹ 439 more variables:
     #   `Bacteria;Actinobacteria;Actinomycetia;Bifidobacteriales;Bifidobacteriaceae;Bifidobacterium;Bifidobacterium_adolescentis;` <int>, …
     # ℹ Use `colnames()` to see all variable names
@@ -190,7 +190,7 @@ MAE |>
 MAE |>
     	EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = T)
 ```
-  # A tibble: 20 × 2
+    # A tibble: 20 × 2
        primary `1.1.1.1`
        <chr>       <int>
      1 P11774        412
@@ -592,15 +592,64 @@ MAE |>
                estimate_group = 'Group',method = 'mean',collapse_sep = '+') 
 ```
 
+    Primary changed!
+    Current primary: Group
+    # A tibble: 2 × 711
+      primary `neg-M103T139` `neg-M107T179` `neg-M109T160` `neg-M121T165` `neg-M124T53` `neg-M124T82`
+      <chr>            <dbl>          <dbl>          <dbl>          <dbl>         <dbl>         <dbl>
+    1 Group_A         39150.         12918.          1855.         19756.        14589.         7424.
+    2 Group_B         38593.         15305.          2398.         20058.        14789.         8001.
+    # ℹ 704 more variables: `neg-M127T49` <dbl>, `neg-M128T56` <dbl>, `neg-M128T94` <dbl>,
+    #   `neg-M129T177_2` <dbl>, `neg-M131T175` <dbl>, `neg-M135T84` <dbl>, `neg-M137T165` <dbl>,
+    #   `neg-M137T198` <dbl>, `neg-M138T200` <dbl>, `neg-M140T82` <dbl>, `neg-M142T151` <dbl>,
+    #   `neg-M146T50` <dbl>, `neg-M149T332` <dbl>, `neg-M149T393` <dbl>, `neg-M151T176` <dbl>,
+    #   `neg-M154T47` <dbl>, `neg-M159T163` <dbl>, `neg-M159T206` <dbl>, `neg-M163T113` <dbl>,
+    #   `neg-M165T165` <dbl>, `neg-M165T172` <dbl>, `neg-M167T104` <dbl>, `neg-M167T137` <dbl>,
+    #   `neg-M167T53_2` <dbl>, `neg-M167T82_2` <dbl>, `neg-M173T163` <dbl>, `neg-M173T174` <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 merge assay data accoding to duplicate rowdata.
 
 ```R
-MAE |> EMP_rowdata_extract('untarget_metabol')
 MAE |>
   EMP_collapse(experiment = 'untarget_metabol',
                collapse_by='row',na_string = c("NA", "null", "","-"),
                estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') 
 ```
+    Feature changed!
+    Current feature: MS2kegg
+    # A tibble: 20 × 193
+       primary C00020 C00022 C00025 C00047 C00051 C00062 C00064 C00072 C00073 C00074  C00078   C00079  C00082
+       <chr>    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>   <dbl>    <dbl>   <dbl>
+     1 P11774   1415.  3795.  4236. 12149.  2239. 59061. 21173.  4156. 11413. 20678. 541915. 1223794.  91879.
+     2 P31579   2227.  3832.  4050. 10506.  1934. 35926. 17334.  8187. 10395. 15518. 505144. 1128146.  70890.
+     3 P33531    966.  3145.  2992. 10510.  3408. 59354. 17487.  3986. 12350. 18519. 523381. 1158779.  65998.
+     4 P36987    324.  4183.  5733. 10461.  1541. 43060. 13803.  2624. 13584.  8587. 491480. 1096061.  88491.
+     5 P40725   3860.  6964.  6399. 10737.  1860. 38626. 18778.  1431.  9352. 11043. 404328.  892090.  48350.
+     6 P40923  10585.  5793.  4923.  9659.  3047. 53740. 20079.  2966. 10335. 12735. 408912.  959190.  54829.
+     7 P51467   3079.  4969.  3068. 12787.  3447. 54442. 19200.  1747. 12293.  7972. 509996. 1177841.  79512.
+     8 P51956  25371.  4440.  4962. 12709.  2827. 49674. 17476.  3920. 13579. 21248. 464563. 1039763.  65581.
+     9 P52630  18912.  4181.  3478. 10147.  2879. 52478. 19740.  5333.  9692. 22683. 414831. 1008052.  48300.
+    10 P54631  13458.  5175.  4890. 14991.  3230. 49776. 20910.  3104. 14971. 19855. 506225. 1237135.  73692.
+    11 P60426    454.  3386.  2279.  8223.  2607. 43362. 15493. 10760. 10593. 16501. 480899.  713110.  61110.
+    12 P66101   7896.  6787.  3634. 15846.  3276. 56558. 22646.  2608. 12632. 13185. 425531. 1156224.  75003.
+    13 P68071  29959. 10392.  7918.  8997.  4449. 55901. 18802.  1036. 12133. 12854. 552633. 1139685.  54882.
+    14 P69489   3365.  2453.  2031. 10045.  3632. 55539. 13736.  2007. 10491. 11197. 418425.  940845.  56897.
+    15 P70597   5793.  5961.  6859. 10381.  2767. 49030. 17924.  2201. 12535.  5113. 572520. 1160175. 104174.
+    16 P75656   6870.  3676.  4561.  9445.  1642. 37131. 15911.   946.  9419. 13083. 414705.  909463.  53954.
+    17 P84567   6974.  7851.  5728.  8317.  6927. 37661. 19135.  1353. 10799. 12491. 547850. 1230595.  67497.
+    18 P94346   3452.  2180.  5329. 13437.  4401. 44692. 20312.  1736. 12129. 13754. 581643. 1084619.  62743.
+    19 P95158   2138.  6259.  6817. 12396.  2756. 52168. 17661.  2269. 12140.  6010. 484683. 1321838.  93646.
+    20 P96518   8785.  2350.  2830.  6637.  2232. 41909. 10865. 10390.  7046. 20289. 424039.  935910.  44605.
+    # ℹ 179 more variables: C00084 <dbl>, C00086 <dbl>, C00090 <dbl>, C00106 <dbl>, C00114 <dbl>,
+    #   C00133 <dbl>, C00135 <dbl>, C00144 <dbl>, C00146 <dbl>, C00148 <dbl>, C00156 <dbl>, C00157 <dbl>,
+    #   C00158 <dbl>, C00180 <dbl>, C00183 <dbl>, C00188 <dbl>, C00195 <dbl>, C00207 <dbl>, C00212 <dbl>,
+    #   C00219 <dbl>, C00242 <dbl>, C00245 <dbl>, C00249 <dbl>, C00255 <dbl>, C00262 <dbl>, C00294 <dbl>,
+    #   C00299 <dbl>, C00300 <dbl>, C00318 <dbl>, C00327 <dbl>, C00328 <dbl>, C00346 <dbl>, C00350 <dbl>,
+    #   C00362 <dbl>, C00366 <dbl>, C00387 <dbl>, C00407 <dbl>, C00416 <dbl>, C00422 <dbl>, C00463 <dbl>,
+    #   C00472 <dbl>, C00486 <dbl>, C00499 <dbl>, C00500 <dbl>, C00548 <dbl>, C00550 <dbl>, C00588 <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 
 combie two collapse method
 
@@ -612,6 +661,22 @@ MAE |>
   EMP_collapse(collapse_by='col',estimate_group = 'Group',
                method = 'mean',collapse_sep = '+')
 ```
+    Primary changed!
+    Current primary: Group
+    # A tibble: 2 × 193
+      primary C00020 C00022 C00025 C00047 C00051 C00062 C00064 C00072 C00073 C00074 C00078 C00079 C00082 C00084
+      <chr>    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>
+    1 Group_A  7637.  4512.  4583. 11187.  2604. 45390. 18038.  3933. 10956. 15073. 4.58e5 1.04e6 62086. 1.17e5
+    2 Group_B  7951.  5265.  4689. 10651.  3506. 51619. 17809.  3344. 11833. 13258. 5.10e5 1.11e6 74118. 1.15e5
+    # ℹ 178 more variables: C00086 <dbl>, C00090 <dbl>, C00106 <dbl>, C00114 <dbl>, C00133 <dbl>,
+    #   C00135 <dbl>, C00144 <dbl>, C00146 <dbl>, C00148 <dbl>, C00156 <dbl>, C00157 <dbl>, C00158 <dbl>,
+    #   C00180 <dbl>, C00183 <dbl>, C00188 <dbl>, C00195 <dbl>, C00207 <dbl>, C00212 <dbl>, C00219 <dbl>,
+    #   C00242 <dbl>, C00245 <dbl>, C00249 <dbl>, C00255 <dbl>, C00262 <dbl>, C00294 <dbl>, C00299 <dbl>,
+    #   C00300 <dbl>, C00318 <dbl>, C00327 <dbl>, C00328 <dbl>, C00346 <dbl>, C00350 <dbl>, C00362 <dbl>,
+    #   C00366 <dbl>, C00387 <dbl>, C00407 <dbl>, C00416 <dbl>, C00422 <dbl>, C00463 <dbl>, C00472 <dbl>,
+    #   C00486 <dbl>, C00499 <dbl>, C00500 <dbl>, C00548 <dbl>, C00550 <dbl>, C00588 <dbl>, C00633 <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 
 #### EMP_decostand
 
@@ -622,6 +687,38 @@ MAE |>
   EMP_decostand(experiment = 'taxonomy',method = 'relative') 
 ```
 
+    # A tibble: 20 × 444
+       primary Archaea;Candidatus_Thermo…¹ Archaea;Euryarchaeot…² Bacteria;Actinobacte…³ Bacteria;Actinobacte…⁴
+       <chr>                         <dbl>                  <dbl>                  <dbl>                  <dbl>
+     1 P11774                     0                       0                     0                      0       
+     2 P31579                     0                       0                     0                      0.000500
+     3 P33531                     0                       0                     0                      0.0004  
+     4 P36987                     0                       0                     0                      0.000300
+     5 P40725                     0                       0                     0                      0       
+     6 P40923                     0                       0                     0                      0.000701
+     7 P51467                     0                       0                     0                      0       
+     8 P51956                     0                       0.00430               0                      0       
+     9 P52630                     0                       0                     0                      0       
+    10 P54631                     0                       0                     0                      0       
+    11 P60426                     0                       0                     0                      0.000400
+    12 P66101                     0                       0                     0                      0       
+    13 P68071                     0                       0                     0                      0.0005  
+    14 P69489                     0                       0.00180               0                      0       
+    15 P70597                     0                       0                     0                      0       
+    16 P75656                     0                       0                     0                      0       
+    17 P84567                     0                       0                     0                      0       
+    18 P94346                     0                       0                     0.000300               0.00140 
+    19 P95158                     0.000200                0                     0                      0.000400
+    20 P96518                     0                       0                     0                      0.000200
+    # ℹ abbreviated names:
+    #   ¹`Archaea;Candidatus_Thermoplasmatota;Thermoplasmata;Methanomassiliicoccales;Methanomassiliicoccaceae;Methanomassiliicoccus;Candidatus_Methanomassiliicoccus_intestinalis;`,
+    #   ²`Archaea;Euryarchaeota;Methanobacteria;Methanobacteriales;Methanobacteriaceae;Methanobrevibacter;Methanobrevibacter_smithii;`,
+    #   ³`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_meyeri;`,
+    #   ⁴`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_odontolytica;`
+    # ℹ 439 more variables:
+    #   `Bacteria;Actinobacteria;Actinomycetia;Bifidobacteriales;Bifidobacteriaceae;Bifidobacterium;Bifidobacterium_adolescentis;` <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 Transfer data into centered log ratio ("clr") format.
 
 ```R
@@ -629,12 +726,77 @@ MAE |>
   EMP_decostand(experiment = 'geno_ko',method = 'clr',pseudocount=0.0001)
 ```
 
+    # A tibble: 20 × 7,630
+       primary K00001 K00002 K00003 K00004 K00005 K00007 K00008 K00009 K00010  K00011 K00012 K00013 K00014
+       <chr>    <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>  <dbl>   <dbl>  <dbl>  <dbl>  <dbl>
+     1 P11774    5.58  1.49    6.47   1.49   4.29 -8.41    6.05   6.01   3.51 -8.41     6.50   6.96   6.92
+     2 P31579    4.66  0.805   5.32   2.60   3.80  1.90    5.69   5.36   2.19  1.50     6.36   6.00   6.54
+     3 P33531    4.55  2.07    6.31   1.66   4.30 -8.24    6.53   5.98   2.92 -8.24     6.39   6.94   6.86
+     4 P36987    5.02  2.03    6.59   2.72   5.02 -7.88    6.87   6.99   4.10 -7.88     7.62   7.42   7.16
+     5 P40725    4.98  2.59    5.39   2.32   3.05 -9.45    5.25   5.05   2.47 -0.241    5.44   5.36   5.57
+     6 P40923    5.50  0.941   6.04   2.55   4.24  0.248   5.54   5.50   3.54 -8.96     5.91   6.05   6.15
+     7 P51467    5.70  2.24    5.42   2.82   4.10 -9.17    5.78   5.60   3.63  2.68     5.15   5.92   5.91
+     8 P51956    5.37  1.85    5.37   1.56   3.33  1.85    5.28   4.97   1.72  0.870    5.58   5.87   5.87
+     9 P52630    5.93  2.60    6.68   3.29   4.85 -8.41    6.18   5.97   4.24  1.50     6.48   6.62   6.88
+    10 P54631    4.97  1.84    5.52   1.15   4.30  2.25    5.41   5.02   2.45  1.15     5.49   5.94   6.06
+    11 P60426    4.70  0.453   5.38   1.37   3.50 -0.240   5.23   5.01   2.32  0.858    5.52   5.65   5.67
+    12 P66101    5.28  2.77    5.84   3.34   4.02 -9.00    5.93   5.50   3.47 -9.00     5.75   6.00   6.20
+    13 P68071    6.46  2.30    8.24   2.30   6.94 -6.91    8.41   7.47   6.93 -6.91     8.24   8.27   8.16
+    14 P69489    4.86  2.17    5.39   1.54   4.28  0.849   5.15   4.80   3.73 -0.537    4.76   5.49   5.38
+    15 P70597    5.37  2.74    6.08   3.06   4.67 -8.55    6.10   5.65   3.06  0.658    5.94   6.55   6.60
+    16 P75656    4.63  1.52    5.71   2.21   3.54  1.23    6.26   6.29   3.39  0.828    5.77   6.20   6.03
+    17 P84567    4.95  2.35    5.99   3.39   4.53 -8.65    6.31   6.23   2.95 -8.65     6.15   6.39   6.42
+    18 P94346    5.08  2.44    5.70   2.34   3.56 -9.17    5.71   5.49   3.17  0.0375   6.13   6.24   6.19
+    19 P95158    5.06  2.25    6.05   2.76   4.22 -8.76    6.62   5.40   2.06  0.455    6.05   6.19   6.52
+    20 P96518    5.11  0.904   6.35   3.47   4.24 -8.31    6.25   6.66   3.54 -8.31     6.24   6.70   6.52
+    # ℹ 7,616 more variables: K00015 <dbl>, K00016 <dbl>, K00018 <dbl>, K00020 <dbl>, K00021 <dbl>,
+    #   K00024 <dbl>, K00026 <dbl>, K00027 <dbl>, K00029 <dbl>, K00030 <dbl>, K00031 <dbl>, K00032 <dbl>,
+    #   K00033 <dbl>, K00034 <dbl>, K00036 <dbl>, K00038 <dbl>, K00039 <dbl>, K00040 <dbl>, K00041 <dbl>,
+    #   K00042 <dbl>, K00043 <dbl>, K00045 <dbl>, K00048 <dbl>, K00052 <dbl>, K00053 <dbl>, K00054 <dbl>,
+    #   K00055 <dbl>, K00057 <dbl>, K00058 <dbl>, K00059 <dbl>, K00060 <dbl>, K00064 <dbl>, K00066 <dbl>,
+    #   K00067 <dbl>, K00069 <dbl>, K00073 <dbl>, K00074 <dbl>, K00075 <dbl>, K00077 <dbl>, K00082 <dbl>,
+    #   K00086 <dbl>, K00087 <dbl>, K00088 <dbl>, K00090 <dbl>, K00091 <dbl>, K00094 <dbl>, K00096 <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 Transfer data into logformat.
 
 ```R
 MAE |>
   EMP_decostand(experiment = 'geno_ec',method = 'log',logbase = 2) 
 ```
+
+    # A tibble: 20 × 2,425
+       primary `1.1.1.1` `1.1.1.100` `1.1.1.102` `1.1.1.103` `1.1.1.105` `1.1.1.108` `1.1.1.11` `1.1.1.122`
+       <chr>       <dbl>       <dbl>       <dbl>       <dbl>       <dbl>       <dbl>      <dbl>       <dbl>
+     1 P11774       9.69        4.17           0        4.17        0           3.32       0           0   
+     2 P31579       9.35        2.58           0        7.17        0           3          3.58        3.32
+     3 P33531       9.15        4.32           0        6.46        0           4.32       0           0   
+     4 P36987       8.35        2.58           0        7.61        0           0          0           0   
+     5 P40725       9.76        4              0        6.09        0           1          0           0   
+     6 P40923       9.96        2.58           0        5           0           0          1           0   
+     7 P51467      10.2         2              0        6.55        0           1          0           0   
+     8 P51956      10.1         5.17           0        5           0           2          4           0   
+     9 P52630       9.90        4.17           0        4.32        2.58        1          0           0   
+    10 P54631       9.36        4.32           0        4.46        0           3.32       4.17        0   
+    11 P60426       9.75        3              0        5.64        0           2.58       1           0   
+    12 P66101       9.70        4.32           1        5.25        0           2.58       0           0   
+    13 P68071       8.98        2              0        7.17        0           3.81       0           0   
+    14 P69489       9.97        4.46           0        5.17        0           1          3           0   
+    15 P70597       9.23        3.81           0        5.25        0           4.81       0           0   
+    16 P75656       9.16        3.58           0        8.52        0           0          2.58        0   
+    17 P84567       8.77        4.58           0        7.54        0           0          0           0   
+    18 P94346       9.67        3              0        5.09        0           2          0           0   
+    19 P95158       9.56        5              0        5           0           1          0           0   
+    20 P96518       8.84        2              0        7.46        2.58        0          0           0   
+    # ℹ 2,416 more variables: `1.1.1.130` <dbl>, `1.1.1.132` <dbl>, `1.1.1.133` <dbl>, `1.1.1.135` <dbl>,
+    #   `1.1.1.136` <dbl>, `1.1.1.137` <dbl>, `1.1.1.14` <dbl>, `1.1.1.141` <dbl>, `1.1.1.157` <dbl>,
+    #   `1.1.1.169` <dbl>, `1.1.1.17` <dbl>, `1.1.1.18` <dbl>, `1.1.1.193` <dbl>, `1.1.1.2` <dbl>,
+    #   `1.1.1.202` <dbl>, `1.1.1.205` <dbl>, `1.1.1.21` <dbl>, `1.1.1.215` <dbl>, `1.1.1.219` <dbl>,
+    #   `1.1.1.22` <dbl>, `1.1.1.23` <dbl>, `1.1.1.25` <dbl>, `1.1.1.251` <dbl>, `1.1.1.26` <dbl>,
+    #   `1.1.1.261` <dbl>, `1.1.1.262` <dbl>, `1.1.1.264` <dbl>, `1.1.1.267` <dbl>, `1.1.1.27` <dbl>,
+    #   `1.1.1.270` <dbl>, `1.1.1.271` <dbl>, `1.1.1.276` <dbl>, `1.1.1.28` <dbl>, `1.1.1.281` <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 
 #### EMP_impute
 
@@ -646,21 +808,101 @@ MAE |>
   EMP_impute(assay=F,coldata=T,rowdata=F)
 ```
 
+    # A tibble: 20 × 2,425
+       primary `1.1.1.1` `1.1.1.100` `1.1.1.102` `1.1.1.103` `1.1.1.105` `1.1.1.108` `1.1.1.11` `1.1.1.122`
+       <chr>       <int>       <int>       <int>       <int>       <int>       <int>      <int>       <int>
+     1 P11774        412           9           0           9           0           5          0           0
+     2 P31579        327           3           0          72           0           4          6           5
+     3 P33531        285          10           0          44           0          10          0           0
+     4 P36987        163           3           0          98           0           0          0           0
+     5 P40725        433           8           0          34           0           1          0           0
+     6 P40923        497           3           0          16           0           0          1           0
+     7 P51467        599           2           0          47           0           1          0           0
+     8 P51956        534          18           0          16           0           2          8           0
+     9 P52630        478           9           0          10           3           1          0           0
+    10 P54631        329          10           0          11           0           5          9           0
+    11 P60426        430           4           0          25           0           3          1           0
+    12 P66101        415          10           1          19           0           3          0           0
+    13 P68071        252           2           0          72           0           7          0           0
+    14 P69489        501          11           0          18           0           1          4           0
+    15 P70597        300           7           0          19           0          14          0           0
+    16 P75656        286           6           0         184           0           0          3           0
+    17 P84567        219          12           0          93           0           0          0           0
+    18 P94346        408           4           0          17           0           2          0           0
+    19 P95158        377          16           0          16           0           1          0           0
+    20 P96518        229           2           0          88           3           0          0           0
+    # ℹ 2,416 more variables: `1.1.1.130` <int>, `1.1.1.132` <int>, `1.1.1.133` <int>, `1.1.1.135` <int>,
+    #   `1.1.1.136` <int>, `1.1.1.137` <int>, `1.1.1.14` <int>, `1.1.1.141` <int>, `1.1.1.157` <int>,
+    #   `1.1.1.169` <int>, `1.1.1.17` <int>, `1.1.1.18` <int>, `1.1.1.193` <int>, `1.1.1.2` <int>,
+    #   `1.1.1.202` <int>, `1.1.1.205` <int>, `1.1.1.21` <int>, `1.1.1.215` <int>, `1.1.1.219` <int>,
+    #   `1.1.1.22` <int>, `1.1.1.23` <int>, `1.1.1.25` <int>, `1.1.1.251` <int>, `1.1.1.26` <int>,
+    #   `1.1.1.261` <int>, `1.1.1.262` <int>, `1.1.1.264` <int>, `1.1.1.267` <int>, `1.1.1.27` <int>,
+    #   `1.1.1.270` <int>, `1.1.1.271` <int>, `1.1.1.276` <int>, `1.1.1.28` <int>, `1.1.1.281` <int>, …
+    # ℹ Use `colnames()` to see all variable names
+
 Support formula, such as only impute SAS and SDS
 
 ```R
 MAE |>
   EMP_coldata_extract(action ='add') |>
-  EMP_impute(.formula = SAS+SDS ~ .,action = 'get') 
+  EMP_impute(.formula = SAS+SDS ~ .) 
 ```
+
+    # A tibble: 20 × 12
+       primary   Age Height Weight   BMI Education_Years  PHQ9  GAD7   SAS   SDS  HAMA  HAMD
+       <chr>   <dbl>  <dbl>  <dbl> <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+     1 P31579     26   1.7    58    20.1              16     4     2    31    40     0     0
+     2 P66101     24   1.73   66    22.0              18     0     0    44    34     2     1
+     3 P75656     27   1.82   88    26.6              17    10     5    36    49     0     0
+     4 P96518     25   1.6    50    19.5              16     4     5    NA    NA    NA    NA
+     5 P40923     26   1.82   85    25.7              18     4     3    35    38     1     2
+     6 P36987     26   1.55   45    18.7              18     4     6    46    36     2     1
+     7 P40725     27   1.57   47    19.1              17     3     3    45    31    NA    NA
+     8 P52630     30   1.78   70    22.1              19     0     1    41    40     0     0
+     9 P94346     27   1.67   48    17.2              19     1     0    35    33     0     1
+    10 P54631     60   1.53   49    20.9              12    11    NA    39    39     8     8
+    11 P70597     40   1.7    62    21.4              16    12    17    54    60     3     6
+    12 P51467     56   1.5    49    21.8               9    NA    NA    44    44     7     8
+    13 P60426     39   1.6    59    23.0               9     5     3    53    44     4     4
+    14 P68071     25   1.72   58    19.6              16     3     0    29    31     4     3
+    15 P69489     34   1.56   55.8  22.9              16     4     4    35    45     3     3
+    16 P95158     40   1.68   52    18.4              19    13    12    46    40    11    11
+    17 P84567     38   1.62   62    23.6              16     4     6    33    44     7     6
+    18 P33531     36   1.73   56    18.7              16     3     0    29    34     5     2
+    19 P51956     28   1.72   60    20.3              12     6     7    49    54     9     9
+    20 P11774     29   1.5    50    22.2              21    11     7    31    33     1     1
 
 2. For assay
 
 ```R
 MAE |>
   EMP_coldata_extract(action ='add') |>
-  EMP_impute(.formula = SAS+SDS ~ .,action = 'get') 
+  EMP_impute(.formula = SAS+SDS ~ .) 
 ```
+
+    # A tibble: 20 × 12
+       primary   Age Height Weight   BMI Education_Years  PHQ9  GAD7   SAS   SDS  HAMA  HAMD
+       <chr>   <dbl>  <dbl>  <dbl> <dbl>           <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
+     1 P31579     26   1.7    58    20.1              16     4     2    31    40     0     0
+     2 P66101     24   1.73   66    22.0              18     0     0    44    34     2     1
+     3 P75656     27   1.82   88    26.6              17    10     5    36    49     0     0
+     4 P96518     25   1.6    50    19.5              16     4     5    NA    NA    NA    NA
+     5 P40923     26   1.82   85    25.7              18     4     3    35    38     1     2
+     6 P36987     26   1.55   45    18.7              18     4     6    46    36     2     1
+     7 P40725     27   1.57   47    19.1              17     3     3    45    31    NA    NA
+     8 P52630     30   1.78   70    22.1              19     0     1    41    40     0     0
+     9 P94346     27   1.67   48    17.2              19     1     0    35    33     0     1
+    10 P54631     60   1.53   49    20.9              12    11    NA    39    39     8     8
+    11 P70597     40   1.7    62    21.4              16    12    17    54    60     3     6
+    12 P51467     56   1.5    49    21.8               9    NA    NA    44    44     7     8
+    13 P60426     39   1.6    59    23.0               9     5     3    53    44     4     4
+    14 P68071     25   1.72   58    19.6              16     3     0    29    31     4     3
+    15 P69489     34   1.56   55.8  22.9              16     4     4    35    45     3     3
+    16 P95158     40   1.68   52    18.4              19    13    12    46    40    11    11
+    17 P84567     38   1.62   62    23.6              16     4     6    33    44     7     6
+    18 P33531     36   1.73   56    18.7              16     3     0    29    34     5     2
+    19 P51956     28   1.72   60    20.3              12     6     7    49    54     9     9
+    20 P11774     29   1.5    50    22.2              21    11     7    31    33     1     1
 
 3. For rowdata (Not Not recommended)
 
@@ -682,10 +924,79 @@ MAE |>
   EMP_assay_extract('taxonomy') |>
   EMP_identify_assay(estimate_group = 'Group',method = 'default',
                      min=0.01,min_ratio = 0.7) ### consider the Group
+```
+    0 of 20 samples were filterd out!
+    429 of 443 features were filterd out!
+    # A tibble: 20 × 15
+       primary Bacteria;Bacteroidetes;Ba…¹ Bacteria;Bacteroidet…² Bacteria;Bacteroidet…³ Bacteria;Bacteroidet…⁴
+       <chr>                         <int>                  <int>                  <int>                  <int>
+     1 P11774                          215                    295                    819                    633
+     2 P31579                          133                    845                    164                    718
+     3 P33531                          162                    285                    117                    296
+     4 P36987                          119                    274                    117                    110
+     5 P40725                           66                    101                     72                    264
+     6 P40923                          126                    228                    136                    129
+     7 P51467                           97                     85                    122                    115
+     8 P51956                           91                     87                    111                    146
+     9 P52630                          333                    120                    293                    320
+    10 P54631                           54                    521                   1689                    300
+    11 P60426                          100                    166                    301                    112
+    12 P66101                          304                    894                   2168                   1287
+    13 P68071                          416                    201                     74                    217
+    14 P69489                          144                    100                    122                    130
+    15 P70597                          212                    252                    113                     62
+    16 P75656                          149                    139                    236                    458
+    17 P84567                           18                     73                    995                    349
+    18 P94346                            9                    433                     87                     10
+    19 P95158                           72                    273                    378                    453
+    20 P96518                          113                    146                    291                    174
+    # ℹ abbreviated names:
+    #   ¹`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_cellulosilyticus;`,
+    #   ²`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_fragilis;`,
+    #   ³`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_ovatus;`,
+    #   ⁴`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_thetaiotaomicron;`
+    # ℹ 10 more variables:
+    #   `Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_uniformis;` <int>, …
+
+```R
 MAE |>
   EMP_assay_extract('taxonomy') |>
   EMP_identify_assay(method = 'default') ### consider all samples belong to one group
 ```
+
+    No group or design set. Assuming all samples belong to one group.
+    0 of 20 samples were filterd out!
+    384 of 443 features were filterd out!
+    # A tibble: 20 × 60
+       primary Bacteria;Bacteroidetes;Ba…¹ Bacteria;Bacteroidet…² Bacteria;Bacteroidet…³ Bacteria;Bacteroidet…⁴
+       <chr>                         <int>                  <int>                  <int>                  <int>
+     1 P11774                           63                     59                    215                    295
+     2 P31579                           36                     44                    133                    845
+     3 P33531                          104                     53                    162                    285
+     4 P36987                          251                     22                    119                    274
+     5 P40725                           91                     71                     66                    101
+     6 P40923                          140                     57                    126                    228
+     7 P51467                          285                     47                     97                     85
+     8 P51956                           60                     49                     91                     87
+     9 P52630                           18                     71                    333                    120
+    10 P54631                           15                     38                     54                    521
+    11 P60426                           92                     37                    100                    166
+    12 P66101                           73                     86                    304                    894
+    13 P68071                          147                     60                    416                    201
+    14 P69489                          127                     48                    144                    100
+    15 P70597                           43                     78                    212                    252
+    16 P75656                          268                     40                    149                    139
+    17 P84567                          621                     30                     18                     73
+    18 P94346                            6                      4                      9                    433
+    19 P95158                           46                     40                     72                    273
+    20 P96518                           32                     57                    113                    146
+    # ℹ abbreviated names:
+    #   ¹`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_caccae;`,
+    #   ²`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_caecimuris;`,
+    #   ³`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_cellulosilyticus;`,
+    #   ⁴`Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_fragilis;`
+    # ℹ 55 more variables:
+    #   `Bacteria;Bacteroidetes;Bacteroidia;Bacteroidales;Bacteroidaceae;Bacteroides;Bacteroides_helcogenes;` <int>, …
 
 2. Consider the minnum counts abundance and min ratio specially for expression data, according to edgeR::filterByExpr.
 
@@ -695,6 +1006,40 @@ MAE |>
   EMP_identify_assay(method = 'edgeR',min = 10,min_ratio = 0.7,estimate_group = 'Group') 
 ```
 
+    0 of 20 samples were filterd out!
+    1123 of 2424 features were filterd out!
+    # A tibble: 20 × 1,302
+       primary `1.1.1.1` `1.1.1.103` `1.1.1.133` `1.1.1.14` `1.1.1.157` `1.1.1.169` `1.1.1.17` `1.1.1.18`
+       <chr>       <int>       <int>       <int>      <int>       <int>       <int>      <int>      <int>
+     1 P11774        412           9         281        191          33         264        184         15
+     2 P31579        327          72         314        265          42         250        191          8
+     3 P33531        285          44         466        259         161         242        150          7
+     4 P36987        163          98         221        254          35          94        287         16
+     5 P40725        433          34         233        242          57         154        199         15
+     6 P40923        497          16         256        198          96         231        190         27
+     7 P51467        599          47         272        310          63         287        259         36
+     8 P51956        534          16         332        248          56         327        181          7
+     9 P52630        478          10         280        216          92         225        176         31
+    10 P54631        329          11         329        213          42         223        143         11
+    11 P60426        430          25         260        237         103         289        191         13
+    12 P66101        415          19         273        304          83         258        198         26
+    13 P68071        252          72         295        451          19         311        176        102
+    14 P69489        501          18         357        294          69         374        207         71
+    15 P70597        300          19         281        231          67         245        147         11
+    16 P75656        286         184         256        458          61         128        473         26
+    17 P84567        219          93         377        316          77         122        290         11
+    18 P94346        408          17         324        290          52         242        233         23
+    19 P95158        377          16         290        477          82         211        140          5
+    20 P96518        229          88         206        209          57          97        317         14
+    # ℹ 1,293 more variables: `1.1.1.193` <int>, `1.1.1.202` <int>, `1.1.1.205` <int>, `1.1.1.219` <int>,
+    #   `1.1.1.22` <int>, `1.1.1.23` <int>, `1.1.1.25` <int>, `1.1.1.26` <int>, `1.1.1.261` <int>,
+    #   `1.1.1.262` <int>, `1.1.1.267` <int>, `1.1.1.27` <int>, `1.1.1.271` <int>, `1.1.1.276` <int>,
+    #   `1.1.1.28` <int>, `1.1.1.281` <int>, `1.1.1.282` <int>, `1.1.1.289` <int>, `1.1.1.29` <int>,
+    #   `1.1.1.290` <int>, `1.1.1.3` <int>, `1.1.1.303` <int>, `1.1.1.308` <int>, `1.1.1.31` <int>,
+    #   `1.1.1.316` <int>, `1.1.1.336` <int>, `1.1.1.343` <int>, `1.1.1.346` <int>, `1.1.1.350` <int>,
+    #   `1.1.1.363` <int>, `1.1.1.367` <int>, `1.1.1.369` <int>, `1.1.1.37` <int>, `1.1.1.371` <int>, …
+    # ℹ Use `colnames()` to see all variable names
+
 
 #### EMP_modify_assay
 
@@ -702,20 +1047,83 @@ For some special cases, to modify the assay data and EMP_identify_assay works be
 
 1. Change the expression value which is 0 into 0.0001
 
-  ```R
+```R
 MAE |>
   EMP_assay_extract('geno_ec') |>
   EMP_modify_assay('==0',pseudocount=0.0001)
-  ```
+```
+    # A tibble: 20 × 2,425
+       primary `1.1.1.1` `1.1.1.100` `1.1.1.102` `1.1.1.103` `1.1.1.105` `1.1.1.108` `1.1.1.11` `1.1.1.122`
+       <chr>       <dbl>       <dbl>       <dbl>       <dbl>       <dbl>       <dbl>      <dbl>       <dbl>
+     1 P11774        412           9      0.0001           9      0.0001      5          0.0001      0.0001
+     2 P31579        327           3      0.0001          72      0.0001      4          6           5     
+     3 P33531        285          10      0.0001          44      0.0001     10          0.0001      0.0001
+     4 P36987        163           3      0.0001          98      0.0001      0.0001     0.0001      0.0001
+     5 P40725        433           8      0.0001          34      0.0001      1          0.0001      0.0001
+     6 P40923        497           3      0.0001          16      0.0001      0.0001     1           0.0001
+     7 P51467        599           2      0.0001          47      0.0001      1          0.0001      0.0001
+     8 P51956        534          18      0.0001          16      0.0001      2          8           0.0001
+     9 P52630        478           9      0.0001          10      3           1          0.0001      0.0001
+    10 P54631        329          10      0.0001          11      0.0001      5          9           0.0001
+    11 P60426        430           4      0.0001          25      0.0001      3          1           0.0001
+    12 P66101        415          10      1               19      0.0001      3          0.0001      0.0001
+    13 P68071        252           2      0.0001          72      0.0001      7          0.0001      0.0001
+    14 P69489        501          11      0.0001          18      0.0001      1          4           0.0001
+    15 P70597        300           7      0.0001          19      0.0001     14          0.0001      0.0001
+    16 P75656        286           6      0.0001         184      0.0001      0.0001     3           0.0001
+    17 P84567        219          12      0.0001          93      0.0001      0.0001     0.0001      0.0001
+    18 P94346        408           4      0.0001          17      0.0001      2          0.0001      0.0001
+    19 P95158        377          16      0.0001          16      0.0001      1          0.0001      0.0001
+    20 P96518        229           2      0.0001          88      3           0.0001     0.0001      0.0001
+    # ℹ 2,416 more variables: `1.1.1.130` <dbl>, `1.1.1.132` <dbl>, `1.1.1.133` <dbl>, `1.1.1.135` <dbl>,
+    #   `1.1.1.136` <dbl>, `1.1.1.137` <dbl>, `1.1.1.14` <dbl>, `1.1.1.141` <dbl>, `1.1.1.157` <dbl>,
+    #   `1.1.1.169` <dbl>, `1.1.1.17` <dbl>, `1.1.1.18` <dbl>, `1.1.1.193` <dbl>, `1.1.1.2` <dbl>,
+    #   `1.1.1.202` <dbl>, `1.1.1.205` <dbl>, `1.1.1.21` <dbl>, `1.1.1.215` <dbl>, `1.1.1.219` <dbl>,
+    #   `1.1.1.22` <dbl>, `1.1.1.23` <dbl>, `1.1.1.25` <dbl>, `1.1.1.251` <dbl>, `1.1.1.26` <dbl>,
+    #   `1.1.1.261` <dbl>, `1.1.1.262` <dbl>, `1.1.1.264` <dbl>, `1.1.1.267` <dbl>, `1.1.1.27` <dbl>,
+    #   `1.1.1.270` <dbl>, `1.1.1.271` <dbl>, `1.1.1.276` <dbl>, `1.1.1.28` <dbl>, `1.1.1.281` <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 
 2. Change the counts which is below some threshold
 
-  ```R
+```R
 MAE |>
   EMP_assay_extract('taxonomy') |>
   EMP_modify_assay('<10',pseudocount=0) 
-  ```
+```
 
+    # A tibble: 20 × 444
+       primary Archaea;Candidatus_Thermo…¹ Archaea;Euryarchaeot…² Bacteria;Actinobacte…³ Bacteria;Actinobacte…⁴
+       <chr>                         <dbl>                  <dbl>                  <dbl>                  <dbl>
+     1 P11774                            0                      0                      0                      0
+     2 P31579                            0                      0                      0                      0
+     3 P33531                            0                      0                      0                      0
+     4 P36987                            0                      0                      0                      0
+     5 P40725                            0                      0                      0                      0
+     6 P40923                            0                      0                      0                      0
+     7 P51467                            0                      0                      0                      0
+     8 P51956                            0                     43                      0                      0
+     9 P52630                            0                      0                      0                      0
+    10 P54631                            0                      0                      0                      0
+    11 P60426                            0                      0                      0                      0
+    12 P66101                            0                      0                      0                      0
+    13 P68071                            0                      0                      0                      0
+    14 P69489                            0                     18                      0                      0
+    15 P70597                            0                      0                      0                      0
+    16 P75656                            0                      0                      0                      0
+    17 P84567                            0                      0                      0                      0
+    18 P94346                            0                      0                      0                     14
+    19 P95158                            0                      0                      0                      0
+    20 P96518                            0                      0                      0                      0
+    # ℹ abbreviated names:
+    #   ¹`Archaea;Candidatus_Thermoplasmatota;Thermoplasmata;Methanomassiliicoccales;Methanomassiliicoccaceae;Methanomassiliicoccus;Candidatus_Methanomassiliicoccus_intestinalis;`,
+    #   ²`Archaea;Euryarchaeota;Methanobacteria;Methanobacteriales;Methanobacteriaceae;Methanobrevibacter;Methanobrevibacter_smithii;`,
+    #   ³`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_meyeri;`,
+    #   ⁴`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_odontolytica;`
+    # ℹ 439 more variables:
+    #   `Bacteria;Actinobacteria;Actinomycetia;Bifidobacteriales;Bifidobacteriaceae;Bifidobacterium;Bifidobacterium_adolescentis;` <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
 
 #### EMP_rrarefy
 
@@ -725,6 +1133,41 @@ Rarefythe data according to the lowest abundance.
 MAE |>
   EMP_rrarefy(experiment = 'taxonomy')
 ```
+    Min depth: 9987
+    Max depth: 10007
+    Current raresize: 9987
+    # A tibble: 20 × 444
+       primary Archaea;Candidatus_Thermo…¹ Archaea;Euryarchaeot…² Bacteria;Actinobacte…³ Bacteria;Actinobacte…⁴
+       <chr>                         <dbl>                  <dbl>                  <dbl>                  <dbl>
+     1 P11774                            0                      0                      0                      0
+     2 P31579                            0                      0                      0                      5
+     3 P33531                            0                      0                      0                      4
+     4 P36987                            0                      0                      0                      3
+     5 P40725                            0                      0                      0                      0
+     6 P40923                            0                      0                      0                      7
+     7 P51467                            0                      0                      0                      0
+     8 P51956                            0                     43                      0                      0
+     9 P52630                            0                      0                      0                      0
+    10 P54631                            0                      0                      0                      0
+    11 P60426                            0                      0                      0                      4
+    12 P66101                            0                      0                      0                      0
+    13 P68071                            0                      0                      0                      5
+    14 P69489                            0                     18                      0                      0
+    15 P70597                            0                      0                      0                      0
+    16 P75656                            0                      0                      0                      0
+    17 P84567                            0                      0                      0                      0
+    18 P94346                            0                      0                      3                     13
+    19 P95158                            2                      0                      0                      4
+    20 P96518                            0                      0                      0                      2
+    # ℹ abbreviated names:
+    #   ¹`Archaea;Candidatus_Thermoplasmatota;Thermoplasmata;Methanomassiliicoccales;Methanomassiliicoccaceae;Methanomassiliicoccus;Candidatus_Methanomassiliicoccus_intestinalis;`,
+    #   ²`Archaea;Euryarchaeota;Methanobacteria;Methanobacteriales;Methanobacteriaceae;Methanobrevibacter;Methanobrevibacter_smithii;`,
+    #   ³`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_meyeri;`,
+    #   ⁴`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_odontolytica;`
+    # ℹ 439 more variables:
+    #   `Bacteria;Actinobacteria;Actinomycetia;Bifidobacteriales;Bifidobacteriaceae;Bifidobacterium;Bifidobacterium_adolescentis;` <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
+
 
 Only show the depth
 
@@ -732,6 +1175,10 @@ Only show the depth
 MAE |>
   EMP_rrarefy(experiment = 'taxonomy',only_show_depth=T) 
 ```
+    Min depth: 9987
+    Max depth: 10007
+    NULL
+
 
 Set a specific threshold
 
@@ -739,6 +1186,40 @@ Set a specific threshold
 MAE |>
   EMP_rrarefy(experiment = 'taxonomy',raresize=1000) 
 ```
+    Min depth: 9987
+    Max depth: 10007
+    Current raresize: 1000
+    # A tibble: 20 × 316
+       primary Archaea;Euryarchaeota;Met…¹ Bacteria;Actinobacte…² Bacteria;Actinobacte…³ Bacteria;Actinobacte…⁴
+       <chr>                         <dbl>                  <dbl>                  <dbl>                  <dbl>
+     1 P11774                            0                      0                      0                      0
+     2 P31579                            0                      0                      0                      0
+     3 P33531                            0                      0                      0                      0
+     4 P36987                            0                      0                      0                      1
+     5 P40725                            0                      0                      0                      3
+     6 P40923                            0                      0                      2                      0
+     7 P51467                            0                      0                      0                      0
+     8 P51956                            3                      0                      0                      0
+     9 P52630                            0                      0                      0                      0
+    10 P54631                            0                      0                      0                      4
+    11 P60426                            0                      0                      0                      0
+    12 P66101                            0                      0                      0                      0
+    13 P68071                            0                      0                      0                      0
+    14 P69489                            2                      0                      0                      0
+    15 P70597                            0                      0                      0                      0
+    16 P75656                            0                      0                      0                      0
+    17 P84567                            0                      0                      0                      4
+    18 P94346                            0                      1                      3                      0
+    19 P95158                            0                      0                      1                      0
+    20 P96518                            0                      0                      1                      0
+    # ℹ abbreviated names:
+    #   ¹`Archaea;Euryarchaeota;Methanobacteria;Methanobacteriales;Methanobacteriaceae;Methanobrevibacter;Methanobrevibacter_smithii;`,
+    #   ²`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_meyeri;`,
+    #   ³`Bacteria;Actinobacteria;Actinomycetia;Actinomycetales;Actinomycetaceae;Schaalia;Schaalia_odontolytica;`,
+    #   ⁴`Bacteria;Actinobacteria;Actinomycetia;Bifidobacteriales;Bifidobacteriaceae;Bifidobacterium;Bifidobacterium_adolescentis;`
+    # ℹ 311 more variables:
+    #   `Bacteria;Actinobacteria;Actinomycetia;Bifidobacteriales;Bifidobacteriaceae;Bifidobacterium;Bifidobacterium_bifidum;` <dbl>, …
+    # ℹ Use `colnames()` to see all variable names
 
 ### Data Analysis :
 
@@ -750,24 +1231,118 @@ This module is designed to aid users in conducting various popular  multi-omics 
 MAE |>
   EMP_assay_extract(experiment='taxonomy') |> 
   EMP_alpha_analysis()
+```
+
+    # A tibble: 20 × 7
+       primary shannon simpson invsimpson observerd_index chao1   ACE
+       <chr>     <dbl>   <dbl>      <dbl>           <dbl> <dbl> <dbl>
+     1 P11774     3.63   0.948      19.0              172   172   172
+     2 P31579     3.83   0.955      22.0              184   184   184
+     3 P33531     3.54   0.938      16.1              168   168   168
+     4 P36987     2.86   0.800       5.00             139   139   139
+     5 P40725     4.05   0.953      21.3              238   238   238
+     6 P40923     3.33   0.918      12.2              180   180   180
+     7 P51467     3.78   0.956      22.5              195   195   195
+     8 P51956     4.40   0.975      40.0              278   278   278
+     9 P52630     4.12   0.974      38.5              178   178   178
+    10 P54631     2.63   0.817       5.47             118   118   118
+    11 P60426     3.81   0.951      20.6              191   191   191
+    12 P66101     3.10   0.912      11.4               98    98    98
+    13 P68071     3.57   0.939      16.3              170   170   170
+    14 P69489     4.21   0.970      33.0              238   238   238
+    15 P70597     3.56   0.935      15.4              146   146   146
+    16 P75656     2.52   0.751       4.02             110   110   110
+    17 P84567     2.86   0.855       6.91             123   123   123
+    18 P94346     3.44   0.911      11.3              224   224   224
+    19 P95158     3.98   0.961      25.8              231   231   231
+    20 P96518     4.03   0.968      31.7              222   222   222
+
+```R
 MAE |>
   EMP_assay_extract(experiment='geno_ec') |> 
   EMP_alpha_analysis()
 ```
+    # A tibble: 20 × 7
+       primary shannon simpson invsimpson observerd_index chao1   ACE
+       <chr>     <dbl>   <dbl>      <dbl>           <dbl> <dbl> <dbl>
+     1 P11774     6.67   0.998       508.            1811 2004. 1930.
+     2 P31579     6.73   0.998       507.            1887 2023. 1956.
+     3 P33531     6.70   0.998       514.            1791 1945. 1915.
+     4 P36987     6.57   0.998       448.            1754 1884. 1862.
+     5 P40725     6.73   0.998       498.            2007 2112. 2102.
+     6 P40923     6.71   0.998       504.            1898 2018. 2000.
+     7 P51467     6.82   0.998       577.            1830 1896. 1900.
+     8 P51956     6.72   0.998       520.            1970 2088. 2055.
+     9 P52630     6.71   0.998       519.            1831 1948  1926.
+    10 P54631     6.75   0.998       519.            1900 1969. 1961.
+    11 P60426     6.78   0.998       535.            1950 2039. 2022.
+    12 P66101     6.75   0.998       544.            1909 2066. 2034.
+    13 P68071     6.66   0.998       495.            1582 1690. 1706.
+    14 P69489     6.80   0.998       575.            1979 2097. 2071.
+    15 P70597     6.74   0.998       527.            1856 1951. 1945.
+    16 P75656     6.66   0.998       484.            1908 2010. 1986.
+    17 P84567     6.62   0.998       427.            1925 2159. 2104.
+    18 P94346     6.72   0.998       522.            1918 2009. 2017.
+    19 P95158     6.68   0.998       489.            1837 1985. 1961.
+    20 P96518     6.57   0.998       439.            1845 2050. 2003.
+
 
 #### EMP_cluster_analysis
 
 1. Cluster the samples according to the assay data
 
-  ```R
+```R
 MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_cluster_analysis()
+```
+<img src="tutorial_figs/clust1.jpg" alt="clust1" style="zoom:100%;" />
+
+```R
 MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_cluster_analysis(h=0.15) |> ### identify the outlier samples
   EMP_filter(cluster != 1) ### filter away the outlier samples
-  ```
+```
+<img src="tutorial_figs/clust2.jpg" alt="clust2" style="zoom:100%;" />
+
+
+    If any samples in the experiment have changed, the sample_cluster_result will become NULL and
+    EMP_cluster_analysis should be re-run if needed.
+    1 of 20 samples were filterd out!
+    0 of 2424 features were filterd out!
+    # A tibble: 19 × 2,425
+       primary `1.1.1.1` `1.1.1.100` `1.1.1.102` `1.1.1.103` `1.1.1.105` `1.1.1.108` `1.1.1.11` `1.1.1.122`
+       <chr>       <int>       <int>       <int>       <int>       <int>       <int>      <int>       <int>
+     1 P11774        412           9           0           9           0           5          0           0
+     2 P31579        327           3           0          72           0           4          6           5
+     3 P33531        285          10           0          44           0          10          0           0
+     4 P36987        163           3           0          98           0           0          0           0
+     5 P40725        433           8           0          34           0           1          0           0
+     6 P40923        497           3           0          16           0           0          1           0
+     7 P51467        599           2           0          47           0           1          0           0
+     8 P51956        534          18           0          16           0           2          8           0
+     9 P52630        478           9           0          10           3           1          0           0
+    10 P54631        329          10           0          11           0           5          9           0
+    11 P60426        430           4           0          25           0           3          1           0
+    12 P66101        415          10           1          19           0           3          0           0
+    13 P69489        501          11           0          18           0           1          4           0
+    14 P70597        300           7           0          19           0          14          0           0
+    15 P75656        286           6           0         184           0           0          3           0
+    16 P84567        219          12           0          93           0           0          0           0
+    17 P94346        408           4           0          17           0           2          0           0
+    18 P95158        377          16           0          16           0           1          0           0
+    19 P96518        229           2           0          88           3           0          0           0
+    # ℹ 2,416 more variables: `1.1.1.130` <int>, `1.1.1.132` <int>, `1.1.1.133` <int>, `1.1.1.135` <int>,
+    #   `1.1.1.136` <int>, `1.1.1.137` <int>, `1.1.1.14` <int>, `1.1.1.141` <int>, `1.1.1.157` <int>,
+    #   `1.1.1.169` <int>, `1.1.1.17` <int>, `1.1.1.18` <int>, `1.1.1.193` <int>, `1.1.1.2` <int>,
+    #   `1.1.1.202` <int>, `1.1.1.205` <int>, `1.1.1.21` <int>, `1.1.1.215` <int>, `1.1.1.219` <int>,
+    #   `1.1.1.22` <int>, `1.1.1.23` <int>, `1.1.1.25` <int>, `1.1.1.251` <int>, `1.1.1.26` <int>,
+    #   `1.1.1.261` <int>, `1.1.1.262` <int>, `1.1.1.264` <int>, `1.1.1.267` <int>, `1.1.1.27` <int>,
+    #   `1.1.1.270` <int>, `1.1.1.271` <int>, `1.1.1.276` <int>, `1.1.1.28` <int>, `1.1.1.281` <int>, …
+    # ℹ Use `colnames()` to see all variable names
+
+
 
 2. Cluster the samples according to the coldata
 
