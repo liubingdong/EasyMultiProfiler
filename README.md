@@ -1296,7 +1296,7 @@ MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_cluster_analysis()
 ```
-<img src="tutorial_figs/clust1.jpg" alt="clust1" style="zoom:100%;" />
+<img src="tutorial_related/tutorial_figs/clust1.jpg" alt="clust1" style="zoom:100%;" />
 
 ```R
 MAE |>
@@ -1304,7 +1304,7 @@ MAE |>
   EMP_cluster_analysis(h=0.15) |> ### identify the outlier samples
   EMP_filter(cluster != 1) ### filter away the outlier samples
 ```
-<img src="tutorial_figs/clust2.jpg" alt="clust2" style="zoom:100%;" />
+<img src="tutorial_related/tutorial_figs/clust2.jpg" alt="clust2" style="zoom:100%;" />
 
 
     If any samples in the experiment have changed, the sample_cluster_result will become NULL and
