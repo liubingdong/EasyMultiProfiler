@@ -879,6 +879,23 @@ MAE|>
 
 #### EMP_heatmap_plot
 
+For assay
+```R
+MAE %>%
+  EMP_assay_extract('geno_ec') %>%
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) %>%
+  EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) %>% # Select your interested feature
+  EMP_decostand(method = 'clr') %>%
+  EMP_heatmap_plot(rotate=FALSE,palette='Spectral')
+
+MAE %>%
+  EMP_assay_extract('geno_ec') %>%
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) %>%
+  EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) %>%
+  EMP_collapse(estimate_group = 'Group',collapse_by = 'col') %>% # collapse the data by group
+  EMP_heatmap_plot(rotate=TRUE,palette='Spectral')
+```
+
 For cor analysis
 
 ```R

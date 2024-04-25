@@ -217,7 +217,8 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   df.cor.p[['cor_info']] <- c(experiment_name,paste0(experiment_name,'_codata'))
   df.cor.p[["n.obs"]] <- c(data1_sample_num,data2_sample_num,length(real_samples))
   df.cor.p[['cor_p']] <- df
-
+  df.cor.p[['MEsWW']] <- MEsWW
+  
   if (action == 'add') {
     EMPT@deposit_append[['WGCNA_cor_result']] <- df.cor.p
     .get.info.EMPT(EMPT) <-'EMP_WGCNA_cor_analysis'
@@ -317,7 +318,7 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   df.cor.p[['cor_info']] <- cor_info
   df.cor.p[["n.obs"]] <- c(data1_sample_num,data2_sample_num,length(real_samples))
   df.cor.p[['cor_p']] <- df
-  
+  df.cor.p[['MEsWW']] <- MEsWW
 
   if (action == 'add') {
     EMP@deposit[['WGCNA_cor_analysis_result']] <- df.cor.p
