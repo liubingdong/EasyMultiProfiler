@@ -243,7 +243,7 @@ MAE |>
     20 P96518     317
 
 
-### EMP_rowdata_extract
+#### EMP_rowdata_extract
 
 1. Extract the rowdata of one existed experiment from MultiAssaayExperiment
 
@@ -296,7 +296,7 @@ dim(total_row_data)
 ```
     [1] 11679    18
 
-### EMP_coldata_extract
+#### EMP_coldata_extract
 
 1. Extract the coldata/meta-data/sample-info/patient-info of one existed experiment in the MultiAssaayExperiment
 
