@@ -1,7 +1,7 @@
 
 
 ## EasyMultiProfiler: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization
-<a href="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png"><img src="https://github.com/liubingdong/EasyMultiProfier/blob/main/man/figures/logo.png" width=150 align="right" ></a>
+<a href="man/figures/logo.png"><img src="man/figures/logo.png" width=150 align="right" ></a>
 ![](https://img.shields.io/badge/R%20language->=4.3.0-brightgreen.svg)
 ![](https://img.shields.io/badge/Mac%20OSX%20&%20Windows-Available-brightgreen.svg)
 ![](https://img.shields.io/badge/Release%20version-0.1.0-brightgreen.svg)
