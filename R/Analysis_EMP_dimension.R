@@ -114,11 +114,12 @@
 
   EMPT@deposit[['dimension_coordinate']] <- dimension_reslut
   EMPT@deposit[['dimension_axis']] <- axis_value
-  estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group) ## make sure that pca and pcoa could inherit the estimate_group in the previous step.
-  .get.estimate_group.EMPT(EMPT) <- estimate_group
+
+  ## make sure that pca and pcoa could inherit the estimate_group in the previous step. 
+  if (method %in% c('pls','opls')) {
+      .get.estimate_group.EMPT(EMPT) <- estimate_group
+  }
   try(EMPT@deposit[['dimension_VIP']] <- vip_score,silent = T)
-
-
   .get.method.EMPT(EMPT) <- method
   .get.algorithm.EMPT(EMPT) <- distance
   .get.info.EMPT(EMPT) <- 'EMP_dimension_analysis'
