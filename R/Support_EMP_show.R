@@ -46,7 +46,7 @@ setMethod("show", "EMPT",
                     try(object@deposit[["enrich_data"]]@result %>% tibble::as_tibble() %>% print(n=Inf),silent=TRUE)                     
                    },
                    "EMP_assay_data" = {
-                     .get.result.EMPT(object) %>% print()
+                     object %>% print.EMP_assay_data()
                    },
                    "EMP_cluster_analysis" = {
                      .get.result.EMPT(object) %>% print()

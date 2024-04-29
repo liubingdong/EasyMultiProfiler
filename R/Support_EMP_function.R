@@ -301,3 +301,65 @@ EMP_history <- function(obj) {
   
   return(df)
 }
+
+
+## Enhance the print for EMP_assay_data
+modify_tbl_format_setup <- function(x, totalX, ...){ 
+  tmpxx <- x$tbl_sum %>%
+    strsplit(" ") %>%
+    unlist()
+  tmpxx <- paste(getFromNamespace("big_mark", "pillar")(totalX), tmpxx[2], tmpxx[3])
+  names(tmpxx) <- c("A EMPT-tibble (EMPT object) size")
+  x$tbl_sum <- tmpxx
+  x$rows_total <- totalX
+  x$rows_missing <- totalX - nrow(x$df)
+  return(x)
+}
+
+modify_tbl_format_footer <- function(x,EMPT,...){
+    result_num <-  length(EMPT@deposit)
+    advice <- paste0("The obeject contains ", result_num," analysis result.")
+    x <- c(x, pillar::style_subtle(advice))
+
+  return(x)
+}
+
+
+#' @importFrom pillar tbl_format_setup
+#' @importFrom pillar tbl_format_header
+#' @importFrom pillar tbl_format_footer
+#' @method print EMP_assay_data
+#' @export
+print.EMP_assay_data <- function(EMPT, ..., n = NULL, width = NULL, 
+                                 max_extra_cols = NULL, max_footer_lines=NULL) {
+  
+  . <- NULL
+  
+  result_num <-  length(EMPT@deposit)
+  
+  x <- .get.assay.EMPT(EMPT)
+  
+  total_nrows <-  nrow(x)
+  formatted_EMPT_setup <- pillar::tbl_format_setup(x = x, width = width,n = n, 
+                                           max_extra_cols = max_extra_cols, 
+                                           max_footer_lines = max_footer_lines)
+  
+  formatted_EMPT_setup <- modify_tbl_format_setup(formatted_EMPT_setup, totalX = total_nrows)
+  
+  format_comment <- getFromNamespace("format_comment", "pillar")
+  
+  subtitle <- sprintf(" Sample=%s | Feature=%s",
+                      nrow(x),
+                      ncol(x)
+  ) %>% 
+    format_comment(width=nchar(.) + 5) %>% 
+    pillar::style_subtle()
+  
+  header <- pillar::tbl_format_header(x, formatted_EMPT_setup) %>%
+    append(subtitle, after=1)
+  body <- pillar::tbl_format_body(x, formatted_EMPT_setup)
+  footer <- pillar::tbl_format_footer(x, formatted_EMPT_setup)
+  footer <- modify_tbl_format_footer(footer,EMPT)
+  writeLines(c(header, body, footer))
+  invisible(x)
+}
