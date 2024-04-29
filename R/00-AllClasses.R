@@ -294,8 +294,8 @@ setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
 #' MAE |> 
 #'   EMP_assay_extract('taxonomy') |> 
 #'   EMP_collapse(estimate_group = 'Species',collapse_by = 'row')|>
-#'   EMP_dimension_analysis(method = 'pcoa',distance = 'bray',estimate_group = 'Group')|>
-#'   EMP_scatterplot(show='p12html') # eg. p12,p12html,p23,p23html
+#'   EMP_dimension_analysis(method = 'pcoa',distance = 'bray')|>
+#'   EMP_scatterplot(show='p12html',estimate_group = 'Group') # eg. p12,p12html,p23,p23html
 setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"))
 
 #' @param obj object
