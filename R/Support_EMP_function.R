@@ -304,6 +304,7 @@ EMP_history <- function(obj) {
 
 
 ## Enhance the print for EMP_assay_data
+## These code below is modified from MicrobiotaProcess
 modify_tbl_format_setup <- function(x, totalX, ...){ 
   tmpxx <- x$tbl_sum %>%
     strsplit(" ") %>%
@@ -318,8 +319,8 @@ modify_tbl_format_setup <- function(x, totalX, ...){
 
 modify_tbl_format_footer <- function(x,EMPT,...){
     result_num <-  length(EMPT@deposit)
-    advice <- paste0("The obeject contains ", result_num," analysis result.")
-    x <- c(x, pillar::style_subtle(advice))
+    result_info <- paste0("The obeject contains ", result_num," analysis result.")
+    x <- c(x, pillar::style_subtle(result_info))
 
   return(x)
 }
