@@ -3,7 +3,7 @@
 #' @importFrom dplyr matches
 #' @importFrom dplyr n_distinct
 .EMP_diff_analysis_tidybulk <- function(EMPT,method,.formula,p.adjust='fdr',group_level=NULL,...) {
-  pvalue <- feature <- sign_group <- vs <- log2FC <- estimate_group <- fold_change <- `.` <- NULL
+  Estimate_group <- pvalue <- feature <- sign_group <- vs <- log2FC <- estimate_group <- fold_change <- `.` <- NULL
   batch_effect <- NULL
   Group_info <- as.list(.formula)[[2]]
   estimate_group <- as.list(Group_info)[[length(Group_info)]] %>% as.character()
@@ -203,7 +203,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
 .EMP_diff_analysis <- function(EMPT,experiment,assay_name,method,
                                estimate_group=NULL,feature_name=NULL,
                                p.adjust='fdr',group_level=NULL,core=NULL,...){
-  primary <- pvalue <- feature <- sign_group <- vs <- NULL
+  Estimate_group <- primary <- pvalue <- feature <- sign_group <- vs <- NULL
   message_info <- list()
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
