@@ -176,7 +176,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 #' @examples
 #' # example
 EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay_name=NULL,assay=NULL){
-  sampleID <- row_data <- assay_data <- obj <- colname <- feature <- NULL
+  row_data <- assay_data <- obj <- colname <- feature <- NULL
   if (!is.null(sampleID)) {
     sampleID <- sampleID
   }else{

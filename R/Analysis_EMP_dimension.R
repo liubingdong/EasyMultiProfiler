@@ -114,6 +114,7 @@
 
   EMPT@deposit[['dimension_coordinate']] <- dimension_reslut
   EMPT@deposit[['dimension_axis']] <- axis_value
+  estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group) ## make sure that pca and pcoa could inherit the estimate_group in the previous step.
   .get.estimate_group.EMPT(EMPT) <- estimate_group
   try(EMPT@deposit[['dimension_VIP']] <- vip_score,silent = T)
 
@@ -174,7 +175,6 @@ EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,use_
     EMPT <-x
   }
 
-  #estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
   if (use_cached == F) {
     memoise::forget(.EMP_dimension_analysis_m) %>% invisible()
   }
