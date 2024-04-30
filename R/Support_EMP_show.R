@@ -33,20 +33,20 @@ setMethod("show", "EMPT",
             info <- .get.info.EMPT(object)
             switch(info,
                    "EMP_decostand" = {
-                     .get.result.EMPT(object) %>% print()
+                     object %>% enhance_print(n=10)
                    },
                    "EMP_rrarefy" = {
-                     .get.result.EMPT(object) %>% print()
+                     object %>% enhance_print(n=10)
                    },
                    "EMP_diff_analysis" = {
-                     .get.result.EMPT(object) %>% print()
+                     object %>% enhance_print(n=10)
                    },
                    "EMP_enrich_analysis" = {
                     try(object@deposit[["enrich_data"]]@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf),silent=TRUE)
                     try(object@deposit[["enrich_data"]]@result %>% tibble::as_tibble() %>% print(n=Inf),silent=TRUE)                     
                    },
                    "EMP_assay_data" = {
-                     object %>% print.EMP_assay_data(n=10)
+                     object %>% enhance_print(n=10)
                    },
                    "EMP_cluster_analysis" = {
                      .get.result.EMPT(object) %>% print()
@@ -70,7 +70,7 @@ setMethod("show", "EMPT",
                       .get.result.EMPT(object) %>% print()
                    },
                    "EMP_alpha_analysis" = {
-                     object@deposit$diversity_result %>% print()
+                     object %>% enhance_print(n=10)
                    },
                    "EMP_marker_analysis" = {
                      .get.result.EMPT(object) %>% print()                  

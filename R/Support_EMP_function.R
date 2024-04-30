@@ -329,17 +329,16 @@ modify_tbl_format_footer <- function(x,EMPT,...){
 #' @importFrom pillar tbl_format_setup
 #' @importFrom pillar tbl_format_header
 #' @importFrom pillar tbl_format_footer
-#' @method print EMP_assay_data
-#' @export
-print.EMP_assay_data <- function(EMPT, ..., n = NULL, width = NULL, 
+enhance_print <- function(EMPT, ..., n = NULL, width = NULL, 
                                  max_extra_cols = NULL, max_footer_lines=NULL) {
   
-  . <- NULL
+  . <- assay_dim <- NULL
   
   result_num <-  length(EMPT@deposit)
   
-  x <- .get.assay.EMPT(EMPT)
-  
+  x <- .get.result.EMPT(EMPT)
+  assay_dim <- .get.assay.EMPT(EMPT) %>% dim()
+
   total_nrows <-  nrow(x)
   formatted_EMPT_setup <- pillar::tbl_format_setup(x = x, width = width,n = n, 
                                            max_extra_cols = max_extra_cols, 
@@ -350,8 +349,8 @@ print.EMP_assay_data <- function(EMPT, ..., n = NULL, width = NULL,
   format_comment <- getFromNamespace("format_comment", "pillar")
   
   subtitle <- sprintf(" Sample=%s | Feature=%s",
-                      nrow(x),
-                      ncol(x)
+                      assay_dim[1],
+                      assay_dim[2]
   ) %>% 
     format_comment(width=nchar(.) + 5) %>% 
     pillar::style_subtle()
