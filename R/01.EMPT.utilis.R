@@ -127,7 +127,7 @@ setMethod("EMP_result","EMPT",function(obj,info){
 })
 
 
-#' @param obj EMPT or MultiAssayExperiment object.
+#' @param obj EMPT object.
 #' @param value A data frame or tibble from the external result.
 #' @param value_name A character string. Set the name of external result to inject into EMPT project.
 #' @param affect_when_sample_changed 0 or 1. 0 means that the result is not influenced by sample changes, while 1 means the contrary.

@@ -32,7 +32,7 @@ EMP_result(
 ) <- value
 }
 \arguments{
-\item{obj}{EMPT or MultiAssayExperiment object.}
+\item{obj}{EMPT object.}
 
 \item{info}{A character string. Result or analysis name in the EMPT object.}
 
