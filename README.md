@@ -9,6 +9,60 @@
 
 The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from start to finish.
 
+
+==========================================================================
+### Table of contents
+
+<!--ts-->
+   * [Install](#install)
+   * [Import data](#import-data)
+   * [Prepare the demo data from EasyMultiProfiler](#prepare-the-demo-data-from-easymultiprofiler)
+   * [Data Extract :](#data-extract-)
+       * [EMP_assay_extract](#emp_assay_extract)
+       * [EMP_rowdata_extract](#emp_rowdata_extract)
+       * [EMP_coldata_extract](#emp_coldata_extract)
+   * [Data Preparation :](#data-preparation-)
+       * [EMP_adjust_abudance](#emp_adjust_abudance)
+       * [EMP_feature_convert](#emp_feature_convert)
+       * [EMP_collapse](#emp_collapse)
+       * [EMP_decostand](#emp_decostand)
+       * [EMP_impute](#emp_impute)
+       * [EMP_identify_assay](#emp_identify_assay)
+       * [EMP_modify_assay](#emp_modify_assay)
+       * [EMP_rrarefy](#emp_rrarefy)
+   * [Data Analysis :](#data-analysis-)
+       * [EMP_alpha_analysis](#emp_alpha_analysis)
+       * [EMP_cluster_analysis](#emp_cluster_analysis)
+       * [EMP_cor_analysis](#emp_cor_analysis)
+       * [EMP_diff_analysis](#emp_diff_analysis)
+       * [EMP_dimension_analysis](#emp_dimension_analysis)
+       * [EMP_enrich_analysis](#emp_enrich_analysis)
+       * [EMP_marker_analysis](#emp_marker_analysis)
+       * [EMP_GSEA_analysis](#emp_gsea_analysis)
+       * [EMP_WGCNA_cluster_analysis](#emp_wgcna_cluster_analysis)
+       * [EMP_WGCNA_cor_analysis](#emp_wgcna_cor_analysis)
+       * [EMP_multi_analysis](#emp_multi_analysis)
+   * [Data Virtualization :](#data-virtualization-)
+       * [EMP_boxplot](#emp_boxplot)
+       * [EMP_scatterplot](#emp_scatterplot)
+       * [EMP_dotplot](#emp_dotplot)
+       * [EMP_netplot](#emp_netplot)
+       * [EMP_curveplot](#emp_curveplot)
+       * [EMP_heatmap_plot](#emp_heatmap_plot)
+       * [EMP_volcanol_plot](#emp_volcanol_plot)
+   * [Data support :](#data-support-)
+       * [EMP_filter](#emp_filter)
+       * [EMP_history](#emp_history)
+       * [EMP_result](#emp_result)
+       * [EMP_summary](#emp_summary)
+       * [EMP_taxonomy_import](#emp_taxonomy_import)
+       * [EMP_function_import](#emp_function_import)
+       * [EMP_normal_import](#emp_normal_import)
+       * [EMP_easy_import](#emp_easy_import)
+<!--te-->
+==========================================================================
+
+
 ### Install
 
 **Easily install**
