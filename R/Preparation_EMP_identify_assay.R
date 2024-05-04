@@ -112,6 +112,12 @@
 
   if (is.null(estimate_group)) {
     estimate_group <- .get.estimate_group.EMPT(EMPT)
+    ## In case that privious estimate_group is not in the coldata,eg EMP_collapse， make the estimate_group = NULL
+    col_name <- .get.mapping.EMPT(EMPT) %>% colnames()
+    if (!estimate_group %in% col_name) {
+      estimate_group <- NULL
+    }
+
     if(!is.null(estimate_group)){
       message('EMP_identify_assay will work according to estimate_group = ',estimate_group)
     }
@@ -168,7 +174,7 @@
 #'
 #' @param x Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param estimate_group A character string. Select the group name in the coldata to be calculated.
+#' @param estimate_group A character string. Select the group name in the coldata to be calculated. When estimate_group = NULL or "none", the function will assume all samples belong to one group.
 #' @param method A character string.Methods include default, edgeR. Method default is from doi: 10.3389/fgene.2021.803627. Method edgeR in from edgeR::filterByExpr.
 #' @param min A number. Set the min abundance for filtering. When method='default', min means the lowest relative bundance. When method='edgeR.', min means the lowest abosulte bundance.
 #' @param min_ratio Set the min ratio presence for feature.
