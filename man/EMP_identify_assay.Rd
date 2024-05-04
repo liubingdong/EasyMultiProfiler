@@ -53,16 +53,4 @@ MAE |>
   EMP_assay_extract('geno_ec') |>
   EMP_identify_assay(method = 'edgeR',min = 10,min_ratio = 0.7) # consider all samples belong to one group
 
-
-# EMP_modify_assay
-## For some special cases, to modify the assay data and EMP_identify_assay works better in most cases.
-## Change the expression value which is 0 into 0.0001
-MAE |>
-  EMP_assay_extract('geno_ec') |>
-  EMP_modify_assay('==0',pseudocount=0.0001)
-
-## Change the counts which is below 
-MAE |>
-  EMP_assay_extract('taxonomy') |>
-  EMP_modify_assay('<10',pseudocount=0) 
 }
