@@ -167,7 +167,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
     EMPT <-x
     .get.method.EMPT(EMPT) <- method
   }
-  if (use_cached == F) {
+  if (use_cached == FALSE) {
     memoise::forget(.EMP_diff_analysis_m) %>% invisible()
     memoise::forget(.EMP_diff_analysis_tidybulk_m) %>% invisible()
   }

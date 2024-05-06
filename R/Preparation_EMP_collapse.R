@@ -302,7 +302,13 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #'   EMP_collapse(experiment = 'untarget_metabol',collapse_by='row',na_string = c("NA", "null", "","-"),
 #'                estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
 #'   EMP_collapse(collapse_by='col',estimate_group = 'Group',method = 'mean',collapse_sep = '+')
-EMP_collapse <- function (x,experiment=NULL,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',action='add',...) {
+EMP_collapse <- function (x,experiment=NULL,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',action='add',use_cached=TRUE,...) {
+
+  if (use_cached == FALSE) {
+    memoise::forget(.EMP_collapse_byrow_m) %>% invisible()
+    memoise::forget(.EMP_collapse_bycol_m) %>% invisible()
+  }  
+
   if (collapse_by == 'row') {
     deposit <- .EMP_collapse_byrow_m(x,experiment,
                                   estimate_group,method,
