@@ -8,7 +8,7 @@ EMP_marker_analysis(
   obj,
   experiment,
   method,
-  estimate_group,
+  estimate_group = NULL,
   seed = 123,
   nfolds = 5,
   lambda_select = "lambda.min",

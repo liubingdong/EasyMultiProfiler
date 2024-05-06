@@ -7,6 +7,7 @@
 #' @param method The agglomeration method to be used. This should be (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC).
 #' @param h A numeric. Height at which to cut tree (passed to cutree)
 #' @param groupLabels A boolean. Whether show the group label or not.
+#' @param pseudodist A number between 0 and 1 to replace the NA distance in case that some NA value exist.
 #' @param action  A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @importFrom tibble column_to_rownames
 #' @importFrom stats hclust
@@ -46,7 +47,7 @@
 #'   EMP_assay_extract(experiment = 'geno_ec',pattern='1.1.1.1',pattern_ref='feature') |>
 #'   EMP_cluster_analysis(rowdata = T,h=0.8)
 #' }
-EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,
+EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseudodist=1,
                                  method='average',h=NULL,groupLabels=TRUE,action='add') {
   
   # Check if package is installed, otherwise install
@@ -71,17 +72,30 @@ EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,
     stop('Please check the input data!')
   }
 
+  if(pseudodist >1 | pseudodist <0 ) {
+    stop('Paramtere pseudodist must be 0 to 1')
+  }
+
   if (rowdata == F) {
     data_distance <- EMPT %>%
       .get.assay.EMPT() %>% tibble::column_to_rownames('primary') %>%
-      vegan::vegdist(method=distance)
+      vegan::vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
   }else if (rowdata == T) {
     data_distance <- EMPT %>%
       .get.assay.EMPT() %>% tibble::column_to_rownames('primary') %>% t() %>%
-      vegan::vegdist(method=distance)
+      vegan::vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
   }
 
+  # Use the pseudodist to replace the NA 
+  data_distance <- as.data.frame(as.matrix(data_distance))
+  if (any(is.na(data_distance))) {
+    message("NA value in distance calculation, pseudodist = ",pseudodist,' activated.')
+    data_distance <- data_distance %>%
+      dplyr::mutate_all(function(x) tidyr::replace_na(x, pseudodist))
+  }
 
+  data_distance <- as.data.frame(as.matrix(data_distance)) %>%
+    dplyr::mutate_all(function(x) tidyr::replace_na(x, pseudodist))
 
   Tree = stats::hclust(as.dist(data_distance), method = method)
 

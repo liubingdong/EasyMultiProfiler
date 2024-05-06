@@ -237,7 +237,7 @@
 #' MAE |>
 #'   EMP_marker_analysis(experiment = 'geno_ko',method = 'lasso',estimate_group = 'Education_Years') |>
 #'   EMP_filter(feature_condition = lasso_coe >0) # Select the imprortant feature
-EMP_marker_analysis <- function(obj,experiment,method,estimate_group,seed=123,nfolds=5,lambda_select='lambda.min',
+EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=123,nfolds=5,lambda_select='lambda.min',
                                   max.depth=6,eta=0.3,nrounds=50,xgboost_run='classify',objective="binary:logistic",verbose=0,use_cached=TRUE,action='add',...){
 
   call <- match.call()

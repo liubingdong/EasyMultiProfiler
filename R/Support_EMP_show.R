@@ -49,7 +49,11 @@ setMethod("show", "EMPT",
                      object %>% enhance_print(n=10)
                    },
                    "EMP_cluster_analysis" = {
-                     .get.result.EMPT(object) %>% print()
+                     cluster_re <- .get.result.EMPT(object)
+                     for (i in names(cluster_re)) {
+                       cluster_re[[i]]['cluster'] %>% table() %>% print()
+                       cluster_re[i] %>% print()
+                     }
                    },
                    "EMP_WGCNA_cluster_analysis" = {
                      deposit <- .get.result.EMPT(object)

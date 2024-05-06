@@ -26,7 +26,7 @@
            if(is.null(distance)){
              stop("Parameter distance in necessary!")
            }
-           assay_data_dis <-  vegan::vegdist(assay_data,method=distance) %>% as.matrix()
+           assay_data_dis <-  vegan::vegdist(assay_data,method=distance,na.rm = TRUE) %>% as.matrix() %>% suppressWarnings()
            
            # set the warning
            check_dim <- dim(assay_data)[1] * dim(assay_data)[2]

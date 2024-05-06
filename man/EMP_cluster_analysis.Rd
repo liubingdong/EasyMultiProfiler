@@ -9,6 +9,7 @@ EMP_cluster_analysis(
   experiment,
   distance = "bray",
   rowdata = FALSE,
+  pseudodist = 1,
   method = "average",
   h = NULL,
   groupLabels = TRUE,
@@ -23,6 +24,8 @@ EMP_cluster_analysis(
 \item{distance}{A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".}
 
 \item{rowdata}{A boolean. Whether the function cluster the feature or not.}
+
+\item{pseudodist}{A number between 0 and 1 to replace the NA distance in case that some NA value exist.}
 
 \item{method}{The agglomeration method to be used. This should be (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC).}
 
