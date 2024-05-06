@@ -6,7 +6,7 @@
 \usage{
 EMP_collapse(
   x,
-  experiment,
+  experiment = NULL,
   estimate_group = NULL,
   method = "sum",
   na_string = c("NA", "null", ""),
