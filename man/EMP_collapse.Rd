@@ -13,6 +13,7 @@ EMP_collapse(
   collapse_by,
   collapse_sep = " ",
   action = "add",
+  use_cached = TRUE,
   ...
 )
 }

@@ -46,7 +46,7 @@
   if (assay_name == 'relative') {
     data <- .get.assay.EMPT(EMPT)
   }else if(assay_name == 'counts') {
-    data <- EMPT %>% EMP_decostand(method='relative',action='get')
+    data <- EMPT %>% EMP_decostand(method='relative',action='get') %>% suppressMessages()
   }
 
 
