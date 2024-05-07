@@ -34,6 +34,8 @@ EMP_collapse(
 
 \item{action}{A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
+
 \item{...}{Further parameters passed to the function mean, sum, median, min, max in the base package.}
 }
 \value{

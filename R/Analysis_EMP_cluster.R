@@ -10,11 +10,11 @@
 #' @param pseudodist A number between 0 and 1 to replace the NA distance in case that some NA value exist.
 #' @param action  A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @importFrom tibble column_to_rownames
-#' @importFrom stats hclust
-#' @importFrom vegan vegdist
 #' @importFrom graphics abline
 #' @importFrom BiocManager install
 #' @importFrom utils install.packages
+#' @importFrom vegan vegdist
+#' @importFrom stats hclust
 #'
 #' @return EMPT object
 #' @export
@@ -50,7 +50,7 @@
 EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseudodist=1,
                                  method='average',h=NULL,groupLabels=TRUE,action='add') {
   
-  # Check if package is installed, otherwise install
+# Check if package is installed, otherwise install
 #  if (find.package("dendextend", quiet = TRUE) %>% length() == 0) {
 #    message("EMP_cluster_analysis need install package dendextend!")
 #    if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -76,14 +76,15 @@ EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseu
     stop('Paramtere pseudodist must be 0 to 1')
   }
 
+
   if (rowdata == F) {
     data_distance <- EMPT %>%
       .get.assay.EMPT() %>% tibble::column_to_rownames('primary') %>%
-      vegan::vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
+      vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
   }else if (rowdata == T) {
     data_distance <- EMPT %>%
       .get.assay.EMPT() %>% tibble::column_to_rownames('primary') %>% t() %>%
-      vegan::vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
+      vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
   }
 
   # Use the pseudodist to replace the NA 
@@ -97,7 +98,7 @@ EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseu
   data_distance <- as.data.frame(as.matrix(data_distance)) %>%
     dplyr::mutate_all(function(x) tidyr::replace_na(x, pseudodist))
 
-  Tree = stats::hclust(as.dist(data_distance), method = method)
+  Tree = hclust(as.dist(data_distance), method = method)
 
   dendrogram_obj <- Tree %>%
     as.dendrogram()
@@ -149,3 +150,6 @@ EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseu
     stop('action should be one of add or get!')
  }
 }
+
+
+
