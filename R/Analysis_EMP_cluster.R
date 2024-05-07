@@ -14,7 +14,7 @@
 #' @importFrom BiocManager install
 #' @importFrom utils install.packages
 #' @importFrom vegan vegdist
-#' @importFrom stats hclust
+#' @importFrom fastcluster hclust
 #'
 #' @return EMPT object
 #' @export

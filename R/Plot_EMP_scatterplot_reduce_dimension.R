@@ -24,16 +24,16 @@
 #' @param ellipse A number from 0 to 1. Set the ellipse in the plot.
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
-#' @param force_adonis force the function run adnois analysis always.(default:FALSE)
+#' @param force_adonis Force the function run adnois analysis always.(default:FALSE)
+#' @param adonis_permutations Permutations for the adonis2.(default:999)
 #' @rdname EMP_scatterplot
 #' @return EMPT object
-#' @export
 #' @importFrom ggsignif geom_signif
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
 #' @importFrom patchwork plot_layout
 EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='default',
-                                           show='p12',distance_for_adonis=NULL,force_adonis=FALSE,
+                                           show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
                                            method='t.test',key_samples = NULL,
                                            ellipse = NULL,html_width=15,html_height=15){
@@ -265,16 +265,20 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='d
     .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
 
  check_dim <- dim(assay_data)[1] * dim(assay_data)[2]
- if (force_adonis == F) {
-   if (check_dim > 8.1e+07) {
+ check_sample_num <- dim(assay_data)[1]
+
+ if (force_adonis == FALSE) {
+   if (check_dim > 8.1e+07 | check_sample_num > 500) {
    message_wrap("Inputting large-scale data may lead to extended computation time for adonis. If necessary, please enable the force_adonis = TRUE.")
    }
- }else {
+ }else if (force_adonis == TRUE) {
    check_dim <- 1
- } 
+   check_sample_num <- 1
+ }else {
+  stop('force_adonis must be TRUE or FALSE')
+ }
 
- 
- if (check_dim > 8.1e+07) {
+ if (check_dim > 8.1e+07 | check_sample_num > 500) {
   if (!is.null(.get.algorithm.EMPT(EMPT))) {
       distance <- .get.algorithm.EMPT(EMPT)
   } else {
@@ -310,7 +314,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='d
 
   set.seed(seed)
   adonis_data <- .get.assay.EMPT(EMPT) %>% tibble::column_to_rownames('primary')
-  adonis_result <- vegan::adonis2(adonis_data~Group,data = mapping,method = distance_for_adonis)
+  adonis_result <- vegan::adonis2(adonis_data~Group,data = mapping,method = distance_for_adonis,permutations = adonis_permutations)
   p5 <- ggplot() +
     geom_text(aes(x = -0.5,y = 0.6,
                   label = paste(distance_for_adonis,

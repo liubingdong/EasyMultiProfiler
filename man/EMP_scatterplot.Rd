@@ -18,6 +18,7 @@ EMP_scatterplot.EMP_dimension_analysis(
   show = "p12",
   distance_for_adonis = NULL,
   force_adonis = FALSE,
+  adonis_permutations = 999,
   estimate_group = NULL,
   palette = NULL,
   method = "t.test",
@@ -42,7 +43,9 @@ EMP_scatterplot.EMP_dimension_analysis(
 
 \item{distance_for_adonis}{A character string.Set the distance for adonis. Detailed in the vegan::adonis.}
 
-\item{force_adonis}{force the function run adnois analysis always.(default:FALSE)}
+\item{force_adonis}{Force the function run adnois analysis always.(default:FALSE)}
+
+\item{adonis_permutations}{Permutations for the adonis2.(default:999)}
 
 \item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
 
