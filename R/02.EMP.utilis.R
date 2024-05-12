@@ -275,7 +275,40 @@ setMethod(".get.experiment.EMP","EMP",function(obj,info){
 })
 
 
+#' EMP_sankey_plot
+#'
+#' @param obj EMPT
+#' @param ... ...
+#' @return EMP object
+#' @export
+#'
+#' @examples
+#' data(MAE)
+#' k1 <- MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_collapse(estimate_group = 'Genus',collapse_by = 'row') |>
+#'   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+#'   EMP_filter(feature_condition = pvalue<0.05)
+#' 
+#' k2 <- MAE |>
+#'   EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
+#'                estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |>
+#'   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+#'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 1.5)
+#'
+#' k3 <- MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+#'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 2)
+#'
+#' (k1 + k3 + k2) |> EMP_cor_analysis() |>
+#'   EMP_sankey_plot()
+setGeneric("EMP_sankey_plot",function(obj, ...) standardGeneric("EMP_sankey_plot"))
 
+#' @rdname EMP_sankey_plot
+setMethod("EMP_sankey_plot","EMP_cor_analysis",function(obj, ...){
+  EMP_sankey_plot.EMP_cor_analysis(obj, ...)
+})
 
 
 

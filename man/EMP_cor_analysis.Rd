@@ -9,7 +9,10 @@ EMP_cor_analysis(
   select = NULL,
   method = "spearman",
   action = "add",
+  rvalue = 0,
+  pvalue = 0.05,
   use_cached = TRUE,
+  force_sankey = FALSE,
   ...
 )
 }
@@ -18,11 +21,17 @@ EMP_cor_analysis(
 
 \item{select}{A character string. The experiment name in the EMP object.}
 
-\item{method}{A character string. Methods include pearson (default), spearman and kendall.}
+\item{method}{A character string. Methods include pearson (default), spearman.}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
+\item{rvalue}{A number. Set relation value forthreshold for correlation test (default:0). Only activated in sankey cor-analysis.}
+
+\item{pvalue}{A number. Set pvalue forthreshold for correlation test (default:0.05). Only activated in sankey cor-analysis.}
+
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
+
+\item{force_sankey}{A boolean. Whether force the cor-analysis for the sankey plot or not.}
 
 \item{...}{Further parameters passed to the function agricolae::correlation}
 }
@@ -46,6 +55,16 @@ k2 <- MAE |>
   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 1.5)
 
+k3 <- MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
+  EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 2)
+
+#For two experinemnt 
 (k1 + k2) |> EMP_cor_analysis(method = 'spearman') |>
   EMP_heatmap_plot() ## Visualization
+
+#For more experinemnt 
+(k1 + k3 + k2) |> EMP_cor_analysis() |>
+  EMP_sankey_plot()
 }

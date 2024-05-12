@@ -181,6 +181,8 @@ setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
 setClass("EMP_assay_heatmap",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_cor_heatmap",contains = c("EMP"))
+setClass("EMP_cor_sankey",contains = c("EMP"))
+
 
 setClass("EMP_multi_same_df",contains = c("EMP"))
 

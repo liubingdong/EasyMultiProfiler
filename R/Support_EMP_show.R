@@ -228,14 +228,11 @@ setMethod("show", "EMP",
                      }
                    },
                    "EMP_cor_analysis" = {
-                     object <- object@deposit$cor_analysis_result
-                     cat('EMP_cor_analysis:','\n')
-                     cat('Cor-relationship matrix:',dim(object$correlation)[1],'x',dim(object$correlation)[2],'\n')
-                     cat(object$cor_info[1],'observation:',object$n.obs[1],'\n')
-                     if (!is.na(object$cor_info[2])) {
-                      cat(object$cor_info[2],'observation:',object$n.obs[2],'\n')
-                     }
-                     cat('Intersect observation:',object$n.obs[3])
+                      cor_method <- .get.method.EMP(object)
+                      object <- .get.result.EMP(object,info = 'EMP_cor_analysis')
+                      cat('EMP_cor_analysis:','\n')
+                      cat('Cor-relationship observation:',paste0(object$n.obs,collapse = ' x '),'\n')
+                      cat('Cor-relationship method: ',cor_method)
                    },
                    "EMP_WGCNA_cor_analysis2" = {
                      object <- object@deposit$WGCNA_cor_analysis_result
@@ -249,6 +246,9 @@ setMethod("show", "EMP",
                       .get.result.EMP(object) %>% print()
                    },
                     "EMP_cor_heatmap" = {
+                      .get.result.EMP(object) %>% print()
+                   },
+                    "EMP_cor_sankey" = {
                       .get.result.EMP(object) %>% print()
                    },
                    "EMP_multi_same_df" = {
@@ -299,7 +299,13 @@ setMethod("show", "EMP",
                       message_wrap(str)
                      }
                      return(.get.plot_deposit.EMP(object,info='EMP_cor_heatmap'))
-                   },                   ,
+                   },
+                  "EMP_cor_sankey" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }
+                     return(.get.plot_deposit.EMP(object,info='EMP_cor_sankey'))
+                   },
                   "EMP_WGCNA_cor_analysis2" = {
                      for (str in object@message_info) {
                       message_wrap(str)
