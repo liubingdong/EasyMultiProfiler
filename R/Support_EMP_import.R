@@ -97,7 +97,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
     temp %<>%
       dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_"))  # Space in the value will lead to unexperted error 
     temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep) %>% 
-      dplyr::mutate_all(.funs = dplyr::na_if, "")  # make the empty value into NA in order to adapt .impute_tax
+      dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))  # make the empty value into NA in order to adapt .impute_tax
     colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
       .impute_tax() ## impute the NA tax
