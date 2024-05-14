@@ -322,8 +322,10 @@ setMethod(".get.assay.EMPT<-","EMPT",function(obj,value){
   rowdata <- rowData(obj) %>% as.data.frame() %>% 
     dplyr::filter(feature %in% feature_name) 
 
-  coldata <- colData(obj)
-  coldata <- coldata[rownames(coldata) %in% sample_name, ] %>% as.data.frame()
+  #coldata <- colData(obj)
+  #coldata <- coldata[rownames(coldata) %in% sample_name, ] %>% as.data.frame()
+  coldata <- colData(obj) %>% as.data.frame() %>% dplyr::filter(rownames(.) %in% sample_name)
+
 
   value %<>% tibble::column_to_rownames('primary') %>% t() %>% DataFrame()
 
