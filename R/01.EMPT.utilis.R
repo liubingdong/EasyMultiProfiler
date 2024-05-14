@@ -315,15 +315,13 @@ setMethod(".get.assay.EMPT","EMPT",function(obj){
 })
 setGeneric(".get.assay.EMPT<-",function(obj,value) standardGeneric(".get.assay.EMPT<-"))
 setMethod(".get.assay.EMPT<-","EMPT",function(obj,value){
-  primary <- feature <- NULL
+  primary <- feature <- . <- NULL
   sample_name <- value %>% dplyr::pull(primary)
   feature_name <- colnames(value)[-1]
 
   rowdata <- rowData(obj) %>% as.data.frame() %>% 
     dplyr::filter(feature %in% feature_name) 
 
-  #coldata <- colData(obj)
-  #coldata <- coldata[rownames(coldata) %in% sample_name, ] %>% as.data.frame()
   coldata <- colData(obj) %>% as.data.frame() %>% dplyr::filter(rownames(.) %in% sample_name)
 
 

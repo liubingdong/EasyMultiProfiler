@@ -244,8 +244,6 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',assay_
    
    if (ncol(coldata) == 0) {
      stop("coldata must contain one column informantion at least!")
-   }else if (ncol(coldata) == 1){
-     coldata <- coldata %>% as.data.frame() %>% dplyr::mutate(colname = rownames(.))
    }else{
      coldata <- coldata
    }
@@ -284,8 +282,6 @@ EMP_easy_taxonomy_import <- function(file=NULL,data=NULL,assay='experiment',assa
     
     if (ncol(coldata) == 0) {
       stop("coldata must contain one column informantion at least!")
-    }else if (ncol(coldata) == 1){
-      coldata <- coldata %>% as.data.frame() %>% dplyr::mutate(colname = rownames(.))
     }else{
       coldata <- coldata
     }
@@ -323,8 +319,6 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
     
     if (ncol(coldata) == 0) {
       stop("coldata must contain one column informantion at least!")
-    }else if (ncol(coldata) == 1){
-      coldata <- coldata %>% as.data.frame() %>% dplyr::mutate(colname = rownames(.))
     }else{
       coldata <- coldata
     }
