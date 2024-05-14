@@ -154,7 +154,7 @@ More installation error and solution: [**Click this**](https://github.com/liubin
 ### Prepare the demo data from EasyMultiProfiler
 
 ```R 
-Data(MAE)
+data(MAE)
 ```
 
 ### Data Extract :
