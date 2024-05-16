@@ -276,15 +276,25 @@ EMP_diff_analysis <- function(x,experiment,.formula,
 .EMP_diff_analysis_m <- memoise::memoise(.EMP_diff_analysis)
 
 #' @importFrom stringr str_split
+#' @importFrom stringr str_detect
 .get_diff_df <- function(data) {
   dfs <- lapply(data, function(x) {
-    temp_info <- x[["data.name"]] %>% stringr::str_split(pattern = 'by') %>% unlist() %>% trimws()
+    matches_sep1 <- str_detect(x[["data.name"]], 'and')
+    matches_sep2 <- str_detect(x[["data.name"]], 'by')
+    
+    if(matches_sep1) {
+      temp_info <- x[["data.name"]] %>% str_split(pattern = 'and') %>% unlist() %>% trimws()
+    }else if(matches_sep2){
+      temp_info <- x[["data.name"]] %>% str_split(pattern = 'by') %>% unlist() %>% trimws()
+    }else{
+      "pleas check the sep of diff result!"
+    }
     temp <- data.frame(feature = temp_info[1],Estimate_group=temp_info[2])
     temp$pvalue <- x$p.value
     temp$method <- x$method
     return(temp)
   })
-
+  
   df <- do.call(rbind, dfs) %>% tibble::as_tibble()
   return(df)
 }
