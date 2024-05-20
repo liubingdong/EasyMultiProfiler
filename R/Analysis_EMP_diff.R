@@ -239,7 +239,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
                 subgroup=subgroup,core=core,...) %>% suppressMessages()
 
 
-  diff_data <-  .get_diff_df(diff_result)
+  diff_data <-  .get_diff_df(diff_result,feature_name,estimate_group)
 
   # fold change only support for the relative and counts data
   sign_fold_temp <- .get_sign_fold(assay_data,subgroup,assay_name,group_level,estimate_group)
@@ -275,27 +275,16 @@ EMP_diff_analysis <- function(x,experiment,.formula,
 
 .EMP_diff_analysis_m <- memoise::memoise(.EMP_diff_analysis)
 
-#' @importFrom stringr str_split
-#' @importFrom stringr str_detect
-.get_diff_df <- function(data) {
+.get_diff_df <- function(data,feature_name,estimate_group) {
   dfs <- lapply(data, function(x) {
-    matches_sep1 <- str_detect(x[["data.name"]], 'and')
-    matches_sep2 <- str_detect(x[["data.name"]], 'by')
-    
-    if(matches_sep1) {
-      temp_info <- x[["data.name"]] %>% str_split(pattern = 'and') %>% unlist() %>% trimws()
-    }else if(matches_sep2){
-      temp_info <- x[["data.name"]] %>% str_split(pattern = 'by') %>% unlist() %>% trimws()
-    }else{
-      "pleas check the sep of diff result!"
-    }
-    temp <- data.frame(feature = temp_info[1],Estimate_group=temp_info[2])
+    temp <- data.frame(pvalue=NA,method=NA)
     temp$pvalue <- x$p.value
     temp$method <- x$method
     return(temp)
   })
-  
   df <- do.call(rbind, dfs) %>% tibble::as_tibble()
+  df <- df %>% dplyr::mutate(feature = feature_name,Estimate_group = estimate_group) %>%
+    dplyr::select(feature,Estimate_group,everything())
   return(df)
 }
 
