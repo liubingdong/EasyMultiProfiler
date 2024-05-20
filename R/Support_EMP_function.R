@@ -350,7 +350,7 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
   
   subtitle <- sprintf(" Sample=%s | Feature=%s",
                       assay_dim[1],
-                      assay_dim[2]
+                      (assay_dim[2]-1)
   ) %>% 
     format_comment(width=nchar(.) + 5) %>% 
     pillar::style_subtle()
