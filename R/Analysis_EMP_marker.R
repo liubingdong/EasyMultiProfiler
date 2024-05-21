@@ -194,7 +194,7 @@
 #' @param eta A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param nrounds An interger (default:50). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param xgboost_run An character string (default:classify).Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.
-#' @param objective An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:linear for linear regression.                                 
+#' @param objective An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:squarederror for linear regression.                                 
 #' @param verbose An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
@@ -223,7 +223,7 @@
 #' ## regression or classify by randomforest
 #' MAE |>
 #'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
-#'                       estimate_group = 'Education_Years',objective = 'reg:linear')
+#'                       estimate_group = 'Education_Years',objective = 'reg:squarederror')
 #' ### For two categories classify
 #' MAE |>
 #'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
