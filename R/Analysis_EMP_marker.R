@@ -110,7 +110,7 @@
     stop('Parameter xgboost_run need specify classify or regression and select the suitable parameter objective!')
   }
 
-  nthread <- chectCores() - 1
+  nthread <- parallel::detectCores() - 1
 
   traindata <- xgb.DMatrix(data = as.matrix(assay_data),label= coldata)
   set.seed(seed)

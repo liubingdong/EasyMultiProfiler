@@ -295,6 +295,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
 #' @importFrom snowfall sfLapply
 #' @importFrom snowfall sfStop
 #' @importFrom rlang new_formula
+#' @importFrom parallel detectCores
 #' @noRd
 .multi_compare <- function(fun,
                             data,
@@ -311,14 +312,14 @@ EMP_diff_analysis <- function(x,experiment,.formula,
   }
   ## set the core
   if(is.null(core)){
-    spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = chectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
+    spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
   }else {
-    available_core <- chectCores() - 1
+    available_core <- parallel::detectCores() - 1
     if(core>0 & core <= available_core){
       spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = core),print_cat = TRUE, message = FALSE, warning = FALSE)
     }else{
       warning("The parameter core number is wrong,now parallel execution on ",available_core," CPUs.")
-      spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = chectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
+      spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
     }
   }
   ## pass the data from envrionment

@@ -36,6 +36,7 @@ Imports:
     patchwork (== 1.2.0),
     purrr (>= 1.0.2),
     pillar,
+    parallel,
     qvalue (>= 2.34.0),
     randomForest (>= 4.7.1.1),
     rlang (>= 1.1.3),
