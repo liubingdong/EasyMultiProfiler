@@ -18,7 +18,7 @@
 #' @importFrom utils read.table
 #' @importFrom SummarizedExperiment assay
 #' @noRd
-.EMP_adjust_abudance <- function(EMPT,method,.factor_unwanted,.factor_of_interest,...) {
+.EMP_adjust_abundance <- function(EMPT,method,.factor_unwanted,.factor_of_interest,...) {
 
   EMPT %>%
       tidybulk::adjust_abundance( .factor_unwanted = !!.factor_unwanted, .factor_of_interest =  !!.factor_of_interest,
@@ -35,7 +35,7 @@
 }
 
 #' @importFrom memoise memoise
-.EMP_adjust_abudance_m <- memoise::memoise(.EMP_adjust_abudance)
+.EMP_adjust_abundance_m <- memoise::memoise(.EMP_adjust_abundance)
 
 
 #' Adjust experssion or abundance for unexpected bias or batch effect
@@ -58,19 +58,19 @@
 ## combat_seq method 
 #' MAE |>
 #'   EMP_assay_extract(experiment='geno_ko') |>
-#'   EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+#'   EMP_adjust_abundance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
 #'                       method = 'combat_seq',action = 'add') 
 #' ## combat method 
 #' MAE |>
 #'   EMP_assay_extract(experiment='geno_ko') |>
-#'   EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+#'   EMP_adjust_abundance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
 #'                       method = 'combat',action = 'add') 
 #' ## limma_remove_batch_effect
 #' MAE |>
 #'   EMP_assay_extract(experiment='geno_ko') |>
-#'   EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+#'   EMP_adjust_abundance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
 #'                       method = 'limma_remove_batch_effect') 
-EMP_adjust_abudance <- function(x,experiment,
+EMP_adjust_abundance <- function(x,experiment,
                                 method='combat_seq',use_cached=TRUE,
                                 .factor_unwanted,.factor_of_interest,action='add',...) {
   call <- match.call()
@@ -86,9 +86,9 @@ EMP_adjust_abudance <- function(x,experiment,
     stop('Please check the input data')
   }
   if (use_cached == F) {
-    memoise::forget(.EMP_adjust_abudance_m) %>% invisible()
+    memoise::forget(.EMP_adjust_abundance_m) %>% invisible()
   }
-  EMPT <- .EMP_adjust_abudance_m(EMPT=x,method=method,.factor_unwanted,.factor_of_interest,...)
+  EMPT <- .EMP_adjust_abundance_m(EMPT=x,method=method,.factor_unwanted,.factor_of_interest,...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_assay_data'
   if (action == 'add') {

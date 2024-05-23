@@ -27,7 +27,7 @@
 }
 
 
-#' Filer experssion or abudance data that match a condition
+#' Filer experssion or abundance data that match a condition
 #'
 #' @param obj EMPT or MultiAssayExperiment object.
 #' @param sample_condition Expressions that return a logical value, and are defined in terms of the variables in coldata. If multiple expressions are included, they are combined with the &，| operator. 

@@ -57,7 +57,7 @@ EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALS
       .get.mapping.EMPT(EMPT) <- .get.mapping.EMPT(EMPT) %>%
         missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
-      message('Coldata has not NA value!')
+      message('Coldata has no NA value!')
     }
   }
 
@@ -66,7 +66,7 @@ EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALS
       .get.row_info.EMPT(EMPT) <- .get.row_info.EMPT(EMPT) %>%
         missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
-      message('Rowdata has not NA value!')
+      message('Rowdata has no NA value!')
     }
   }
 
@@ -75,7 +75,7 @@ EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALS
       .get.assay.EMPT(EMPT) <- .get.assay.EMPT(EMPT) %>%
         missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
-      message('Assay data has not NA value!')
+      message('Assay data has no NA value!')
     }
   }
 

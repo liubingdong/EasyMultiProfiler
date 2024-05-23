@@ -2,7 +2,7 @@
 % Please edit documentation in R/Support_EMP_filter.R
 \name{EMP_filter}
 \alias{EMP_filter}
-\title{Filer experssion or abudance data that match a condition}
+\title{Filer experssion or abundance data that match a condition}
 \usage{
 EMP_filter(
   obj,
@@ -36,7 +36,7 @@ EMP_filter(
 EMPT object
 }
 \description{
-Filer experssion or abudance data that match a condition
+Filer experssion or abundance data that match a condition
 }
 \examples{
 data(MAE)

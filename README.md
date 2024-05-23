@@ -22,7 +22,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
        * [EMP_rowdata_extract](#emp_rowdata_extract)
        * [EMP_coldata_extract](#emp_coldata_extract)
    * [Data Preparation :](#data-preparation-)
-       * [EMP_adjust_abudance](#emp_adjust_abudance)
+       * [EMP_adjust_abundance](#emp_adjust_abundance)
        * [EMP_feature_convert](#emp_feature_convert)
        * [EMP_collapse](#emp_collapse)
        * [EMP_decostand](#emp_decostand)
@@ -397,7 +397,7 @@ MAE |>
 
 This module is designed to assist users in various mainstream data preprocessing steps, including standardization, batch correction, filtering analysis, feature convert, and feature collapse, etc.
 
-#### EMP_adjust_abudance
+#### EMP_adjust_abundance
 
 combat_seq method 
 
@@ -430,7 +430,7 @@ combat method
 ```R
 MAE |>
   EMP_assay_extract(experiment='geno_ko') |>
-  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+  EMP_adjust_abundance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
                       method = 'combat',action = 'add') 
 ```
     # A tibble: 20 × 7,630
@@ -470,7 +470,7 @@ limma_remove_batch_effect
 ```R
 MAE |>
   EMP_assay_extract(experiment='geno_ko') |>
-  EMP_adjust_abudance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
+  EMP_adjust_abundance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
                       method = 'limma_remove_batch_effect') 
 ```
     # A tibble: 20 × 7,630
