@@ -36,7 +36,7 @@ EMP_GSEA_analysis(
 
 \item{method}{A character string. Methods include signal2Noise, cor, log2FC.}
 
-\item{cor_method}{A character string including pearson, spearman, kendall. The alogarithm cor_method used in method = "cor".}
+\item{cor_method}{A character string including pearson, spearman. The alogarithm cor_method used in method = "cor".}
 
 \item{group_level}{A series of character strings. Determine the comparison order of groups when method = "log2FC".}
 

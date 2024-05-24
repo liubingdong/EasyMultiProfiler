@@ -276,6 +276,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
 .EMP_diff_analysis_m <- memoise::memoise(.EMP_diff_analysis)
 
 .get_diff_df <- function(data,feature_name,estimate_group) {
+  feature <- Estimate_group <- NULL
   dfs <- lapply(data, function(x) {
     temp <- data.frame(pvalue=NA,method=NA)
     temp$pvalue <- x$p.value

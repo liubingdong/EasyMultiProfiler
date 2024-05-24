@@ -44,9 +44,20 @@
   data1_sample_num <- rownames(data1) %>% unique %>% length()
   data2_sample_num <- rownames(data2) %>% unique %>% length()
 
+
+  # filter the samnples with miss value
+  data1 <- na.omit(data1)
+  data2 <- na.omit(data2)
+
   data1 <- data1 |> dplyr::filter(rownames(data1) %in% real_sample)
   data2 <- data2 |> dplyr::filter(rownames(data2) %in% real_sample)
-  df.cor.p<-agricolae_correlation(x=data1,y=data2,method = method,...)
+  #df.cor.p<-agricolae_correlation(x=data1,y=data2,method = method,...)
+
+  df.cor.p <- CorRcpp(x = data1,y = data2,type = method)
+  names(df.cor.p) <- c('correlation','pvalue')
+
+  df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
+  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
@@ -57,7 +68,8 @@
     as.data.frame() %>%
     tibble::rownames_to_column('var1') %>%
     tidyr::pivot_longer(cols = -var1,names_to = 'var2',values_to = 'pvalue')
-  df$pvalue<-round(df.p$pvalue,2)
+  
+  df$pvalue <- df.p$pvalue
 
 
   df.cor.p[['cor_info']] <- cor_info
@@ -226,19 +238,31 @@ rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman'){
   SampleID <- value <- NULL
 
   deposit=list()
+
+
+  # filter the samnples with miss value
+  data1 <- na.omit(data1)
+  data2 <- na.omit(data2)
   
   real_sample <- intersect(data1[['SampleID']],data2[['SampleID']])
   
-  data1 <- data1 %>% dplyr::filter(SampleID == real_sample)  %>% 
+  data1 <- data1 %>% dplyr::filter(SampleID %in% real_sample)  %>% 
     dplyr::arrange('primary') %>%
     tibble::column_to_rownames('SampleID')
   
-  data2 <- data2 %>% dplyr::filter(SampleID == real_sample)  %>% 
+  data2 <- data2 %>% dplyr::filter(SampleID %in% real_sample)  %>% 
     dplyr::arrange('primary') %>%
     tibble::column_to_rownames('SampleID')
   
  
-  data.corr <- agricolae_correlation(data1, data2,method = cor_method)
+  #data.corr <- agricolae_correlation(data1, data2,method = cor_method)
+  data.corr <- CorRcpp(x = data1,y = data2,type = cor_method)
+  names(data.corr) <- c('correlation','pvalue')
+
+  data.corr[["correlation"]] <- round(data.corr[["correlation"]],2)
+  data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],2)
+
+
   occor.r <- data.corr$correlation
   occor.p <- data.corr$pvalue
   occor.r[occor.p>pvalue|abs(occor.r)<rvalue] = 0 
@@ -314,7 +338,7 @@ check_duplicate_col <- function(list_of_dfs) {
 #' @param force_sankey A boolean. Whether force the cor-analysis for the sankey plot or not.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
-#' @param ... Further parameters passed to the function agricolae::correlation
+#' @param ... ...
 #' @rdname EMP_cor_analysis
 #' @return EMPT object
 #' @export

@@ -27,9 +27,9 @@ EMP_WGCNA_cor_analysis(obj, ...)
 \arguments{
 \item{obj}{EMPT or MultiAssayExperiment object.}
 
-\item{...}{Further parameters passed to the function agricolae::correlation}
+\item{...}{...}
 
-\item{method}{A character string. Methods include pearson (default), spearman and kendall.}
+\item{method}{A character string. Methods include pearson (default), spearman.}
 
 \item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate.}
 

@@ -33,7 +33,7 @@ EMP_cor_analysis(
 
 \item{force_sankey}{A boolean. Whether force the cor-analysis for the sankey plot or not.}
 
-\item{...}{Further parameters passed to the function agricolae::correlation}
+\item{...}{...}
 }
 \value{
 EMPT object

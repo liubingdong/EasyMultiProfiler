@@ -191,13 +191,23 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   moduleColorsAutomatic <- WGCNA::labels2colors(moduleLabelsAutomatic)
   moduleColorsWW <- moduleColorsAutomatic
   MEs0 <- WGCNA::moduleEigengenes(assay_data, moduleColorsWW)$eigengenes
-  MEsWW <- orderMEs(MEs0)
+  MEsWW <- WGCNA::orderMEs(MEs0)
+
+  # filter the samnples with miss value
+  coldata <- na.omit(coldata)
+  MEsWW <- na.omit(MEsWW)
 
   real_samples <- intersect(rownames(coldata),rownames(MEsWW))
-  coldata <- coldata[real_samples,]
-  assay_data <- assay_data[real_samples,]
+  coldata <- coldata %>% dplyr::filter(rownames(coldata) %in% real_samples )
+  MEsWW <- MEsWW %>% dplyr::filter(rownames(MEsWW) %in% real_samples ) 
 
-  df.cor.p<-agricolae_correlation(x=coldata,y=MEsWW,method = method)
+  #df.cor.p<-agricolae_correlation(x=coldata,y=MEsWW,method = method)
+  df.cor.p <- CorRcpp(x = coldata,y = MEsWW,type = method)
+  names(df.cor.p) <- c('correlation','pvalue')
+
+  df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
+  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
+
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
@@ -208,7 +218,8 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
     as.data.frame() %>%
     tibble::rownames_to_column('var1') %>%
     tidyr::pivot_longer(cols = -var1,names_to = 'var2',values_to = 'pvalue')
-  df$pvalue<-round(df.p$pvalue,2)
+ 
+  df$pvalue <- df.p$pvalue
 
   data1_sample_num <- rownames(assay_data) %>% unique %>% length()
   data2_sample_num <- rownames(coldata) %>% unique %>% length()
@@ -298,7 +309,23 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
   MEs0 <- WGCNA::moduleEigengenes(data1, moduleColorsWW)$eigengenes
   MEsWW <- orderMEs(MEs0)
 
-  df.cor.p<-agricolae_correlation(x=data2,y=MEsWW,method = method)
+  #df.cor.p<-agricolae_correlation(x=data2,y=MEsWW,method = method)
+
+  # filter the samnples with miss value
+  data2 <- na.omit(data2)
+  MEsWW <- na.omit(MEsWW)
+
+  real_samples <- intersect(rownames(data2),rownames(MEsWW))
+  data2 <- data2[real_samples,]
+  MEsWW <- MEsWW[real_samples,]
+
+
+  df.cor.p <- CorRcpp(x = data2,y = MEsWW,type = method)
+  names(df.cor.p) <- c('correlation','pvalue')
+
+  df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
+  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
+
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
@@ -309,7 +336,8 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
     as.data.frame() %>%
     tibble::rownames_to_column('var1') %>%
     tidyr::pivot_longer(cols = -var1,names_to = 'var2',values_to = 'pvalue')
-  df$pvalue<-round(df.p$pvalue,2)
+  
+  df$pvalue <- df.p$pvalue
 
   data1_sample_num <- rownames(data1) %>% unique %>% length()
   data2_sample_num <- rownames(data2) %>% unique %>% length()

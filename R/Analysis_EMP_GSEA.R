@@ -92,19 +92,32 @@
         stop('GSEA based on correlation analysis need estimate_group parameter!')
       }
 
-      feature_table <-.get.assay.EMPT(EMPT) %>% 
+      feature_table <- .get.assay.EMPT(EMPT) %>% 
         dplyr::arrange(primary) %>% ## confirm the sample rank
-        dplyr::select(-primary)
-      
+        tibble::column_to_rownames('primary')
+
       coldata <- .get.mapping.EMPT(EMPT) %>% 
         dplyr::arrange(primary) %>% ## confirm the sample rank
+        tibble::column_to_rownames('primary') %>%
         dplyr::select(!!estimate_group) 
-      
-      #data.corr <- psych::corr.test(feature_table, coldata,method = cor_method,adjust='none')
-      data.corr <- agricolae_correlation(feature_table, coldata,method = cor_method)
 
+      coldata <- na.omit(coldata)
+      feature_table <- na.omit(feature_table)
+
+      real_samples <- intersect(rownames(coldata),rownames(feature_table))
+      coldata <- coldata %>% dplyr::filter(rownames(coldata) %in% real_samples )
+      feature_table <- feature_table %>% dplyr::filter(rownames(feature_table) %in% real_samples ) 
+
+      #data.corr <- psych::corr.test(feature_table, coldata,method = cor_method,adjust='none')
+      #data.corr <- agricolae_correlation(feature_table, coldata,method = cor_method)
+      data.corr <- CorRcpp(x = feature_table,y = coldata,type = cor_method)
+      names(data.corr) <- c('correlation','pvalue')
+
+      #data.corr[["correlation"]] <- round(data.corr[["correlation"]],2)
+      #data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],2)
       data.r <- data.corr$correlation
       data.p <- data.corr$pvalue
+   
       data.r[data.p>threshold_p|abs(data.r)<threshold_r] = 0 ## filter according to the threshold
       
       data.r %<>% as.data.frame() %>% 
@@ -185,7 +198,7 @@
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param estimate_group A character string. Select the column you are interested in the coldata.
 #' @param method A character string. Methods include signal2Noise, cor, log2FC.
-#' @param cor_method A character string including pearson, spearman, kendall. The alogarithm cor_method used in method = "cor".
+#' @param cor_method A character string including pearson, spearman. The alogarithm cor_method used in method = "cor".
 #' @param group_level A series of character strings. Determine the comparison order of groups when method = "log2FC".
 #' @param pseudocount A number. The alogarithm pseudocount used in method = "signal2Noise", adjust the 0 in the signal2Noise result into pseudocount value. (default:0.0001)
 #' @param pvalueCutoff A character string. Adjusted pvalue cutoff on enrichment tests to report.
@@ -267,8 +280,8 @@ EMP_GSEA_analysis <- function(x,condition,experiment,estimate_group=NULL,method,
                                                       pseudocount,pvalueCutoff,threshold,seed,...)
          },
          "cor" = {  
-           if (!cor_method %in% c('pearson','spearman','kendall')) {
-             stop('Parameter method in EMP_GSEA_analysis_cor should be one of pearson, spearman, kendall! ')
+           if (!cor_method %in% c('pearson','spearman')) {
+             stop('Parameter method in EMP_GSEA_analysis_cor should be one of pearson, spearman! ')
            }
            EMPT %<>%  .EMP_GSEA_analysis_cor(estimate_group,cor_method,keyType,KEGG_Type,species,
                                              pvalueCutoff,threshold_r,threshold_p,seed,...)

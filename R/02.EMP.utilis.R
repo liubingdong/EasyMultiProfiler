@@ -234,10 +234,10 @@ setGeneric("EMP_WGCNA_cor_analysis",function(obj,...) standardGeneric("EMP_WGCNA
 
 
 
-#' @param method A character string. Methods include pearson (default), spearman and kendall.
+#' @param method A character string. Methods include pearson (default), spearman.
 #' @param coldata_to_assay A series of character strings. Select the column from coldata to caculate.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to the function agricolae::correlation
+#' @param ... ...
 #' @rdname EMP_WGCNA_cor_analysis
 
 setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj,method='spearman',coldata_to_assay=NULL,action='add',...){
@@ -246,8 +246,8 @@ setMethod("EMP_WGCNA_cor_analysis","EMPT",function(obj,method='spearman',coldata
 
 
 #' @param select A character string. The experiment name in the EMP object.
-#' @param method A character string. Methods include pearson (default), spearman and kendall.
-#' @param ... Further parameters passed to the function agricolae::correlation
+#' @param method A character string. Methods include pearson (default), spearman.
+#' @param ... ...
 #' @rdname EMP_WGCNA_cor_analysis
 
 
