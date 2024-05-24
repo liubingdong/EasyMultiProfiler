@@ -1,7 +1,7 @@
 
 #' @param obj EMP object
 #' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred).
-#' @param show A character string. Show inluding all, sig and pvalue.
+#' @param show A character string. Show inluding all, sig and pvalue.(Only supported for EMP_cor_analysis and EMP_WGCNA_cor_analysis)
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @section Palettes:
 #' The following palettes are available for use with these scales:
