@@ -115,7 +115,7 @@ EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseu
     dendrogram_obj %>%
       dendextend::color_branches(.,
                                  h = h,
-                                 groupLabels = T,warn=F) %>% plot(main = "Clustering to detect outliers")
+                                 groupLabels = groupLabels,warn=F) %>% plot(main = "Clustering to detect outliers")
     abline(h = h, col = "red",lty=2)
 
     desired_branch <- dendextend::cutree(
