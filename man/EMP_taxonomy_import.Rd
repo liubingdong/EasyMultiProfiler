@@ -9,6 +9,7 @@ EMP_taxonomy_import(
   data = NULL,
   humann_format = FALSE,
   assay_name = NULL,
+  duplicate_feature = FALSE,
   sep = if (humann_format == "FALSE") ";" else "|"
 )
 }
@@ -20,6 +21,8 @@ EMP_taxonomy_import(
 \item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
 
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
+
+\item{duplicate_feature}{A boolean. Whether the feature exist the dupicated name.}
 
 \item{sep}{The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')}
 }

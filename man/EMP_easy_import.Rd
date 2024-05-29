@@ -12,6 +12,7 @@ EMP_easy_import(
   assay_name = NULL,
   coldata = NULL,
   humann_format = FALSE,
+  duplicate_feature = FALSE,
   output = "MAE",
   sep = if (humann_format == "FALSE") ";" else "|"
 )
@@ -30,6 +31,8 @@ EMP_easy_import(
 \item{coldata}{A dataframe containing one column informantion at least.}
 
 \item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
+
+\item{duplicate_feature}{A boolean. Whether the feature exist the dupicated name.}
 
 \item{output}{A character string. Set the output result in SE(SummariseExperiment) or MAE(MultiAssayExperiment) format.}
 

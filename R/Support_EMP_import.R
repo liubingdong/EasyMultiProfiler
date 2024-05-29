@@ -72,6 +72,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @param file A file path.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
+#' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param sep The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')
 #' @importFrom SummarizedExperiment SummarizedExperiment
@@ -81,7 +82,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #'
 #' @examples
 #' # add example
-EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_name=NULL,sep=if (humann_format == "FALSE") ';' else '|') {
+EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_name=NULL,duplicate_feature=FALSE,sep=if (humann_format == "FALSE") ';' else '|') {
   feature <- `.` <- NULL
   if(humann_format == TRUE){
     deposit <- humann_taxonomy_import(file=file,data=data,sep = sep)
@@ -91,26 +92,58 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
     }else {
       temp <- read.table(file=file,header = T,sep = '\t',quote="")
     }     
+
     colnames(temp)[1] <- 'feature'
+    temp[["feature"]] <- gsub('; ', ';', temp[["feature"]])
+    temp[["feature"]] <- gsub(' ;', ';', temp[["feature"]])
     temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
     rownames(temp) <- NULL # necessary!
     temp %<>%
-      dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_"))  # Space in the value will lead to unexperted error 
-    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep) %>% 
-      dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))  # make the empty value into NA in order to adapt .impute_tax
-    colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
-    temp_name <- data.frame(feature = temp$feature,temp_name) %>%
-      .impute_tax() ## impute the NA tax
-    temp  %<>% tibble::column_to_rownames('feature') %>% as.matrix()
-    deposit <- SummarizedExperiment(assays=list(counts=temp),
-                                    rowData = temp_name)
-  }
+      dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_")) 
+    
+    if(duplicate_feature==FALSE){
+
+      temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>% 
+        dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., "")) 
+      colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
+      temp_name <- data.frame(feature = temp$feature,temp_name) %>%
+        .impute_tax() ## impute the NA tax
+      temp  %<>% tibble::column_to_rownames('feature') %>% as.matrix()
+      deposit <- SummarizedExperiment(assays=list(counts=temp),
+                                      rowData = temp_name)
+    }else if(duplicate_feature==TRUE){
+
+      strings_to_remove1 <- c('k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__')
+      strings_to_remove2 <- c('k_', 'p_', 'c_', 'o_', 'f_', 'g_', 's_')
+      for (i in strings_to_remove1) {
+        temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+      }
+      for (i in strings_to_remove2) {
+        temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+      }
+      
+      temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>%
+        dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))
+      colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
+      temp_name <- data.frame(feature = temp$feature,temp_name) %>%
+        .impute_tax()  %>% ## impute the NA tax
+        dplyr::mutate(feature = paste0('feature_',1:nrow(temp_name)))
+      temp  %<>% 
+        dplyr::mutate(feature = paste0('feature_',1:nrow(temp))) %>%
+        tibble::column_to_rownames('feature') %>% as.matrix()
+      
+      deposit <- SummarizedExperiment(assays=list(counts=temp),
+                                      rowData = temp_name)
+    }else{
+      stop("Parameter duplicate_feature must be T or F!")
+    }
+
   if (!is.null(assay_name)) {
     assayNames(deposit, 1) <- assay_name
   }
   return(deposit)
+  }
 }
-
 
 #' Import gene data into SummariseExperiment
 #'
@@ -265,12 +298,12 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',assay_
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 EMP_easy_taxonomy_import <- function(file=NULL,data=NULL,assay='experiment',assay_name=NULL,coldata=NULL,
-                                     humann_format=FALSE,output='MAE',
+                                     humann_format=FALSE,duplicate_feature=FALSE,output='MAE',
                                      sep=if (humann_format == "FALSE") ';' else '|') {
   
   sampleID <- assay_data <- SE_object <- NULL
 
-  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,assay_name=assay_name,sep=sep)                                    
+  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,duplicate_feature=duplicate_feature,assay_name=assay_name,sep=sep)                                    
   
   sampleID <-  dimnames(SE_object)[[2]]                                 
   if (output == 'SE') {
@@ -346,6 +379,7 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @param assay A character string. Set the experiment name.(default:experiment)
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
+#' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param coldata A dataframe containing one column informantion at least.
 #' @param sep The field separator character. Only activated when type =''tax. Values on each line of the file are separated by this character. (defacult:'|') 
 #' @param output A character string. Set the output result in SE(SummariseExperiment) or MAE(MultiAssayExperiment) format.
@@ -357,12 +391,12 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' # example
 
 EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,coldata=NULL,
-                            humann_format=FALSE,output='MAE',
+                            humann_format=FALSE,duplicate_feature=FALSE,output='MAE',
                             sep=if (humann_format == "FALSE") ';' else '|'){
   obj <- NULL
   switch(type,
          "tax" = {obj <- EMP_easy_taxonomy_import(file=file,data=data,assay=assay,assay_name=assay_name,coldata=coldata,
-                                                  humann_format=humann_format,output=output,sep=sep)},
+                                                  humann_format=humann_format,duplicate_feature=duplicate_feature,output=output,sep=sep)},
          "ko" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
                                                   humann_format=humann_format,output=output)},
          "ec" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
