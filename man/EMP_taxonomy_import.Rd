@@ -9,7 +9,7 @@ EMP_taxonomy_import(
   data = NULL,
   humann_format = FALSE,
   assay_name = NULL,
-  duplicate_feature = FALSE,
+  duplicate_feature = NULL,
   sep = if (humann_format == "FALSE") ";" else "|"
 )
 }

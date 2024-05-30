@@ -12,7 +12,7 @@ EMP_easy_import(
   assay_name = NULL,
   coldata = NULL,
   humann_format = FALSE,
-  duplicate_feature = FALSE,
+  duplicate_feature = NULL,
   output = "MAE",
   sep = if (humann_format == "FALSE") ";" else "|"
 )

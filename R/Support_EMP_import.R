@@ -82,8 +82,8 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #'
 #' @examples
 #' # add example
-EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_name=NULL,duplicate_feature=FALSE,sep=if (humann_format == "FALSE") ';' else '|') {
-  feature <- `.` <- NULL
+EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "FALSE") ';' else '|') {
+  feature <- `.` <- check_duplicated_feature <- NULL
   if(humann_format == TRUE){
     deposit <- humann_taxonomy_import(file=file,data=data,sep = sep)
   }else{
@@ -98,9 +98,31 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
     temp[["feature"]] <- gsub(' ;', ';', temp[["feature"]])
     temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
     rownames(temp) <- NULL # necessary!
+
+    ## Mistake-proofing
+    strings_to_remove1 <- c('d__','k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__')
+    strings_to_remove2 <- c('d_','k_', 'p_', 'c_', 'o_', 'f_', 'g_', 's_')
+    for (i in strings_to_remove1) {
+      temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+    }
+    for (i in strings_to_remove2) {
+      temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+    }
+    temp[["feature"]] <- gsub(';__', ';', temp[["feature"]])
+    temp[["feature"]] <- gsub(';_', ';', temp[["feature"]])
     temp %<>%
       dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_")) 
-    
+
+    if (is.null(duplicate_feature)){
+      check_duplicated_feature <- any(duplicated(temp$feature))
+      if(check_duplicated_feature){
+        duplicate_feature <- TRUE
+        message("The duplicated name in the feature have been detected. Parameter duplicate_feature is forced to be TRUE.")
+      }else{
+      duplicate_feature <- FALSE
+      }
+    }
+
     if(duplicate_feature==FALSE){
 
       temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>% 
@@ -112,15 +134,6 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
       deposit <- SummarizedExperiment(assays=list(counts=temp),
                                       rowData = temp_name)
     }else if(duplicate_feature==TRUE){
-
-      strings_to_remove1 <- c('k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__')
-      strings_to_remove2 <- c('k_', 'p_', 'c_', 'o_', 'f_', 'g_', 's_')
-      for (i in strings_to_remove1) {
-        temp[["feature"]] <- gsub(i, '', temp[["feature"]])
-      }
-      for (i in strings_to_remove2) {
-        temp[["feature"]] <- gsub(i, '', temp[["feature"]])
-      }
       
       temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>%
         dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))
@@ -298,7 +311,7 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',assay_
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 EMP_easy_taxonomy_import <- function(file=NULL,data=NULL,assay='experiment',assay_name=NULL,coldata=NULL,
-                                     humann_format=FALSE,duplicate_feature=FALSE,output='MAE',
+                                     humann_format=FALSE,duplicate_feature=NULL,output='MAE',
                                      sep=if (humann_format == "FALSE") ';' else '|') {
   
   sampleID <- assay_data <- SE_object <- NULL
@@ -391,7 +404,7 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' # example
 
 EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,coldata=NULL,
-                            humann_format=FALSE,duplicate_feature=FALSE,output='MAE',
+                            humann_format=FALSE,duplicate_feature=NULL,output='MAE',
                             sep=if (humann_format == "FALSE") ';' else '|'){
   obj <- NULL
   switch(type,
