@@ -266,7 +266,7 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
   colnames(data)[1] <- 'feature'
 
   if (is.null(sampleID)) {
-    sampleID <- colnames(data)
+    sampleID <- colnames(data)[-1]
     
     data <- data[rowSums(data[,-1]) != 0,] # filter away empty feature!
     rownames(data) <- NULL # necessary!
