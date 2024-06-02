@@ -10,6 +10,7 @@ EMP_easy_import(
   type,
   assay = "experiment",
   assay_name = NULL,
+  sampleID = NULL,
   coldata = NULL,
   humann_format = FALSE,
   duplicate_feature = NULL,
@@ -27,6 +28,8 @@ EMP_easy_import(
 \item{assay}{A character string. Set the experiment name.(default:experiment)}
 
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
+
+\item{sampleID}{A series of character strings. This parameter helps identify the assay and rowdata only when type = 'normal'.}
 
 \item{coldata}{A dataframe containing one column informantion at least.}
 

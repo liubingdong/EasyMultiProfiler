@@ -255,8 +255,8 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
-EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',assay_name=NULL,coldata=NULL,output='MAE') {
-  sampleID <- row_data <- assay_data <- SE_object <- feature <- Name <- NULL
+EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sampleID=NULL,assay_name=NULL,coldata=NULL,output='MAE') {
+  row_data <- assay_data <- SE_object <- feature <- Name <- NULL
   if (!is.null(data)) {
     data <- data
   }else {
@@ -264,15 +264,29 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',assay_
   }  
   
   colnames(data)[1] <- 'feature'
-  data <- data[rowSums(data[,-1]) != 0,] # filter away empty feature!
-  rownames(data) <- NULL # necessary!
-  row_data <- data %>% 
-    dplyr::mutate(Name=feature) %>%
-    dplyr::select(feature,Name)
+
+  if (is.null(sampleID)) {
+    sampleID <- colnames(assay_data)
+    
+    data <- data[rowSums(data[,-1]) != 0,] # filter away empty feature!
+    rownames(data) <- NULL # necessary!
+
+    row_data <- data %>% 
+      dplyr::mutate(Name=feature) %>%
+      dplyr::select(feature,Name)
+    
+    assay_data <- data %>%
+      tibble::column_to_rownames('feature')
+  }else{
+    data <- data[rowSums(data[, sampleID]) != 0,] # filter away empty feature!
+    rownames(data) <- NULL # necessary!
   
-  assay_data <- data %>%
-    tibble::column_to_rownames('feature')
-  sampleID <- colnames(assay_data)
+    row_data <- data %>% 
+      dplyr::select(-dplyr::any_of({{sampleID}})) 
+
+    assay_data <- data %>% 
+      dplyr::select(dplyr::any_of({{sampleID}}))
+  }
   
   SE_object <- SummarizedExperiment(assays=list(counts= as.matrix(assay_data)),
                               rowData = row_data)
@@ -391,6 +405,7 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @param type A character string. Methods include tax, ko, ec and normal.
 #' @param assay A character string. Set the experiment name.(default:experiment)
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
+#' @param sampleID A series of character strings. This parameter helps identify the assay and rowdata only when type = 'normal'.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
 #' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param coldata A dataframe containing one column informantion at least.
@@ -403,7 +418,7 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @examples
 #' # example
 
-EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,coldata=NULL,
+EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,sampleID=NULL,coldata=NULL,
                             humann_format=FALSE,duplicate_feature=NULL,output='MAE',
                             sep=if (humann_format == "FALSE") ';' else '|'){
   obj <- NULL
@@ -414,7 +429,7 @@ EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_na
                                                   humann_format=humann_format,output=output)},
          "ec" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
                                                   humann_format=humann_format,output=output)},
-         "normal" = {obj <- EMP_easy_normal_import(file=file,data=data,assay=assay,assay_name=assay_name,coldata=coldata,output=output)},
+         "normal" = {obj <- EMP_easy_normal_import(file=file,data=data,assay=assay,sampleID=sampleID,assay_name=assay_name,coldata=coldata,output=output)},
          {
            stop('type only support tax, ko, ec and normal!')
          }
