@@ -37,13 +37,16 @@ CorRcpp <- function(x=x,y=NULL,type=c("pearson","spearman")) {
     if(nrow(x)<4){
       stop("Cor-analysis need more than 4 samples")
     }
+    if(any(is.na(x))){
+      stop("There are NA value in data!")
+    }
     if(type=="spearman"){
       x <- apply(x, 2, rank)
     }
     corres <-  cp_cor_s(mat = as.matrix(x))
     corres$R_matrix <- as.data.frame(corres$R_matrix)
     corres$P_matrix <- as.data.frame(corres$P_matrix)
-    diag(corres$P_matrix) <- 0 ## advoid the NaN value in case of the same feature
+    diag(corres$P_matrix) <- 0 ## adjust the P value in case of the same feature
     row.names(corres$R_matrix) <- colnames(x)
     row.names(corres$P_matrix) <- colnames(x)
     colnames(corres$R_matrix) <- colnames(x)
@@ -51,6 +54,9 @@ CorRcpp <- function(x=x,y=NULL,type=c("pearson","spearman")) {
   }else{
     if(nrow(x)<4 | nrow(y)<4){
       stop("Cor-analysis need more than 4 samples")
+    }
+    if(any(is.na(x)) | any(is.na(y))){
+      stop("There are NA value in data!")
     }
     if(type=="spearman"){
       stopifnot(is.data.frame(y))
@@ -61,9 +67,13 @@ CorRcpp <- function(x=x,y=NULL,type=c("pearson","spearman")) {
     corres <-  cp_cor_t(mat = as.matrix(x),mat2=as.matrix(y))
     corres$R_matrix <- as.data.frame(corres$R_matrix)
     corres$P_matrix <- as.data.frame(corres$P_matrix)
+
     if(check_xy_duplicate(x,y)){
-      diag(corres$P_matrix) <- 0 ## advoid the NaN value in case of the same feature
+      diag(corres$P_matrix) <- 0 ## adjust the P value in case of the same feature
     }
+
+    corres[["P_matrix"]][is.na(corres[["P_matrix"]])] <- 0 ## advoid the NaN value in case of the same feature
+
     row.names(corres$R_matrix) <- colnames(x)
     row.names(corres$P_matrix) <- colnames(x)
     colnames(corres$R_matrix) <- colnames(y)
@@ -71,7 +81,6 @@ CorRcpp <- function(x=x,y=NULL,type=c("pearson","spearman")) {
   }
   return(corres)
 }
-
 
 check_xy_duplicate <- function(x,y) {
   rownames(x) <- colnames(x) <- NULL

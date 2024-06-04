@@ -282,6 +282,9 @@ setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
   EMP_boxplot.EMP_assay_data(obj, ...)
 })
 
+setMethod("EMP_boxplot","EMP_decostand",function(obj, ...){
+  EMP_boxplot.EMP_assay_data(obj, ...)
+})
 
 #' Scatterplot for EMPT result
 #'
