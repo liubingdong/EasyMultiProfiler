@@ -197,6 +197,7 @@ EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_
       EMPT@elementMetadata <-data.se@elementMetadata
       EMPT@metadata <-data.se@metadata
       EMPT@info <- 'EMP_assay_data'
+      class(EMPT) <- 'EMP_assay_data'
       .get.history.EMPT(EMPT) <- call
       .get.assay_name.EMPT(EMPT) <- assay_name
       .get.experiment.EMPT(EMPT) <- experiment
