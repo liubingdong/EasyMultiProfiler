@@ -57,7 +57,9 @@
   names(df.cor.p) <- c('correlation','pvalue')
 
   df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
-  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
+
+  df.cor.p[["pvalue"]][is.na(df.cor.p[["pvalue"]])] <- 0 ## advoid the NaN value in case of the same feature
+  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],3)
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
