@@ -8,6 +8,7 @@ EMP_taxonomy_import(
   file = NULL,
   data = NULL,
   humann_format = FALSE,
+  biom_format = FALSE,
   assay_name = NULL,
   duplicate_feature = NULL,
   sep = if (humann_format == "FALSE") ";" else "|"
@@ -19,6 +20,8 @@ EMP_taxonomy_import(
 \item{data}{A dataframe.The row must be the feature and the column is the sample.}
 
 \item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
+
+\item{biom_format}{A boolean. Whether the function improt microbioal data in the biom format.}
 
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
 

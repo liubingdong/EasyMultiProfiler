@@ -13,6 +13,7 @@ EMP_easy_import(
   sampleID = NULL,
   coldata = NULL,
   humann_format = FALSE,
+  biom_format = FALSE,
   duplicate_feature = NULL,
   output = "MAE",
   sep = if (humann_format == "FALSE") ";" else "|"
@@ -34,6 +35,8 @@ EMP_easy_import(
 \item{coldata}{A dataframe containing one column informantion at least.}
 
 \item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
+
+\item{biom_format}{A boolean. Whether the function improt microbioal data in the biom format.}
 
 \item{duplicate_feature}{A boolean. Whether the feature exist the dupicated name.}
 

@@ -12,6 +12,7 @@ Imports:
     bigstatsr (>= 1.5.12),
     BiocManager (>= 1.30.22),    
     Boruta (>= 8.0.0),
+    biomformat,
     clusterProfiler (>= 4.10.0),
     dplyr,  
     networkD3,

@@ -72,25 +72,46 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @param file A file path.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
+#' @param biom_format A boolean. Whether the function improt microbioal data in the biom format.
 #' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param sep The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom stringr str_replace_all
+#' @importFrom biomformat biom
+#' @importFrom biomformat read_hdf5_biom
+#' @importFrom biomformat observation_metadata
+#' @importFrom biomformat biom_data
 #' @return SummmariseExperiment object
 #' @export
 #'
 #' @examples
 #' # add example
-EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "FALSE") ';' else '|') {
-  feature <- `.` <- check_duplicated_feature <- NULL
+EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,biom_format=FALSE,assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "FALSE") ';' else '|') {
+  feature <- `.` <- check_duplicated_feature <- biom_df <- biom_data <- tax_data <- NULL
   if(humann_format == TRUE){
     deposit <- humann_taxonomy_import(file=file,data=data,sep = sep)
   }else{
     if (!is.null(data)) {
       temp <- data
     }else {
-      temp <- read.table(file=file,header = T,sep = '\t',quote="")
+      if(biom_format == FALSE){
+        temp <- read.table(file=file,header = T,sep = '\t',quote="")
+      }else if(biom_format == TRUE){
+        biom_data <- biomformat::biom(biomformat::read_hdf5_biom(biom_file=file)) 
+        biom_df <- biom_data %>%
+          biomformat::biom_data() %>%
+          as.matrix() %>% 
+          as.data.frame() %>%
+          tibble::rownames_to_column('otuid')
+        tax_data <- biomformat::observation_metadata(biom_data) %>% tidyr::unite(col = "feature", everything(), sep = ";") %>%
+          tibble::rownames_to_column('otuid')
+        temp <- dplyr::left_join(biom_df,tax_data,by='otuid') %>%
+          dplyr::select(-otuid) %>%
+          dplyr::select(feature,everything()) 
+      }else{
+        stop("Parameter biom_format must be TRUE or FALSE!")
+      } 
     }     
 
     colnames(temp)[1] <- 'feature'
@@ -148,7 +169,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,assay_na
       deposit <- SummarizedExperiment(assays=list(counts=temp),
                                       rowData = temp_name)
     }else{
-      stop("Parameter duplicate_feature must be T or F!")
+      stop("Parameter duplicate_feature must be TRUE or FALSE!")
     }
 
   if (!is.null(assay_name)) {
@@ -325,12 +346,12 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 EMP_easy_taxonomy_import <- function(file=NULL,data=NULL,assay='experiment',assay_name=NULL,coldata=NULL,
-                                     humann_format=FALSE,duplicate_feature=NULL,output='MAE',
+                                     humann_format=FALSE,biom_format=FALSE,duplicate_feature=NULL,output='MAE',
                                      sep=if (humann_format == "FALSE") ';' else '|') {
   
   sampleID <- assay_data <- SE_object <- NULL
 
-  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,duplicate_feature=duplicate_feature,assay_name=assay_name,sep=sep)                                    
+  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,biom_format=biom_format,duplicate_feature=duplicate_feature,assay_name=assay_name,sep=sep)                                    
   
   sampleID <-  dimnames(SE_object)[[2]]                                 
   if (output == 'SE') {
@@ -407,6 +428,7 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param sampleID A series of character strings. This parameter helps identify the assay and rowdata only when type = 'normal'.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
+#' @param biom_format A boolean. Whether the function improt microbioal data in the biom format.
 #' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param coldata A dataframe containing one column informantion at least.
 #' @param sep The field separator character. Only activated when type =''tax. Values on each line of the file are separated by this character. (defacult:'|') 
@@ -419,12 +441,12 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' # example
 
 EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,sampleID=NULL,coldata=NULL,
-                            humann_format=FALSE,duplicate_feature=NULL,output='MAE',
+                            humann_format=FALSE,biom_format=FALSE,duplicate_feature=NULL,output='MAE',
                             sep=if (humann_format == "FALSE") ';' else '|'){
   obj <- NULL
   switch(type,
          "tax" = {obj <- EMP_easy_taxonomy_import(file=file,data=data,assay=assay,assay_name=assay_name,coldata=coldata,
-                                                  humann_format=humann_format,duplicate_feature=duplicate_feature,output=output,sep=sep)},
+                                                  humann_format=humann_format,biom_format=biom_format,duplicate_feature=duplicate_feature,output=output,sep=sep)},
          "ko" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
                                                   humann_format=humann_format,output=output)},
          "ec" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
