@@ -64,8 +64,8 @@
     
     if (is.null(keyType)) {
       stop("keyType should be specified as ko, ec or cpd!")
-    }else if(!keyType %in% c('ko','ec','cpd')){
-      stop("keyType should be ko, ec or cpd!")
+    }else if(!keyType %in% c('ko','ec','cpd','entrezid')){
+      stop("keyType should be ko, ec ,cpd or entrezid!")
     }
 
     if(!KEGG_Type %in% c('KEGG','MKEGG')){
@@ -131,8 +131,8 @@
     
     if (is.null(keyType)) {
       stop("keyType should be specified as ko, ec or cpd!")
-    }else if(!keyType %in% c('ko','ec','cpd')){
-      stop("keyType should be ko, ec or cpd!")
+    }else if(!keyType %in% c('ko','ec','cpd','entrezid')){
+      stop("keyType should be ko, ec ,cpd or entrezid!")
     }
 
     if(!KEGG_Type %in% c('KEGG','MKEGG')){
@@ -171,8 +171,8 @@
   
   if (is.null(keyType)) {
     stop("keyType should be specified as ko, ec or cpd!")
-  }else if(!keyType %in% c('ko','ec','cpd')){
-    stop("keyType should be ko, ec or cpd!")
+  }else if(!keyType %in% c('ko','ec','cpd','entrezid')){
+    stop("keyType should be ko, ec ,cpd or entrezid!")
   }
 
   if(!KEGG_Type %in% c('KEGG','MKEGG')){
