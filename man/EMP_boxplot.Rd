@@ -5,6 +5,7 @@
 \alias{EMP_boxplot}
 \alias{EMP_boxplot,EMP_alpha_analysis-method}
 \alias{EMP_boxplot,EMP_assay_data-method}
+\alias{EMP_boxplot,EMP_decostand-method}
 \alias{EMP_boxplot.EMP_alpha_analysis}
 \alias{EMP_boxplot.EMP_assay_data}
 \title{Boxplot for EMPT result}
@@ -14,6 +15,8 @@ EMP_boxplot(obj, ...)
 \S4method{EMP_boxplot}{EMP_alpha_analysis}(obj, ...)
 
 \S4method{EMP_boxplot}{EMP_assay_data}(obj, ...)
+
+\S4method{EMP_boxplot}{EMP_decostand}(obj, ...)
 
 EMP_boxplot.EMP_alpha_analysis(
   EMPT,

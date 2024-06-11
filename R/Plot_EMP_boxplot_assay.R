@@ -89,7 +89,6 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 
 #' 
 #'
-#' @export
 #'
 #' @examples
 #' # add example
@@ -118,5 +117,28 @@ EMP_boxplot.EMP_assay_data <- function(EMPT,plot_category = 1,seed =123,method =
 
 }
 
+EMP_boxplot.EMP_decostand <- function(EMPT,plot_category = 1,seed =123,method = 'wilcox.test',
+                               estimate_group = NULL,group_level = 'default',
+                               ncol = NULL,show = 'pic',palette = NULL,
+                               html_width=NULL,html_height=NULL,
+                               mytheme = 'theme()') {
+  #call <- match.call()
+  .get.plot_category.EMPT(EMPT) <- plot_category
+  #.get.history.EMPT(EMPT) <- call
+  switch(.get.plot_category.EMPT(EMPT),
+         "1" = {
+           withr::with_seed(seed,EMP_boxplot_assay_default(EMPT,method = method,
+                               estimate_group = estimate_group,group_level = group_level,
+                               ncol = ncol,show = show,palette = palette,
+                               html_width=html_width,html_height=html_height,
+                               mytheme = mytheme))
+         },
+         "2" = {
+           # where is EMP_boxplot_assay_2?
+           # withr::with_seed(seed,EMP_boxplot_assay_2(EMPT,...))
+         }
 
+  )
+
+}
 
