@@ -71,8 +71,8 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #'
 #' @param file A file path.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
-#' @param humann_format A boolean. Whether the function improt the data according to the humann format.
-#' @param biom_format A boolean. Whether the function improt microbioal data in the biom format.
+#' @param file_format A string including biom and gzv.
+#' @param humann_format A boolean. Whether the function import the data in the Metaphlan or Humann format.
 #' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param sep The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')
@@ -82,103 +82,118 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @importFrom biomformat read_hdf5_biom
 #' @importFrom biomformat observation_metadata
 #' @importFrom biomformat biom_data
+#' @importFrom utils read.csv
+#' @importFrom utils unzip
 #' @return SummmariseExperiment object
+#' @details Paramter file_format and humann_format help the function import data properly. Data in humann format is usually is generated from Metaphlan and Humann. Data in biom format is usually is generated from Qiime1. Data in qzv format is usually is generated from Qiime2.
 #' @export
 #'
 #' @examples
 #' # add example
-EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,biom_format=FALSE,assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "FALSE") ';' else '|') {
-  feature <- `.` <- check_duplicated_feature <- biom_df <- biom_data <- tax_data <- NULL
+EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_format=NULL,assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "TRUE") '|' else ';') {
+  feature <- `.` <- check_duplicated_feature <- biom_df <- biom_data <- tax_data <- otuid <- unzipfiles <- data_file <- NULL
   if(humann_format == TRUE){
     deposit <- humann_taxonomy_import(file=file,data=data,sep = sep)
   }else{
     if (!is.null(data)) {
       temp <- data
-    }else {
-      if(biom_format == FALSE){
-        temp <- read.table(file=file,header = T,sep = '\t',quote="")
-      }else if(biom_format == TRUE){
-        biom_data <- biomformat::biom(biomformat::read_hdf5_biom(biom_file=file)) 
-        biom_df <- biom_data %>%
-          biomformat::biom_data() %>%
-          as.matrix() %>% 
-          as.data.frame() %>%
-          tibble::rownames_to_column('otuid')
-        tax_data <- biomformat::observation_metadata(biom_data) %>% tidyr::unite(col = "feature", everything(), sep = ";") %>%
-          tibble::rownames_to_column('otuid')
-        temp <- dplyr::left_join(biom_df,tax_data,by='otuid') %>%
-          dplyr::select(-otuid) %>%
-          dplyr::select(feature,everything()) 
-      }else{
-        stop("Parameter biom_format must be TRUE or FALSE!")
-      } 
-    }     
-
-    colnames(temp)[1] <- 'feature'
-    temp[["feature"]] <- gsub('; ', ';', temp[["feature"]])
-    temp[["feature"]] <- gsub(' ;', ';', temp[["feature"]])
-    temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
-    rownames(temp) <- NULL # necessary!
-
-    ## Mistake-proofing
-    strings_to_remove1 <- c('d__','k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__')
-    strings_to_remove2 <- c('d_','k_', 'p_', 'c_', 'o_', 'f_', 'g_', 's_')
-    for (i in strings_to_remove1) {
-      temp[["feature"]] <- gsub(i, '', temp[["feature"]])
-    }
-    for (i in strings_to_remove2) {
-      temp[["feature"]] <- gsub(i, '', temp[["feature"]])
-    }
-    temp[["feature"]] <- gsub(';__', ';', temp[["feature"]])
-    temp[["feature"]] <- gsub(';_', ';', temp[["feature"]])
-    temp %<>%
-      dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_")) 
-
-    if (is.null(duplicate_feature)){
-      check_duplicated_feature <- any(duplicated(temp$feature))
-      if(check_duplicated_feature){
-        duplicate_feature <- TRUE
-        message("The duplicated name in the feature have been detected. Parameter duplicate_feature is forced to be TRUE.")
-      }else{
-      duplicate_feature <- FALSE
-      }
-    }
-
-    if(duplicate_feature==FALSE){
-
-      temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>% 
-        dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., "")) 
-      colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
-      temp_name <- data.frame(feature = temp$feature,temp_name) %>%
-        .impute_tax() ## impute the NA tax
-      temp  %<>% tibble::column_to_rownames('feature') %>% as.matrix()
-      deposit <- SummarizedExperiment(assays=list(counts=temp),
-                                      rowData = temp_name)
-    }else if(duplicate_feature==TRUE){
-      
-      temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>%
-        dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))
-      colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
-      temp_name <- data.frame(feature = temp$feature,temp_name) %>%
-        .impute_tax()  %>% ## impute the NA tax
-        dplyr::mutate(feature = paste0('feature_',1:nrow(temp_name)))
-      temp  %<>% 
-        dplyr::mutate(feature = paste0('feature_',1:nrow(temp))) %>%
-        tibble::column_to_rownames('feature') %>% as.matrix()
-      
-      deposit <- SummarizedExperiment(assays=list(counts=temp),
-                                      rowData = temp_name)
     }else{
-      stop("Parameter duplicate_feature must be TRUE or FALSE!")
+      if (!is.null(file_format)) {
+        switch(file_format,
+               biom={
+                 biom_data <- biomformat::biom(biomformat::read_hdf5_biom(biom_file=file)) 
+                 biom_df <- biom_data %>%
+                   biomformat::biom_data() %>%
+                   as.matrix() %>% 
+                   as.data.frame() %>%
+                   tibble::rownames_to_column('otuid')
+                 tax_data <- biomformat::observation_metadata(biom_data) %>% tidyr::unite(col = "feature", everything(), sep = ";") %>%
+                   tibble::rownames_to_column('otuid')
+                 temp <- dplyr::left_join(biom_df,tax_data,by='otuid') %>%
+                   dplyr::select(-otuid) %>%
+                   dplyr::select(feature,everything()) 
+               },
+               qzv={
+                 tmpdir <- tempdir()
+                 unzipfiles <- unzip(file, exdir=tmpdir)
+                 data_file <- unzipfiles[grep("level-7.csv", unzipfiles)]
+                 temp <- read.csv(data_file,header = T,row.names=1,check.names=FALSE) %>%  # check.names is to properly read ; in column names
+                   t() %>% as.data.frame() %>%
+                   tibble::rownames_to_column('feature') 
+               }, 
+               {
+                  stop('parameter file_format must be NULL, biom or qzv')
+               }
+ 
+        )        
+      }else{
+        temp <- read.table(file=file,header = T,sep = '\t',quote="")
+      }
+  }
+  colnames(temp)[1] <- 'feature'
+  temp[["feature"]] <- gsub('; ', ';', temp[["feature"]])
+  temp[["feature"]] <- gsub(' ;', ';', temp[["feature"]])
+  temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
+  rownames(temp) <- NULL # necessary!
+  
+  ## Mistake-proofing
+  strings_to_remove1 <- c('d__','k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__')
+  strings_to_remove2 <- c('d_','k_', 'p_', 'c_', 'o_', 'f_', 'g_', 's_')
+  for (i in strings_to_remove1) {
+    temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+  }
+  for (i in strings_to_remove2) {
+    temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+  }
+  temp[["feature"]] <- gsub(';__', ';', temp[["feature"]])
+  temp[["feature"]] <- gsub(';_', ';', temp[["feature"]])
+  temp %<>%
+    dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_")) 
+  
+  if (is.null(duplicate_feature)){
+    check_duplicated_feature <- any(duplicated(temp$feature))
+    if(check_duplicated_feature){
+      duplicate_feature <- TRUE
+      message("The duplicated name in the feature have been detected. Parameter duplicate_feature is forced to be TRUE.")
+    }else{
+      duplicate_feature <- FALSE
     }
-
+  }
+  
+  if(duplicate_feature==FALSE){
+    
+    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>% 
+      dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., "")) 
+    colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
+    temp_name <- data.frame(feature = temp$feature,temp_name) %>%
+      .impute_tax() ## impute the NA tax
+    temp  %<>% tibble::column_to_rownames('feature') %>% as.matrix()
+    deposit <- SummarizedExperiment(assays=list(counts=temp),
+                                    rowData = temp_name)
+  }else if(duplicate_feature==TRUE){
+    
+    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>%
+      dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))
+    colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
+    temp_name <- data.frame(feature = temp$feature,temp_name) %>%
+      .impute_tax()  %>% ## impute the NA tax
+      dplyr::mutate(feature = paste0('feature_',1:nrow(temp_name)))
+    temp  %<>% 
+      dplyr::mutate(feature = paste0('feature_',1:nrow(temp))) %>%
+      tibble::column_to_rownames('feature') %>% as.matrix()
+    
+    deposit <- SummarizedExperiment(assays=list(counts=temp),
+                                    rowData = temp_name)
+  }else{
+    stop("Parameter duplicate_feature must be TRUE or FALSE!")
+  }
+  
   if (!is.null(assay_name)) {
     assayNames(deposit, 1) <- assay_name
   }
-  return(deposit)
-  }
-}
-
+ }
+ return(deposit) 
+}  
 #' Import gene data into SummariseExperiment
 #'
 #' @param file A file path. The file should be deposited in txt format.
@@ -346,12 +361,12 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
 EMP_easy_taxonomy_import <- function(file=NULL,data=NULL,assay='experiment',assay_name=NULL,coldata=NULL,
-                                     humann_format=FALSE,biom_format=FALSE,duplicate_feature=NULL,output='MAE',
-                                     sep=if (humann_format == "FALSE") ';' else '|') {
+                                     humann_format=FALSE,file_format=NULL,duplicate_feature=NULL,output='MAE',
+                                     sep=if (humann_format == TRUE) '|' else ';') {
   
   sampleID <- assay_data <- SE_object <- NULL
 
-  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,biom_format=biom_format,duplicate_feature=duplicate_feature,assay_name=assay_name,sep=sep)                                    
+  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,file_format=file_format,duplicate_feature=duplicate_feature,assay_name=assay_name,sep=sep)                                    
   
   sampleID <-  dimnames(SE_object)[[2]]                                 
   if (output == 'SE') {
@@ -427,8 +442,8 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @param assay A character string. Set the experiment name.(default:experiment)
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param sampleID A series of character strings. This parameter helps identify the assay and rowdata only when type = 'normal'.
-#' @param humann_format A boolean. Whether the function improt the data according to the humann format.
-#' @param biom_format A boolean. Whether the function improt microbioal data in the biom format.
+#' @param file_format A string including biom and gzv.
+#' @param humann_format A boolean. Whether the function import the data in the Metaphlan or Humann format.
 #' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param coldata A dataframe containing one column informantion at least.
 #' @param sep The field separator character. Only activated when type =''tax. Values on each line of the file are separated by this character. (defacult:'|') 
@@ -436,17 +451,17 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @rdname EMP_easy_import
 #' @return SummmariseExperiment or MultiAssayExperiment object
 #' @export
-#'
+#' @details Paramter file_format and humann_format help the function import data properly. Data in humann format is usually is generated from Metaphlan and Humann. Data in biom format is usually is generated from Qiime1. Data in qzv format is usually is generated from Qiime2.
 #' @examples
 #' # example
 
 EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,sampleID=NULL,coldata=NULL,
-                            humann_format=FALSE,biom_format=FALSE,duplicate_feature=NULL,output='MAE',
-                            sep=if (humann_format == "FALSE") ';' else '|'){
+                            file_format=NULL,humann_format=FALSE,duplicate_feature=NULL,output='MAE',
+                            sep=if (humann_format == "TRUE") '|' else ';'){
   obj <- NULL
   switch(type,
          "tax" = {obj <- EMP_easy_taxonomy_import(file=file,data=data,assay=assay,assay_name=assay_name,coldata=coldata,
-                                                  humann_format=humann_format,biom_format=biom_format,duplicate_feature=duplicate_feature,output=output,sep=sep)},
+                                                  humann_format=humann_format,file_format=file_format,duplicate_feature=duplicate_feature,output=output,sep=sep)},
          "ko" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
                                                   humann_format=humann_format,output=output)},
          "ec" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,

@@ -8,10 +8,10 @@ EMP_taxonomy_import(
   file = NULL,
   data = NULL,
   humann_format = FALSE,
-  biom_format = FALSE,
+  file_format = NULL,
   assay_name = NULL,
   duplicate_feature = NULL,
-  sep = if (humann_format == "FALSE") ";" else "|"
+  sep = if (humann_format == "TRUE") "|" else ";"
 )
 }
 \arguments{
@@ -19,9 +19,9 @@ EMP_taxonomy_import(
 
 \item{data}{A dataframe.The row must be the feature and the column is the sample.}
 
-\item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
+\item{humann_format}{A boolean. Whether the function import the data in the Metaphlan or Humann format.}
 
-\item{biom_format}{A boolean. Whether the function improt microbioal data in the biom format.}
+\item{file_format}{A string including biom and gzv.}
 
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
 
@@ -34,6 +34,9 @@ SummmariseExperiment object
 }
 \description{
 Import microbial data into SummariseExperiment
+}
+\details{
+Paramter file_format and humann_format help the function import data properly. Data in humann format is usually is generated from Metaphlan and Humann. Data in biom format is usually is generated from Qiime1. Data in qzv format is usually is generated from Qiime2.
 }
 \examples{
 # add example

@@ -12,11 +12,11 @@ EMP_easy_import(
   assay_name = NULL,
   sampleID = NULL,
   coldata = NULL,
+  file_format = NULL,
   humann_format = FALSE,
-  biom_format = FALSE,
   duplicate_feature = NULL,
   output = "MAE",
-  sep = if (humann_format == "FALSE") ";" else "|"
+  sep = if (humann_format == "TRUE") "|" else ";"
 )
 }
 \arguments{
@@ -34,9 +34,9 @@ EMP_easy_import(
 
 \item{coldata}{A dataframe containing one column informantion at least.}
 
-\item{humann_format}{A boolean. Whether the function improt the data according to the humann format.}
+\item{file_format}{A string including biom and gzv.}
 
-\item{biom_format}{A boolean. Whether the function improt microbioal data in the biom format.}
+\item{humann_format}{A boolean. Whether the function import the data in the Metaphlan or Humann format.}
 
 \item{duplicate_feature}{A boolean. Whether the feature exist the dupicated name.}
 
@@ -49,6 +49,9 @@ SummmariseExperiment or MultiAssayExperiment object
 }
 \description{
 Easily import data into SummariseExperiment or MultiAssayExperiment
+}
+\details{
+Paramter file_format and humann_format help the function import data properly. Data in humann format is usually is generated from Metaphlan and Humann. Data in biom format is usually is generated from Qiime1. Data in qzv format is usually is generated from Qiime2.
 }
 \examples{
 # example
