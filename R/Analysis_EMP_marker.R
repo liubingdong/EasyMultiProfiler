@@ -33,29 +33,33 @@
 .EMP_Boruta_analysis_m <- memoise::memoise(.EMP_Boruta_analysis)
 
 #' @importFrom randomForest randomForest
-
 .EMP_rf_analysis <- function(obj,seed=123,estimate_group,...) {
+
   assay_data <- coldata <- tran_data <- randomforest_model <- feature_importance <- check_y <- primary <- NULL
   IncNodePurity <- MeanDecreaseAccuracy <- MeanDecreaseGini<- NULL
   assay_data <- obj %>% .get.assay.EMPT()
   coldata <- obj %>% .get.mapping.EMPT() %>%
     dplyr::select(primary,{{estimate_group}}) %>%
-    dplyr::rename(Group = {{estimate_group}})
+    dplyr::rename(group = {{estimate_group}})
   feature_name <- colnames(assay_data)[-1]
   tran_data  <- dplyr::left_join(assay_data,coldata,by='primary') %>% 
     tibble::column_to_rownames('primary')
   
   
-  if (class(tran_data$Group) == 'numeric' | class(tran_data$Group) == 'integer') {
+  if (class(tran_data$group) == 'numeric' | class(tran_data$group) == 'integer') {
     check_y <- 'regression'
-  }else if (class(tran_data$Group) == 'character' | class(tran_data$Group) == 'factor') {
+  }else if (class(tran_data$group) == 'character' | class(tran_data$group) == 'factor') {
     check_y <- 'classify'
-    tran_data$Group <- factor(tran_data$Group)
+    tran_data$group <- factor(tran_data$group)
   }
   
-  colnames(tran_data) <- c(paste0('V',1:(ncol(tran_data)-1)),'Group')
+  rlang::check_installed(c('BiocManager'), reason = 'for .EMP_rf_analysis().', action = install.packages) 
+  rlang::check_installed(c('janitor'), reason = 'for .EMP_rf_analysis().', action = BiocManager::install)
+
+  #colnames(tran_data) <- c(paste0('V',1:(ncol(tran_data)-1)),'Group')
+  tran_data <- janitor::clean_names(tran_data) # clean bad names for rf, or error.
   set.seed(seed)
-  randomforest_model <- randomForest(Group~.,data=tran_data,importance=TRUE,...)
+  randomforest_model <- randomForest(group~.,data=tran_data,importance=TRUE,...)
   if (check_y == 'classify') {
     feature_importance <- randomforest_model$importance %>% as.data.frame() %>%
       dplyr::select(MeanDecreaseAccuracy,MeanDecreaseGini) %>%

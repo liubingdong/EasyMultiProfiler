@@ -70,7 +70,8 @@ Suggests:
     mitch (>= 1.14.0),
     kableExtra (>= 1.3.4),
     formattable (>= 0.2.1),
-    glmnet (>= 4.1.8)
+    glmnet (>= 4.1.8),
+    janitor
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppParallel
 NeedsCompilation: yes
