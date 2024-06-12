@@ -91,6 +91,9 @@ setMethod("show", "EMPT",
                    "EMP_assay_boxplot" = {
                      .show_EMP_assay_boxplot(object,.get.plot_specific.EMPT(object))
                    },
+                   "EMP_structure_plot" = {
+                     .show_EMP_structure_plot(object,.get.plot_specific.EMPT(object))
+                   },
                    "EMP_enrich_analysis_dotplot" = {
                      .show_EMP_dotplot_enrich(object,.get.plot_specific.EMPT(object))
                    },

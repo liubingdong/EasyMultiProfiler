@@ -149,6 +149,7 @@ setClass("EMPT",
 
 setClass("EMP_assay_data",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_assay_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
+setClass("EMP_structure_plot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 
 setClass("EMP_alpha_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_alpha_analysis_boxplot",contains = c("EMP_alpha_analysis","EMPT","SummarizedExperiment"))
@@ -243,6 +244,59 @@ setMethod("EMP_assay_extract","EMPT",function(obj,pattern_ref,pattern,exact,acti
 
 
 
+
+#' Structure plot for EMPT result
+#'
+#' @param ... ...
+#' @rdname EMP_structure_plot
+#'
+#' @return EMPT object
+#' @export
+#'
+#' @examples
+#' data(MAE)
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_decostand(method = 'relative') |>
+#'   EMP_collapse(estimate_group = 'Class',collapse_by = 'row') |>
+#'   EMP_structure_plot(top_num=10)
+#' # merge the data by group information 
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_decostand(method = 'relative') |>
+#'   EMP_collapse(estimate_group = 'Class',collapse_by = 'row') |>
+#'   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') |>
+#'   EMP_structure_plot(top_num=10)
+#'
+#' # plot by group information
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_decostand(method = 'relative') |>
+#'   EMP_collapse(estimate_group = 'Class',collapse_by = 'row') |>
+#'   EMP_structure_plot(top_num=10,estimate_group='Sex')
+#'     
+#' MAE |>
+#'   EMP_assay_extract('host_gene') |>
+#'   EMP_identify_assay(method = 'edgeR') |>
+#'   EMP_structure_plot(top_num=10)
+
+setGeneric("EMP_structure_plot",function(obj, ...) standardGeneric("EMP_structure_plot"))
+
+#' @param ... ...
+#' @rdname EMP_structure_plot
+
+setMethod("EMP_structure_plot","EMP_assay_data",function(obj, ...){
+  EMP_structure_plot.EMP_assay_data(obj, ...)
+})
+
+#' @param ... ...
+#' @rdname EMP_structure_plot
+setMethod("EMP_structure_plot","EMP_decostand",function(obj, ...){
+  EMP_structure_plot.EMP_assay_data(obj, ...)
+})
+
+
+
 #' Boxplot for EMPT result
 #'
 #' @param ... ...
@@ -270,7 +324,6 @@ setGeneric("EMP_boxplot",function(obj, ...) standardGeneric("EMP_boxplot"))
 #' @rdname EMP_boxplot
 
 setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj, ...){
-  # EMP_boxplot_alpha(obj,method,estimate_group,group_level,
   EMP_boxplot.EMP_alpha_analysis(obj, ...)
 })
 

@@ -19,7 +19,7 @@ EMP_boxplot(obj, ...)
 \S4method{EMP_boxplot}{EMP_decostand}(obj, ...)
 
 EMP_boxplot.EMP_alpha_analysis(
-  EMPT,
+  obj,
   plot_category = 1,
   seed = 123,
   method = "wilcox.test",
@@ -35,7 +35,7 @@ EMP_boxplot.EMP_alpha_analysis(
 )
 
 EMP_boxplot.EMP_assay_data(
-  EMPT,
+  obj,
   plot_category = 1,
   seed = 123,
   method = "wilcox.test",
@@ -53,8 +53,6 @@ EMP_boxplot.EMP_assay_data(
 \item{obj}{EMPT object}
 
 \item{...}{...}
-
-\item{EMPT}{Object in EMPT format.}
 
 \item{plot_category}{An interger.More plot style.(under constrution)}
 

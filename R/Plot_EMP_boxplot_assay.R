@@ -69,12 +69,9 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 }
 
 
-
-
-#' @param EMPT Object in EMPT format.
+#' @param obj EMPT object
 #' @param plot_category An interger.More plot style.(under constrution)
 #' @param seed An interger. Set the random seed to the plot.
-#' @param obj EMPT object
 #' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
 #' @param group_level A string vector. Set the group order in the plot.
@@ -87,17 +84,17 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_boxplot
 
-EMP_boxplot.EMP_assay_data <- function(EMPT,plot_category = 1,seed =123,method = 'wilcox.test',
+EMP_boxplot.EMP_assay_data <- function(obj,plot_category = 1,seed =123,method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()') {
   #call <- match.call()
-  .get.plot_category.EMPT(EMPT) <- plot_category
+  .get.plot_category.EMPT(obj) <- plot_category
   #.get.history.EMPT(EMPT) <- call
-  switch(.get.plot_category.EMPT(EMPT),
+  switch(.get.plot_category.EMPT(obj),
          "1" = {
-           withr::with_seed(seed,EMP_boxplot_assay_default(EMPT,method = method,
+           withr::with_seed(seed,EMP_boxplot_assay_default(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
                                ncol = ncol,show = show,palette = palette,
                                html_width=html_width,html_height=html_height,
@@ -112,17 +109,17 @@ EMP_boxplot.EMP_assay_data <- function(EMPT,plot_category = 1,seed =123,method =
 
 }
 
-EMP_boxplot.EMP_decostand <- function(EMPT,plot_category = 1,seed =123,method = 'wilcox.test',
+EMP_boxplot.EMP_decostand <- function(obj,plot_category = 1,seed =123,method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()') {
   #call <- match.call()
-  .get.plot_category.EMPT(EMPT) <- plot_category
+  .get.plot_category.EMPT(obj) <- plot_category
   #.get.history.EMPT(EMPT) <- call
-  switch(.get.plot_category.EMPT(EMPT),
+  switch(.get.plot_category.EMPT(obj),
          "1" = {
-           withr::with_seed(seed,EMP_boxplot_assay_default(EMPT,method = method,
+           withr::with_seed(seed,EMP_boxplot_assay_default(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
                                ncol = ncol,show = show,palette = palette,
                                html_width=html_width,html_height=html_height,
