@@ -87,11 +87,6 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_boxplot
 
-#' 
-#'
-#'
-#' @examples
-#' # add example
 EMP_boxplot.EMP_assay_data <- function(EMPT,plot_category = 1,seed =123,method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                ncol = NULL,show = 'pic',palette = NULL,

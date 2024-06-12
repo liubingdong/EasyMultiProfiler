@@ -14,11 +14,8 @@
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_boxplot
 #' @importFrom withr with_seed
-#'
-#' @export
-#'
-#' @examples
-#' # add example
+
+
 EMP_boxplot.EMP_alpha_analysis <- function(EMPT,plot_category = 1,seed =123,method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                ncol = NULL,select_metrics=NULL,show = 'pic',palette = NULL,

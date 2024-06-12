@@ -98,6 +98,4 @@ MAE |>
   EMP_assay_extract('taxonomy') |> 
   EMP_alpha_analysis()|>
   EMP_boxplot(method='t.test',estimate_group='Group')
-# add example
-# add example
 }
