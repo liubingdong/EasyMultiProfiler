@@ -336,7 +336,7 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
   
   result_num <-  length(EMPT@deposit)
   
-  x <- .get.result.EMPT(EMPT)
+  x <- .get.result.EMPT(EMPT,info = 'EMP_assay_data')
   assay_dim <- .get.assay.EMPT(EMPT) %>% dim()
 
   total_nrows <-  nrow(x)

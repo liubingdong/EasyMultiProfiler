@@ -76,7 +76,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
 
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
 
-  alpha_data <- .get.result.EMPT(EMPT) %>%
+  alpha_data <- .get.result.EMPT(EMPT,info='EMP_alpha_analysis') %>%
     dplyr::full_join(mapping,by= 'primary')
 
   group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
@@ -105,12 +105,14 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
     geom_boxplot(outlier.color=NA) +
     ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,position = position_jitter(height = .00000001))+
     ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
-    facet_wrap(ID~., scales = 'free', strip.position = 'right',ncol = ncol) +
+    facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
     xlab(NULL) +
     ylab("Alpha Metrics") +
     ggtitle('Alpha analysis Plot') +
-    scale_fill_manual(values = col_values) +
-    theme_bw() + eval(parse(text = paste0(mytheme)))
+    scale_fill_manual(values = col_values) + 
+    theme_bw() + 
+    theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
+    eval(parse(text = paste0(mytheme)))
 
 
   alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
@@ -151,7 +153,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
 #     geom_boxplot(outlier.color=NA,shape = shape,alpha=0.5) +
 #     ggiraph::geom_jitter_interactive(aes(tooltip = value),shape=21,position = position_jitter(height = .00000001))+
 #     ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
-#     facet_wrap(ID~., scales = 'free', strip.position = 'right') +
+#     facet_wrap(ID~., scales = 'free', strip.position = 'top') +
 #     xlab(NULL) +
 #     ylab("Alpha Metrics") +
 #     ggtitle('Alpha analysis Plot') +

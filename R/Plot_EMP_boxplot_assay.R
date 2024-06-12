@@ -22,7 +22,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
 
-  data <-.get.result.EMPT(EMPT) %>% dplyr::left_join(mapping,by ='primary')
+  data <-.get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% dplyr::left_join(mapping,by ='primary')
 
   group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
   #compare <- plyr::alply(group_combn,2)
@@ -42,11 +42,13 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
     geom_boxplot(outlier.color=NA) +
     ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,position = position_jitter(height = .00000001))+
     ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
-    facet_wrap(ID~., scales = 'free', strip.position = 'right',ncol = ncol) +
-    xlab(NULL) +
+    facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
+    xlab(NULL) + 
     ggtitle('Feature Boxplot') +
     scale_fill_manual(values = col_values) +
-    theme_bw() + eval(parse(text = paste0(mytheme)))
+    theme_bw() + 
+    theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
+    eval(parse(text = paste0(mytheme)))
 
 
   data_plot[['html']] <- ggiraph::girafe(code = print(data_plot[['pic']]),width = html_width,height = html_height)

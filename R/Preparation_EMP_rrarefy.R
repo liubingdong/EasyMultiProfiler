@@ -4,7 +4,7 @@
   trim_sample_id <- NULL
   trim_feature_id <- NULL
   message_info <- list()
-  assay_data <- .get.result.EMPT(EMPT) %>% tibble::column_to_rownames('primary') %>% round(digits = 0)
+  assay_data <- .get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% tibble::column_to_rownames('primary') %>% round(digits = 0)
   total_sample_num <- nrow(assay_data)
   total_feature_num <- ncol(assay_data )
   min_raresize <- min(rowSums(assay_data))

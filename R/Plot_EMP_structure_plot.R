@@ -32,17 +32,17 @@ EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate
   if (!is.null(estimate_group)) {
     data_plot[['pic']]  <- ggplot(top_str_data, aes(x=primary,y=value, fill = feature))+  geom_col(position = 'stack', width = 0.8) +
       scale_fill_manual(values =col_values) +
-      facet_wrap({{estimate_group}}, scales = 'free_x', ncol = ncol,strip.position = 'right') +
+      facet_wrap({{estimate_group}}, scales = 'free_x', ncol = ncol,strip.position = 'top') +
       theme(panel.grid = element_blank(), panel.background = element_rect(color = 'black', fill = 'transparent'), strip.text = element_text(size = 12)) +
       theme(axis.text = element_text(size = 5), axis.title = element_text(size = 13), legend.title = element_blank(), legend.text = element_text(size = 11)) +
-      theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
+      xlab(NULL) + theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       eval(parse(text = paste0(mytheme)))
   }else{
     data_plot[['pic']]  <- ggplot(top_str_data, aes(x=primary,y=value, fill = feature))+  geom_col(position = 'stack', width = 0.8) +
       scale_fill_manual(values =col_values) +
       theme(panel.grid = element_blank(), panel.background = element_rect(color = 'black', fill = 'transparent'), strip.text = element_text(size = 12)) +
       theme(axis.text = element_text(size = 5), axis.title = element_text(size = 13), legend.title = element_blank(), legend.text = element_text(size = 11)) +
-      theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
+      xlab(NULL) + theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       eval(parse(text = paste0(mytheme)))
   }
   
