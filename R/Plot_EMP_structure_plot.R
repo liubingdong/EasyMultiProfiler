@@ -26,6 +26,12 @@ EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate
       names_to = 'feature',
       values_to = "value"
     ) 
+
+  ## In case that data contains negative value of feature
+  if (any(top_str_data$value <0)) {
+    stop("EMP_structure_plot dont allow negative value, please check the assay data!")
+  }
+
   ## In case that data only contain one feature
   if (dplyr::n_distinct(top_str_data$feature) >=2) {
     top_str_data <- top_str_data %>% dplyr::mutate(feature = forcats::fct_relevel(factor(feature), "Others", after = Inf))
