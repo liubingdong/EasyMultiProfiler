@@ -25,8 +25,11 @@ EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate
       cols = !dplyr::any_of(c('primary',!!estimate_group)),
       names_to = 'feature',
       values_to = "value"
-    ) %>%
-    dplyr::mutate(feature = forcats::fct_relevel(factor(feature), "Others", after = Inf))
+    ) 
+  ## In case that data only contain one feature
+  if (dplyr::n_distinct(top_str_data$feature) >=2) {
+    top_str_data <- top_str_data %>% dplyr::mutate(feature = forcats::fct_relevel(factor(feature), "Others", after = Inf))
+  }
   
   data_plot <- list()
   if (!is.null(estimate_group)) {
