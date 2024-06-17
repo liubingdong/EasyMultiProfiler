@@ -3,6 +3,12 @@
 #' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred).
 #' @param show A character string. Show inluding all, sig and pvalue.(Only supported for EMP_cor_analysis and EMP_WGCNA_cor_analysis)
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param clust_row A boolean. Whether the function clust the row or not. (default:FALSE) 
+#' @param clust_col A boolean. Whether the function clust the row or not. (default:FALSE) 
+#' @param dist_method A character string. More see stats::dist. (default: euclidean) 
+#' @param clust_method A character string. More see fastcluster::hclust (default: complete) 
+#' @param label_size A number. Set the label size. (default:4) 
+#' @param tree_size A number between 0 and 1. Set the clust tree size. (default:0.1) 
 #' @section Palettes:
 #' The following palettes are available for use with these scales:
 #' \describe{
@@ -21,7 +27,8 @@
 #'
 #'
 EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","darkred"),
-                            show='all',mytheme = 'theme()'){
+                            clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,
+                            show='all',label_size=4,mytheme = 'theme()'){
   var1 <- var2 <- coefficient <- EMP <- NULL
   
   if (inherits(obj,"EMP")) {
@@ -38,6 +45,18 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
   }
 
   df <- result[['cor_p']]
+  df_r <- result[['correlation']]
+  if (clust_col == TRUE) {
+    var1_clust <- fastcluster::hclust(dist(df_r,method=dist_method),method = clust_method)
+    var1_order <- df_r[var1_clust$order,] %>% rownames()  
+    df$var1 <- factor(df$var1,levels=var1_order)
+  }
+  
+  if (clust_row == TRUE) {
+    var2_clust <- fastcluster::hclust(dist(t(df_r),method=dist_method),method = clust_method)  
+    var2_order <- df_r[,var2_clust$order] %>% colnames()     
+    df$var2 <- factor(df$var2,levels=var2_order)
+  } 
 
   ra<-abs(df$pvalue)
   NN<-nrow(df)
@@ -70,14 +89,14 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text(size=label_size) + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_text(size=label_size) + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
@@ -89,7 +108,7 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
     if (check_palette) {
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_text(size=label_size) + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
@@ -97,12 +116,22 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
     }else{
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_text(size=label_size) + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
     }
   }
+
+  if (clust_row == TRUE) {
+    row_tree <- ggtree::ggtree(var2_clust,layout = "rectangular",branch.length = "none")
+    p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
+  }
+  
+  if (clust_col == TRUE) {
+    col_tree <- ggtree::ggtree(var1_clust,branch.length = "none") + ggtree::layout_dendrogram()
+    p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
+  } 
 
   .get.plot_deposit.EMP(EMP,info='EMP_cor_heatmap') <- p1
   .get.info.EMP(EMP) <- 'EMP_cor_heatmap'
@@ -117,11 +146,19 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
 #' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
 #' @param show A character string. Show inluding all, sig and pvalue.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param clust_row A boolean. Whether the function clust the row or not. (default:FALSE) 
+#' @param clust_col A boolean. Whether the function clust the row or not. (default:FALSE) 
+#' @param dist_method A character string. More see stats::dist. (default: euclidean) 
+#' @param clust_method A character string. More see fastcluster::hclust (default: complete) 
+#' @param label_size A number. Set the label size. (default:4) 
+#' @param tree_size A number between 0 and 1. Set the clust tree size. (default:0.1) 
 #' @rdname EMP_heatmap_plot
 #' @importFrom dplyr mutate
 #'
 #'
-EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show='all',mytheme = 'theme()'){
+EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
+                                clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,
+                                show='all',label_size=4,mytheme = 'theme()'){
   WGCNA_color <- WGCNA_module_elements <- `.` <- var2 <- var1 <- coefficient <- NULL
   call <- match.call()
   if (inherits(obj,"EMP")) {
@@ -140,7 +177,13 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
   }
 
   df <- result[['cor_p']]
-
+  df_r <- result[['correlation']]
+  if (clust_col == TRUE) {
+    var1_clust <- fastcluster::hclust(dist(df_r,method=dist_method),method = clust_method)
+    var1_order <- df_r[var1_clust$order,] %>% rownames()  
+    df$var1 <- factor(df$var1,levels=var1_order)
+  }
+  
   ra<-abs(df$pvalue)
   NN<-nrow(df)
 
@@ -168,8 +211,6 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
   df$rp<-ra
   df.label<-df$rp
 
-
-
  ## add module elements nums to y label
  net <- WGCNA_cluster_result[['WGCNA_cluster_result']]
  feature_modules <-WGCNA_cluster_result[['WGCNA_cluster_df']] %>%
@@ -180,17 +221,28 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
   dplyr::mutate(var2 = paste(var2,WGCNA_module_elements,sep='\n'))
 
 
+  if (clust_row == TRUE) {
+    df_r2 <- df %>%  dplyr::select(var1,var2,coefficient) %>%
+      tidyr::pivot_wider(names_from = 'var2',values_from = 'coefficient') %>%
+      tibble::column_to_rownames('var1')
+    
+    var2_clust <- fastcluster::hclust(dist(t(df_r2),method=dist_method),method = clust_method)  
+    var2_order <- df_r2[,var2_clust$order] %>% colnames()     
+    df$var2 <- factor(df$var2,levels=var2_order)
+  } 
+
+
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+      geom_text(size=label_size) + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
       geom_tile(color = "white") +
-      geom_text() + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+      geom_text(size=label_size) + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
@@ -202,7 +254,7 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
     if (check_palette) {
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+        geom_text(size=label_size) + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
@@ -210,13 +262,22 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
     }else{
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
         geom_tile(color = "white") +
-        geom_text() + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+        geom_text(size=label_size) + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
     }
   }
 
+  if (clust_row == TRUE) {
+    row_tree <- ggtree::ggtree(var2_clust,layout = "rectangular",branch.length = "none")
+    p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
+  }
+  
+  if (clust_col == TRUE) {
+    col_tree <- ggtree::ggtree(var1_clust,branch.length = "none") + ggtree::layout_dendrogram()
+    p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
+  } 
 
   if (inherits(obj,"EMP")) {
     EMP <- obj
@@ -239,10 +300,24 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),show=
 #' @param obj EMPT or EMP object
 #' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
 #' @param rotate A boolean. Whether rotate the heatmap or not. (Only activated for EMP_assay_data)
+#' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
+#' @param clust_row A boolean. Whether the function clust the row or not. (default:FALSE) 
+#' @param clust_col A boolean. Whether the function clust the row or not. (default:FALSE) 
+#' @param dist_method A character string. More see stats::dist. (default: euclidean) 
+#' @param clust_method A character string. More see fastcluster::hclust (default: complete) 
+#' @param tree_size A number between 0 and 1. Set the clust tree size. (default:0.1) 
+#' @param label_size A number. Set the label size. (default:4) 
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_heatmap_plot
+#' @importFrom forcats fct_relevel
+#' @importFrom aplot insert_top
+#' @importFrom aplot insert_left
+#' @importFrom ggtree ggtree
+#' @importFrom stats dist
+#' @importFrom fastcluster hclust
 
 EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkred"),rotate=FALSE,
+                                         clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,label_size=4,
                                          mytheme = 'theme()'){
   
   primary <- value <- NULL
@@ -255,23 +330,47 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   
   result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data')
   
+
+  if (clust_row == TRUE | clust_col == TRUE) {
+    result_clust <- result %>%
+       tibble::column_to_rownames('primary')
+
+    row_clust <- fastcluster::hclust(dist(result_clust,method=dist_method),method = clust_method)
+    col_clust <- fastcluster::hclust(dist(t(result_clust),method=dist_method),method = clust_method)  
+  
+    row_order <- result_clust[row_clust$order,] %>% rownames() 
+    col_order <- result_clust[,col_clust$order] %>% colnames()     
+  }
+
   df <- result %>% tidyr::pivot_longer(
     cols =  -primary,
     names_to = 'feature',
     values_to = "value"
   )
-  
-  
-  if (rotate == FALSE) {
+
+  if (rotate == TRUE) {
     xy_name <- c('feature','primary')
+    if (clust_row == TRUE) {
+      df$primary <- factor(df$primary,levels = row_order)
+    }
+    if (clust_col == TRUE) {
+      df$feature <- factor(df$feature,levels = col_order)      
+    }
   }else{
-    xy_name <- c('primary','feature')
+    xy_name <- c('primary','feature')  
+    if (clust_row == TRUE) {
+      df$primary <- factor(df$primary,levels = row_order)
+    }
+    if (clust_col == TRUE) {
+      df$feature <- factor(df$feature,levels = col_order)
+    }
   }
-  
+
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
       geom_tile(color = "white") +
       scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + 
+      xlab(NULL) + ylab(NULL) +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
@@ -279,6 +378,7 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
     p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
       geom_tile(color = "white") +
       scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + 
+      xlab(NULL) + ylab(NULL) +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
@@ -290,7 +390,8 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
     if (check_palette) {
       p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
         geom_tile(color = "white") +
-        scale_fill_distiller(palette=palette) +  
+        scale_fill_distiller(palette=palette) + 
+        xlab(NULL) + ylab(NULL) + 
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
@@ -299,12 +400,35 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
       p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
         geom_tile(color = "white") +
         scale_fill_steps(low = 'white',high = palette) + 
+        xlab(NULL) + ylab(NULL) +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
     }
   }
   
+  if (rotate == TRUE) {
+    #xy_name <- c('feature','primary')
+    if (clust_row == TRUE) {
+      row_tree <- ggtree::ggtree(row_clust,layout = "rectangular",branch.length = "none")
+      p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
+    }
+    if (clust_col == TRUE) {
+      col_tree <- ggtree::ggtree(col_clust,branch.length = "none") + ggtree::layout_dendrogram()
+      p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
+    }   
+  }else{
+    #xy_name <- c('primary','feature')  
+    if (clust_row == TRUE) {
+      row_tree <- ggtree::ggtree(col_clust,layout = "rectangular",branch.length = "none")
+      p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
+    }
+    if (clust_col == TRUE) {
+      col_tree <- ggtree::ggtree(row_clust,branch.length = "none") + ggtree::layout_dendrogram()
+      p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
+    }     
+  }
+
   .get.plot_deposit.EMPT(EMPT,info='EMP_assay_heatmap') <- p1
   .get.info.EMPT(EMPT) <- 'EMP_assay_heatmap'
   .get.history.EMPT(EMPT) <- call

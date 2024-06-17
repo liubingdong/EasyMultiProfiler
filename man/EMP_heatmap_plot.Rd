@@ -24,14 +24,26 @@ EMP_heatmap_plot(obj, ...)
 EMP_heatmap.EMP_cor_analysis(
   obj,
   palette = c("steelblue", "white", "darkred"),
+  clust_row = FALSE,
+  clust_col = FALSE,
+  dist_method = "euclidean",
+  clust_method = "complete",
+  tree_size = 0.1,
   show = "all",
+  label_size = 4,
   mytheme = "theme()"
 )
 
 EMP_heatmap.WGCNA(
   obj,
   palette = c("steelblue", "white", "darkred"),
+  clust_row = FALSE,
+  clust_col = FALSE,
+  dist_method = "euclidean",
+  clust_method = "complete",
+  tree_size = 0.1,
   show = "all",
+  label_size = 4,
   mytheme = "theme()"
 )
 
@@ -39,6 +51,12 @@ EMP_heatmap.EMP_assay_data(
   obj,
   palette = c("steelblue", "white", "darkred"),
   rotate = FALSE,
+  clust_row = FALSE,
+  clust_col = FALSE,
+  dist_method = "euclidean",
+  clust_method = "complete",
+  tree_size = 0.1,
+  label_size = 4,
   mytheme = "theme()"
 )
 }
@@ -49,7 +67,19 @@ EMP_heatmap.EMP_assay_data(
 
 \item{palette}{1-3 character string. Color palette. (default: steelblue, white, darkred)}
 
+\item{clust_row}{A boolean. Whether the function clust the row or not. (default:FALSE)}
+
+\item{clust_col}{A boolean. Whether the function clust the row or not. (default:FALSE)}
+
+\item{dist_method}{A character string. More see stats::dist. (default: euclidean)}
+
+\item{clust_method}{A character string. More see fastcluster::hclust (default: complete)}
+
+\item{tree_size}{A number between 0 and 1. Set the clust tree size. (default:0.1)}
+
 \item{show}{A character string. Show inluding all, sig and pvalue.}
+
+\item{label_size}{A number. Set the label size. (default:4)}
 
 \item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
 

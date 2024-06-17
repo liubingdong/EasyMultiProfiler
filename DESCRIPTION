@@ -9,6 +9,7 @@ Description: The EasyMultiProfiler package aims to offer a user-friendly and eff
 License: Artistic-2.0
 Encoding: UTF-8
 Imports: 
+    aplot,
     bigstatsr (>= 1.5.12),
     BiocManager (>= 1.30.22),    
     Boruta (>= 8.0.0),
@@ -25,6 +26,7 @@ Imports:
     ggsignif (>= 0.6.4),
     ggthemes (>= 5.1.0),
     ggrepel,
+    ggtree,
     glue (>= 1.7.0),
     gson (>= 0.1.0),
     impute (>= 1.76.0),
