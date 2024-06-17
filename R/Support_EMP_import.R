@@ -107,7 +107,9 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
                    as.matrix() %>% 
                    as.data.frame() %>%
                    tibble::rownames_to_column('otuid')
-                 tax_data <- biomformat::observation_metadata(biom_data) %>% tidyr::unite(col = "feature", everything(), sep = ";") %>%
+                 tax_data <- biomformat::observation_metadata(biom_data) %>% 
+                   dplyr::select(dplyr::starts_with('taxonomy')) %>%
+                   tidyr::unite(col = "feature", everything(), sep = ";") %>%
                    tibble::rownames_to_column('otuid')
                  temp <- dplyr::left_join(biom_df,tax_data,by='otuid') %>%
                    dplyr::select(-otuid) %>%
@@ -172,7 +174,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
                                     rowData = temp_name)
   }else if(duplicate_feature==TRUE){
     
-    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>%
+    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,row.names = NULL,header = FALSE) %>%
       dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))
     colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
