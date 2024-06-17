@@ -33,7 +33,7 @@ EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate
   }
 
   ## In case that data only contain one feature
-  if (dplyr::n_distinct(top_str_data$feature) >=2) {
+  if (dplyr::n_distinct(top_str_data$feature) >=2 & 'Others' %in% top_str_data$feature) {
     top_str_data <- top_str_data %>% dplyr::mutate(feature = forcats::fct_relevel(factor(feature), "Others", after = Inf))
   }
   
