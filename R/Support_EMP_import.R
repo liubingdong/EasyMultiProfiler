@@ -162,7 +162,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   
   if(duplicate_feature==FALSE){
     
-    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F) %>% 
+    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,row.names = NULL,header = FALSE) %>% 
       dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., "")) 
     colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
