@@ -226,7 +226,7 @@ as.EMP <- function(object,select=NULL) {
 #'
 #' @param obj Object in EMPT or EMP format.
 #'
-#' @return EMPT object
+#' @return list
 #' @export
 #'
 #' @examples
