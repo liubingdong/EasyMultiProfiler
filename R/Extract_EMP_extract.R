@@ -30,7 +30,7 @@
 
   if (!is.null(pattern)) {
     .get.row_info.EMPT(EMPT) %>%
-      dplyr::filter(.pattern_Dectect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact)) %>%
+      dplyr::filter(str_detect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact)) %>%
       dplyr::pull(feature)  -> id
 
     id_real <- intersect(colnames(assay_content),id) ## in case that no complete matched id in the EMP_rrarefy
@@ -84,7 +84,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
     if (!is.null(experiment)) {
       deposit <- rowData(obj[[experiment]]) %>% as.data.frame() %>% tibble::as_tibble()
       if (!is.null(pattern)) {
-        deposit %<>% dplyr::filter(.pattern_Dectect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact))
+        deposit %<>% dplyr::filter(str_detect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact))
       }
     }else {
       rowdata_list <- list()
@@ -95,7 +95,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
       deposit <- do.call(dplyr::bind_rows, c(rowdata_list,.id='experiment_name'))
       if (!is.null(pattern)) {
         deposit %<>%
-          dplyr::filter(.pattern_Dectect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact)) %>%
+          dplyr::filter(str_detect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact)) %>%
           dplyr::select_if(~!all(is.na(.))) ## Delete columns that are all NA
       }
     }
@@ -105,7 +105,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
     deposit <- rowData(EMPT) %>% as.data.frame() %>% tibble::as_tibble()
 
     if (!is.null(pattern)) {
-      deposit %<>% dplyr::filter(.pattern_Dectect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact))
+      deposit %<>% dplyr::filter(str_detect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact))
     }
   }else {
     stop("Please check the input data!")

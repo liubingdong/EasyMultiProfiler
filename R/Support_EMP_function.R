@@ -8,23 +8,25 @@
     return(result)
 }
 
-#' Title
+#' Multi-detect the presence/absence of a match
 #'
-#' @param pattern_ref Object in EMPT format.
-#' @param pattern A character string. Experiment name in the MultiAssayExperiment object.
-#' @param exact A boolean. Whether the extract use exact search method.
-#' @return xx object
+#' @param string A character vector.
+#' @param pattern Pattern to look for.
+#' @param exact A boolean. Whether search the pattern matched completely.
+#' @return Boolean vector
 #' @export
-#'
+#' @author Bingdong Liu
 #' @examples
-#' # add example
-.pattern_Dectect_multi <- function(pattern_ref,pattern,exact=F){
+#' text <- c('Bacilli_unclassfiled','Bacteroidia_uncuture','Other')
+#' str_detect_multi(text,c('Bacilli','bacteroidia'),exact=F) # Ignore the capital letter
+#' str_detect_multi(text,c('Bacilli','Bacteroidia'),exact=T) # Set the matched completely
+str_detect_multi <- function(string,pattern,exact=F){
   if (length(pattern) ==1) {
-    .pattern_Dectect(pattern_ref = pattern_ref,pattern = pattern,exact=exact)
+    .pattern_Dectect(pattern_ref = string,pattern = pattern,exact=exact)
   }else if (length(pattern) > 1){
     id_detect <-list()
     for (j in pattern) {
-      id_temp <- .pattern_Dectect(pattern_ref = pattern_ref,pattern = j,exact=exact)
+      id_temp <- .pattern_Dectect(pattern_ref = string,pattern = j,exact=exact)
       id_detect[[j]] <- id_temp
     }
     .combine_logical_vectors(id_detect)

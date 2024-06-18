@@ -65,8 +65,12 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_normal_import}} 
 	\item \code{\link{EMP_easy_import}} 
  }
+{Other useful function} : 
+\itemize{
+	\item \code{\link{CorRcpp}} 
+	\item \code{\link{str_detect_multi}} 
+ }
 }
-
 \seealso{
 Useful links:
 \itemize{
