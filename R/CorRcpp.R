@@ -10,7 +10,7 @@ NULL
 #' @rdname CorRcpp
 #' @return list
 #' @export
-#'
+#' @author Qiusheng Wu
 #' @examples
 #' data_df1 <- data.frame(
 #'   A = c(11, 23, 3, 45, 5),
@@ -46,7 +46,7 @@ CorRcpp <- function(x=x,y=NULL,type=c("pearson","spearman")) {
     corres <-  cp_cor_s(mat = as.matrix(x))
     corres$R_matrix <- as.data.frame(corres$R_matrix)
     corres$P_matrix <- as.data.frame(corres$P_matrix)
-    diag(corres$P_matrix) <- 0 ## adjust the P value in case of the same feature
+    corres$P_matrix[round(corres$R_matrix,9) == 1] <- 0 ## adjust the P value in case of the same feature
     row.names(corres$R_matrix) <- colnames(x)
     row.names(corres$P_matrix) <- colnames(x)
     colnames(corres$R_matrix) <- colnames(x)
@@ -67,23 +67,11 @@ CorRcpp <- function(x=x,y=NULL,type=c("pearson","spearman")) {
     corres <-  cp_cor_t(mat = as.matrix(x),mat2=as.matrix(y))
     corres$R_matrix <- as.data.frame(corres$R_matrix)
     corres$P_matrix <- as.data.frame(corres$P_matrix)
-
-    if(check_xy_duplicate(x,y)){
-      diag(corres$P_matrix) <- 0 ## adjust the P value in case of the same feature
-    }
-
-    corres[["P_matrix"]][is.na(corres[["P_matrix"]])] <- 0 ## advoid the NaN value in case of the same feature
-
+    corres$P_matrix[round(corres$R_matrix,9) == 1] <- 0 ## adjust the P value in case of the same feature
     row.names(corres$R_matrix) <- colnames(x)
     row.names(corres$P_matrix) <- colnames(x)
     colnames(corres$R_matrix) <- colnames(y)
     colnames(corres$P_matrix) <- colnames(y)
   }
   return(corres)
-}
-
-check_xy_duplicate <- function(x,y) {
-  rownames(x) <- colnames(x) <- NULL
-  rownames(y) <- colnames(y) <- NULL
-  identical(x, y)
 }

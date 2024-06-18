@@ -39,3 +39,6 @@ re <- CorRcpp(data_df1,data_df2,type = 'spearman')
 re$R_matrix # correlation value
 re$P_matrix # pvalue
 }
+\author{
+Qiusheng Wu
+}
