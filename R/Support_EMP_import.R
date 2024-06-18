@@ -84,6 +84,8 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @importFrom biomformat biom_data
 #' @importFrom utils read.csv
 #' @importFrom utils unzip
+#' @importFrom dplyr any_of
+#' @importFrom dplyr contains
 #' @return SummmariseExperiment object
 #' @details Paramter file_format and humann_format help the function import data properly. Data in humann format is usually is generated from Metaphlan and Humann. Data in biom format is usually is generated from Qiime1. Data in qzv format is usually is generated from Qiime2.
 #' @export
@@ -129,7 +131,16 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
  
         )        
       }else{
-        temp <- read.table(file=file,header = T,sep = '\t',quote="")
+        # the process below will support the level-7 microbial data and ASV/OTU raw table generated from biom
+        lines <- readLines(file,warn = FALSE)
+        ## if the first line with #, the line will be ignored
+        if (substring(lines[1], 1, 1) == "#") {
+          lines <- lines[-1]
+        }
+        ## use textConnection() to pass the content to the function read.table()
+        temp <- read.table(text = paste(lines, collapse = "\n"), header = TRUE,sep = '\t',comment.char="") %>%
+          dplyr::select(-any_of(contains(c('OTU ID','OTU.ID','OTU_ID','ASV ID','ASV.ID','ASV_ID')))) %>%
+          dplyr::select(where(is.character),everything())        
       }
   }
   colnames(temp)[1] <- 'feature'
