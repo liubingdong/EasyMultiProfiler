@@ -5,7 +5,7 @@
 \title{Standardization Methods}
 \usage{
 EMP_decostand(
-  x,
+  obj,
   experiment,
   method,
   bySample = TRUE,
@@ -17,11 +17,11 @@ EMP_decostand(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{A character string. Standardization method inluding relative(Equivalent to total in the vegan::decostand), integer, log, clr, alr, aclr,and more. Details see vegan::decostand.}
+\item{method}{A character string. Details see vegan::decostand.}
 
 \item{bySample}{A boolean. Whether the function decostand by the sample or feature.}
 
@@ -29,7 +29,7 @@ EMP_decostand(
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{pseudocount}{A number. The logarithm pseudocount used in method = "clr".(default=0.0000001)}
+\item{pseudocount}{A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001)}
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
@@ -41,6 +41,16 @@ EMPT object
 \description{
 Standardization Methods
 }
+\section{method}{
+
+The following method from vegan::decostand are available：
+\describe{
+  relative(total), max, frequency, normalize, range,
+  rank, standardize, pa, chi.square,
+  hellinger, log, alr, clr, rclr
+}
+}
+
 \examples{
 data(MAE)
 ## Transfer data into relative format.

@@ -45,15 +45,22 @@
 
 #' Standardization Methods
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param method A character string. Standardization method inluding relative(Equivalent to total in the vegan::decostand), integer, log, clr, alr, aclr,and more. Details see vegan::decostand.
+#' @param method A character string. Details see vegan::decostand.
 #' @param bySample A boolean. Whether the function decostand by the sample or feature.
 #' @param logbase An interger. The logarithm base used in method = "log".(default=2)
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
-#' @param pseudocount A number. The logarithm pseudocount used in method = "clr".(default=0.0000001)
+#' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001)
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param ... Further parameters passed to the function vegan::decostand.
+#' @section method:
+#' The following method from vegan::decostand are available：
+#' \describe{
+#'   relative(total), max, frequency, normalize, range,
+#'   rank, standardize, pa, chi.square,
+#'   hellinger, log, alr, clr, rclr
+#' }
 #'
 #' @return EMPT object
 #' @export
@@ -71,14 +78,14 @@
 #' ## Transfer data into logformat.
 #' MAE |>
 #'   EMP_decostand(experiment = 'geno_ec',method = 'log',logbase = 2) 
-EMP_decostand <- function(x,experiment,method,bySample=TRUE,logbase =2,use_cached = TRUE,pseudocount=0.0000001,action='add',...){
+EMP_decostand <- function(obj,experiment,method,bySample=TRUE,logbase =2,use_cached = TRUE,pseudocount=0.0000001,action='add',...){
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
-    x <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    x <- .as.EMPT(obj,
                      experiment = experiment)
     .get.method.EMPT(x) <- method
-  }else if(inherits(x,'EMPT')){
-    x <- x
+  }else if(inherits(obj,'EMPT')){
+    x <- obj
     .get.method.EMPT(x) <- method
     class(x) <- 'EMP_assay_data'
   }else {

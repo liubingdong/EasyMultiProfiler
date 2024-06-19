@@ -10,7 +10,7 @@ EMP_history(obj)
 \item{obj}{Object in EMPT or EMP format.}
 }
 \value{
-EMPT object
+list
 }
 \description{
 Get history from EMPT or EMP object
