@@ -5,7 +5,7 @@
 \title{Adjust experssion or abundance for unexpected bias or batch effect}
 \usage{
 EMP_adjust_abundance(
-  x,
+  obj,
   experiment,
   method = "combat_seq",
   use_cached = TRUE,
@@ -16,7 +16,7 @@ EMP_adjust_abundance(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or SummarisedExperiment format.}
+\item{obj}{Object in EMPT or SummarisedExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

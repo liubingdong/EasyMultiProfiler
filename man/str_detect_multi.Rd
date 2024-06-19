@@ -4,7 +4,7 @@
 \alias{str_detect_multi}
 \title{Multi-detect the presence/absence of a match}
 \usage{
-str_detect_multi(string, pattern, exact = F)
+str_detect_multi(string, pattern, exact = FALSE)
 }
 \arguments{
 \item{string}{A character vector.}
@@ -21,8 +21,8 @@ Multi-detect the presence/absence of a match
 }
 \examples{
 text <- c('Bacilli_unclassfiled','Bacteroidia_uncuture','Other')
-str_detect_multi(text,c('Bacilli','bacteroidia'),exact=F) # Ignore the capital letter
-str_detect_multi(text,c('Bacilli','Bacteroidia'),exact=T) # Set the matched completely
+str_detect_multi(text,c('Bacilli','bacteroidia'),exact=FALSE) # Ignore the capital letter
+str_detect_multi(text,c('Bacilli','Bacteroidia'),exact=TRUE) # Set the matched completely
 }
 \author{
 Bingdong Liu

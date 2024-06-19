@@ -4,10 +4,10 @@
 \alias{EMP_alpha_analysis}
 \title{Diversity Indices}
 \usage{
-EMP_alpha_analysis(x, experiment, use_cached = TRUE, action = "add", ...)
+EMP_alpha_analysis(obj, experiment, use_cached = TRUE, action = "add", ...)
 }
 \arguments{
-\item{x}{Object in EMPT format.}
+\item{obj}{Object in EMPT format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

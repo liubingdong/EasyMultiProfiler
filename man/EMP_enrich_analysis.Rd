@@ -5,7 +5,7 @@
 \title{KEGG enrichment for EMPT object}
 \usage{
 EMP_enrich_analysis(
-  x,
+  obj,
   condition,
   minGSSize = 1,
   maxGSSize = 500,
@@ -18,7 +18,7 @@ EMP_enrich_analysis(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{condition}{Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05}
 

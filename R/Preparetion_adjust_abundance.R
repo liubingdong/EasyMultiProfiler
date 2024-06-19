@@ -40,7 +40,7 @@
 
 #' Adjust experssion or abundance for unexpected bias or batch effect
 #'
-#' @param x Object in EMPT or SummarisedExperiment format.
+#' @param obj Object in EMPT or SummarisedExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
@@ -70,16 +70,16 @@
 #'   EMP_assay_extract(experiment='geno_ko') |>
 #'   EMP_adjust_abundance(.factor_unwanted = 'Region',.factor_of_interest = 'Group',
 #'                       method = 'limma_remove_batch_effect') 
-EMP_adjust_abundance <- function(x,experiment,
+EMP_adjust_abundance <- function(obj,experiment,
                                 method='combat_seq',use_cached=TRUE,
                                 .factor_unwanted,.factor_of_interest,action='add',...) {
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
-    x <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    x <- .as.EMPT(obj,
                   experiment = experiment)
     .get.method.EMPT(x) <- method
-  }else if(inherits(x,'EMPT')){
-    x <- x
+  }else if(inherits(obj,'EMPT')){
+    x <- obj
     .get.method.EMPT(x) <- method
     class(x) <- 'EMP_assay_data'
   }else {

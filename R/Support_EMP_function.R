@@ -18,9 +18,9 @@
 #' @author Bingdong Liu
 #' @examples
 #' text <- c('Bacilli_unclassfiled','Bacteroidia_uncuture','Other')
-#' str_detect_multi(text,c('Bacilli','bacteroidia'),exact=F) # Ignore the capital letter
-#' str_detect_multi(text,c('Bacilli','Bacteroidia'),exact=T) # Set the matched completely
-str_detect_multi <- function(string,pattern,exact=F){
+#' str_detect_multi(text,c('Bacilli','bacteroidia'),exact=FALSE) # Ignore the capital letter
+#' str_detect_multi(text,c('Bacilli','Bacteroidia'),exact=TRUE) # Set the matched completely
+str_detect_multi <- function(string,pattern,exact=FALSE){
   if (length(pattern) ==1) {
     .pattern_Dectect(pattern_ref = string,pattern = pattern,exact=exact)
   }else if (length(pattern) > 1){
@@ -41,7 +41,7 @@ str_detect_multi <- function(string,pattern,exact=F){
 }
 
 
-.pattern_Dectect <- function(pattern_ref,pattern,exact=F){
+.pattern_Dectect <- function(pattern_ref,pattern,exact=FALSE){
   if (exact == F) {
     pattern_ref <- tolower(pattern_ref)
     pattern <- tolower(pattern)

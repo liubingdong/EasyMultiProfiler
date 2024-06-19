@@ -66,7 +66,7 @@
 
 #' Rarefaction abundance or experssion Richness
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param raresize An interger. Subsample size for rarefying community.
 #' @param seed An interger. Set the random seed to the plot.(default:123)
@@ -90,13 +90,13 @@
 #' MAE |>
 #'   EMP_rrarefy(experiment = 'taxonomy',raresize=1000) # Set a specific threshold
 
-EMP_rrarefy <- function(x,experiment,raresize=NULL,seed=123,only_show_depth=FALSE,use_cached = TRUE,action = 'add',...) {
+EMP_rrarefy <- function(obj,experiment,raresize=NULL,seed=123,only_show_depth=FALSE,use_cached = TRUE,action = 'add',...) {
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
-    x <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    x <- .as.EMPT(obj,
                   experiment = experiment)
-  }else if(inherits(x,'EMPT')){
-    x <- x
+  }else if(inherits(obj,'EMPT')){
+    x <- obj
     class(x) <- 'EMP_assay_data'
   }else {
     stop('Please check the input data')

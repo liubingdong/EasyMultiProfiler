@@ -5,7 +5,7 @@
 \title{Fast Imputation of Missing Values by Chained Random Forests}
 \usage{
 EMP_impute(
-  x,
+  obj,
   experiment,
   coldata = TRUE,
   assay = FALSE,
@@ -20,7 +20,7 @@ EMP_impute(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

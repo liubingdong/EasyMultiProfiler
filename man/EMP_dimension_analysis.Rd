@@ -5,7 +5,7 @@
 \title{Dimension reduction of the abundance or experssion data}
 \usage{
 EMP_dimension_analysis(
-  x,
+  obj,
   experiment,
   method = "pcoa",
   distance = NULL,
@@ -15,7 +15,7 @@ EMP_dimension_analysis(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

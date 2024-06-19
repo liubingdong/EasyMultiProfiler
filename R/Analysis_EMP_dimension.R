@@ -131,7 +131,7 @@
 
 #' Dimension reduction of the abundance or experssion data
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method  A character string. Methods include pca, pcoa, pls, opls.
 #' @param distance A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist.
@@ -166,15 +166,15 @@
 #'   EMP_filter(feature_condition = pvalue < 0.05) |>
 #'   EMP_dimension_analysis(method = 'opls',estimate_group = 'Sex') |>
 #'   EMP_scatterplot(estimate_group='Sex',show='p12html',ellipse=0.6) ## Visualization
-EMP_dimension_analysis <- function(x,experiment,method='pcoa',distance=NULL,use_cached=TRUE,
+EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,use_cached=TRUE,
                                    estimate_group=NULL,action='add'){
   call <- match.call()
 
-  if (inherits(x,"MultiAssayExperiment")) {
-    EMPT <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(x,'EMPT')) {
-    EMPT <-x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
   }
 
   if (use_cached == F) {

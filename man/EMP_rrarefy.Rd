@@ -5,7 +5,7 @@
 \title{Rarefaction abundance or experssion Richness}
 \usage{
 EMP_rrarefy(
-  x,
+  obj,
   experiment,
   raresize = NULL,
   seed = 123,
@@ -16,7 +16,7 @@ EMP_rrarefy(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

@@ -24,7 +24,7 @@ EMP_multi_analysis(
 )
 }
 \arguments{
-\item{EMP}{EMP objetc}
+\item{EMP}{EMP object}
 
 \item{select}{A character string. The experiment name in the EMP object.}
 

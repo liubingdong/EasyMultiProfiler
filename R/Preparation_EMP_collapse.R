@@ -264,7 +264,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 
 #' Aggregates abundace or experssion from the same attributes in the coldata or rowdata
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param estimate_group A character string. Select the column in the rowdata or coldata to collapse. 
 #' @param method  A character string. Methods include mean, sum, median, min, max.
@@ -303,7 +303,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #'   EMP_collapse(experiment = 'untarget_metabol',collapse_by='row',na_string = c("NA", "null", "","-"),
 #'                estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
 #'   EMP_collapse(collapse_by='col',estimate_group = 'Group',method = 'mean',collapse_sep = '+')
-EMP_collapse <- function (x,experiment=NULL,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',action='add',use_cached=TRUE,...) {
+EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',action='add',use_cached=TRUE,...) {
 
   if (use_cached == FALSE) {
     memoise::forget(.EMP_collapse_byrow_m) %>% invisible()
@@ -311,11 +311,11 @@ EMP_collapse <- function (x,experiment=NULL,estimate_group=NULL,method='sum',na_
   }  
 
   if (collapse_by == 'row') {
-    deposit <- .EMP_collapse_byrow_m(x,experiment,
+    deposit <- .EMP_collapse_byrow_m(x=obj,experiment,
                                   estimate_group,method,
                                   na_string,collapse_sep,action,...)
   }else if (collapse_by == 'col') {
-    deposit <- .EMP_collapse_bycol_m(x,experiment,
+    deposit <- .EMP_collapse_bycol_m(x=obj,experiment,
                                   estimate_group,method,
                                   na_string,collapse_sep,action,...)
   }else{

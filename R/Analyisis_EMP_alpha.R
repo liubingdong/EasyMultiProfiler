@@ -43,7 +43,7 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis)
 
 #' Diversity Indices
 #'
-#' @param x Object in EMPT format.
+#' @param obj Object in EMPT format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
@@ -62,15 +62,15 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis)
 #' MAE |>
 #'   EMP_assay_extract(experiment='geno_ec') |> 
 #'   EMP_alpha_analysis()
-EMP_alpha_analysis <- function(x,experiment,use_cached = TRUE,action='add',...) {
+EMP_alpha_analysis <- function(obj,experiment,use_cached = TRUE,action='add',...) {
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (inherits(obj,"MultiAssayExperiment")) {
 
-    EMPT <- .as.EMPT(x,
+    EMPT <- .as.EMPT(obj,
                      experiment = experiment)
 
-  }else if(inherits(x,'EMPT')) {
-    EMPT <- x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
   }else {
     stop('Please check the input data!')
   }

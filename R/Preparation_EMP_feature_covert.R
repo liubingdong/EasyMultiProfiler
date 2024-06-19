@@ -113,7 +113,7 @@
 
 #' Covert featureID of gene experssion or compund abundance
 #'
-#' @param x EMPT or MultiAssayExperiment object.
+#' @param obj EMPT or MultiAssayExperiment object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include mean, sum, median, min, max. When multiple annotations appear on features, merge activate.
 #' @param from A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.
@@ -144,14 +144,14 @@
 #'                estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |> ## get the compound in KEGG format
 #'   EMP_feature_convert(from = 'KEGG',to='HMDB')
 
-EMP_feature_convert <- function(x,experiment,method='mean',from,to,species = "none",OrgDb = NULL,action='add'){
+EMP_feature_convert <- function(obj,experiment,method='mean',from,to,species = "none",OrgDb = NULL,action='add'){
   call <- match.call()
   check_result <- NULL
-  if (inherits(x,"MultiAssayExperiment")) {
-    EMPT <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(x,'EMPT')) {
-    EMPT <-x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
   }
   
   # Tolerate differences in capitalization.

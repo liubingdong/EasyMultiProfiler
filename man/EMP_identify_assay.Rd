@@ -5,7 +5,7 @@
 \title{Identify the most core experssion and abudnace from sparse data}
 \usage{
 EMP_identify_assay(
-  x,
+  obj,
   experiment,
   estimate_group = NULL,
   method = c("default", "edgeR"),
@@ -15,7 +15,7 @@ EMP_identify_assay(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

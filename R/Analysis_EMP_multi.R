@@ -1,7 +1,7 @@
 
 #' Multi analysis for diff reslut or enrichment
 #'
-#' @param EMP EMP objetc
+#' @param EMP EMP object
 #' @param select A character string. The experiment name in the EMP object.
 #' @param method A character string including feature, diff_feature_enrich and same_feature_enrich.
 #' @param combineFun A character string including enricher, ActivePathways and mitch.

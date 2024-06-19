@@ -182,7 +182,7 @@
 
 #' Identify the most core experssion and abudnace from sparse data
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param estimate_group A character string. Select the group name in the coldata to be calculated. When estimate_group = NULL or "none", the function will assume all samples belong to one group.
 #' @param method A character string.Methods include default, edgeR. Method default is from doi: 10.3389/fgene.2021.803627. Method edgeR in from edgeR::filterByExpr.
@@ -211,20 +211,20 @@
 #'   EMP_assay_extract('geno_ec') |>
 #'   EMP_identify_assay(method = 'edgeR',min = 10,min_ratio = 0.7) # consider all samples belong to one group
 #' 
-EMP_identify_assay <- function(x,experiment,estimate_group=NULL,
+EMP_identify_assay <- function(obj,experiment,estimate_group=NULL,
                                method=c('default','edgeR'),min=if (method == "edgeR") 10 else 0.001,
                                min_ratio = 0.7,action='add'){
   call <- match.call()
   switch(method,
          "default" = {
-           EMPT <- x %>% .EMP_assay_filter_default(experiment=experiment,
+           EMPT <- obj %>% .EMP_assay_filter_default(experiment=experiment,
                                                    estimate_group=estimate_group,
                                                    min=min,
                                                    min_ratio=min_ratio,
                                                    action='add')
          },
          "edgeR"={
-           EMPT <- x %>% .EMP_assay_filter_bulk(experiment=experiment,
+           EMPT <- obj %>% .EMP_assay_filter_bulk(experiment=experiment,
                                                 estimate_group=estimate_group,
                                                 min=min,
                                                 min_ratio=min_ratio,

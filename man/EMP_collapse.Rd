@@ -5,7 +5,7 @@
 \title{Aggregates abundace or experssion from the same attributes in the coldata or rowdata}
 \usage{
 EMP_collapse(
-  x,
+  obj,
   experiment = NULL,
   estimate_group = NULL,
   method = "sum",
@@ -18,7 +18,7 @@ EMP_collapse(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

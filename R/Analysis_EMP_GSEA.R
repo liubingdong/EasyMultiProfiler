@@ -193,7 +193,7 @@
 
 #' Gene set enrichment analysis.
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param condition Expressions that return a logical value. The alogarithm condition used in method = "log2FC".eg. pvalue < 0.05
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param estimate_group A character string. Select the column you are interested in the coldata.
@@ -257,7 +257,7 @@
 #'                     pvalueCutoff = 0.05,keyType = 'ko') |>
 #'   EMP_netplot(showCategory=5) 
 #' }
-EMP_GSEA_analysis <- function(x,condition,experiment,estimate_group=NULL,method,cor_method='pearson',group_level=NULL,
+EMP_GSEA_analysis <- function(obj,condition,experiment,estimate_group=NULL,method,cor_method='pearson',group_level=NULL,
                                keyType=NULL,KEGG_Type='KEGG',species = "all",
                                pseudocount=0.0001,pvalueCutoff=1,threshold=NULL,
                                threshold_r=0,threshold_p=0.05,seed=TRUE,action='add',...){
@@ -266,12 +266,12 @@ EMP_GSEA_analysis <- function(x,condition,experiment,estimate_group=NULL,method,
   rlang::check_installed(c('clusterProfiler'), reason = 'for EMP_GSEA_analysis().', action = BiocManager::install)    
   
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (inherits(obj,"MultiAssayExperiment")) {
     
-    EMPT <- .as.EMPT(x,
+    EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(x,'EMPT')) {
-    EMPT <-x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
   }
   
   switch(method,

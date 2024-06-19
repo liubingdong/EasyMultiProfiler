@@ -5,7 +5,7 @@
 \title{Gene set enrichment analysis.}
 \usage{
 EMP_GSEA_analysis(
-  x,
+  obj,
   condition,
   experiment,
   estimate_group = NULL,
@@ -26,7 +26,7 @@ EMP_GSEA_analysis(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{condition}{Expressions that return a logical value. The alogarithm condition used in method = "log2FC".eg. pvalue < 0.05}
 

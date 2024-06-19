@@ -76,7 +76,7 @@
 
 #' WGCNA cluster analysis
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param powers a vector of soft thresholding powers for which the scale free topology fit indices are to be calculated.
@@ -95,7 +95,6 @@
 #' @param pamRespectsDendro Logical, only used when pamStage is TRUE. If TRUE, the PAM stage will respect the dendrogram in the sense an object can be PAM-assigned only to clusters that lie below it on the branch that the object is merged into. See WGCNA::cutreeDynamic for more details.
 #' @param saveTOMs logical: should the consensus topological overlap matrices for each block be saved and returned?
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-# ' @param ... wait_for_add
 #'
 #' @return EMPT object
 #' @export
@@ -111,7 +110,7 @@
 #'   EMP_assay_extract('geno_ko') |>
 #'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.8,mergeCutHeight=0.4)
 #' }
-EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, seq(from = 12, to=20, by=2)),
+EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10, seq(from = 12, to=20, by=2)),
                                         RsquaredCut=0.85, removeFirst = FALSE, nBreaks = 10, blockSize = NULL,
                                         # corFnc = WGCNA::cor, corOptions = list(use = 'p'),
                                         networkType = "unsigned",
@@ -125,11 +124,11 @@ EMP_WGCNA_cluster_analysis <- function(x,experiment,use_cached=T,powers=c(1:10, 
 
   call <- match.call()
 
-  if (inherits(x,"MultiAssayExperiment")) {
-    x <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    x <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(x,'EMPT')){
-    x <- x
+  }else if(inherits(obj,'EMPT')){
+    x <- obj
     class(x) <- 'EMP_assay_data'
   }else {
     stop('Please check the input data')

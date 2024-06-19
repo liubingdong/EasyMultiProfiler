@@ -5,7 +5,7 @@
 \title{Covert featureID of gene experssion or compund abundance}
 \usage{
 EMP_feature_convert(
-  x,
+  obj,
   experiment,
   method = "mean",
   from,
@@ -16,7 +16,7 @@ EMP_feature_convert(
 )
 }
 \arguments{
-\item{x}{EMPT or MultiAssayExperiment object.}
+\item{obj}{EMPT or MultiAssayExperiment object.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

@@ -5,7 +5,7 @@
 \title{WGCNA cluster analysis}
 \usage{
 EMP_WGCNA_cluster_analysis(
-  x,
+  obj,
   experiment,
   use_cached = T,
   powers = c(1:10, seq(from = 12, to = 20, by = 2)),
@@ -27,7 +27,7 @@ EMP_WGCNA_cluster_analysis(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

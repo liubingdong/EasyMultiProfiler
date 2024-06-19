@@ -5,7 +5,7 @@
 \title{Identify clusters for sample or feature}
 \usage{
 EMP_cluster_analysis(
-  x,
+  obj,
   experiment,
   distance = "bray",
   rowdata = FALSE,
@@ -17,7 +17,7 @@ EMP_cluster_analysis(
 )
 }
 \arguments{
-\item{x}{Object in EMPT or MultiAssayExperiment format.}
+\item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

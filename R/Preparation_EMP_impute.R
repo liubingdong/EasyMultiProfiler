@@ -1,6 +1,6 @@
 #' Fast Imputation of Missing Values by Chained Random Forests
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param coldata A boolean. Whether the function use the coldata to impute or not.(default:TRUE)
 #' @param assay A boolean. Whether the function use the assay to impute or not.(default:FALSE)
@@ -41,14 +41,14 @@
 #'   EMP_assay_extract('geno_ec') |>
 #'   EMP_impute(assay=FALSE,coldata=FALSE,rowdata=TRUE)
 #' }
-EMP_impute <- function(x,experiment,coldata = TRUE,assay = FALSE, rowdata = FALSE,.formula=. ~ .,
+EMP_impute <- function(obj,experiment,coldata = TRUE,assay = FALSE, rowdata = FALSE,.formula=. ~ .,
                        pmm.k = 10, num.trees = 1000, seed = 123,verbose = 0,action='add',...){
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
-    EMPT <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(x,'EMPT')) {
-    EMPT <-x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
   }
 
 

@@ -1,6 +1,6 @@
 #' Identify clusters for sample or feature
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param distance A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
 #' @param rowdata A boolean. Whether the function cluster the feature or not.
@@ -47,7 +47,7 @@
 #'   EMP_assay_extract(experiment = 'geno_ec',pattern='1.1.1.1',pattern_ref='feature') |>
 #'   EMP_cluster_analysis(rowdata = T,h=0.8)
 #' }
-EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseudodist=1,
+EMP_cluster_analysis <- function(obj,experiment,distance='bray',rowdata=FALSE,pseudodist=1,
                                  method='average',h=NULL,groupLabels=TRUE,action='add') {
   
 # Check if package is installed, otherwise install
@@ -61,13 +61,13 @@ EMP_cluster_analysis <- function(x,experiment,distance='bray',rowdata=FALSE,pseu
   rlang::check_installed(c('dendextend'), reason = 'for EMP_cluster_analysis().', action = BiocManager::install)   
   colname <- primary <- `.` <- NULL
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (inherits(obj,"MultiAssayExperiment")) {
 
-    EMPT <- .as.EMPT(x,
+    EMPT <- .as.EMPT(obj,
                      experiment = experiment)
 
-  }else if(inherits(x,'EMPT')) {
-    EMPT <- x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
   }else {
     stop('Please check the input data!')
   }

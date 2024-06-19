@@ -48,7 +48,7 @@
 
 #' KEGG enrichment for EMPT object
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05
 #' @param minGSSize Minimal size of genes annotated by Ontology term for testing.
 #' @param maxGSSize Maximal size of genes annotated for testing.
@@ -93,15 +93,15 @@
 #'   EMP_enrich_analysis(keyType ='entrezid',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=0.05,species = 'hsa') |>
 #'   EMP_dotplot()
 #' }
-EMP_enrich_analysis <- function(x,condition,minGSSize=1,maxGSSize=500,keyType=NULL,KEGG_Type='KEGG',species = "all",action='add',combineGroup=FALSE,...){
+EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500,keyType=NULL,KEGG_Type='KEGG',species = "all",action='add',combineGroup=FALSE,...){
   
   rlang::check_installed(c('BiocManager'), reason = 'for EMP_enrich_analysis().', action = install.packages) 
   rlang::check_installed(c('clusterProfiler'), reason = 'for EMP_enrich_analysis().', action = BiocManager::install)  
 
   call <- match.call()
 
-  if(!is.null(.get.result.EMPT(x,info='EMP_diff_analysis'))) {
-    EMPT = x
+  if(!is.null(.get.result.EMPT(obj,info='EMP_diff_analysis'))) {
+    EMPT <- obj
   }else {
     stop('The input data be generated from EMP_diff_analysis!')
   }
