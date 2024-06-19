@@ -112,7 +112,7 @@
 
 #' Differential expression or abundance analysis
 #'
-#' @param x Object in EMPT or MultiAssayExperiment format.
+#' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include t.test, wilcox_test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights
 #' @param p.adjust A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)
@@ -154,17 +154,17 @@
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='edgeR_quasi_likelihood',
 #'                     .formula = ~0+Group,estimate_group = c('Group_B','Group_A')) ## Set the comparison order.
-EMP_diff_analysis <- function(x,experiment,.formula,
+EMP_diff_analysis <- function(obj,experiment,.formula,
                               method = 'wilcox.test',p.adjust='fdr',estimate_group=NULL,
                               use_cached = TRUE,action='add',group_level=NULL,
                               core=NULL,...){
   call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
-    EMPT <- .as.EMPT(x,
+  if (inherits(obj,"MultiAssayExperiment")) {
+    EMPT <- .as.EMPT(obj,
                      experiment = experiment)
     .get.method.EMPT(EMPT) <- method
-  }else if(inherits(x,'EMPT')) {
-    EMPT <-x
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
     .get.method.EMPT(EMPT) <- method
   }
   if (use_cached == FALSE) {
@@ -185,7 +185,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
          "limma_voom"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
          "limma_voom_sample_weights"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
          {
-           EMPT <- .EMP_diff_analysis_m(EMPT = EMPT,method=method,group_level=group_level,estimate_group=estimate_group,core=core,...)
+           EMPT <- .EMP_diff_analysis_m(EMPT = EMPT,method=method,group_level=group_level,estimate_group=estimate_group,core=core,p.adjust=p.adjust,...)
          }
   )
   .get.history.EMPT(EMPT) <- call
@@ -200,7 +200,7 @@ EMP_diff_analysis <- function(x,experiment,.formula,
 }
 
 
-.EMP_diff_analysis <- function(EMPT,experiment,assay_name,method,
+.EMP_diff_analysis <- function(EMPT,method,
                                estimate_group=NULL,feature_name=NULL,
                                p.adjust='fdr',group_level=NULL,core=NULL,...){
   Estimate_group <- primary <- pvalue <- feature <- sign_group <- vs <- NULL
@@ -213,9 +213,6 @@ EMP_diff_analysis <- function(x,experiment,.formula,
               dplyr::left_join(mapping,by = 'primary') %>%
               dplyr::select(primary,!!estimate_group,everything())
   .get.assay_name.EMPT(EMPT) -> assay_name
-
-
-
 
   if (is.null(feature_name)) {
     feature_name <- assay_data %>% dplyr::select(where(is.numeric)) %>% colnames()
