@@ -260,7 +260,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 #'
 #' @param file A file path. The file should be deposited in txt format.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
-#' @param sampleID a seris of string character.
+#' @param sampleID a seris of string character to indicate the samples.
 #' @param dfmap A dataframe. Indicate the experiment name, sample source and sample tube details in the omics data.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param assay A character string. Indicate the experiment name of the import data in the dfmap.
@@ -273,27 +273,35 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 #' # example
 EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay_name=NULL,assay=NULL){
   row_data <- assay_data <- obj <- colname <- feature <- NULL
-  if (!is.null(sampleID)) {
-    sampleID <- sampleID
-  }else{
-    if (is.null(dfmap) | is.null(assay) ) {
-      stop("If sampleID is NULL, please input dfmap and assay!")
-    }else{
-      sampleID <- dfmap %>% as.data.frame() %>% dplyr::filter(assay == !!assay) %>%
-        dplyr::pull(colname)
-    }
-  }
   if (!is.null(data)) {
     data <- data
   }else {
     data <- read.table(file=file,header = T,sep = '\t',quote="")
-  }   
+  } 
+  
+  if (!is.null(sampleID)) {
+    sampleID <- sampleID
+  }else{
+    if (!is.null(dfmap) & !is.null(assay) ) {
+      sampleID <- dfmap %>% as.data.frame() %>% dplyr::filter(assay == !!assay) %>%
+        dplyr::pull(colname)
+    }else{
+      message('The function will consider all column as samples. If the data contain rowdata, please define sampleID!')
+      sampleID <- colnames(data)[-1]
+    }
+  }
+  
   colnames(data)[1] <- 'feature'
   data <- data[rowSums(data[,sampleID]) != 0,] # filter away empty feature!
   rownames(data) <- NULL # necessary!
+  
   row_data <- data %>% dplyr::select(!all_of(!!sampleID))
+  if (ncol(row_data) == 1) {
+    row_data <- row_data %>% dplyr::mutate(Name=feature)
+  }
   assay_data <- data %>% dplyr::select(feature,all_of(!!sampleID)) %>%
     tibble::column_to_rownames('feature')
+
   obj <- SummarizedExperiment(assays=list(counts= as.matrix(assay_data)),
                               rowData = row_data)
   if (!is.null(assay_name)) {

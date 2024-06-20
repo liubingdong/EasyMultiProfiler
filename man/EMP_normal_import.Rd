@@ -18,7 +18,7 @@ EMP_normal_import(
 
 \item{data}{A dataframe.The row must be the feature and the column is the sample.}
 
-\item{sampleID}{a seris of string character.}
+\item{sampleID}{a seris of string character to indicate the samples.}
 
 \item{dfmap}{A dataframe. Indicate the experiment name, sample source and sample tube details in the omics data.}
 
