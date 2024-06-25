@@ -4,17 +4,17 @@
 .EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',...) {
   #call <- match.call()
 
-  var1 <- NULL
+  primary <- var1 <- NULL
   if (is.null(select)) {
     data1 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%
-      dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+      dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
     if (length(EMP@ExperimentList) == 1) {
       data2 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%
-        dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+        dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
       cor_info <- names(EMP@ExperimentList)
     }else{
       data2 <- EMP@ExperimentList[[2]] %>% EMP_assay_extract(action='get') %>%
-        dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+        dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
       cor_info <- names(EMP@ExperimentList[1:2])
     }
   }else{
@@ -34,20 +34,19 @@
     cor_info <- select
 
     data1 <- EMP@ExperimentList[[select[1]]] %>% EMP_assay_extract(action='get') %>%
-        dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+        dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
     data2 <- EMP@ExperimentList[[select[2]]] %>% EMP_assay_extract(action='get') %>%
-        dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+        dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
 
   }
-
-  real_sample <- intersect(rownames(data1),rownames(data2))
-  data1_sample_num <- rownames(data1) %>% unique %>% length()
-  data2_sample_num <- rownames(data2) %>% unique %>% length()
-
 
   # filter the samnples with miss value
   data1 <- na.omit(data1)
   data2 <- na.omit(data2)
+
+  real_sample <- intersect(rownames(data1),rownames(data2))
+  data1_sample_num <- rownames(data1) %>% unique %>% length()
+  data2_sample_num <- rownames(data2) %>% unique %>% length()
 
   data1 <- data1 |> dplyr::filter(rownames(data1) %in% real_sample)
   data2 <- data2 |> dplyr::filter(rownames(data2) %in% real_sample)
@@ -111,7 +110,7 @@
   for (i in select) {
     data_list[[i]] <- EMP@ExperimentList[[i]] %>% 
       EMP_assay_extract(action='get') %>%
-      dplyr::arrange('primary') %>% 
+      dplyr::arrange(primary) %>% 
       dplyr::rename(SampleID = primary) %>% 
       as.data.frame() %>% 
       suppressMessages()
@@ -247,11 +246,11 @@ rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman'){
   real_sample <- intersect(data1[['SampleID']],data2[['SampleID']])
   
   data1 <- data1 %>% dplyr::filter(SampleID %in% real_sample)  %>% 
-    dplyr::arrange('primary') %>%
+    dplyr::arrange(SampleID) %>%
     tibble::column_to_rownames('SampleID')
   
   data2 <- data2 %>% dplyr::filter(SampleID %in% real_sample)  %>% 
-    dplyr::arrange('primary') %>%
+    dplyr::arrange(SampleID) %>%
     tibble::column_to_rownames('SampleID')
   
  

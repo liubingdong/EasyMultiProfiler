@@ -304,13 +304,14 @@ setMethod(".get.SE.EMPT<-","EMPT",function(obj,value){
 
 setGeneric(".get.assay.EMPT",function(obj) standardGeneric(".get.assay.EMPT"))
 setMethod(".get.assay.EMPT","EMPT",function(obj){
+  primary <- NULL
   obj %>% 
   assay() %>% 
   as.data.frame() %>% 
   t() %>% 
   as.data.frame() %>% 
   tibble::rownames_to_column('primary') %>% 
-  dplyr::arrange('primary') %>%
+  dplyr::arrange(primary) %>%
   tibble::as_tibble()
 })
 setGeneric(".get.assay.EMPT<-",function(obj,value) standardGeneric(".get.assay.EMPT<-"))
@@ -322,10 +323,14 @@ setMethod(".get.assay.EMPT<-","EMPT",function(obj,value){
   rowdata <- rowData(obj) %>% as.data.frame() %>% 
     dplyr::filter(feature %in% feature_name) 
 
-  coldata <- colData(obj) %>% as.data.frame() %>% dplyr::filter(rownames(.) %in% sample_name)
+  coldata <- colData(obj) %>% as.data.frame() %>% 
+    dplyr::filter(rownames(.) %in% sample_name) %>% 
+    dplyr::arrange(rownames(.))  ## necessary
 
-
-  value %<>% tibble::column_to_rownames('primary') %>% t() %>% DataFrame()
+  value <- value %>% 
+    dplyr::arrange(primary) %>% ## necessary
+    tibble::column_to_rownames('primary') %>% 
+    t() 
 
   data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(value)),
                                                     rowData=rowdata, colData = coldata)

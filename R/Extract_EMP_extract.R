@@ -149,7 +149,7 @@ EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_
       coldata <- colData(obj) %>% 
         as.data.frame() %>% 
         tibble::rownames_to_column('primary') %>% 
-        dplyr::arrange('primary') %>%
+        dplyr::arrange(primary) %>%
         tibble::as_tibble() 
     }else if (inherits(obj,'MultiAssayExperiment')){
       colData(obj) %>% as.data.frame()%>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() -> coldata

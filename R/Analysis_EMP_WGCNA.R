@@ -247,7 +247,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 
 #' @importFrom WGCNA orderMEs
 .EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman',action='add'){
-  var1 <- NULL
+  primary <- var1 <- NULL
 
   if (inherits(obj,"EMP")) {
     EMP <- obj
@@ -257,14 +257,14 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 
   if (is.null(select)) {
     data1 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%
-      dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+      dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
     if (length(EMP@ExperimentList) == 1) {
       data2 <- EMP@ExperimentList[[1]] %>% EMP_assay_extract(action='get') %>%
-        dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+        dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
       cor_info <- names(EMP@ExperimentList)
     }else{
       data2 <- EMP@ExperimentList[[2]] %>% EMP_assay_extract(action='get') %>%
-        dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+        dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
       cor_info <- names(EMP@ExperimentList[1:2])
     }
   }else{
@@ -284,9 +284,9 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
     cor_info <- select
 
     data1 <- EMP@ExperimentList[[select[1]]] %>% EMP_assay_extract(action='get') %>%
-      dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+      dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
     data2 <- EMP@ExperimentList[[select[2]]] %>% EMP_assay_extract(action='get') %>%
-      dplyr::arrange('primary') %>% tibble::column_to_rownames('primary') %>% suppressMessages()
+      dplyr::arrange(primary) %>% tibble::column_to_rownames('primary') %>% suppressMessages()
 
   }
 
