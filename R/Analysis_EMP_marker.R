@@ -93,7 +93,7 @@
 #' @importFrom xgboost xgboost
 #' @importFrom xgboost xgb.importance
 
-.EMP_xgb_analysis <- function(obj,seed=123,estimate_group,max.depth=6,eta=0.3,nrounds=50,objective="binary:logistic",xgboost_run='classify',verbose=0,...) {
+.EMP_xgb_analysis <- function(obj,seed=123,estimate_group,max.depth=6,eta=0.3,nrounds=50,objective=NULL,xgboost_run=NULL,verbose=0,...) {
   assay_data <- row_data <- coldata <- tran_data <- xgb_model <- feature_importance <- primary <- feature <- NULL
   Feature <- Gain <- Cover <- Frequency <-  Importance <- xgb_Gain <- xgb_Cover <- xgb_Frequency <- xgb_Importance <- nthread <- NULL
   assay_data <- obj %>% 
@@ -101,6 +101,11 @@
     tibble::column_to_rownames('primary') %>% 
     as.matrix()
   row_data <- obj %>% .get.row_info.EMPT() %>% dplyr::select(1:2)
+
+
+  if (is.null(objective) | is.null(xgboost_run)) {
+    stop('Parameter xgboost_run need specify classify or regression and select the suitable parameter objective!')
+  }
 
   if (xgboost_run == 'classify') {
     coldata <- obj %>% .get.mapping.EMPT() %>%
@@ -111,7 +116,7 @@
     coldata <- obj %>% .get.mapping.EMPT() %>%
       dplyr::pull({{estimate_group}})
   }else {
-    stop('Parameter xgboost_run need specify classify or regression and select the suitable parameter objective!')
+    stop('Parameter xgboost_run must be classify or regression!')
   }
 
   nthread <- parallel::detectCores() - 1
@@ -197,8 +202,8 @@
 #' @param max.depth An interger (default:6). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param eta A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param nrounds An interger (default:50). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
-#' @param xgboost_run An character string (default:classify).Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.
-#' @param objective An character string (default:binary:logistic). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:squarederror for linear regression.                                 
+#' @param xgboost_run An character string.Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.
+#' @param objective An character string. Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:squarederror for linear regression.                                 
 #' @param verbose An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
@@ -224,17 +229,18 @@
 #'   EMP_marker_analysis(experiment = 'geno_ec',method = 'randomforest',
 #'                       estimate_group = 'Education_Years') 
 #' 
-#' ## regression or classify by randomforest
+#' ## regression or classify by xgboost
+#' ### For regression
 #' MAE |>
-#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='regression',
 #'                       estimate_group = 'Education_Years',objective = 'reg:squarederror')
 #' ### For two categories classify
 #' MAE |>
-#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='classify',
 #'                       estimate_group = 'Group',objective = 'binary:logistic')
 #' ### For multible categories classify
 #' MAE |>
-#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='classify',
 #'                       estimate_group = 'Status',objective = 'multi:softmax',
 #'                       num_class=3) ## num_class is necessary
 #' ## Lasso regression
@@ -242,7 +248,7 @@
 #'   EMP_marker_analysis(experiment = 'geno_ko',method = 'lasso',estimate_group = 'Education_Years') |>
 #'   EMP_filter(feature_condition = lasso_coe >0) # Select the imprortant feature
 EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=123,nfolds=5,lambda_select='lambda.min',
-                                  max.depth=6,eta=0.3,nrounds=50,xgboost_run='classify',objective="binary:logistic",verbose=0,use_cached=TRUE,action='add',...){
+                                  max.depth=6,eta=0.3,nrounds=50,xgboost_run=NULL,objective=NULL,verbose=0,use_cached=TRUE,action='add',...){
 
   call <- match.call()
   if (inherits(obj,"MultiAssayExperiment")) {
