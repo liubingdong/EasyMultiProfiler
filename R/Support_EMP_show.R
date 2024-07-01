@@ -108,6 +108,9 @@ setMethod("show", "EMPT",
                    },
                    "EMP_assay_heatmap" = {
                      .get.result.EMPT(object) %>% print()
+                   },
+                   "EMP_fitline_plot" = {
+                     .show_EMP_fitplot(object,.get.plot_specific.EMPT(object)) %>% suppressWarnings()
                    }
                    )
           }
@@ -274,6 +277,9 @@ setMethod("show", "EMP",
                    },
                    "EMP_multi_same_enrich_netplot" = {
                       .get.result.EMP(object) %>% print()
+                   },
+                   "EMP_fitline_plot" = {
+                     .show_EMP_fitplot(object,.get.plot_specific.EMP(object)) %>% suppressWarnings()
                    },
                    {
                      print('No info is matched!')

@@ -35,6 +35,8 @@ setClass("EMP",
            ExperimentList = list(),
            deposit = list(),
            plot_deposit =list(),
+           palette = c("#E64B35FF","#4DBBD5FF","#00A087FF","#3C5488FF","#F39B7FFF","#8491B4FF",
+                       "#B2182B","#E69F00","#56B4E9","#009E73","#F0E442","#0072B2","#D55E00","#CC79A7","#CC6666"),
            history = list(total=list())
          )
 )
@@ -150,6 +152,7 @@ setClass("EMPT",
 setClass("EMP_assay_data",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_assay_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 setClass("EMP_structure_plot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
+setClass("EMP_fitline_plot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 
 setClass("EMP_alpha_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_alpha_analysis_boxplot",contains = c("EMP_alpha_analysis","EMPT","SummarizedExperiment"))
@@ -183,7 +186,7 @@ setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 setClass("EMP_assay_heatmap",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_cor_heatmap",contains = c("EMP"))
 setClass("EMP_cor_sankey",contains = c("EMP"))
-
+setClass("EMP_fitline_plot2",contains = c("EMP"))
 
 setClass("EMP_multi_same_df",contains = c("EMP"))
 
@@ -326,7 +329,6 @@ setGeneric("EMP_boxplot",function(obj, ...) standardGeneric("EMP_boxplot"))
 setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj, ...){
   EMP_boxplot.EMP_alpha_analysis(obj, ...)
 })
-
 
 #' @param ... ...
 #' @rdname EMP_boxplot
@@ -481,8 +483,8 @@ setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
 #'
 #' @examples
 #' \dontrun{
-#'data(MAE)
-#'MAE |>
+#' data(MAE)
+#' MAE |>
 #'  EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                    estimate_group = 'Group',
 #'                    pvalueCutoff = 0.05,keyType = 'ko') |>
@@ -498,6 +500,51 @@ setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
 
 setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
   EMP_curveplot_enrich(obj,...)
+})
+
+#' Two variable regression plot
+#'
+#' @param obj object
+#' @param ... ...
+#' @rdname EMP_fitline_plot
+#'
+#' @export
+#'
+#' @examples
+#' data(MAE)
+#' ## For EMPT
+#' MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_fitline_plot(var_select=c('1.1.1.1','BMI'))
+#'
+#' MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_fitline_plot(var_select=c('Weight','BMI'),estimate_group='Sex',show='html')
+#' 
+#' ## For EMP
+#' k1 <- MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_decostand(method = 'clr')
+#' 
+#' k2 <- MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_collapse(collapse_by='row',estimate_group = 'Class',method = 'sum') |>
+#'   EMP_decostand(method = 'relative')
+#' 
+#' (k1 + k2) |>
+#'   EMP_fitline_plot(var_select=c('1.1.1.1','Bacilli'),
+#'                    estimate_group='Group',eq_size=2.5)
+
+setGeneric("EMP_fitline_plot",function(obj, ...) standardGeneric("EMP_fitline_plot"))
+
+#' @rdname EMP_fitline_plot
+setMethod("EMP_fitline_plot","EMPT",function(obj, ...){
+  EMP_fitline_plot.EMPT(obj, ...)
+})
+
+#' @rdname EMP_fitline_plot
+setMethod("EMP_fitline_plot","EMP",function(obj, ...){
+  EMP_fitline_plot.EMP(obj, ...)
 })
 
 

@@ -46,6 +46,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_boxplot}} 
 	\item \code{\link{EMP_scatterplot}}
 	\item \code{\link{EMP_dotplot}}
+	\item \code{\link{EMP_fitline_plot}}	
 	\item \code{\link{EMP_netplot}}
 	\item \code{\link{EMP_curveplot}}  
  	\item \code{\link{EMP_heatmap_plot}}
