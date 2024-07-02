@@ -62,8 +62,8 @@
     )
   }
 
-  # Only the log algorithm and the pa algorithm do not need to consider the direction of standardization.
-  if (!method %in% c('log','pa')) {
+  # Only the log, pa and integer algorithm do not need to consider the direction of standardization.
+  if (!method %in% c('log','pa','integer')) {
     decostand_info <- c('Sample','Feature')
     message_info <- list()
     message_info %<>% append(paste0('Standardization method proceed by ',decostand_info[MARGIN],'!')) 
