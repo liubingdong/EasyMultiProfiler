@@ -73,6 +73,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @param data A dataframe.The row must be the feature and the column is the sample.
 #' @param file_format A string including biom and gzv.
 #' @param humann_format A boolean. Whether the function import the data in the Metaphlan or Humann format.
+#' @param start_level A string. Specific the start level of input data from Domain,Kindom,Phylum,Class,Order,Family,Genus,Species,Strain.(default:Kindom)
 #' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param sep The field separator character. Values on feature column of the file are separated by this character. (defacult:';',when humann_format=T defacult:'|')
@@ -92,7 +93,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #'
 #' @examples
 #' # add example
-EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_format=NULL,assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "TRUE") '|' else ';') {
+EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_format=NULL,start_level='Kindom',assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "TRUE") '|' else ';') {
   feature <- `.` <- check_duplicated_feature <- biom_df <- biom_data <- tax_data <- otuid <- unzipfiles <- data_file <- NULL
   if(humann_format == TRUE){
     deposit <- humann_taxonomy_import(file=file,data=data,sep = sep)
@@ -175,9 +176,13 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   
   if(duplicate_feature==FALSE){
     
-    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,row.names = NULL,header = FALSE) %>% 
+    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,quote = "",row.names = NULL,header = FALSE) %>% 
       dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., "")) 
-    colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
+
+    total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+    real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
+    colnames(temp_name) <- total_tax_info[1:ncol(temp_name)]
+
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
       .impute_tax() ## impute the NA tax
     temp  %<>% tibble::column_to_rownames('feature') %>% as.matrix()
@@ -185,9 +190,13 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
                                     rowData = temp_name)
   }else if(duplicate_feature==TRUE){
     
-    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,row.names = NULL,header = FALSE) %>%
+    temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,quote = "",row.names = NULL,header = FALSE) %>%
       dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))
-    colnames(temp_name) <- c('Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')[1:ncol(temp_name)]
+
+    total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+    real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
+    colnames(temp_name) <- total_tax_info[1:ncol(temp_name)]
+    
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
       .impute_tax()  %>% ## impute the NA tax
       dplyr::mutate(feature = paste0('feature_',1:nrow(temp_name)))
@@ -381,13 +390,13 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
-EMP_easy_taxonomy_import <- function(file=NULL,data=NULL,assay='experiment',assay_name=NULL,coldata=NULL,
+EMP_easy_taxonomy_import <- function(file=NULL,data=NULL,assay='experiment',assay_name=NULL,coldata=NULL,start_level='Kindom',
                                      humann_format=FALSE,file_format=NULL,duplicate_feature=NULL,output='MAE',
                                      sep=if (humann_format == TRUE) '|' else ';') {
   
   sampleID <- assay_data <- SE_object <- NULL
 
-  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,file_format=file_format,duplicate_feature=duplicate_feature,assay_name=assay_name,sep=sep)                                    
+  SE_object <- EMP_taxonomy_import(file=file,data=data,humann_format=humann_format,file_format=file_format,start_level=start_level,duplicate_feature=duplicate_feature,assay_name=assay_name,sep=sep)                                    
   
   sampleID <-  dimnames(SE_object)[[2]]                                 
   if (output == 'SE') {
@@ -467,6 +476,7 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @param humann_format A boolean. Whether the function import the data in the Metaphlan or Humann format.
 #' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @param coldata A dataframe containing one column informantion at least.
+#' @param start_level A string. Specific the start level of input data from Domain,Kindom,Phylum,Class,Order,Family,Genus,Species,Strain.(default:Kindom)
 #' @param sep The field separator character. Only activated when type =''tax. Values on each line of the file are separated by this character. (defacult:'|') 
 #' @param output A character string. Set the output result in SE(SummariseExperiment) or MAE(MultiAssayExperiment) format.
 #' @rdname EMP_easy_import
@@ -476,12 +486,12 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @examples
 #' # example
 
-EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,sampleID=NULL,coldata=NULL,
+EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,sampleID=NULL,coldata=NULL,start_level='Kindom',
                             file_format=NULL,humann_format=FALSE,duplicate_feature=NULL,output='MAE',
                             sep=if (humann_format == "TRUE") '|' else ';'){
   obj <- NULL
   switch(type,
-         "tax" = {obj <- EMP_easy_taxonomy_import(file=file,data=data,assay=assay,assay_name=assay_name,coldata=coldata,
+         "tax" = {obj <- EMP_easy_taxonomy_import(file=file,data=data,assay=assay,assay_name=assay_name,coldata=coldata,start_level=start_level,
                                                   humann_format=humann_format,file_format=file_format,duplicate_feature=duplicate_feature,output=output,sep=sep)},
          "ko" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
                                                   humann_format=humann_format,output=output)},

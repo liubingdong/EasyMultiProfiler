@@ -9,6 +9,7 @@ EMP_taxonomy_import(
   data = NULL,
   humann_format = FALSE,
   file_format = NULL,
+  start_level = "Kindom",
   assay_name = NULL,
   duplicate_feature = NULL,
   sep = if (humann_format == "TRUE") "|" else ";"
@@ -22,6 +23,8 @@ EMP_taxonomy_import(
 \item{humann_format}{A boolean. Whether the function import the data in the Metaphlan or Humann format.}
 
 \item{file_format}{A string including biom and gzv.}
+
+\item{start_level}{A string. Specific the start level of input data from Domain,Kindom,Phylum,Class,Order,Family,Genus,Species,Strain.(default:Kindom)}
 
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
 

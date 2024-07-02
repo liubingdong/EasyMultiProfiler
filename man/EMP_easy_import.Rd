@@ -12,6 +12,7 @@ EMP_easy_import(
   assay_name = NULL,
   sampleID = NULL,
   coldata = NULL,
+  start_level = "Kindom",
   file_format = NULL,
   humann_format = FALSE,
   duplicate_feature = NULL,
@@ -33,6 +34,8 @@ EMP_easy_import(
 \item{sampleID}{A series of character strings. This parameter helps identify the assay and rowdata only when type = 'normal'.}
 
 \item{coldata}{A dataframe containing one column informantion at least.}
+
+\item{start_level}{A string. Specific the start level of input data from Domain,Kindom,Phylum,Class,Order,Family,Genus,Species,Strain.(default:Kindom)}
 
 \item{file_format}{A string including biom and gzv.}
 
