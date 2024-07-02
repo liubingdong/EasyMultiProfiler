@@ -8,7 +8,7 @@ EMP_decostand(
   obj,
   experiment,
   method,
-  bySample = TRUE,
+  bySample = "default",
   logbase = 2,
   use_cached = TRUE,
   pseudocount = 1e-07,
@@ -41,7 +41,7 @@ EMPT object
 \description{
 Standardization Methods
 }
-\section{method}{
+\section{Detaild about method}{
 
 The following method from vegan::decostand are available：
 \describe{
@@ -49,6 +49,53 @@ The following method from vegan::decostand are available：
   rank, standardize, pa, chi.square,
   hellinger, log, alr, clr, rclr
 }
+
+When standardizing data, it's important to consider whether the data processing direction should be by sample or by feature. 
+All methods have a default parameter bySample in EMP_decostand function. Users could change this parameter according to study design. 
+For more detailed information, please refer to the decostand function in the vegan package.
+
+Here is a brife introduction of document from vegan package:
+
+1. relative(total): divide by margin total, also called relative abundance. (default bySample = TRUE).
+
+2. max: divide by margin maximum (default bySample = FALSE).
+
+3. frequency: divide by margin total and multiply by the number of non-zero items, so that the average of non-zero entries is one (Oksanen 1983; default bySample = FALSE).
+
+4. normalize: make margin sum of squares equal to one (default bySample = TRUE).
+
+5. range: standardize values into range 0 ... 1 (default bySample = FALSE). If all values are constant, they will be transformed to 0.
+
+6. rank: rank replaces abundance values by their increasing ranks leaving zeros unchanged, and rrank is similar but uses relative ranks with maximum 1 (default bySample = TRUE). Average ranks are used for tied values.
+
+7. standardize: scale x to zero mean and unit variance (default bySample = FALSE).
+
+8. pa: scale x to presence/absence scale (0/1).
+
+9. chi.square: divide by row sums and square root of column sums, and adjust for square root of matrix total (Legendre & Gallagher 2001). 
+When used with the Euclidean distance, the distances should be similar to the Chi-square distance used in correspondence analysis. 
+However, the results from cmdscale would still differ, since CA is a weighted ordination method (default bySample = TRUE).
+
+10. hellinger: square root of method = "relative" (Legendre & Gallagher 2001).(default bySample = TRUE)
+
+11. log: logarithmic transformation. Higher bases give less weight to quantities and more to presences, and logbase = Inf gives the presence/absence scaling.
+
+12. alr: Additive log ratio ("alr") transformation (Aitchison 1986) reduces data skewness and compositionality bias. 
+The transformation assumes positive values, pseudocounts can be added with the argument pseudocount. 
+One of the rows/columns is a reference that can be given by reference (name of index). The first row/column is used by default (reference = 1). 
+Note that this transformation drops one row or column from the transformed output data. 
+This transformation is often used with pH and other chemistry measurenments. 
+It is also commonly used as multinomial logistic regression. Default bySample = TRUE uses row as the reference.
+
+13. clr: centered log ratio ("clr") transformation proposed by Aitchison (1986) reduces data skewness and compositionality bias. 
+This transformation has frequent applications in microbial ecology (see e.g. Gloor et al., 2017).
+The method can operate only with positive data; a common way to deal with zeroes is to add pseudocount,  
+Adding pseudocount will inevitably introduce some bias; see the rclr method for one available solution. (default bySample = TRUE)
+
+14. rclr: square root of method = "relative" (Legendre & Gallagher 2001). robust clr ("rclr") is similar to regular clr (see above) but allows data that contains zeroes.
+This method does not use pseudocounts, unlike the standard clr.
+Robust clr divides the values by geometric mean of the observed features; zero values are kept as zeroes, and not taken into account. 
+In high dimensional data, the geometric mean of rclr is a good approximation of the true geometric mean. (default bySample = TRUE)
 }
 
 \examples{
