@@ -328,7 +328,7 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
     stop('Please check the input data!')
   } 
   
-  result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data')
+  result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages()
   
 
   if (clust_row == TRUE | clust_col == TRUE) {
