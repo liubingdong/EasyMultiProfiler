@@ -335,11 +335,11 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
     result_clust <- result %>%
        tibble::column_to_rownames('primary')
 
-    row_clust <- fastcluster::hclust(dist(result_clust,method=dist_method),method = clust_method)
-    col_clust <- fastcluster::hclust(dist(t(result_clust),method=dist_method),method = clust_method)  
+    primary_clust <- fastcluster::hclust(dist(result_clust,method=dist_method),method = clust_method)
+    feature_clust <- fastcluster::hclust(dist(t(result_clust),method=dist_method),method = clust_method)  
   
-    row_order <- result_clust[row_clust$order,] %>% rownames() 
-    col_order <- result_clust[,col_clust$order] %>% colnames()     
+    primary_order <- result_clust[primary_clust$order,] %>% rownames() 
+    feature_order <- result_clust[,feature_clust$order] %>% colnames()     
   }
 
   df <- result %>% tidyr::pivot_longer(
@@ -351,18 +351,18 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   if (rotate == TRUE) {
     xy_name <- c('feature','primary')
     if (clust_row == TRUE) {
-      df$primary <- factor(df$primary,levels = row_order)
+      df$primary <- factor(df$primary,levels = primary_order)
     }
     if (clust_col == TRUE) {
-      df$feature <- factor(df$feature,levels = col_order)      
+      df$feature <- factor(df$feature,levels = feature_order)      
     }
   }else{
     xy_name <- c('primary','feature')  
-    if (clust_row == TRUE) {
-      df$primary <- factor(df$primary,levels = row_order)
-    }
     if (clust_col == TRUE) {
-      df$feature <- factor(df$feature,levels = col_order)
+      df$primary <- factor(df$primary,levels = primary_order)
+    }
+    if (clust_row == TRUE) {
+      df$feature <- factor(df$feature,levels = feature_order)
     }
   }
 
@@ -410,21 +410,21 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   if (rotate == TRUE) {
     #xy_name <- c('feature','primary')
     if (clust_row == TRUE) {
-      row_tree <- ggtree::ggtree(row_clust,layout = "rectangular",branch.length = "none")
+      row_tree <- ggtree::ggtree(primary_clust,layout = "rectangular",branch.length = "none")
       p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
     }
     if (clust_col == TRUE) {
-      col_tree <- ggtree::ggtree(col_clust,branch.length = "none") + ggtree::layout_dendrogram()
+      col_tree <- ggtree::ggtree(feature_clust,branch.length = "none") + ggtree::layout_dendrogram()
       p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
     }   
   }else{
     #xy_name <- c('primary','feature')  
     if (clust_row == TRUE) {
-      row_tree <- ggtree::ggtree(col_clust,layout = "rectangular",branch.length = "none")
+      row_tree <- ggtree::ggtree(feature_clust,layout = "rectangular",branch.length = "none")
       p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
     }
     if (clust_col == TRUE) {
-      col_tree <- ggtree::ggtree(row_clust,branch.length = "none") + ggtree::layout_dendrogram()
+      col_tree <- ggtree::ggtree(primary_clust,branch.length = "none") + ggtree::layout_dendrogram()
       p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
     }     
   }
