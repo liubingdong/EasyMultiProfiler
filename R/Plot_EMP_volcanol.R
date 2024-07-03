@@ -1,44 +1,5 @@
-#' EMP volcanol plot
-#'
-#' @param EMPT EMPT object
-#' @param y A character string. Select the pvalue from the EMP_diff_analysis.
-#' @param palette A series of character string. Color palette.
-#' @param key_feature A series of character string. Label the some feature.
-#' @param show A character string include pic (default), html.
-#' @param html_width An interger. Set the html width.
-#' @param html_height An interger. Set the html height.
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
-#' @param ... Further parameters passed to ggrepel::geom_text_repel
 #' @importFrom ggrepel geom_text_repel
-#' @return EMPT object
-#' @export
-#'
-#' @examples
-#' data(MAE)
-#' MAE |>
-#'   EMP_assay_extract(experiment = 'geno_ec') |>
-#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-#'   EMP_volcanol_plot(show='html')
-#'
-#' # label feature
-#' MAE |>
-#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
-#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19')) 
-#'
-#' # Addtionl parameters will pass into ggrepel::geom_text_repel.
-#' MAE |>
-#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
-#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),color = "white",
-#'                     bg.color = "grey30",bg.r = 0.15)
-#' MAE |>
-#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
-#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
-#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),
-#'                     min.segment.length = 0, seed = 42, box.padding = 0.5) ## Add arrow
-
-EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
+EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
                            html_width=NULL,html_height=NULL,key_feature=NULL,
                            mytheme = 'theme()',...) {
   sign_group <- log2FC <- feature <- color <- key <- NULL
@@ -148,6 +109,65 @@ EMP_volcanol_plot <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
   EMPT
 }
 
+#' EMP volcanol plot
+#'
+#' @param obj EMPT object
+#' @param plot_category An interger.More plot style.(under constrution)
+#' @param y A character string. Select the pvalue from the EMP_diff_analysis.
+#' @param palette A series of character string. Color palette.
+#' @param key_feature A series of character string. Label the some feature.
+#' @param show A character string include pic (default), html.
+#' @param html_width An interger. Set the html width.
+#' @param html_height An interger. Set the html height.
+#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param ... Further parameters passed to ggrepel::geom_text_repel
+#' @return EMPT object
+#' @export
+#'
+#' @examples
+#' data(MAE)
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'geno_ec') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(show='html')
+#'
+#' # label feature
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19')) 
+#'
+#' # Addtionl parameters will pass into ggrepel::geom_text_repel.
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),color = "white",
+#'                     bg.color = "grey30",bg.r = 0.15)
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'integer') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),
+#'                     min.segment.length = 0, seed = 42, box.padding = 0.5) ## Add arrow
+EMP_volcanol_plot <- function(obj,plot_category=1,y='pvalue',palette = NULL,show = 'pic',
+                           html_width=NULL,html_height=NULL,key_feature=NULL,
+                           mytheme = 'theme()',...) {
+  call <- match.call()
+  .get.plot_category.EMPT(obj) <- plot_category
+  .get.history.EMPT(obj) <- call
+
+  switch(.get.plot_category.EMPT(obj),
+         "1" = {
+           EMP_volcanol_plot_default(EMPT=obj,y=y,palette = palette,show = show,
+                           html_width=html_width,html_height=html_height,key_feature=key_feature,
+                           mytheme = mytheme,...)
+         },
+         "2" = {
+          message("Under construction!")
+         }
+
+  )
+
+}
 
 .show_EMP_diff_volcanol_plot <- function(obj,plot) {
   result <- .get.plot_deposit.EMPT(obj,info = 'EMP_diff_volcanol_plot')

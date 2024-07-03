@@ -5,7 +5,8 @@
 \title{EMP volcanol plot}
 \usage{
 EMP_volcanol_plot(
-  EMPT,
+  obj,
+  plot_category = 1,
   y = "pvalue",
   palette = NULL,
   show = "pic",
@@ -17,7 +18,9 @@ EMP_volcanol_plot(
 )
 }
 \arguments{
-\item{EMPT}{EMPT object}
+\item{obj}{EMPT object}
+
+\item{plot_category}{An interger.More plot style.(under constrution)}
 
 \item{y}{A character string. Select the pvalue from the EMP_diff_analysis.}
 

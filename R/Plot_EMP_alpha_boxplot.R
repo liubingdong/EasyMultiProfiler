@@ -20,9 +20,9 @@ EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 1,seed =123,metho
                                ncol = NULL,select_metrics=NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()') {
-  #call <- match.call()
+  call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
-  #.get.history.EMPT(EMPT) <- call
+  .get.history.EMPT(obj) <- call
 
   switch(.get.plot_category.EMPT(obj),
          "1" = {

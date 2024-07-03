@@ -12,7 +12,7 @@
 
 
 
-#' @param EMPT EMPT object
+#' @param obj EMPT object
 #' @param seed An interger. Set the random seed to the plot.
 #' @param group_level A string vector. Set the group order in the plot.
 #' @param show A character string include pic (default), html. This could display graphical results on 3 axes. eg. p12,p12html,p23,p23html
@@ -32,13 +32,21 @@
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
 #' @importFrom patchwork plot_layout
-EMP_scatterplot.EMP_dimension_analysis  <- function(EMPT,seed=123,group_level='default',
+EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
                                            method='t.test',key_samples = NULL,
                                            ellipse = NULL,html_width=15,html_height=15){
   primary <- Group <- NULL
   call <- match.call()
+  
+  # just change to unified naming.
+  if (inherits(obj,"EMPT")) {
+    EMPT <- obj
+  }else{
+    stop("please check the input data for EMP_scatterplot.EMP_dimension_analysis!")
+  }
+
   deposit <- list()
 
   palette <- .get.palette.EMPT(EMPT)

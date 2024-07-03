@@ -91,9 +91,9 @@ EMP_boxplot.EMP_assay_data <- function(obj,plot_category = 1,seed =123,method = 
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()') {
-  #call <- match.call()
+  call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
-  #.get.history.EMPT(EMPT) <- call
+  .get.history.EMPT(obj) <- call
   switch(.get.plot_category.EMPT(obj),
          "1" = {
            withr::with_seed(seed,EMP_boxplot_assay_default(EMPT=obj,method = method,
@@ -116,9 +116,9 @@ EMP_boxplot.EMP_decostand <- function(obj,plot_category = 1,seed =123,method = '
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()') {
-  #call <- match.call()
+  call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
-  #.get.history.EMPT(EMPT) <- call
+  .get.history.EMPT(obj) <- call
   switch(.get.plot_category.EMPT(obj),
          "1" = {
            withr::with_seed(seed,EMP_boxplot_assay_default(EMPT=obj,method = method,

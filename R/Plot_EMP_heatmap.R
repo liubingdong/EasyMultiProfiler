@@ -30,7 +30,7 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
                             clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,
                             show='all',label_size=4,mytheme = 'theme()'){
   var1 <- var2 <- coefficient <- EMP <- NULL
-  
+  call <- match.call()
   if (inherits(obj,"EMP")) {
     EMP <- obj
   }else{
@@ -319,7 +319,8 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkred"),rotate=FALSE,
                                          clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,label_size=4,
                                          mytheme = 'theme()'){
-  
+  call <- match.call()
+
   primary <- value <- NULL
   
   if (inherits(obj,"EMPT")) {

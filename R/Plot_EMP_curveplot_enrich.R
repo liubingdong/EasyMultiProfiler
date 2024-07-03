@@ -21,7 +21,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 }
 
 
-#' @param EMPT Object in EMPT format.
+#' @param obj Object in EMPT format.
 #' @param plot_category An interger.More plot style.
 #' @param geneSetID geneSet ID
 #' @param seed An interger. Set the random seed to the plot.(default:123)
@@ -34,14 +34,14 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 #'
 #' @examples
 #' # add example
-EMP_curveplot_enrich <- function(EMPT,plot_category = 1,seed =123,geneSetID,...) {
+EMP_curveplot_enrich <- function(obj,plot_category = 1,seed =123,geneSetID,...) {
   call <- match.call()
-  .get.plot_category.EMPT(EMPT) <- plot_category
-  .get.history.EMPT(EMPT) <- call
+  .get.plot_category.EMPT(obj) <- plot_category
+  .get.history.EMPT(obj) <- call
 
-  switch(.get.plot_category.EMPT(EMPT),
+  switch(.get.plot_category.EMPT(obj),
          "1" = {
-           withr::with_seed(seed,EMP_curveplot_enrich_default(EMPT,geneSetID,...))
+           withr::with_seed(seed,EMP_curveplot_enrich_default(EMPT=obj,geneSetID,...))
          },
          "2" = {
            # withr::with_seed(seed,EMP_curveplot_enrich_2(EMPT,...))

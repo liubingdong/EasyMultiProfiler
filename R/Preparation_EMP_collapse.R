@@ -12,7 +12,6 @@
 EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),
     collapse_sep=' ',action='add',...) {
   `.sample` <- counts <- feature <- primary <- old_feature <- NULL 
-  call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
@@ -89,7 +88,6 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
   
   .get.estimate_group.EMPT(EMPT) <- estimate_group
   .get.message_info.EMPT(EMPT) <- message_info
-  .get.history.EMPT(EMPT) <- call
   .get.method.EMPT(EMPT) <- 'collapse'
   .get.algorithm.EMPT(EMPT) <- 'collapse_byrow'
   .get.info.EMPT(EMPT) <- 'EMP_assay_data'
@@ -120,7 +118,6 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @noRd 
 EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
   `.feature` <- counts <- primary <- feature <- old_feature <- NULL
-  call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
@@ -200,7 +197,6 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
   
   .get.estimate_group.EMPT(EMPT) <- estimate_group
   .get.message_info.EMPT(EMPT) <- message_info
-  .get.history.EMPT(EMPT) <- call
   .get.method.EMPT(EMPT) <- 'collapse'
   .get.algorithm.EMPT(EMPT) <- 'collapse_bycol'
   .get.info.EMPT(EMPT) <- 'EMP_assay_data'
@@ -304,7 +300,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #'                estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
 #'   EMP_collapse(collapse_by='col',estimate_group = 'Group',method = 'mean',collapse_sep = '+')
 EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',action='add',use_cached=TRUE,...) {
-
+  call <- match.call()
   if (use_cached == FALSE) {
     memoise::forget(.EMP_collapse_byrow_m) %>% invisible()
     memoise::forget(.EMP_collapse_bycol_m) %>% invisible()
@@ -321,6 +317,7 @@ EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',n
   }else{
     stop("Please set parameter collapse_by (row or col)! ")
   }
+  .get.history.EMPT(deposit) <- call
   return(deposit)
 }
 

@@ -12,7 +12,7 @@ EMP_scatterplot(obj, ...)
 \S4method{EMP_scatterplot}{EMP_dimension_analysis}(obj, ...)
 
 EMP_scatterplot.EMP_dimension_analysis(
-  EMPT,
+  obj,
   seed = 123,
   group_level = "default",
   show = "p12",
@@ -29,11 +29,9 @@ EMP_scatterplot.EMP_dimension_analysis(
 )
 }
 \arguments{
-\item{obj}{object}
+\item{obj}{EMPT object}
 
 \item{...}{...}
-
-\item{EMPT}{EMPT object}
 
 \item{seed}{An interger. Set the random seed to the plot.}
 

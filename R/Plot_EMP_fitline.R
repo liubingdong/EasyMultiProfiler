@@ -246,9 +246,9 @@ EMP_fitline_plot.EMPT <- function(obj,plot_category = 1,seed =123,var_select,
                                estimate_group = NULL,formula=y~poly(x,1),se=FALSE,
                                show = 'pic',palette = NULL,eq_size=3,mytheme='theme()',
                                html_width=NULL,html_height=NULL) {
-  #call <- match.call()
+  call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
-  #.get.history.EMPT(EMPT) <- call
+  .get.history.EMPT(obj) <- call
   switch(.get.plot_category.EMPT(obj),
          "1" = {
            withr::with_seed(seed,.EMP_fitline_plot_default.EMPT(EMPT=obj,var_select=var_select,formula=formula,se=se,

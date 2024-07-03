@@ -10,14 +10,12 @@ EMP_curveplot(obj, ...)
 
 \S4method{EMP_curveplot}{EMP_enrich_analysis}(obj, ...)
 
-EMP_curveplot_enrich(EMPT, plot_category = 1, seed = 123, geneSetID, ...)
+EMP_curveplot_enrich(obj, plot_category = 1, seed = 123, geneSetID, ...)
 }
 \arguments{
-\item{obj}{object}
+\item{obj}{Object in EMPT format.}
 
 \item{...}{Further parameters passed to the function enrichplot::gseaplot2}
-
-\item{EMPT}{Object in EMPT format.}
 
 \item{plot_category}{An interger.More plot style.}
 

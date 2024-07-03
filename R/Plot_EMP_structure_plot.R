@@ -127,9 +127,9 @@ top_exper_caculate <- function(assay_data,estimate_group=NULL,structure_method =
 EMP_structure_plot.EMP_assay_data <- function(obj,plot_category = 1,method = 'mean',top_num=10,
                                estimate_group = NULL,ncol = NULL,show = 'pic',palette = NULL,
                                mytheme = 'theme()') {
-  #call <- match.call()
+  call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
-  #.get.history.EMPT(EMPT) <- call
+  .get.history.EMPT(obj) <- call
   switch(.get.plot_category.EMPT(obj),
          "1" = {
            EMP_structure_plot_default(EMPT=obj,method = method,top_num = top_num,
@@ -147,9 +147,9 @@ EMP_structure_plot.EMP_assay_data <- function(obj,plot_category = 1,method = 'me
 EMP_structure_plot.EMP_decostand <- function(obj,plot_category = 1,method = 'mean',top_num = 10,
                                estimate_group = NULL,ncol = NULL,show = 'pic',palette = NULL,
                                mytheme = 'theme()') {
-  #call <- match.call()
+  call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
-  #.get.history.EMPT(EMPT) <- call
+  .get.history.EMPT(obj) <- call
   switch(.get.plot_category.EMPT(obj),
          "1" = {
            EMP_structure_plot_default(EMPT=obj,method = method,top_num = top_num,
