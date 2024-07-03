@@ -38,7 +38,7 @@ EMP_multi_analysis(
 
 \item{combineGroup}{A boolean. Whether the function combine the enrichment or not.}
 
-\item{combineLevel}{A character string. One of "gene" and "enrichResult". Only actived, when combineFun == "enricher".}
+\item{combineLevel}{A character string. One of "gene" and "enrichResult". The parameter options include 'gene' and 'enrichResult' indicate whether the fusion p-value occurs at the feature level or at the enrichment result level. Only actived, when combineFun = "enricher".}
 
 \item{p.adjust}{A character string. One of holm, hochberg, hommel, bonferroni, BH, BY, fdr, none.(defaault: fdr)}
 

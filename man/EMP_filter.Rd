@@ -16,7 +16,7 @@ EMP_filter(
 )
 }
 \arguments{
-\item{obj}{EMPT or MultiAssayExperiment object.}
+\item{obj}{EMPT object.}
 
 \item{sample_condition}{Expressions that return a logical value, and are defined in terms of the variables in coldata. If multiple expressions are included, they are combined with the &，| operator.}
 
