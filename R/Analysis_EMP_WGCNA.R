@@ -167,7 +167,6 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #' @importFrom dplyr where
 .EMP_WGCNA_cor_analysis_EMPT <-function(EMPT,method='spearman',coldata_to_assay=NULL,action='add'){
   var1 <- NULL
-  call <- match.call()
   experiment_name <- .get.experiment.EMPT(EMPT)
   #net <- EMPT@deposit_append[['feature_WGCNA_cluster_result']]
   WGCNA_cluster_result <- .get.result.EMPT(EMPT,info='EMP_WGCNA_cluster_analysis')
@@ -233,7 +232,6 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
     EMPT@deposit_append[['WGCNA_cor_result']] <- df.cor.p
     .get.info.EMPT(EMPT) <-'EMP_WGCNA_cor_analysis'
     .get.method.EMPT(EMPT) <- method
-    .get.history.EMPT(EMPT) <- call
     class(EMPT) <- 'EMP_WGCNA_cor_analysis'
     return(EMPT)
   }else if(action == 'get') {
@@ -248,7 +246,6 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #' @importFrom WGCNA orderMEs
 .EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman',action='add'){
   primary <- var1 <- NULL
-
   if (inherits(obj,"EMP")) {
     EMP <- obj
   }else{
@@ -361,3 +358,77 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 }
 
 .EMP_WGCNA_cor_analysis_EMP_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMP)
+
+
+#' EMP_WGCNA_cor_analysis
+#'
+#' @param obj EMPT or EMP object.
+#' @param select A character string. The experiment name in the EMP object. Only for the EMP object.
+#' @param method A character string. Methods include pearson (default), spearman.
+#' @param coldata_to_assay A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.
+#' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#' @return EMP object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data(MAE)
+#' ## from one experiment
+#' WGCNA_COR_result <- MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),
+#'                          method='spearman',action='add') # If want the detailed result, set action = 'get'
+#' 
+#' ## Visualization
+#' MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+#'   EMP_heatmap_plot(palette = 'Spectral')
+#' 
+#' ## Filter the interesting module and make the enrichment analysis
+#' MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+#'   EMP_heatmap_plot(palette = 'Spectral') |>
+#'   EMP_filter(feature_condition = WGCNA_color == 'brown' ) |> 
+#'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
+#'   EMP_enrich_analysis(keyType = 'ec',KEGG_Type = 'MKEGG') |>
+#'   EMP_dotplot()
+#' 
+#' ## from two different experiments
+#' k1 <- MAE |>
+#'   EMP_assay_extract('geno_ec')  |> 
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)
+#' 
+#' k2 <- MAE |>
+#'   EMP_assay_extract('host_gene',pattern = c('A1BG','A1CF','A2MP1','AACS'),pattern_ref = 'feature')
+#' 
+#' (k1 + k2) |>
+#'   EMP_WGCNA_cor_analysis(method='spearman') |>
+#'   EMP_heatmap_plot(palette = 'Spectral') 
+#' }
+
+EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_assay=NULL,action='add'){
+  deposit <- NULL
+  call <- match.call()
+  if (inherits(obj,"EMP")) {
+    deposit <- .EMP_WGCNA_cor_analysis_EMP_m(obj=obj,select=select,method=method,action=action)
+    .get.history.EMP(deposit) <- call
+  }else if (inherits(obj,"EMP")) {
+    deposit <- .EMP_WGCNA_cor_analysis_EMPT_m(obj=obj,coldata_to_assay=coldata_to_assay,method=method,action=action)
+    .get.history.EMPT(deposit) <- call
+  }else{
+    stop("Please check the input data for EMP_WGCNA_cor_analysis!")
+  } 
+  return(deposit)
+}
+
+
+
