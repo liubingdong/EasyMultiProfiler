@@ -181,7 +181,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
 
     total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
     real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
-    colnames(temp_name) <- total_tax_info[1:ncol(temp_name)]
+    colnames(temp_name) <- real_tax_info[1:ncol(temp_name)]
 
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
       .impute_tax() ## impute the NA tax
@@ -195,7 +195,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
 
     total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
     real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
-    colnames(temp_name) <- total_tax_info[1:ncol(temp_name)]
+    colnames(temp_name) <- real_tax_info[1:ncol(temp_name)]
     
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
       .impute_tax()  %>% ## impute the NA tax
