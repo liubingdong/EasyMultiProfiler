@@ -8,7 +8,7 @@
 #' @param pvalueCutoff A character string. Adjusted pvalue cutoff on enrichment tests to report.
 #' @param combineMethod A character string including fisher, edgington and stouffer. Only actived, when combineFun == "enricher".
 #' @param combineGroup A boolean. Whether the function combine the enrichment or not.
-#' @param combineLevel A character string. One of "gene" and "enrichResult". Only actived, when combineFun == "enricher".
+#' @param combineLevel A character string. One of "gene" and "enrichResult". The parameter options include 'gene' and 'enrichResult' indicate whether the fusion p-value occurs at the feature level or at the enrichment result level. Only actived, when combineFun = "enricher".
 #' @param minGSSize Minimal size of genes annotated by Ontology term for testing. (default=10)
 #' @param maxGSSize Maximal size of each geneSet for analyzing. default=500)
 #' @param keyType A character string. Methods include ko, ec, cpd and entrezid.
