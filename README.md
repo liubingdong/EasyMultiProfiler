@@ -56,6 +56,13 @@ library(EasyMultiProfiler)
 
 More installation error and solution: [**Click this**](https://github.com/liubingdong/EasyMultiProfiler/blob/main/tutorial_related/Installation.md)
 
+### Update new version
+The EasyMultiProfiler package is continuously being updated with more analysis and visualization modules. When an updated version is needed, simply run pak again to update.
+```R
+pak::pak("liubingdong/EasyMultiProfiler")
+library(EasyMultiProfiler)
+```
+
 ### Usage and tutorial
 For more details, please refer to the [**online tutorial**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/).
 
