@@ -13,6 +13,10 @@ EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate
     col_values <- palette
   }
 
+  if (top_num >= length(col_values)) {
+     stop('The maximum number exceeds the number of color palettes. Please set an appropriate number of color palettes!')
+  }
+
   if (!is.null(estimate_group)) {
     mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
     str_data <- .get.assay.EMPT(EMPT) %>% dplyr::left_join(mapping,by ='primary')
@@ -82,9 +86,9 @@ top_exper_caculate <- function(assay_data,estimate_group=NULL,structure_method =
   
   
   feature_num <- ncol(data_abundace)
-  if(top_num >10){
-    stop("Top number could not exceed 10.")
-  }
+  #if(top_num >10){
+  #  stop("Top number could not exceed 10.")
+  #}
   
   if (top_num < feature_num & 0 < top_num) {
     if (structure_method=='median') {
@@ -111,20 +115,49 @@ top_exper_caculate <- function(assay_data,estimate_group=NULL,structure_method =
   return(data_select_combie)
 } 
 
-
+#' Structure plot for EMPT result
+#'
+#' @return EMPT object
+#' @export
 #' @param obj EMPT object
 #' @param plot_category An interger.More plot style.(under constrution)
 #' @param method A character string including mean,median,max and min. The name of the statistical test that is applied to select the top feature.
-#' @param top_num An interger. Max and default number is 10.
+#' @param top_num An interger. 
 #' @param estimate_group A character string. Select the colname in the coldata to divide the data in the plot.
 #' @param ncol An interger. Set the col number in the facet plot.
 #' @param show A character string include pic (default), html(under constrution).
 #' @param palette A series of character string. Color palette.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_structure_plot
+#'
+#' @examples
+#' data(MAE)
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_decostand(method = 'relative') |>
+#'   EMP_collapse(estimate_group = 'Class',collapse_by = 'row') |>
+#'   EMP_structure_plot(top_num=10)
+#' # merge the data by group information 
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_decostand(method = 'relative') |>
+#'   EMP_collapse(estimate_group = 'Class',collapse_by = 'row') |>
+#'   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') |>
+#'   EMP_structure_plot(top_num=10)
+#'
+#' # plot by group information
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_decostand(method = 'relative') |>
+#'   EMP_collapse(estimate_group = 'Class',collapse_by = 'row') |>
+#'   EMP_structure_plot(top_num=10,estimate_group='Sex')
+#'     
+#' MAE |>
+#'   EMP_assay_extract('host_gene') |>
+#'   EMP_identify_assay(method = 'edgeR') |>
+#'   EMP_structure_plot(top_num=10)
 
-
-EMP_structure_plot.EMP_assay_data <- function(obj,plot_category = 1,method = 'mean',top_num=10,
+EMP_structure_plot <- function(obj,plot_category = 1,method = 'mean',top_num=10,
                                estimate_group = NULL,ncol = NULL,show = 'pic',palette = NULL,
                                mytheme = 'theme()') {
   call <- match.call()
@@ -143,23 +176,23 @@ EMP_structure_plot.EMP_assay_data <- function(obj,plot_category = 1,method = 'me
   )
 
 }
-#' @rdname EMP_structure_plot
-EMP_structure_plot.EMP_decostand <- function(obj,plot_category = 1,method = 'mean',top_num = 10,
-                               estimate_group = NULL,ncol = NULL,show = 'pic',palette = NULL,
-                               mytheme = 'theme()') {
-  call <- match.call()
-  .get.plot_category.EMPT(obj) <- plot_category
-  .get.history.EMPT(obj) <- call
-  switch(.get.plot_category.EMPT(obj),
-         "1" = {
-           EMP_structure_plot_default(EMPT=obj,method = method,top_num = top_num,
-            estimate_group=estimate_group,show=show,palette=palette,ncol=ncol,mytheme=mytheme)
-         },
-         "2" = {
-           # where is EMP_boxplot_assay_2?
-           # withr::with_seed(seed,EMP_boxplot_assay_2(EMPT,...))
-         }
-
-  )
-
-}
+##' @rdname EMP_structure_plot
+#EMP_structure_plot.EMP_decostand <- function(obj,plot_category = 1,method = 'mean',top_num = 10,
+#                               estimate_group = NULL,ncol = NULL,show = 'pic',palette = NULL,
+#                               mytheme = 'theme()') {
+#  call <- match.call()
+#  .get.plot_category.EMPT(obj) <- plot_category
+#  .get.history.EMPT(obj) <- call
+#  switch(.get.plot_category.EMPT(obj),
+#         "1" = {
+#           EMP_structure_plot_default(EMPT=obj,method = method,top_num = top_num,
+#            estimate_group=estimate_group,show=show,palette=palette,ncol=ncol,mytheme=mytheme)
+#         },
+#         "2" = {
+#           # where is EMP_boxplot_assay_2?
+#           # withr::with_seed(seed,EMP_boxplot_assay_2(EMPT,...))
+#         }
+#
+#  )
+#
+#}

@@ -165,8 +165,15 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 }
 
 #' @importFrom dplyr where
-.EMP_WGCNA_cor_analysis_EMPT <-function(EMPT,method='spearman',coldata_to_assay=NULL,action='add'){
+.EMP_WGCNA_cor_analysis_EMPT <-function(obj,method='spearman',coldata_to_assay=NULL,action='add'){
   var1 <- NULL
+  
+  if (inherits(obj,"EMPT")) {
+    EMPT <- obj
+  }else{
+    stop('Please check the input data!')
+  }  
+
   experiment_name <- .get.experiment.EMPT(EMPT)
   #net <- EMPT@deposit_append[['feature_WGCNA_cluster_result']]
   WGCNA_cluster_result <- .get.result.EMPT(EMPT,info='EMP_WGCNA_cluster_analysis')
@@ -420,10 +427,14 @@ EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_
   call <- match.call()
   if (inherits(obj,"EMP")) {
     deposit <- .EMP_WGCNA_cor_analysis_EMP_m(obj=obj,select=select,method=method,action=action)
-    .get.history.EMP(deposit) <- call
+    if (action=='add') {
+      .get.history.EMP(deposit) <- call
+    }
   }else if (inherits(obj,"EMP")) {
     deposit <- .EMP_WGCNA_cor_analysis_EMPT_m(obj=obj,coldata_to_assay=coldata_to_assay,method=method,action=action)
-    .get.history.EMPT(deposit) <- call
+    if (action=='add') {
+      .get.history.EMPT(deposit) <- call    
+    }    
   }else{
     stop("Please check the input data for EMP_WGCNA_cor_analysis!")
   } 
