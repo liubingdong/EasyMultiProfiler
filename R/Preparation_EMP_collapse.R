@@ -317,7 +317,9 @@ EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',n
   }else{
     stop("Please set parameter collapse_by (row or col)! ")
   }
-  .get.history.EMPT(deposit) <- call
+  if (action == 'add') {
+    .get.history.EMPT(deposit) <- call
+  }
   return(deposit)
 }
 

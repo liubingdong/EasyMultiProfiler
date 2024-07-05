@@ -77,6 +77,10 @@
     method_name <- method
   }
 
+  if (method == 'total') {
+    method_name  <- 'relative'
+  }
+
   ## .calc_rclr unused argument pseudocount
   if (method == 'rclr') {
     assay_decostand_data <- assay_data %>%  tibble::column_to_rownames('primary') %>% 
