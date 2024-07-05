@@ -214,7 +214,12 @@ setMethod("EMP_result<-","EMPT",function(obj,value_name,affect_when_sample_chang
                               attribute=attribute,
                               attribute2=attribute2,
                               source=source)
- deposilt_info %<>% dplyr::bind_rows(new_value_info)
+ if (value_name %in% deposilt_info$Result) {
+  stop('An analysis result named ',value_name,' already exists in the data!')
+ }else{
+  deposilt_info %<>% dplyr::bind_rows(new_value_info)
+ }
+
  obj@deposit_info <- deposilt_info
  obj@deposit[[value_name]] <- value
  return(obj)
