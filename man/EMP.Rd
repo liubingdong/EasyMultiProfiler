@@ -74,7 +74,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/XXXXX/}
+  \item \url{https://github.com/liubingdong/EasyMultiProfiler}
 }
 }
 
