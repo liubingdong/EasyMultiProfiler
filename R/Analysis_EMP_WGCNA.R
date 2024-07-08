@@ -430,7 +430,7 @@ EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_
     if (action=='add') {
       .get.history.EMP(deposit) <- call
     }
-  }else if (inherits(obj,"EMP")) {
+  }else if (inherits(obj,"EMPT")) {
     deposit <- .EMP_WGCNA_cor_analysis_EMPT_m(obj=obj,coldata_to_assay=coldata_to_assay,method=method,action=action)
     if (action=='add') {
       .get.history.EMPT(deposit) <- call    

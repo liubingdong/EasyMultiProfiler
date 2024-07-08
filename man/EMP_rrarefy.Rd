@@ -22,7 +22,7 @@ EMP_rrarefy(
 
 \item{raresize}{An interger. Subsample size for rarefying community.}
 
-\item{seed}{An interger. Set the random seed to the plot.(default:123)}
+\item{seed}{An interger. Set the random seed for rarefaction process.(default:123)}
 
 \item{only_show_depth}{A boolean. Whether the function only show the depth or not.}
 

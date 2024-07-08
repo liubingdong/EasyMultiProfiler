@@ -69,7 +69,7 @@
 #' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param raresize An interger. Subsample size for rarefying community.
-#' @param seed An interger. Set the random seed to the plot.(default:123)
+#' @param seed An interger. Set the random seed for rarefaction process.(default:123)
 #' @param only_show_depth A boolean. Whether the function only show the depth or not.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
