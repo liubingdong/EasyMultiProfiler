@@ -47,49 +47,6 @@ For more detailed information
 help("EasyMultiProfiler")
 ```
 
-+ Data Extract
-  * EMP_assay_extract
-  * EMP_coldata_extract
-  * EMP_rowdata_extract
-+ Data Preparation
-  * EMP_adjust_abudance
-  * EMP_collapse
-  * EMP_decostand
-  * EMP_feature_convert
-  * EMP_impute
-  * EMP_identify_assay
-  * EMP_modify_assay
-  * EMP_rrarefy
-+ Data Analysis
-  * EMP_alpha_analysis
-  * EMP_cluster_analysis
-  * EMP_cor_analysis
-  * EMP_diff_analysis
-  * EMP_dimension_analysis
-  * EMP_enrich_analysis
-  * EMP_marker_analysis
-  * EMP_GSEA_analysis
-  * EMP_WGCNA_cluster_analysis
-  * EMP_WGCNA_cor_analysis
-  * EMP_multi_analysis
-+ Data Virtualization
-  * EMP_boxplot
-  * EMP_scatterplot
-  * EMP_dotplot
-  * EMP_netplot
-  * EMP_curveplot
-  * EMP_heatmap_plot
-  * EMP_volcanol_plot
-+ Data support
-  * EMP_filter
-  * EMP_history
-  * EMP_result
-  * EMP_summary
-  * EMP_taxonomy_import
-  * EMP_function_import
-  * EMP_normal_import
-  * EMP_easy_import
-
 # Vignette
 
 Please go to <https://github.com/liubingdong/EasyMultiProfiler/tree/main> for the full vignette.
