@@ -60,6 +60,11 @@ str_detect_multi <- function(string,pattern,exact=FALSE){
 #' @importFrom SummarizedExperiment rowData
 .as.EMPT <- function(x,experiment,estimate_group = NULL) {
   assay <- colname <- primary <- NULL
+  
+  if(is.null(experiment)){
+    stop('Parameter experiment should be specified!')
+  }
+
   sampleMap <- x@sampleMap %>% tibble::as_tibble() %>%
     dplyr::filter(assay %in% experiment) %>%
     dplyr::select(colname,primary)

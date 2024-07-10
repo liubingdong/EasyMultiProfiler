@@ -1,53 +1,10 @@
-#' Identify clusters for sample or feature
-#'
-#' @param obj Object in EMPT or MultiAssayExperiment format.
-#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param distance A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
-#' @param rowdata A boolean. Whether the function cluster the feature or not.
-#' @param method The agglomeration method to be used. This should be (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC).
-#' @param h A numeric. Height at which to cut tree (passed to cutree)
-#' @param groupLabels A boolean. Whether show the group label or not.
-#' @param pseudodist A number between 0 and 1 to replace the NA distance in case that some NA value exist.
-#' @param action  A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @importFrom tibble column_to_rownames
 #' @importFrom graphics abline
 #' @importFrom BiocManager install
 #' @importFrom utils install.packages
 #' @importFrom vegan vegdist
 #' @importFrom fastcluster hclust
-#'
-#' @return EMPT object
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' data(MAE)
-#' ## Cluster the samples according to the assay data
-#' MAE |>
-#'   EMP_assay_extract(experiment = 'geno_ec') |>
-#'   EMP_cluster_analysis()
-#' 
-#' MAE |>
-#'   EMP_assay_extract(experiment = 'geno_ec') |>
-#'   EMP_cluster_analysis(h=0.15) # identify the outlier samples
-#' 
-#' MAE |>
-#'   EMP_assay_extract(experiment = 'geno_ec') |>
-#'   EMP_cluster_analysis(h=0.15) |>
-#'   EMP_filter(sample_condition = cluster != 1) # filter away the outlier
-#' 
-#' ## Cluster the samples according to the coldata
-#' MAE |> 
-#'   EMP_coldata_extract(action = 'add') |> # transfer the coldata to asaay
-#'   EMP_impute(assay = T) |> # impute missing value
-#'   EMP_cluster_analysis(method = 'ward.D2',distance='clark',h=0.2) 
-#' 
-#' ## Cluster the features according to the assay data
-#' MAE |> 
-#'   EMP_assay_extract(experiment = 'geno_ec',pattern='1.1.1.1',pattern_ref='feature') |>
-#'   EMP_cluster_analysis(rowdata = T,h=0.8)
-#' }
-EMP_cluster_analysis <- function(obj,experiment,distance='bray',rowdata=FALSE,pseudodist=1,
+.EMP_cluster_analysis <- function(obj,experiment,distance='bray',rowdata=FALSE,pseudodist=1,
                                  method='average',h=NULL,groupLabels=TRUE,action='add') {
   
 # Check if package is installed, otherwise install
@@ -60,7 +17,7 @@ EMP_cluster_analysis <- function(obj,experiment,distance='bray',rowdata=FALSE,ps
   rlang::check_installed(c('BiocManager'), reason = 'for EMP_cluster_analysis().', action = install.packages) 
   rlang::check_installed(c('dendextend'), reason = 'for EMP_cluster_analysis().', action = BiocManager::install)   
   colname <- primary <- `.` <- NULL
-  call <- match.call()
+  #call <- match.call()
   if (inherits(obj,"MultiAssayExperiment")) {
 
     EMPT <- .as.EMPT(obj,
@@ -79,11 +36,11 @@ EMP_cluster_analysis <- function(obj,experiment,distance='bray',rowdata=FALSE,ps
 
   if (rowdata == F) {
     data_distance <- EMPT %>%
-      .get.assay.EMPT() %>% tibble::column_to_rownames('primary') %>%
+      assay() %>% t() %>%
       vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
   }else if (rowdata == T) {
     data_distance <- EMPT %>%
-      .get.assay.EMPT() %>% tibble::column_to_rownames('primary') %>% t() %>%
+      assay() %>% 
       vegdist(method=distance,na.rm = TRUE) %>% suppressWarnings()
   }
 
@@ -141,7 +98,7 @@ EMP_cluster_analysis <- function(obj,experiment,distance='bray',rowdata=FALSE,ps
     EMPT@method <- paste0(distance,'+',method)
     EMPT@algorithm <- 'cluster_analysis'
     .get.info.EMPT(EMPT) <- 'EMP_cluster_analysis'
-    .get.history.EMPT(EMPT) <- call
+    #.get.history.EMPT(EMPT) <- call
     class(EMPT) <- 'EMP_cluster_analysis'
     return(EMPT)
  }else if (action=='get') {
@@ -152,4 +109,67 @@ EMP_cluster_analysis <- function(obj,experiment,distance='bray',rowdata=FALSE,ps
 }
 
 
+#' @importFrom memoise memoise
+.EMP_cluster_analysis_m <- memoise::memoise(.EMP_cluster_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+
+#' Identify clusters for sample or feature
+#'
+#' @param obj Object in EMPT or MultiAssayExperiment format.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
+#' @param distance A character string.Dissimilarity index, partial match to "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
+#' @param rowdata A boolean. Whether the function cluster the feature or not.
+#' @param method The agglomeration method to be used. This should be (an unambiguous abbreviation of) one of "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC).
+#' @param h A numeric. Height at which to cut tree (passed to cutree)
+#' @param groupLabels A boolean. Whether show the group label or not.
+#' @param pseudodist A number between 0 and 1 to replace the NA distance in case that some NA value exist.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param action  A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#'
+#' @return EMPT object
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data(MAE)
+#' ## Cluster the samples according to the assay data
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'geno_ec') |>
+#'   EMP_cluster_analysis()
+#' 
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'geno_ec') |>
+#'   EMP_cluster_analysis(h=0.15) # identify the outlier samples
+#' 
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'geno_ec') |>
+#'   EMP_cluster_analysis(h=0.15) |>
+#'   EMP_filter(sample_condition = cluster != 1) # filter away the outlier
+#' 
+#' ## Cluster the samples according to the coldata
+#' MAE |> 
+#'   EMP_coldata_extract(action = 'add') |> # transfer the coldata to asaay
+#'   EMP_impute(assay = T) |> # impute missing value
+#'   EMP_cluster_analysis(method = 'ward.D2',distance='clark',h=0.2) 
+#' 
+#' ## Cluster the features according to the assay data
+#' MAE |> 
+#'   EMP_assay_extract(experiment = 'geno_ec',pattern='1.1.1.1',pattern_ref='feature') |>
+#'   EMP_cluster_analysis(rowdata = T,h=0.8)
+#' }
+EMP_cluster_analysis <- function (obj,experiment=NULL,distance='bray',rowdata=FALSE,pseudodist=1,
+                                 method='average',h=NULL,groupLabels=TRUE,use_cached=TRUE,action='add') {
+  call <- match.call()
+  deposit <- list()
+
+  if (use_cached == FALSE) {
+    memoise::forget(.EMP_cluster_analysis_m) %>% invisible()
+  }
+  
+  deposit <- .EMP_cluster_analysis_m(obj = obj,experiment=experiment,distance=distance,rowdata=rowdata,pseudodist=pseudodist,
+                                 method=method,h=h,groupLabels=groupLabels,action=action)
+  if (action=='add') {
+    .get.history.EMPT(deposit) <- call
+  }
+  return(deposit)
+}
 

@@ -6,13 +6,14 @@
 \usage{
 EMP_cluster_analysis(
   obj,
-  experiment,
+  experiment = NULL,
   distance = "bray",
   rowdata = FALSE,
   pseudodist = 1,
   method = "average",
   h = NULL,
   groupLabels = TRUE,
+  use_cached = TRUE,
   action = "add"
 )
 }
@@ -32,6 +33,8 @@ EMP_cluster_analysis(
 \item{h}{A numeric. Height at which to cut tree (passed to cutree)}
 
 \item{groupLabels}{A boolean. Whether show the group label or not.}
+
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
