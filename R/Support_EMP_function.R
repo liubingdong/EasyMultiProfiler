@@ -1,4 +1,4 @@
-.perform_operation <- function(x, method,na.rm=TRUE,...) {
+perform_operation <- function(x, method,na.rm=TRUE,...) {
     result <- switch(method,
                      "mean" = mean(x,na.rm=na.rm, ...),
                      "sum" = sum(x,na.rm=na.rm, ...),
@@ -307,14 +307,15 @@ EMP_history <- function(obj) {
 
 ## Enhance the print for EMP_assay_data
 ## These code below is modified from MicrobiotaProcess
-modify_tbl_format_setup <- function(x, totalX, ...){ 
+modify_tbl_format_setup <- function(x, totalX,totalY,...){ 
   tmpxx <- x$tbl_sum %>%
     strsplit(" ") %>%
     unlist()
-  tmpxx <- paste(getFromNamespace("big_mark", "pillar")(totalX), tmpxx[2], tmpxx[3])
+  tmpxx <- paste(getFromNamespace("big_mark", "pillar")(totalX), tmpxx[2], getFromNamespace("big_mark", "pillar")(totalY))
   names(tmpxx) <- c("A EMPT-tibble (EMPT object) size")
   x$tbl_sum <- tmpxx
   x$rows_total <- totalX
+  x$cols_total <- totalY
   x$rows_missing <- totalX - nrow(x$df)
   return(x)
 }
@@ -327,7 +328,7 @@ modify_tbl_format_footer <- function(x,EMPT,...){
   return(x)
 }
 
-
+#' @importFrom SummarizedExperiment assay
 #' @importFrom pillar tbl_format_setup
 #' @importFrom pillar tbl_format_header
 #' @importFrom pillar tbl_format_footer
@@ -338,21 +339,38 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
   
   result_num <-  length(EMPT@deposit)
   
-  x <- .get.result.EMPT(EMPT)
-  assay_dim <- .get.assay.EMPT(EMPT) %>% dim()
+  # Here is for speed up
+  info <- .get.info.EMPT(EMPT)
+  if (info %in% c('EMP_assay_data','EMP_rrarefy','EMP_decostand')) {
+      assay_dim <- EMPT %>% dim() %>% rev()
+      if (any(assay_dim > 500)) {
 
-  total_nrows <-  nrow(x)
+        select_col <- ifelse(assay_dim[1]<20,assay_dim[1],20)
+        select_row <- ifelse(assay_dim[2]<20,assay_dim[2],20)
+        
+        x <- assay(EMPT)[1:select_row,1:select_col] %>% t() %>% as.data.frame() %>%
+          tibble::rownames_to_column('primary') %>% tibble::as_tibble()
+      }else{
+        x <- .get.assay.EMPT(EMPT)
+      }
+  }else{
+      x <- .get.result.EMPT(EMPT)
+      assay_dim <- EMPT %>% dim() %>% rev()  
+  }
+
+  total_nrows <-  assay_dim[1]
+  total_cols <-  assay_dim[2]
   formatted_EMPT_setup <- pillar::tbl_format_setup(x = x, width = width,n = n, 
                                            max_extra_cols = max_extra_cols, 
                                            max_footer_lines = max_footer_lines)
   
-  formatted_EMPT_setup <- modify_tbl_format_setup(formatted_EMPT_setup, totalX = total_nrows)
+  formatted_EMPT_setup <- modify_tbl_format_setup(formatted_EMPT_setup, totalX = total_nrows,totalY=total_cols)
   
   format_comment <- getFromNamespace("format_comment", "pillar")
   
   subtitle <- sprintf(" Sample=%s | Feature=%s",
                       assay_dim[1],
-                      (assay_dim[2]-1)
+                      (assay_dim[2])
   ) %>% 
     format_comment(width=nchar(.) + 5) %>% 
     pillar::style_subtle()

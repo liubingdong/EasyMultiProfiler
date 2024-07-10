@@ -1,5 +1,3 @@
-#' @importFrom tidybulk tidybulk
-# ' @importFrom dplyr select
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr filter
@@ -8,6 +6,8 @@
 #' @importFrom tidyr pivot_wider
 #' @importFrom tibble column_to_rownames
 #' @importFrom SummarizedExperiment SummarizedExperiment
+#' @importFrom data.table data.table
+#' @importFrom data.table as.data.table
 #' @noRd 
 EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),
     collapse_sep=' ',action='add',...) {
@@ -35,18 +35,46 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
       stop('estimate_group parameter should be different in a serious of EMP_collapse_byrow! ')
     }
   }
+  
+  # original design too slow
+  #new_assay_data <- EMPT %>% 
+  #  tidybulk::tidybulk() %>%
+  #  dplyr::select(.sample,counts,!!estimate_group) %>%
+  #  dplyr::rename(primary=.sample,feature=!!estimate_group) %>%
+  #  tidyr::drop_na() %>%
+  #  dplyr::filter(!feature %in% !!na_string) %>% 
+  #  dplyr::group_by(primary, feature) %>%
+  #  dplyr::summarise(counts = perform_operation(counts,method),.groups='drop') %>% 
+  #  tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
+  #  tibble::column_to_rownames('primary') %>% t()
+ 
+  ## merge necessary df
+  assay_data <- EMPT %>% MultiAssayExperiment::assay() %>% as.data.frame() %>%
+    tibble::rownames_to_column('feature')
 
-  new_assay_data <- EMPT %>% 
-    tidybulk::tidybulk() %>%
-    dplyr::select(.sample,counts,!!estimate_group) %>%
-    dplyr::rename(primary=.sample,feature=!!estimate_group) %>%
+  row_data <- EMPT %>% SummarizedExperiment::rowData() %>% as.data.frame() %>%
+    dplyr::select(feature,!!estimate_group)
+
+  merge_df <- dplyr::full_join(assay_data,row_data,by='feature') %>%
+    tidyr::pivot_longer(
+      cols = -c(feature,{{estimate_group}}),
+      names_to = "primary",
+      values_to = "counts"
+    ) %>%
+    dplyr::select(primary,counts,{{estimate_group}}) %>%
+    dplyr::rename(feature = !!estimate_group ) %>%
     tidyr::drop_na() %>%
-    dplyr::filter(!feature %in% !!na_string) %>% 
-    dplyr::group_by(primary, feature) %>%
-    dplyr::summarise(counts = .perform_operation(counts,method),.groups='drop') %>% 
+    dplyr::filter(!feature %in% !!na_string) 
+
+  ## use data.table to speed up collapse
+  merge_df <- as.data.table(merge_df)
+  merge_df_compute <- merge_df[, .(counts = perform_operation(counts,method)), by = .(primary, feature)]
+  
+  new_assay_data <- merge_df_compute %>%
+    dplyr::arrange(primary,feature) %>%
     tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
     tibble::column_to_rownames('primary') %>% t()
-  
+
 
   if (is.null(df_attr_row)) {
     new_row_data <- .get.row_info.EMPT(EMPT)  %>% 
@@ -113,8 +141,8 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @importFrom tidyr pivot_wider
 #' @importFrom tibble column_to_rownames
 #' @importFrom SummarizedExperiment SummarizedExperiment
-#'
-#' @return xx object
+#' @importFrom data.table data.table
+#' @importFrom data.table as.data.table
 #' @noRd 
 EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
   `.feature` <- counts <- primary <- feature <- old_feature <- NULL
@@ -141,18 +169,47 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
       stop('estimate_group parameter should be different in a serious of EMP_collapse_byrow! ')
     }
   }
-  
-  new_assay_data <- EMPT %>% 
-    tidybulk::tidybulk() %>%
-    dplyr::select(.feature,counts,!!estimate_group) %>%
-    dplyr::rename(primary=!!estimate_group,feature=.feature) %>%
+  # original design too slow
+  #new_assay_data <- EMPT %>% 
+  #  tidybulk::tidybulk() %>%
+  #  dplyr::select(.feature,counts,!!estimate_group) %>%
+  #  dplyr::rename(primary=!!estimate_group,feature=.feature) %>%
+  #  tidyr::drop_na() %>%
+  #  dplyr::filter(!primary %in% !!na_string) %>% 
+  #  dplyr::group_by(primary, feature) %>%
+  #  dplyr::summarise(counts = perform_operation(counts,method),.groups='drop') %>%
+  #  tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
+  #  tibble::column_to_rownames('primary') %>% t()
+
+
+  ## merge necessary df
+  assay_data <- EMPT %>% MultiAssayExperiment::assay() %>% t() %>% as.data.frame() %>%
+    tibble::rownames_to_column('primary')
+
+  col_data <- EMPT %>% SummarizedExperiment::colData() %>% as.data.frame() %>%
+    tibble::rownames_to_column('primary') %>%
+    dplyr::select(primary,{{estimate_group}}) 
+
+  merge_df <- dplyr::full_join(assay_data,col_data,by='primary') %>%
+    tidyr::pivot_longer(
+      cols = -c(primary,!!estimate_group),
+      names_to = 'feature',
+      values_to = "counts"
+    ) %>%
+    dplyr::select(feature,counts,!!estimate_group) %>%
     tidyr::drop_na() %>%
-    dplyr::filter(!primary %in% !!na_string) %>% 
-    dplyr::group_by(primary, feature) %>%
-    dplyr::summarise(counts = .perform_operation(counts,method),.groups='drop') %>%
+    dplyr::filter(!{{estimate_group}} %in% !!na_string) 
+
+  ## use data.table to speed up collapse
+  merge_df <- as.data.table(merge_df)
+  merge_df_compute <- merge_df[, .(counts = perform_operation(counts,method)), by = .(get(estimate_group),feature)]
+
+  new_assay_data <- merge_df_compute %>%
+    dplyr::arrange(get,feature) %>%
+    dplyr::rename(!!estimate_group := get) %>%
     tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
-    tibble::column_to_rownames('primary') %>% t()
-  
+    tibble::column_to_rownames(estimate_group) %>% t()
+
   
   if (is.null(df_attr_col)) {
     new_col_data <- .get.mapping.EMPT(EMPT)  %>% 
@@ -232,10 +289,11 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
       dplyr::summarise(!!i := paste0(unique(!!dplyr::sym(i)), collapse = collapse_sep ) ) -> data_deposit[[i]]
   }
 
+  # Here it is not necessary to use data.table, due to little time cost
   for (i in idx_numeric) {
     df %>%
       dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
-      dplyr::summarise(!!i := .perform_operation(!!dplyr::sym(i),method,...),.groups='drop') -> data_deposit[[i]]
+      dplyr::summarise(!!i := perform_operation(!!dplyr::sym(i),method,...),.groups='drop') -> data_deposit[[i]]
   }
 
   combined_df <- purrr::reduce(data_deposit, dplyr::full_join, by = estimate_group)

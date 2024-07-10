@@ -199,7 +199,7 @@ EMP_decostand <- function(obj,experiment,method,bySample='default',logbase =2,us
   }else {
     stop('Please check the input data')
   }
-  if (use_cached == F) {
+  if (use_cached == FALSE) {
     memoise::forget(.EMP_decostand_m) %>% invisible()
   }
   EMPT <- .EMP_decostand_m(EMPT=x,method=method,bySample=bySample,logbase=logbase,pseudocount=pseudocount,...)

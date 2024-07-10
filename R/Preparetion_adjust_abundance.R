@@ -85,7 +85,7 @@ EMP_adjust_abundance <- function(obj,experiment,
   }else {
     stop('Please check the input data')
   }
-  if (use_cached == F) {
+  if (use_cached == FALSE) {
     memoise::forget(.EMP_adjust_abundance_m) %>% invisible()
   }
   EMPT <- .EMP_adjust_abundance_m(EMPT=x,method=method,.factor_unwanted,.factor_of_interest,...)

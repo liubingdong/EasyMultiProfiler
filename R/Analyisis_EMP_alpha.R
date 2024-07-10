@@ -76,7 +76,7 @@ EMP_alpha_analysis <- function(obj,experiment,use_cached = TRUE,action='add',...
   }
 
 
-  if (use_cached == F) {
+  if (use_cached == FALSE) {
     memoise::forget(.EMP_alpha_analysis) %>% invisible()
   }
 

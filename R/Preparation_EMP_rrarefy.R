@@ -101,7 +101,7 @@ EMP_rrarefy <- function(obj,experiment,raresize=NULL,seed=123,only_show_depth=FA
   }else {
     stop('Please check the input data')
   }
-  if (use_cached == F) {
+  if (use_cached == FALSE) {
     memoise::forget(.EMP_rrarefy_m) %>% invisible()
   }
   

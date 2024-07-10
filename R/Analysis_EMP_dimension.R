@@ -177,7 +177,7 @@ EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,us
     EMPT <- obj
   }
 
-  if (use_cached == F) {
+  if (use_cached == FALSE) {
     memoise::forget(.EMP_dimension_analysis_m) %>% invisible()
   }
 

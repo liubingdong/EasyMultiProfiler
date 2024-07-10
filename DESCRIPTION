@@ -1,7 +1,7 @@
 Package: EasyMultiProfiler
 Type: Package
 Title: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization
-Version: 0.1.7
+Version: 0.1.8
 Authors@R: c( person(given = "Bingdong", family = "liu",       email = "382983280@qq.com", role = c("aut", "cre")),
               person(given = "Erqiang",  family = "Hu",        email = "13766876214@163.com", role = c("aut", "ctb")))
 Maintainer: Bingdong Liu <382983280@qq.com>
@@ -15,6 +15,7 @@ Imports:
     Boruta (>= 8.0.0),
     biomformat,
     clusterProfiler (>= 4.10.0),
+    data.table,
     dplyr,  
     networkD3,
     dynamicTreeCut (>= 1.63.1),

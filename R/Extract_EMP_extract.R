@@ -1,7 +1,7 @@
 .EMP_assay_extract_EMP <- function (x,experiment,
                                     pattern_ref = 'Name',pattern=NULL,
-                                    exact=F,action='add') {
-  call <- match.call()
+                                    exact=FALSE,action='add') {
+  #call <- match.call()
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x, experiment = experiment)
   }else if(inherits(x,'EMPT')) {
@@ -21,9 +21,9 @@
 
 .EMP_assay_extract_EMPT <- function (EMPT,
                                pattern_ref = 'Name',pattern = NULL,
-                               exact=F,action = 'add') {
+                               exact=FALSE,action = 'add') {
   feature <- primary <- NULL
-  call <- match.call()
+  #call <- match.call()
 
   assay_content <-.get.assay.EMPT(EMPT)
   #assay_name <- .get.assay_name.EMPT(EMPT)
@@ -39,7 +39,7 @@
 
   .get.assay.EMPT(EMPT) <- assay_content
   .get.info.EMPT(EMPT) <- 'EMP_assay_data'
-  .get.history.EMPT(EMPT) <- call
+  #.get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_assay_data'
 
   if (action == 'add') {
@@ -51,6 +51,69 @@
   }
 }
 
+
+.EMP_assay_extract_EMP_m <- memoise::memoise(.EMP_assay_extract_EMP)
+.EMP_assay_extract_EMPT_m <- memoise::memoise(.EMP_assay_extract_EMPT)
+
+
+
+
+#' Extract assay data
+#'
+#' @param obj MultiAssayExperiment or EMPT object.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
+#' @param pattern_ref A character string. Select which column in the rowdata to extract assay data from.
+#' @param pattern A character string. Select which pattern in the rowdata to extract assay data.
+#' @param exact A boolean. Whether the extract use exact search method.(default:FALSE)
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
+#'
+#' @return EMPT object
+#' @export
+#'
+#' @examples
+#' data(MAE)
+#' ## Extract the assay data of one existed experiment from MultiAssaayExperiment
+#' MAE |>
+#'  EMP_assay_extract('taxonomy')
+  
+#' MAE |>
+#'  EMP_assay_extract('geno_ko') 
+#' ##  Search for specific features according to the rowdata
+#' MAE |>
+#'   EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = TRUE)
+#' MAE |>
+#'   EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = FALSE)
+EMP_assay_extract <- function (obj,experiment,pattern_ref = 'Name',pattern = NULL,use_cached = TRUE,
+                               exact=FALSE,action = 'add') {
+  deposit <- NULL
+  call <- match.call()
+
+  if (inherits(obj,"MultiAssayExperiment")) {
+    if (use_cached == FALSE) {
+      memoise::forget(.EMP_assay_extract_EMP_m) %>% invisible()
+    }    
+    deposit <- .EMP_assay_extract_EMP_m(x=obj,experiment=experiment,
+                                    pattern_ref = pattern_ref,pattern=pattern,
+                                    exact=exact,action=action)
+    if (action=='add') {
+      .get.history.EMPT(deposit) <- call # Here is already EMPT.
+    }
+  }else if (inherits(obj,"EMPT")) {
+    if (use_cached == FALSE) {
+      memoise::forget(.EMP_assay_extract_EMPT_m) %>% invisible()
+    }    
+    deposit <- .EMP_assay_extract_EMPT_m(EMPT=obj,
+                               pattern_ref = pattern_ref,pattern = pattern,
+                               exact=exact,action = action)
+    if (action=='add') {
+      .get.history.EMPT(deposit) <- call    
+    }    
+  }else{
+    stop("Please check the input data for EMP_assay_extract!")
+  } 
+  return(deposit)
+}
 
 
 #' Extract rowdata

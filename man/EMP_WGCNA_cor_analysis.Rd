@@ -9,6 +9,7 @@ EMP_WGCNA_cor_analysis(
   select = NULL,
   method = "spearman",
   coldata_to_assay = NULL,
+  use_cached = TRUE,
   action = "add"
 )
 }
@@ -20,6 +21,8 @@ EMP_WGCNA_cor_analysis(
 \item{method}{A character string. Methods include pearson (default), spearman.}
 
 \item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.}
+
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }

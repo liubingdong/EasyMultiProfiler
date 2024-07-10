@@ -133,7 +133,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
   }else {
     stop('Please check the input data')
   }
-  if (use_cached == F) {
+  if (use_cached == FALSE) {
     memoise::forget(.EMP_WGCNA_cluster_analysis_m) %>% invisible()
   }
 
@@ -373,6 +373,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #' @param select A character string. The experiment name in the EMP object. Only for the EMP object.
 #' @param method A character string. Methods include pearson (default), spearman.
 #' @param coldata_to_assay A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @return EMP object
 #' @export
@@ -422,15 +423,21 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #'   EMP_heatmap_plot(palette = 'Spectral') 
 #' }
 
-EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_assay=NULL,action='add'){
+EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_assay=NULL,use_cached=TRUE,action='add'){
   deposit <- NULL
   call <- match.call()
   if (inherits(obj,"EMP")) {
+    if (use_cached == FALSE) {
+      memoise::forget(.EMP_WGCNA_cor_analysis_EMP_m) %>% invisible()
+    }       
     deposit <- .EMP_WGCNA_cor_analysis_EMP_m(obj=obj,select=select,method=method,action=action)
     if (action=='add') {
       .get.history.EMP(deposit) <- call
     }
   }else if (inherits(obj,"EMPT")) {
+    if (use_cached == FALSE) {
+      memoise::forget(.EMP_WGCNA_cor_analysis_EMPT_m) %>% invisible()
+    }       
     deposit <- .EMP_WGCNA_cor_analysis_EMPT_m(obj=obj,coldata_to_assay=coldata_to_assay,method=method,action=action)
     if (action=='add') {
       .get.history.EMPT(deposit) <- call    

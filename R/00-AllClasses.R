@@ -199,53 +199,6 @@ setClass("EMP_multi_same_enrich_dotplot",contains = c("EMP","EMP_multi_same_enri
 setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enrich"))
 
 
-#' Extract assay data
-#'
-#' @param obj EMPT or MultiAssayExperiment object.
-#' @param ... ...
-#' @rdname EMP_assay_extract
-#'
-#' @return EMPT object
-#' @export
-#'
-#' @examples
-#' data(MAE)
-#' ## Extract the assay data of one existed experiment from MultiAssaayExperiment
-#' MAE |>
-#'  EMP_assay_extract('taxonomy')
-  
-#' MAE |>
-#'  EMP_assay_extract('geno_ko') 
-#' ##  Search for specific features according to the rowdata
-#' MAE |>
-#'   EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = TRUE)
-#' MAE |>
-#'   EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = FALSE)
-
-setGeneric("EMP_assay_extract",function(obj,experiment,pattern_ref='Name',pattern=NULL,exact=FALSE,action='add',...) standardGeneric("EMP_assay_extract"))
-
-#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
-#' @param pattern_ref A character string. Select which column in the rowdata to extract assay data from.
-#' @param pattern A character string. Select which pattern in the rowdata to extract assay data.
-#' @param exact A boolean. Whether the extract use exact search method.(default:FALSE)
-#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... ...
-#' @rdname EMP_assay_extract
-setMethod("EMP_assay_extract","MultiAssayExperiment",function(obj,experiment,pattern_ref,pattern,exact,action){
-  .EMP_assay_extract_EMP(obj,experiment,pattern_ref,pattern,exact,action)
-})
-
-#' @param pattern_ref A character string. Select which column in the rowdata to extract assay data from.
-#' @param pattern A character string. Select which pattern in the rowdata to extract assay data.
-#' @param exact A boolean. Whether the extract use exact search method.(default:FALSE)
-#' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... ...
-#' @rdname EMP_assay_extract
-setMethod("EMP_assay_extract","EMPT",function(obj,pattern_ref,pattern,exact,action){
-  .EMP_assay_extract_EMPT(obj,pattern_ref,pattern,exact,action)
-})
-
-
 #' Boxplot for EMPT result
 #'
 #' @param ... ...
