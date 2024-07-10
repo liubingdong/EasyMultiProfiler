@@ -11,7 +11,7 @@
 #' @noRd 
 EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),
     collapse_sep=' ',action='add',...) {
-  `.sample` <- counts <- feature <- primary <- old_feature <- NULL 
+  `.sample` <- counts <- feature <- primary <- old_feature <- . <- NULL 
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
@@ -145,7 +145,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @importFrom data.table as.data.table
 #' @noRd 
 EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
-  `.feature` <- counts <- primary <- feature <- old_feature <- NULL
+  `.feature` <- counts <- primary <- feature <- old_feature <- . <-  NULL
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
