@@ -6,7 +6,7 @@
 \usage{
 EMP_impute(
   obj,
-  experiment,
+  experiment = NULL,
   coldata = TRUE,
   assay = FALSE,
   rowdata = FALSE,
@@ -15,6 +15,7 @@ EMP_impute(
   num.trees = 1000,
   seed = 123,
   verbose = 0,
+  use_cached = TRUE,
   action = "add",
   ...
 )
@@ -39,6 +40,8 @@ EMP_impute(
 \item{seed}{Integer seed to initialize the random generator.}
 
 \item{verbose}{Controls how much info is printed to screen. 0 to print nothing.}
+
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
