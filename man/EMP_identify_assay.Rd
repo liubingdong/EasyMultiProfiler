@@ -6,11 +6,12 @@
 \usage{
 EMP_identify_assay(
   obj,
-  experiment,
+  experiment = NULL,
   estimate_group = NULL,
   method = c("default", "edgeR"),
   min = if (method == "edgeR") 10 else 0.001,
   min_ratio = 0.7,
+  use_cached = TRUE,
   action = "add"
 )
 }
@@ -26,6 +27,8 @@ EMP_identify_assay(
 \item{min}{A number. Set the min abundance for filtering. When method='default', min means the lowest relative bundance. When method='edgeR.', min means the lowest abosulte bundance.}
 
 \item{min_ratio}{Set the min ratio presence for feature.}
+
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }

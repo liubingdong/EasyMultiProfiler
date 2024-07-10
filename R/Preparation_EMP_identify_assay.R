@@ -180,6 +180,15 @@
   }
 }
 
+
+#' @importFrom memoise memoise
+.EMP_assay_filter_default_m <- memoise::memoise(.EMP_assay_filter_default,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+
+#' @importFrom memoise memoise
+.EMP_assay_filter_bulk_m <- memoise::memoise(.EMP_assay_filter_bulk,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+
+
+
 #' Identify the most core experssion and abudnace from sparse data
 #'
 #' @param obj Object in EMPT or MultiAssayExperiment format.
@@ -188,6 +197,7 @@
 #' @param method A character string.Methods include default, edgeR. Method default is from doi: 10.3389/fgene.2021.803627. Method edgeR in from edgeR::filterByExpr.
 #' @param min A number. Set the min abundance for filtering. When method='default', min means the lowest relative bundance. When method='edgeR.', min means the lowest abosulte bundance.
 #' @param min_ratio Set the min ratio presence for feature.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #'
 #' @return EMPT object
@@ -211,20 +221,26 @@
 #'   EMP_assay_extract('geno_ec') |>
 #'   EMP_identify_assay(method = 'edgeR',min = 10,min_ratio = 0.7) # consider all samples belong to one group
 #' 
-EMP_identify_assay <- function(obj,experiment,estimate_group=NULL,
+EMP_identify_assay <- function(obj,experiment=NULL,estimate_group=NULL,
                                method=c('default','edgeR'),min=if (method == "edgeR") 10 else 0.001,
-                               min_ratio = 0.7,action='add'){
+                               min_ratio = 0.7,use_cached=TRUE,action='add'){
   call <- match.call()
+
+  if (use_cached == FALSE) {
+    memoise::forget(.EMP_assay_filter_default_m) %>% invisible()
+    memoise::forget(.EMP_assay_filter_bulk_m) %>% invisible()
+  }
+
   switch(method,
          "default" = {
-           EMPT <- obj %>% .EMP_assay_filter_default(experiment=experiment,
+           EMPT <- obj %>% .EMP_assay_filter_default_m(experiment=experiment,
                                                    estimate_group=estimate_group,
                                                    min=min,
                                                    min_ratio=min_ratio,
                                                    action='add')
          },
          "edgeR"={
-           EMPT <- obj %>% .EMP_assay_filter_bulk(experiment=experiment,
+           EMPT <- obj %>% .EMP_assay_filter_bulk_m(experiment=experiment,
                                                 estimate_group=estimate_group,
                                                 min=min,
                                                 min_ratio=min_ratio,

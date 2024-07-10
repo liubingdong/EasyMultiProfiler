@@ -65,6 +65,10 @@ str_detect_multi <- function(string,pattern,exact=FALSE){
     stop('Parameter experiment should be specified!')
   }
 
+  if (!experiment %in% names(x)) {
+    stop('Parameter experiment is not in the object, please check!')
+  }
+
   sampleMap <- x@sampleMap %>% tibble::as_tibble() %>%
     dplyr::filter(assay %in% experiment) %>%
     dplyr::select(colname,primary)
