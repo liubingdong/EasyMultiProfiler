@@ -106,7 +106,7 @@
   EMPT
 }
 
-.EMP_diff_analysis_tidybulk_m <- memoise::memoise(.EMP_diff_analysis_tidybulk)
+.EMP_diff_analysis_tidybulk_m <- memoise::memoise(.EMP_diff_analysis_tidybulk,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 
@@ -270,7 +270,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
   EMPT
 }
 
-.EMP_diff_analysis_m <- memoise::memoise(.EMP_diff_analysis)
+.EMP_diff_analysis_m <- memoise::memoise(.EMP_diff_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 .get_diff_df <- function(data,feature_name,estimate_group) {
   feature <- Estimate_group <- NULL

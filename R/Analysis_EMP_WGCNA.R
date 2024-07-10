@@ -70,7 +70,7 @@
   return(EMPT)
 }
 
-.EMP_WGCNA_cluster_analysis_m <- memoise::memoise(.EMP_WGCNA_cluster_analysis)
+.EMP_WGCNA_cluster_analysis_m <- memoise::memoise(.EMP_WGCNA_cluster_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 
@@ -248,7 +248,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
   }  
 }
 
-.EMP_WGCNA_cor_analysis_EMPT_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMPT)
+.EMP_WGCNA_cor_analysis_EMPT_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMPT,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 #' @importFrom WGCNA orderMEs
 .EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman',action='add'){
@@ -364,7 +364,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
   }  
 }
 
-.EMP_WGCNA_cor_analysis_EMP_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMP)
+.EMP_WGCNA_cor_analysis_EMP_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMP,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 #' EMP_WGCNA_cor_analysis

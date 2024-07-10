@@ -30,7 +30,7 @@
   return(obj)
 }
 
-.EMP_Boruta_analysis_m <- memoise::memoise(.EMP_Boruta_analysis)
+.EMP_Boruta_analysis_m <- memoise::memoise(.EMP_Boruta_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 #' @importFrom randomForest randomForest
 .EMP_rf_analysis <- function(obj,seed=123,estimate_group,...) {
@@ -86,7 +86,7 @@
   return(obj)
 }
 
-.EMP_rf_analysis_m <- memoise::memoise(.EMP_rf_analysis)
+.EMP_rf_analysis_m <- memoise::memoise(.EMP_rf_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 #' @importFrom xgboost xgb.DMatrix
@@ -148,7 +148,7 @@
   return(obj)
 }
 
-.EMP_xgb_analysis_m <- memoise::memoise(.EMP_xgb_analysis)
+.EMP_xgb_analysis_m <- memoise::memoise(.EMP_xgb_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 #' @importFrom stats coef
@@ -187,7 +187,7 @@
   return(obj)
 }
 
-.EMP_lasso_analysis_m <- memoise::memoise(.EMP_lasso_analysis)
+.EMP_lasso_analysis_m <- memoise::memoise(.EMP_lasso_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 #' Marker discover based on classify or regression model

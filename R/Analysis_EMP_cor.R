@@ -82,7 +82,7 @@
   return(EMP)
 }
 
-.EMP_cor_analysis_m <- memoise::memoise(.EMP_cor_analysis)
+.EMP_cor_analysis_m <- memoise::memoise(.EMP_cor_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 
@@ -203,7 +203,7 @@
   return(EMP)
 }
 
-.EMP_cor_analysis_multi_m <- memoise::memoise(.EMP_cor_analysis_multi)
+.EMP_cor_analysis_multi_m <- memoise::memoise(.EMP_cor_analysis_multi,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 check_duplicate_col <- function(list_of_dfs) {
   # collect the colname

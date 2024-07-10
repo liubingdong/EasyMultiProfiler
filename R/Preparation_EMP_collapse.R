@@ -129,7 +129,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
   }
 }
 
-.EMP_collapse_byrow_m <- memoise::memoise(EMP_collapse_byrow)
+.EMP_collapse_byrow_m <- memoise::memoise(EMP_collapse_byrow,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 #' @importFrom tidybulk tidybulk
@@ -268,7 +268,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 }
 
 
-.EMP_collapse_bycol_m <- memoise::memoise(EMP_collapse_bycol)
+.EMP_collapse_bycol_m <- memoise::memoise(EMP_collapse_bycol,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
 
 
 #' @importFrom purrr reduce
