@@ -1,7 +1,7 @@
 .EMP_assay_filter_default<- function(x,experiment,estimate_group=NULL,min = 0,
                                      min_ratio = 0.7,action='add') {
   primary <- feature <- abundance <- Prob <- NULL
-  call <- match.call()
+  #call <- match.call()
 
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -103,7 +103,7 @@
 
 .EMP_assay_filter_bulk<- function(x,experiment,estimate_group=NULL,min = 10,min_ratio = 0.7,action='add') {
   feature <- primary <- NULL
-  call <- match.call()
+  #call <- match.call()
 
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
