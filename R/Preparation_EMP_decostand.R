@@ -7,8 +7,6 @@
     method  <- 'total'
   }
 
-  .get.assay.EMPT(EMPT) -> assay_data
-
   if (bySample != 'default' & !is.logical(bySample)) {
    stop('Paramer bySample should be default, TRUE or FALSE!')
   }
@@ -83,23 +81,23 @@
 
   ## .calc_rclr unused argument pseudocount
   if (method == 'rclr') {
-    assay_decostand_data <- assay_data %>%  tibble::column_to_rownames('primary') %>% 
+    assay_decostand_data <- assay(EMPT) %>% t() %>% 
     vegan::decostand(method = method, MARGIN = MARGIN,logbase=logbase,...)
   }else if(method == 'integer'){
-    assay_decostand_data <- assay_data %>%  tibble::column_to_rownames('primary') %>% 
+    assay_decostand_data <- assay(EMPT) %>% t() %>% 
      round(digits = 0)
   }else {
-    assay_decostand_data <- assay_data %>%  tibble::column_to_rownames('primary') %>% 
+    assay_decostand_data <- assay(EMPT) %>% t() %>% 
     vegan::decostand(method = method, MARGIN = MARGIN,logbase=logbase,pseudocount=pseudocount,...)
   }
 
 
-  .get.assay.EMPT(EMPT) <- assay_decostand_data %>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() %>% dplyr::select(primary,everything())
+  .get.assay.EMPT(EMPT) <- assay_decostand_data %>% as.data.frame() %>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() %>% dplyr::select(primary,everything())
   .get.method.EMPT(EMPT) <- method_name
   .get.assay_name.EMPT(EMPT) <- method_name
   .get.algorithm.EMPT(EMPT) <- 'EMP_decostand'
   .get.info.EMPT(EMPT) <- 'EMP_decostand'
-  EMPT
+  return(EMPT)
 
 }
 

@@ -49,10 +49,10 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
   #  tibble::column_to_rownames('primary') %>% t()
  
   ## merge necessary df
-  assay_data <- EMPT %>% MultiAssayExperiment::assay() %>% as.data.frame() %>%
+  assay_data <- EMPT %>% assay() %>% as.data.frame() %>%
     tibble::rownames_to_column('feature')
 
-  row_data <- EMPT %>% SummarizedExperiment::rowData() %>% as.data.frame() %>%
+  row_data <- EMPT %>% rowData() %>% as.data.frame() %>%
     dplyr::select(feature,!!estimate_group)
 
   merge_df <- dplyr::full_join(assay_data,row_data,by='feature') %>%
@@ -183,10 +183,10 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 
 
   ## merge necessary df
-  assay_data <- EMPT %>% MultiAssayExperiment::assay() %>% t() %>% as.data.frame() %>%
+  assay_data <- EMPT %>% assay() %>% t() %>% as.data.frame() %>%
     tibble::rownames_to_column('primary')
 
-  col_data <- EMPT %>% SummarizedExperiment::colData() %>% as.data.frame() %>%
+  col_data <- EMPT %>% colData() %>% as.data.frame() %>%
     tibble::rownames_to_column('primary') %>%
     dplyr::select(primary,{{estimate_group}}) 
 
