@@ -4,8 +4,7 @@
 .EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL){
   p1 <- p2 <- p3 <- R2X <- NULL
   deposit <- list()
-  assay_data  <- EMPT %>%
-    .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
+  assay_data  <- assay(EMPT) %>% t()
   
   switch(method,
          "pca" = {

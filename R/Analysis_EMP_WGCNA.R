@@ -14,9 +14,7 @@
   Var1 <- Freq <- NULL
   #enableWGCNAThreads()
   
-  assay_data <- .get.assay.EMPT(EMPT) %>%
-    tibble::column_to_rownames('primary') %>%
-    as.matrix()
+  assay_data <- assay(EMPT) %>% t()
 
   sft <- spsUtil::quiet(WGCNA::pickSoftThreshold(assay_data, powerVector = powers,
                           RsquaredCut=RsquaredCut, removeFirst = removeFirst, nBreaks = nBreaks, blockSize = blockSize,
@@ -188,9 +186,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
       dplyr::select(dplyr::all_of(!!coldata_to_assay))
   }
 
-  assay_data <- EMPT %>% .get.assay.EMPT() %>%
-    tibble::column_to_rownames('primary') %>%
-    as.matrix()
+  assay_data <- assay(EMPT) %>% t()
 
   moduleLabelsAutomatic <- net$colors
   moduleColorsAutomatic <- WGCNA::labels2colors(moduleLabelsAutomatic)

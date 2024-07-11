@@ -7,8 +7,7 @@
 #' @noRd
 .EMP_alpha_analysis <- function(EMPT,...) {
   primary <- NULL
-  assay_data  <- EMPT %>%
-    .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
+  assay_data  <- assay(EMPT) %>% t()
   alpha_shannon <- vegan::diversity(assay_data,,index = 'shannon',...)
   alpha_simpson <- vegan::diversity(assay_data,index = 'simpson',...)
   alpha_invsimpson <- vegan::diversity(assay_data,index = 'invsimpson',...)

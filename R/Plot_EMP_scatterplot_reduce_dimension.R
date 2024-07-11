@@ -269,8 +269,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
 
  # set the warning
- assay_data  <- EMPT %>%
-    .get.assay.EMPT() %>% tibble::column_to_rownames('primary')
+ assay_data  <- assay(EMPT) %>% t()
 
  check_dim <- dim(assay_data)[1] * dim(assay_data)[2]
  check_sample_num <- dim(assay_data)[1]
@@ -321,7 +320,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   }
 
   set.seed(seed)
-  adonis_data <- .get.assay.EMPT(EMPT) %>% tibble::column_to_rownames('primary')
+  adonis_data <- assay(EMPT) %>% t()
   adonis_result <- vegan::adonis2(adonis_data~Group,data = mapping,method = distance_for_adonis,permutations = adonis_permutations)
   p5 <- ggplot() +
     geom_text(aes(x = -0.5,y = 0.6,

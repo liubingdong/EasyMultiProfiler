@@ -96,10 +96,7 @@
 .EMP_xgb_analysis <- function(obj,seed=123,estimate_group,max.depth=6,eta=0.3,nrounds=50,objective=NULL,xgboost_run=NULL,verbose=0,...) {
   assay_data <- row_data <- coldata <- tran_data <- xgb_model <- feature_importance <- primary <- feature <- NULL
   Feature <- Gain <- Cover <- Frequency <-  Importance <- xgb_Gain <- xgb_Cover <- xgb_Frequency <- xgb_Importance <- nthread <- NULL
-  assay_data <- obj %>% 
-    .get.assay.EMPT() %>% 
-    tibble::column_to_rownames('primary') %>% 
-    as.matrix()
+  assay_data <- assay(obj) %>% t()
   row_data <- obj %>% .get.row_info.EMPT() %>% dplyr::select(1:2)
 
 
@@ -158,10 +155,7 @@
   rlang::check_installed(c('glmnet'), reason = 'for .EMP_lasso_analysis().', action = BiocManager::install)
   assay_data <- coldata <- tran_data <- lasso_model <- feature_importance <- primary <- NULL
   
-  assay_data <- obj %>% 
-    .get.assay.EMPT() %>% 
-    tibble::column_to_rownames('primary') %>% 
-    as.matrix()
+  assay_data <- assay(obj) %>% t()
   
   coldata <- obj %>% .get.mapping.EMPT() %>%
     dplyr::select(primary,{{estimate_group}}) %>%
