@@ -23,8 +23,8 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
   data <- .get.result.EMPT(EMPT,info='EMP_diff_analysis') %>% suppressMessages()
   # check the group num
   group_num <-  data %>% dplyr::pull(sign_group) %>% na.omit() %>% unique() %>% length()
-  if (group_num != 2) {
-    stop('volcanol plot only support two groups comparition!')
+  if (group_num > 2) {
+    stop('volcanol plot only support no more than 2 groups comparition!')
   }
 
   # check y
