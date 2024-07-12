@@ -170,12 +170,15 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
           class(deposit) <- show_info
           .get.info.EMPT(deposit) <- show_info
         }
-        ## When result is empty, make sure the output is ok
-        check_result_empty <- .get.result.EMPT(deposit) %>% suppressMessages() %>% length() == 0 | .get.result.EMPT(deposit) %>% suppressMessages() %>% is.null()
-        if (check_result_empty) {
-           class(deposit) <- 'EMP_assay_data'
-          .get.info.EMPT(deposit) <- 'EMP_assay_data'         
-        }        
+        if(inherits(.get.result.EMPT(deposit), c('data.frame','tibble'))){
+          deposit <- deposit
+        }else{
+          check_result_empty <- .get.result.EMPT(deposit) %>% spsUtil::quiet() %>% is.null() ||
+            .get.result.EMPT(deposit) %>% spsUtil::quiet() %>% length() == 0 ||
+            .get.result.EMPT(deposit) %>% spsUtil::quiet()  == "No info is matched!"
+          class(deposit) <- 'EMP_assay_data'
+          .get.info.EMPT(deposit) <- 'EMP_assay_data' 
+        }    
   }else{
         stop('Input data should be EMP or EMPT!')
   }
