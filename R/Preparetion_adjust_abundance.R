@@ -83,7 +83,7 @@ EMP_adjust_abundance <- function(obj,experiment,
     .get.method.EMPT(x) <- method
     class(x) <- 'EMP_assay_data'
   }else {
-    stop('Please check the input data')
+    stop('Please check the input data for EMP_adjust_abundance!')
   }
   if (use_cached == FALSE) {
     memoise::forget(.EMP_adjust_abundance_m) %>% invisible()

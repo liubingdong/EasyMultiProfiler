@@ -71,7 +71,7 @@ EMP_alpha_analysis <- function(obj,experiment,use_cached = TRUE,action='add',...
   }else if(inherits(obj,'EMPT')) {
     EMPT <- obj
   }else {
-    stop('Please check the input data!')
+    stop('Please check the input data for EMP_alpha_analysis!')
   }
 
 

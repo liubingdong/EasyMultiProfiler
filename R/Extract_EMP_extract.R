@@ -171,7 +171,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
       deposit %<>% dplyr::filter(str_detect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact))
     }
   }else {
-    stop("Please check the input data!")
+    stop("Please check the input data for EMP_rowdata_extract!")
   }
   return(deposit)
 }
@@ -226,7 +226,7 @@ EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_
         coldata %<>% dplyr::filter(primary %in% real_sample) %>% dplyr::select_if(~!all(is.na(.))) ## Delete any columns when all values are NA
       }
     }else {
-      stop("Please check the input data!")
+      stop("Please check the input data for EMP_coldata_extract!")
     }
 
     if (action == 'get') {

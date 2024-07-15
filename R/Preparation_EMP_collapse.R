@@ -25,7 +25,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
     experiment <- .get.experiment.EMPT(EMPT)
     class(EMPT) <- 'EMP_assay_data'
   }else {
-    stop('Please check the input data')
+    stop('Please check the input data for EMP_collapse_byrow!')
   }
   
   # check the df attr
@@ -159,7 +159,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
     experiment <- .get.experiment.EMPT(EMPT)
     class(EMPT) <- 'EMP_assay_data'
   }else {
-    stop('Please check the input data')
+    stop('Please check the input data for EMP_collapse_bycol!')
   }
   
   # check the df attr

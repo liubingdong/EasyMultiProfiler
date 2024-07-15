@@ -34,7 +34,7 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
   if (inherits(obj,"EMP")) {
     EMP <- obj
   }else{
-    stop('Please check the input data!')
+    stop('Please check the input data for EMP_heatmap.EMP_cor_analysis!')
   }  
 
   result <- .get.result.EMP(EMP,info = 'EMP_cor_analysis')
@@ -168,7 +168,7 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
     result <- .get.result.EMPT(obj,info = 'EMP_WGCNA_cor_analysis')
     WGCNA_cluster_result <- .get.result.EMPT(obj,info = 'EMP_WGCNA_cluster_analysis')
   }else {
-    stop('Please check the input data!')
+    stop('Please check the input data for EMP_heatmap.WGCNA!')
   }
 
   experiment_name <- result[["cor_info"]]
@@ -326,7 +326,7 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   if (inherits(obj,"EMPT")) {
     EMPT <- obj
   }else{
-    stop('Please check the input data!')
+    stop('Please check the input data for EMP_heatmap.EMP_assay_data!')
   } 
   
   result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages()

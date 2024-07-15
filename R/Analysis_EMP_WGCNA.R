@@ -129,7 +129,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
     x <- obj
     class(x) <- 'EMP_assay_data'
   }else {
-    stop('Please check the input data')
+    stop('Please check the input data for EMP_WGCNA_cluster_analysis!')
   }
   if (use_cached == FALSE) {
     memoise::forget(.EMP_WGCNA_cluster_analysis_m) %>% invisible()

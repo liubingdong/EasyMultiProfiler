@@ -120,7 +120,7 @@ as.EMP <- function(object,select=NULL) {
   }else if(inherits(object,'list')) {
     data_list <- object
   }else {
-    stop("Please check the input data!")
+    stop("Please check the input data for as.EMP!")
   }
   
   experiment_name <- c()

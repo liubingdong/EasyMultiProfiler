@@ -10,7 +10,7 @@ EMP_sankey_plot.EMP_cor_analysis <- function(obj,positive_col = '#CC79A7',negtiv
   if (inherits(obj,"EMP")) {
     EMP <- obj
   }else{
-    stop('Please check the input data!')
+    stop('Please check the input data for EMP_sankey_plot.EMP_cor_analysis!')
   }  
 
   result <- .get.result.EMP(EMP,info = 'EMP_cor_analysis')

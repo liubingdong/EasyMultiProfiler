@@ -26,7 +26,7 @@
   }else if(inherits(obj,'EMPT')) {
     EMPT <- obj
   }else {
-    stop('Please check the input data!')
+    stop('Please check the input data for .EMP_cluster_analysis!')
   }
 
   if(pseudodist >1 | pseudodist <0 ) {

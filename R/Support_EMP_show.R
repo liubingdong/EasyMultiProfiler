@@ -77,6 +77,9 @@ setMethod("show", "EMPT",
                       .get.result.EMPT(object) %>% print()
                    },
                    "EMP_alpha_analysis" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }
                      object %>% enhance_print(n=10)
                    },
                    "EMP_marker_analysis" = {

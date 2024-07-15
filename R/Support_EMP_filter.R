@@ -98,8 +98,8 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
     obj %<>% .filter.merge.EMPT() %>% suppressMessages()
   }
 
-  total_sample_num <- obj %>% EMP_coldata_extract() %>% nrow()
-  total_feature_num <- obj %>% EMP_rowdata_extract() %>% nrow()
+  total_sample_num <- dim(obj)[2]
+  total_feature_num <- dim(obj)[1]
 
   ## select sample
   obj %>% EMP_coldata_extract() %>%
@@ -196,8 +196,8 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
   result_names <- names(EMPT@deposit)
   deposit_info <- .get.deposit_info.EMPT(EMPT) %>% dplyr::filter(Result %in% !!result_names)
 
-  total_sample_num <- EMPT %>% EMP_coldata_extract() %>% nrow()
-  total_feature_num <- EMPT %>% EMP_rowdata_extract() %>% nrow()
+  total_sample_num <- dim(EMPT)[2]
+  total_feature_num <- dim(EMPT)[1]
 
   check_samples <- ifelse((total_sample_num - length(real_sample)) == 0,0,1)
   check_features <- ifelse((total_feature_num - length(real_feature)) == 0,0,1)

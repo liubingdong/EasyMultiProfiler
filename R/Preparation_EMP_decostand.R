@@ -195,7 +195,7 @@ EMP_decostand <- function(obj,experiment,method,bySample='default',logbase =2,us
     x <- obj
     class(x) <- 'EMP_assay_data'
   }else {
-    stop('Please check the input data')
+    stop('Please check the input data for EMP_decostand!')
   }
   if (use_cached == FALSE) {
     memoise::forget(.EMP_decostand_m) %>% invisible()
