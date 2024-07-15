@@ -32,6 +32,12 @@ setMethod("show", "EMPT",
           function(object) {
             info <- .get.info.EMPT(object)
             switch(info,
+                   "EMP_assay_data" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }
+                     object %>% enhance_print(n=10)
+                   },              
                    "EMP_decostand" = {
                      object %>% enhance_print(n=10)
                    },
@@ -44,9 +50,6 @@ setMethod("show", "EMPT",
                    "EMP_enrich_analysis" = {
                     try(object@deposit[["enrich_data"]]@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf),silent=TRUE)
                     try(object@deposit[["enrich_data"]]@result %>% tibble::as_tibble() %>% print(n=Inf),silent=TRUE)                     
-                   },
-                   "EMP_assay_data" = {
-                     object %>% enhance_print(n=10)
                    },
                    "EMP_cluster_analysis" = {
                      cluster_re <- .get.result.EMPT(object)
@@ -124,6 +127,12 @@ setMethod("show", "EMPT",
   }
 
   switch(info,
+                   "EMP_assay_data" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }
+                     return(.get.assay.EMPT(object))
+                   },
                    "EMP_decostand" = {
                      for (str in object@message_info) {
                       message_wrap(str)
@@ -151,12 +160,6 @@ setMethod("show", "EMPT",
                      deposit[['dimension_VIP']] <- object@deposit$dimension_VIP
                      deposit[['dimension_axis']] <- object@deposit$dimension_axis
                      return(deposit)
-                   },
-                   "EMP_assay_data" = {
-                     for (str in object@message_info) {
-                      message_wrap(str)
-                     }
-                     return(.get.assay.EMPT(object))
                    },
                    "EMP_cluster_analysis" = {
                      check_sample_cluster <- is.null(object@deposit[['sample_cluster_result']])
