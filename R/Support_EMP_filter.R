@@ -170,7 +170,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
           class(deposit) <- show_info
           .get.info.EMPT(deposit) <- show_info
         }
-        if(inherits(.get.result.EMPT(deposit), c('data.frame','tibble'))){
+        if(inherits(.get.result.EMPT(deposit) %>% suppressMessages(), c('data.frame','tibble'))){
           deposit <- deposit
         }else{
           check_result_empty <- .get.result.EMPT(deposit) %>% spsUtil::quiet() %>% is.null() ||
