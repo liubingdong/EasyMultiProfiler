@@ -39,12 +39,21 @@ setMethod("show", "EMPT",
                      object %>% enhance_print(n=10)
                    },              
                    "EMP_decostand" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }
                      object %>% enhance_print(n=10)
                    },
                    "EMP_rrarefy" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }
                      object %>% enhance_print(n=10)
                    },
                    "EMP_diff_analysis" = {
+                     for (str in object@message_info) {
+                      message_wrap(str)
+                     }                    
                      object %>% enhance_print(n=10)
                    },
                    "EMP_enrich_analysis" = {

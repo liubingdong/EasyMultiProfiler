@@ -363,7 +363,7 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
         x <- .get.assay.EMPT(EMPT)
       }
   }else{
-      x <- .get.result.EMPT(EMPT)
+      x <- .get.result.EMPT(EMPT) %>% suppressMessages()
       assay_dim <- EMPT %>% dim() %>% rev()  
   }
 
