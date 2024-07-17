@@ -316,7 +316,7 @@ EMP_history <- function(obj) {
 
 ## Enhance the print for EMP_assay_data
 ## These code below is modified from MicrobiotaProcess
-modify_tbl_format_setup <- function(x, totalX,totalY,...){ 
+modify_tbl_format_setup <- function(x, totalX,totalY,by,...){ 
   tmpxx <- x$tbl_sum %>%
     strsplit(" ") %>%
     unlist()
@@ -325,7 +325,13 @@ modify_tbl_format_setup <- function(x, totalX,totalY,...){
   x$tbl_sum <- tmpxx
   x$rows_total <- totalX
   x$cols_total <- totalY
-  x$rows_missing <- totalX - nrow(x$df)
+  if (by=='primary') {
+    x$rows_missing <- totalX - nrow(x$df)
+  }else if (by=='feature') {
+    x$rows_missing <- totalY - nrow(x$df)
+  }else{
+    "please check the by in modify_tbl_format_setup!"
+  }
   return(x)
 }
 
@@ -366,14 +372,15 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
       x <- .get.result.EMPT(EMPT) %>% suppressMessages()
       assay_dim <- EMPT %>% dim() %>% rev()  
   }
-
+  check_flag <- colnames(x)[1]
   total_nrows <-  assay_dim[1]
   total_cols <-  assay_dim[2]
   formatted_EMPT_setup <- pillar::tbl_format_setup(x = x, width = width,n = n, 
                                            max_extra_cols = max_extra_cols, 
                                            max_footer_lines = max_footer_lines)
   
-  formatted_EMPT_setup <- modify_tbl_format_setup(formatted_EMPT_setup, totalX = total_nrows,totalY=total_cols)
+  formatted_EMPT_setup <- modify_tbl_format_setup(formatted_EMPT_setup,by=check_flag,
+                                           totalX = total_nrows,totalY=total_cols)
   
   format_comment <- getFromNamespace("format_comment", "pillar")
   
