@@ -32,7 +32,7 @@ humann_function_import <- function(file=NULL,data=NULL,type) {
   temp %<>% dplyr::filter(!stringr::str_detect(feature,'\\|') & !stringr::str_detect(feature,'UN'))
   
   if (any(is.na(temp[,-1]))) {
-    warning("The NA value has been detected in the data and changed into 0!")
+    message("The NA value has been detected in the data and changed into 0!")
     temp[,-1][is.na(temp[,-1])] <- 0
   }
 
@@ -61,7 +61,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
   temp%<>%dplyr::filter(stringr::str_detect(feature,'\\|t_'))
 
   if (any(is.na(temp[,-1]))) {
-    warning("The NA value has been detected in the data and changed into 0!")
+    message("The NA value has been detected in the data and changed into 0!")
     temp[,-1][is.na(temp[,-1])] <- 0
   }
 
@@ -162,7 +162,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   temp[["feature"]] <- gsub(' ;', ';', temp[["feature"]])
 
   if (any(is.na(temp[,-1]))) {
-    warning("The NA value has been detected in the data and changed into 0!")
+    message("The NA value has been detected in the data and changed into 0!")
     temp[,-1][is.na(temp[,-1])] <- 0
   }
 
@@ -271,7 +271,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
     colnames(temp)[1] <- 'feature'
 
     if (any(is.na(temp[,-1]))) {
-      warning("The NA value has been detected in the data and changed into 0!")
+      message("The NA value has been detected in the data and changed into 0!")
       temp[,-1][is.na(temp[,-1])] <- 0
     }
 
@@ -328,7 +328,7 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
   colnames(data)[1] <- 'feature'
 
   if (any(is.na(data[,sampleID]))) {
-    warning("The NA value has been detected in the data and changed into 0!")
+    message("The NA value has been detected in the data and changed into 0!")
     data[,sampleID][is.na(data[,sampleID])] <- 0
   }
 
@@ -366,7 +366,7 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
     sampleID <- colnames(data)[-1]
 
     if (any(is.na(data[,-1]))) {
-      warning("The NA value has been detected in the data and changed into 0!")
+      message("The NA value has been detected in the data and changed into 0!")
       data[,-1][is.na(data[,-1])] <- 0
     }
     
@@ -382,7 +382,7 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
   }else{
 
     if (any(is.na(data[,sampleID]))) {
-      warning("The NA value has been detected in the data and changed into 0!")
+      message("The NA value has been detected in the data and changed into 0!")
       data[,sampleID][is.na(data[,sampleID])] <- 0
     }  
       
