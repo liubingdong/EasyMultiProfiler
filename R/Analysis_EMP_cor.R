@@ -48,9 +48,19 @@
   data1_sample_num <- rownames(data1) %>% unique %>% length()
   data2_sample_num <- rownames(data2) %>% unique %>% length()
 
-  data1 <- data1 |> dplyr::filter(rownames(data1) %in% real_sample)
-  data2 <- data2 |> dplyr::filter(rownames(data2) %in% real_sample)
+  data1_pre <- data1 |> dplyr::filter(rownames(data1) %in% real_sample)
+  data2_pre <- data2 |> dplyr::filter(rownames(data2) %in% real_sample)
   #df.cor.p<-agricolae_correlation(x=data1,y=data2,method = method,...)
+
+  ## check the consistent value
+  data1<- data1_pre %>%
+    dplyr::select_if(~ dplyr::n_distinct(.) > 1)
+  data2 <- data2_pre %>%
+    dplyr::select_if(~ dplyr::n_distinct(.) > 1)
+
+  if (ncol(data1_pre) != ncol(data1) | ncol(data2_pre) != ncol(data2)) {
+     warning(' The consistent value has beed detected and be removed!')
+  }
 
   df.cor.p <- CorRcpp(x = data1,y = data2,type = method)
   names(df.cor.p) <- c('correlation','pvalue')
