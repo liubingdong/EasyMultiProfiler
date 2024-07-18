@@ -30,6 +30,12 @@ humann_function_import <- function(file=NULL,data=NULL,type) {
   }
   colnames(temp)[1] <- 'feature'
   temp %<>% dplyr::filter(!stringr::str_detect(feature,'\\|') & !stringr::str_detect(feature,'UN'))
+  
+  if (any(is.na(temp[,-1]))) {
+    warning("The NA value has been detected in the data and changed into 0!")
+    temp[,-1][is.na(temp[,-1])] <- 0
+  }
+
   temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
   rownames(temp) <- NULL # necessary!
   temp2 <- dplyr::left_join(temp,ref,by = 'feature')
@@ -53,6 +59,12 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
   }  
   colnames(temp)[1] <- 'feature'
   temp%<>%dplyr::filter(stringr::str_detect(feature,'\\|t_'))
+
+  if (any(is.na(temp[,-1]))) {
+    warning("The NA value has been detected in the data and changed into 0!")
+    temp[,-1][is.na(temp[,-1])] <- 0
+  }
+
   temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
   rownames(temp) <- NULL # necessary!
   temp %<>%
@@ -144,9 +156,16 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
           dplyr::select(where(is.character),everything())        
       }
   }
+
   colnames(temp)[1] <- 'feature'
   temp[["feature"]] <- gsub('; ', ';', temp[["feature"]])
   temp[["feature"]] <- gsub(' ;', ';', temp[["feature"]])
+
+  if (any(is.na(temp[,-1]))) {
+    warning("The NA value has been detected in the data and changed into 0!")
+    temp[,-1][is.na(temp[,-1])] <- 0
+  }
+
   temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!
   rownames(temp) <- NULL # necessary!
   
@@ -250,6 +269,12 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
     dplyr::rename(feature=from,Name = to)
     }
     colnames(temp)[1] <- 'feature'
+
+    if (any(is.na(temp[,-1]))) {
+      warning("The NA value has been detected in the data and changed into 0!")
+      temp[,-1][is.na(temp[,-1])] <- 0
+    }
+
     temp <- temp[rowSums(temp[,-1]) != 0,] # filter away empty feature!    
     rownames(temp) <- NULL # necessary!
     temp2 <- dplyr::left_join(temp,ref,by = 'feature')
@@ -301,6 +326,12 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
   }
   
   colnames(data)[1] <- 'feature'
+
+  if (any(is.na(data[,sampleID]))) {
+    warning("The NA value has been detected in the data and changed into 0!")
+    data[,sampleID][is.na(data[,sampleID])] <- 0
+  }
+
   data <- data[rowSums(data[,sampleID]) != 0,] # filter away empty feature!
   rownames(data) <- NULL # necessary!
   
@@ -333,6 +364,11 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
 
   if (is.null(sampleID)) {
     sampleID <- colnames(data)[-1]
+
+    if (any(is.na(data[,-1]))) {
+      warning("The NA value has been detected in the data and changed into 0!")
+      data[,-1][is.na(data[,-1])] <- 0
+    }
     
     data <- data[rowSums(data[,-1]) != 0,] # filter away empty feature!
     rownames(data) <- NULL # necessary!
@@ -344,6 +380,12 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
     assay_data <- data %>%
       tibble::column_to_rownames('feature')
   }else{
+
+    if (any(is.na(data[,sampleID]))) {
+      warning("The NA value has been detected in the data and changed into 0!")
+      data[,sampleID][is.na(data[,sampleID])] <- 0
+    }  
+      
     data <- data[rowSums(data[, sampleID]) != 0,] # filter away empty feature!
     rownames(data) <- NULL # necessary!
   
