@@ -12,6 +12,7 @@ EMP_collapse(
   na_string = c("NA", "null", ""),
   collapse_by,
   collapse_sep = " ",
+  collapse_boolean = "any",
   action = "add",
   use_cached = TRUE,
   ...
@@ -31,6 +32,8 @@ EMP_collapse(
 \item{collapse_by}{A character string. Methods include col or row.}
 
 \item{collapse_sep}{A character string. The linking symbol used when strings are combined.}
+
+\item{collapse_boolean}{A character string including any or all. The stategy used when boolean value are combined.}
 
 \item{action}{A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 

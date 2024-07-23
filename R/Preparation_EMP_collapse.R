@@ -10,7 +10,7 @@
 #' @importFrom data.table as.data.table
 #' @noRd 
 EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),
-    collapse_sep=' ',action='add',...) {
+    collapse_sep=' ',collapse_boolean='any',action='add',...) {
   `.sample` <- counts <- feature <- primary <- old_feature <- . <- NULL 
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -32,7 +32,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
   df_attr_row <- EMPT@deposit2[['df_attr_row']]
   if (!is.null(df_attr_row)) {
     if (df_attr_row$feature == estimate_group) {
-      stop('estimate_group parameter should be different in a serious of EMP_collapse_byrow! ')
+      stop('Parameter estimate_group should be different!')
     }
   }
   
@@ -72,7 +72,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
   
   new_assay_data <- merge_df_compute %>%
     dplyr::arrange(primary,feature) %>%
-    tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
+    tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>% suppressWarnings() %>% ## Here is to suppress warning for some metabolite id with weird symbol
     tibble::column_to_rownames('primary') %>% t()
 
 
@@ -80,7 +80,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
     new_row_data <- .get.row_info.EMPT(EMPT)  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
-      .collpseBygroup.tibble(estimate_group = estimate_group,method=method,collapse_by='row',collapse_sep=collapse_sep,...)
+      .collpseBygroup.tibble(estimate_group = estimate_group,method=method,collapse_by='row',collapse_sep=collapse_sep,collapse_boolean=collapse_boolean,...)
     EMPT@deposit2[['df_attr_row']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
   }else {
     row_data <- .get.row_info.EMPT(EMPT)
@@ -94,7 +94,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
     new_row_data <- row_data  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
-      .collpseBygroup.tibble(estimate_group = estimate_group,method=method,collapse_by='row',collapse_sep=collapse_sep,...)
+      .collpseBygroup.tibble(estimate_group = estimate_group,method=method,collapse_by='row',collapse_sep=collapse_sep,collapse_boolean=collapse_boolean,...)
     EMPT@deposit2[['df_attr_row']] <- lapply(new_row_data, attr, "raw_info")%>% as.data.frame()
   }
   
@@ -144,7 +144,7 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @importFrom data.table data.table
 #' @importFrom data.table as.data.table
 #' @noRd 
-EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',action='add',...) {
+EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',collapse_boolean='any',action='add',...) {
   `.feature` <- counts <- primary <- feature <- old_feature <- . <-  NULL
   if (inherits(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
@@ -166,7 +166,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
   df_attr_col <- EMPT@deposit2[['df_attr_col']]
   if (!is.null(df_attr_col)) {
     if (df_attr_col$primary == estimate_group) {
-      stop('estimate_group parameter should be different in a serious of EMP_collapse_byrow! ')
+      stop('Parameter estimate_group should be different!')
     }
   }
   # original design too slow
@@ -207,7 +207,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
   new_assay_data <- merge_df_compute %>%
     dplyr::arrange(get,feature) %>%
     dplyr::rename(!!estimate_group := get) %>%
-    tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>%
+    tidyr::pivot_wider(names_from = 'feature',values_from = 'counts') %>% suppressWarnings() %>% ## Here is to suppress warning for some metabolite id with weird symbol
     tibble::column_to_rownames(estimate_group) %>% t()
 
   
@@ -215,7 +215,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
     new_col_data <- .get.mapping.EMPT(EMPT)  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
-      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep,collapse_by = 'col',method=method,...)
+      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep,collapse_boolean=collapse_boolean,collapse_by = 'col',method=method,...)
     EMPT@deposit2[['df_attr_col']] <- lapply(new_col_data, attr, "raw_info")%>% as.data.frame()
     
   }else {
@@ -230,7 +230,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
     new_col_data <- col_data  %>% 
       tidyr::drop_na(!!estimate_group) %>%
       dplyr::filter(!(!!dplyr::sym(estimate_group) %in% !!na_string)) %>%  # filter the missing value
-      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep,collapse_by = 'col',method=method,...)
+      .collpseBygroup.tibble(estimate_group = estimate_group,collapse_sep=collapse_sep,collapse_boolean=collapse_boolean,collapse_by = 'col',method=method,...)
     EMPT@deposit2[['df_attr_col']] <- lapply(new_col_data, attr, "raw_info")%>% as.data.frame()
   }
   
@@ -273,16 +273,16 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 
 #' @importFrom purrr reduce
 #' @noRd
-.collpseBygroup.tibble <- function(df,estimate_group,method,collapse_sep=' ',collapse_by,...) {
+.collpseBygroup.tibble <- function(df,estimate_group,method,collapse_sep=' ',collapse_by,collapse_boolean='all',...) {
   feature <- primary <- NULL
   idx <- df  %>% dplyr::select(-!!estimate_group) %>% colnames()
   old_col_name <- df %>% colnames()
   data_deposit <- list()
 
-
   idx_numeric <- df  %>% dplyr::select(-!!estimate_group) %>% dplyr::select(where(is.numeric)) %>% colnames()
-  idx_character <- df  %>% dplyr::select(-!!estimate_group) %>% dplyr::select(where(is.character)) %>% colnames()
-  
+  idx_character <- df  %>% dplyr::select(-!!estimate_group) %>% dplyr::select(where(is.character) | where(is.factor)) %>% colnames()
+  idx_boolean <- df  %>% dplyr::select(-!!estimate_group) %>% dplyr::select(where(is.logical)) %>% colnames()
+
   for (i in idx_character) {
     df %>%
       dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
@@ -294,6 +294,20 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
     df %>%
       dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
       dplyr::summarise(!!i := perform_operation(!!dplyr::sym(i),method,...),.groups='drop') -> data_deposit[[i]]
+  }
+
+  for (i in idx_boolean) {
+    if (collapse_boolean == 'any') {
+      df %>%
+        dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
+        dplyr::summarise(!!i := any(!!dplyr::sym(i))) -> data_deposit[[i]]
+    }else if (collapse_boolean == 'all') {
+      df %>%
+        dplyr::group_by(!!dplyr::sym(estimate_group)) %>%
+        dplyr::summarise(!!i := all(!!dplyr::sym(i))) -> data_deposit[[i]]
+    }else{
+      stop("Parameter collapse_boolean must be any or all!")
+    }
   }
 
   combined_df <- purrr::reduce(data_deposit, dplyr::full_join, by = estimate_group)
@@ -324,6 +338,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @param method  A character string. Methods include mean, sum, median, min, max.
 #' @param na_string A series of character strings. Indicate which characters can be considered missing values.
 #' @param collapse_sep A character string. The linking symbol used when strings are combined.
+#' @param collapse_boolean A character string including any or all. The stategy used when boolean value are combined.
 #' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param collapse_by A character string. Methods include col or row.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
@@ -357,7 +372,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #'   EMP_collapse(experiment = 'untarget_metabol',collapse_by='row',na_string = c("NA", "null", "","-"),
 #'                estimate_group = 'MS2kegg',method = 'mean',collapse_sep = '+') |>
 #'   EMP_collapse(collapse_by='col',estimate_group = 'Group',method = 'mean',collapse_sep = '+')
-EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',action='add',use_cached=TRUE,...) {
+EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_by,collapse_sep=' ',collapse_boolean='any',action='add',use_cached=TRUE,...) {
   call <- match.call()
   if (use_cached == FALSE) {
     memoise::forget(.EMP_collapse_byrow_m) %>% invisible()
@@ -367,11 +382,11 @@ EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',n
   if (collapse_by == 'row') {
     deposit <- .EMP_collapse_byrow_m(x=obj,experiment,
                                   estimate_group,method,
-                                  na_string,collapse_sep,action,...)
+                                  na_string,collapse_sep,collapse_boolean,action,...)
   }else if (collapse_by == 'col') {
     deposit <- .EMP_collapse_bycol_m(x=obj,experiment,
                                   estimate_group,method,
-                                  na_string,collapse_sep,action,...)
+                                  na_string,collapse_sep,collapse_boolean,action,...)
   }else{
     stop("Please set parameter collapse_by (row or col)! ")
   }
