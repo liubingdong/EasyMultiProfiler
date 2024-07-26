@@ -76,6 +76,12 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   ###PCoA分析--轴12
   data <- .get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_coordinate']] %>% suppressMessages()
   plotdata <- dplyr::left_join(data,mapping,by='primary')
+
+  ## Due to the purpose of the module, missing value in the group label is not allowed!
+  if(any(is.na(plotdata$Group))) {
+    stop('Column ',estimate_group,' has beed deteced missing value, this column could be filtered by EMP_filter firstly!')
+  }
+
   pc1 <-.get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_axis']][1] %>% suppressMessages()
   pc2 <-.get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_axis']][2] %>% suppressMessages()
   try(pc3 <-.get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_axis']][3] %>% suppressMessages(),silent = T)
