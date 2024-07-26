@@ -22,7 +22,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
 
-  data <-.get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% dplyr::left_join(mapping,by ='primary')
+  data <-.get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages() %>% dplyr::left_join(mapping,by ='primary') 
 
   ## clean the missing value in the group label
   if(any(is.na(data[[estimate_group]]))) {
@@ -30,7 +30,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
     data <- data %>% tidyr::drop_na(!!estimate_group)
   }
 
-  group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
+  group_combn <- combn(as.character(unique(data[[estimate_group]])),2)
   #compare <- plyr::alply(group_combn,2)
   compare <- list() 
   for (i in 1:ncol(group_combn)) {

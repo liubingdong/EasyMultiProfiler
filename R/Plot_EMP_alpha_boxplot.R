@@ -76,7 +76,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
 
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
 
-  alpha_data <- .get.result.EMPT(EMPT,info='EMP_alpha_analysis') %>%
+  alpha_data <- .get.result.EMPT(EMPT,info='EMP_alpha_analysis') %>% suppressMessages() %>%
     dplyr::full_join(mapping,by= 'primary')
 
   ## clean the missing value in the group label
@@ -85,7 +85,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
     alpha_data <- alpha_data %>% tidyr::drop_na(!!estimate_group)
   }
 
-  group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
+  group_combn <- combn(as.character(unique(alpha_data[[estimate_group]])),2)
 
   #compare <- plyr::alply(group_combn,2)
   compare <- list() 
