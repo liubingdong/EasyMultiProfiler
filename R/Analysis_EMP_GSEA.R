@@ -105,9 +105,13 @@
         dplyr::arrange(primary) %>% ## confirm the sample rank
         tibble::column_to_rownames('primary') %>%
         dplyr::select(!!estimate_group) 
+    
+      ## clean the missing value in the group label
+      if(any(is.na(coldata[[estimate_group]]))) {
+        stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+      }
 
-      coldata <- na.omit(coldata)
-      feature_table <- na.omit(feature_table)
+      #feature_table <- na.omit(feature_table)
 
       real_samples <- intersect(rownames(coldata),rownames(feature_table))
       coldata <- coldata %>% dplyr::filter(rownames(coldata) %in% real_samples )
