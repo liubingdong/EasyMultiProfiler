@@ -2,6 +2,11 @@
   primary <- feature <- value <- mean_value <- sd_value <- min_sd <- real_sd <- NULL
   real_mean <- mean_diff <- sd_sum <- NULL
   coldata <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
+
+  ## clean the missing value in the group label
+  if(any(is.na(coldata[[estimate_group]]))) {
+    stop('Column ',estimate_group,' has beed deteced missing value,please check and filter them!')
+  }
   
   data  <- .get.assay.EMPT(EMPT)  %>% tidyr::pivot_longer(cols = -primary,names_to = 'feature',values_to = 'value') %>%
     dplyr::left_join(coldata,by='primary')

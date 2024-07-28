@@ -51,6 +51,11 @@
            estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
            group_info <- EMPT %>% EMP_coldata_extract() %>% dplyr::pull(!!estimate_group)
            
+           ## check the missing value in the group label
+           if(any(is.na(group_info))) {
+             stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+           }
+
            plsda_raw <- ropls::opls(assay_data,
                                     group_info,
                                     orthoI=0,
@@ -75,6 +80,11 @@
            }
            estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
            group_info <- EMPT %>% EMP_coldata_extract() %>% dplyr::pull(!!estimate_group)
+           
+           ## check the missing value in the group label
+           if(any(is.na(group_info))) {
+             stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+           }
            
            if(length(unique(group_info)) > 2){
              stop("opls model ony support two groups analysis!")

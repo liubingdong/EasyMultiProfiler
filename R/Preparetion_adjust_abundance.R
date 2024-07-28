@@ -20,6 +20,14 @@
 #' @noRd
 .EMP_adjust_abundance <- function(EMPT,method,.factor_unwanted,.factor_of_interest,...) {
 
+  primary <- NULL
+  
+  coldata <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!.factor_unwanted,!!.factor_of_interest)
+  
+  if(any(is.na(coldata))) {
+    stop('Column ',.factor_unwanted,' or ',.factor_of_interest,' has beed deteced missing value, please check and filter them!')
+  }  
+
   EMPT %>%
       tidybulk::adjust_abundance( .factor_unwanted = !!.factor_unwanted, .factor_of_interest =  !!.factor_of_interest,
                                   method=method,...) %>% suppressWarnings() %>% suppressMessages() -> EMPT_adjust

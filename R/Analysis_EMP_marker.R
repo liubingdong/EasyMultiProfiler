@@ -245,6 +245,9 @@ EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=1
                                   max.depth=6,eta=0.3,nrounds=50,xgboost_run=NULL,objective=NULL,verbose=0,use_cached=TRUE,action='add',...){
 
   call <- match.call()
+  
+  primary <- NULL
+
   if (inherits(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
@@ -255,6 +258,12 @@ EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=1
   }
   
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+
+  ## check the missing value in the group label
+  coldata <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
+  if(any(is.na(coldata[[estimate_group]]))) {
+    stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+  }
 
   if (use_cached == FALSE) {
     memoise::forget(.EMP_Boruta_analysis_m) %>% invisible()

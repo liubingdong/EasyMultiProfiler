@@ -225,10 +225,18 @@ EMP_identify_assay <- function(obj,experiment=NULL,estimate_group=NULL,
                                method=c('default','edgeR'),min=if (method == "edgeR") 10 else 0.001,
                                min_ratio = 0.7,use_cached=TRUE,action='add'){
   call <- match.call()
-
+  primary <- NULL
   if (use_cached == FALSE) {
     memoise::forget(.EMP_assay_filter_default_m) %>% invisible()
     memoise::forget(.EMP_assay_filter_bulk_m) %>% invisible()
+  }
+
+  ## check the missing value in the group label
+  if (!is.null(estimate_group)) {
+    coldata <- .get.mapping.EMPT(obj) %>% dplyr::select(primary,!!estimate_group)
+    if(any(is.na(coldata[[estimate_group]]))) {
+      stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+    }
   }
 
   switch(method,
