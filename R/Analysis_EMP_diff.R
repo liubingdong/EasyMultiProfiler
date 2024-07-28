@@ -2,6 +2,8 @@
 #' @importFrom dplyr last_col
 #' @importFrom dplyr matches
 #' @importFrom dplyr n_distinct
+#' @importFrom SummarizedExperiment rowData
+#' @importFrom SummarizedExperiment colData
 .EMP_diff_analysis_tidybulk <- function(EMPT,method,.formula,p.adjust='fdr',group_level=NULL,...) {
   Estimate_group <- pvalue <- feature <- sign_group <- vs <- log2FC <- estimate_group <- fold_change <- `.` <- NULL
   batch_effect <- NULL
@@ -21,7 +23,20 @@
     stop("The group_level parameter must have exactly 2 factors!")
   }
 
+  ## reduce the cost when using tidybulk::tidybulk
+  new_coldata <- colData(EMPT) 
+  new_coldata <- new_coldata[,estimate_group,drop = FALSE]
+  
+  ## check the missing value in the group label
+  if(any(is.na(new_coldata[[estimate_group]]))) {
+    stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+  }
+
+  rowData(EMPT) <- NULL
+  colData(EMPT) <- new_coldata
+
   melt_EMPT <- EMPT %>% tidybulk::tidybulk()
+
   check_group <- melt_EMPT %>% dplyr::pull(estimate_group) %>% dplyr::n_distinct() == 2
   if(!check_group ) {
     stop('For ',method,' only support supports two-category group!')
@@ -208,6 +223,11 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
+
+  ## check the missing value in the group label
+  if(any(is.na(mapping[[estimate_group]]))) {
+    stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+  }
 
   assay_data <- .get.assay.EMPT(EMPT) %>%
               dplyr::left_join(mapping,by = 'primary') %>%
