@@ -226,7 +226,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
   data2_sample_num <- rownames(coldata) %>% unique %>% length()
 
 
-  df.cor.p[['cor_info']] <- c(experiment_name,paste0(experiment_name,'_codata'))
+  df.cor.p[['cor_info']] <- c(experiment_name,paste0(experiment_name,'_coldata'))
   df.cor.p[["n.obs"]] <- c(data1_sample_num,data2_sample_num,length(real_samples))
   df.cor.p[['cor_p']] <- df
   df.cor.p[['MEsWW']] <- MEsWW
