@@ -51,6 +51,11 @@
       stop('Please check the parameter estimate_group, ',estimate_group,' is not in the data!')
     }
     
+    ## check the missing value in the group label
+    if(any(is.na(data[[estimate_group]]))) {
+      stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
+    }
+
     ymax <- ymax*1.3
     
     data <- data %>% dplyr::filter(dplyr::if_all(dplyr::all_of(c(var_select,estimate_group)), ~ !is.na(.)))
@@ -104,12 +109,13 @@
       assay_data1 <- EMP@ExperimentList[[1]] %>% .get.assay.EMPT()
       assay_data2 <- EMP@ExperimentList[[2]] %>% .get.assay.EMPT()
       
-      #coldata1 <- EMP@ExperimentList[[1]] %>% .get.mapping.EMPT()
+      coldata1 <- EMP@ExperimentList[[1]] %>% .get.mapping.EMPT()
       
       x_data <- assay_data1 %>% dplyr::select(primary,dplyr::all_of(var_select[1]))
       y_data <- assay_data2 %>% dplyr::select(primary,dplyr::all_of(var_select[2]))
 
-      data <- dplyr::inner_join(x_data,y_data,by='primary')
+      data <- dplyr::inner_join(x_data,y_data,by='primary') %>%
+        dplyr::inner_join(coldata1,by='primary')      
       
     }else{
       if (!all(select %in% experiment_name)) {
@@ -122,11 +128,12 @@
       assay_data1 <- EMP@ExperimentList[[select[1]]] %>% .get.assay.EMPT()
       assay_data2 <- EMP@ExperimentList[[select[2]]] %>% .get.assay.EMPT()
       
-      #coldata1 <- EMP@ExperimentList[[1]] %>% .get.mapping.EMPT()
+      coldata1 <- EMP@ExperimentList[[1]] %>% .get.mapping.EMPT()
       
       x_data <- assay_data1 %>% dplyr::select(primary,dplyr::all_of(var_select[1]))
       y_data <- assay_data2 %>% dplyr::select(primary,dplyr::all_of(var_select[2]))
-      data <- dplyr::inner_join(x_data,y_data,by='primary') 
+      data <- dplyr::inner_join(x_data,y_data,by='primary') %>%
+        dplyr::inner_join(coldata1,by='primary')      
     }
   }else{
     assay_data <- .get.assay.EMPT(EMP@ExperimentList[[1]]) 
