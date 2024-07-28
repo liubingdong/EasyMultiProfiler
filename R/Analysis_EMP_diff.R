@@ -2,10 +2,10 @@
 #' @importFrom dplyr last_col
 #' @importFrom dplyr matches
 #' @importFrom dplyr n_distinct
-#' @importFrom SummarizedExperiment rowData
-#' @importFrom SummarizedExperiment colData
+#' @importFrom SummarizedExperiment `rowData<-`
+#' @importFrom SummarizedExperiment `colData<-`
 .EMP_diff_analysis_tidybulk <- function(EMPT,method,.formula,p.adjust='fdr',group_level=NULL,...) {
-  Estimate_group <- pvalue <- feature <- sign_group <- vs <- log2FC <- estimate_group <- fold_change <- `.` <- NULL
+  Estimate_group <- pvalue <- feature <- sign_group <- vs <- log2FC <- estimate_group <- fold_change <- `.` <- tiny_EMPT <- NULL
   batch_effect <- NULL
   Group_info <- as.list(.formula)[[2]]
   estimate_group <- as.list(Group_info)[[length(Group_info)]] %>% as.character()
@@ -24,18 +24,23 @@
   }
 
   ## reduce the cost when using tidybulk::tidybulk
-  new_coldata <- colData(EMPT) 
-  new_coldata <- new_coldata[,estimate_group,drop = FALSE]
-  
+  tiny_EMPT <- EMPT
+
+  new_coldata <- colData(tiny_EMPT) 
+  new_coldata <- new_coldata[,c(estimate_group,batch_info),drop=FALSE]
+
+  new_rowdata <- rowData(tiny_EMPT)
+  new_rowdata <- new_rowdata[,1,drop = FALSE]
+
   ## check the missing value in the group label
   if(any(is.na(new_coldata[[estimate_group]]))) {
     stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
   }
 
-  rowData(EMPT) <- NULL
-  colData(EMPT) <- new_coldata
+  rowData(tiny_EMPT) <- new_rowdata
+  colData(tiny_EMPT) <- new_coldata
 
-  melt_EMPT <- EMPT %>% tidybulk::tidybulk()
+  melt_EMPT <- tiny_EMPT %>% tidybulk::tidybulk()
 
   check_group <- melt_EMPT %>% dplyr::pull(estimate_group) %>% dplyr::n_distinct() == 2
   if(!check_group ) {
