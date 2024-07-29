@@ -46,6 +46,11 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
 
   df <- result[['cor_p']]
   df_r <- result[['correlation']]
+
+  if (any(is.na(df))) {
+    stop("The NA value has been detected, please check the EMP_cor_analysis result!")
+  }
+
   if (clust_col == TRUE) {
     var1_clust <- fastcluster::hclust(dist(df_r,method=dist_method),method = clust_method)
     var1_order <- df_r[var1_clust$order,] %>% rownames()  
@@ -178,6 +183,11 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 
   df <- result[['cor_p']]
   df_r <- result[['correlation']]
+
+  if (any(is.na(df))) {
+    stop("The NA value has been detected, please check the EMP_WGCNA_cor_analysis result!")
+  }
+
   if (clust_col == TRUE) {
     var1_clust <- fastcluster::hclust(dist(df_r,method=dist_method),method = clust_method)
     var1_order <- df_r[var1_clust$order,] %>% rownames()  
@@ -331,6 +341,9 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   
   result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages()
   
+  if (any(is.na(result))) {
+    stop("The NA value has been detected, please check the assay data!")
+  }
 
   if (clust_row == TRUE | clust_col == TRUE) {
     result_clust <- result %>%
