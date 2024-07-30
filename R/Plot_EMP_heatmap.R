@@ -47,6 +47,9 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
   df <- result[['cor_p']]
   df_r <- result[['correlation']]
 
+  var1_raw_order <- rownames(df_r)
+  var2_raw_order <- colnames(df_r) %>% rev()
+
   if (any(is.na(df))) {
     stop("The NA value has been detected, please check the EMP_cor_analysis result!")
   }
@@ -55,12 +58,16 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
     var1_clust <- fastcluster::hclust(dist(df_r,method=dist_method),method = clust_method)
     var1_order <- df_r[var1_clust$order,] %>% rownames()  
     df$var1 <- factor(df$var1,levels=var1_order)
+  }else{
+    df$var1 <- factor(df$var1,levels=var1_raw_order)
   }
   
   if (clust_row == TRUE) {
     var2_clust <- fastcluster::hclust(dist(t(df_r),method=dist_method),method = clust_method)  
     var2_order <- df_r[,var2_clust$order] %>% colnames()     
     df$var2 <- factor(df$var2,levels=var2_order)
+  }else{
+    df$var2 <- factor(df$var2,levels=var2_raw_order)
   } 
 
   ra<-abs(df$pvalue)
@@ -184,6 +191,9 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
   df <- result[['cor_p']]
   df_r <- result[['correlation']]
 
+  var1_raw_order <- rownames(df_r)
+  var2_raw_order <- colnames(df_r)
+
   if (any(is.na(df))) {
     stop("The NA value has been detected, please check the EMP_WGCNA_cor_analysis result!")
   }
@@ -192,6 +202,8 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
     var1_clust <- fastcluster::hclust(dist(df_r,method=dist_method),method = clust_method)
     var1_order <- df_r[var1_clust$order,] %>% rownames()  
     df$var1 <- factor(df$var1,levels=var1_order)
+  }else{
+    df$var1 <- factor(df$var1,levels=var1_raw_order)
   }
   
   ra<-abs(df$pvalue)
@@ -239,7 +251,7 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
     var2_clust <- fastcluster::hclust(dist(t(df_r2),method=dist_method),method = clust_method)  
     var2_order <- df_r2[,var2_clust$order] %>% colnames()     
     df$var2 <- factor(df$var2,levels=var2_order)
-  } 
+  }
 
 
   if (length(palette) >= 3) {
