@@ -173,7 +173,7 @@
 #' MAE |>
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='edgeR_quasi_likelihood',
-#'                     .formula = ~0+Group,estimate_group = c('Group_B','Group_A')) ## Set the comparison order.
+#'                     .formula = ~0+Group,group_level = c('Group_B','Group_A')) ## Set the comparison order.
 EMP_diff_analysis <- function(obj,experiment,.formula,
                               method = 'wilcox.test',p.adjust='fdr',estimate_group=NULL,
                               use_cached = TRUE,action='add',group_level=NULL,
