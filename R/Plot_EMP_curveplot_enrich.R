@@ -9,7 +9,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
   p <- .get.result.EMPT(EMPT) %>%
     gseaplot2(geneSetID,...)
 
-  enrich_plot[['pic']] <- p
+  enrich_plot[['pic']] <- p[[1]] + p[[2]] + p[[3]] +  patchwork::plot_layout(ncol = 1,nrow = 3,heights = c(4.5,1.5,3))
   #enrich_plot[['html']] <- plotly::ggplotly(p)
 
   #EMPT@deposit[['gsea_curve_plot']] <- enrich_plot
