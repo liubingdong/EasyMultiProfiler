@@ -12,9 +12,10 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
   enrich_plot[['pic']] <- p
   #enrich_plot[['html']] <- plotly::ggplotly(p)
 
-  EMPT@deposit[['enrich_analysis_plot']] <- enrich_plot
+  #EMPT@deposit[['gsea_curve_plot']] <- enrich_plot
+  .get.plot_deposit.EMPT(EMPT,info = 'gsea_curve_plot') <- enrich_plot
   .get.plot_specific.EMPT(EMPT) <- show
-  .get.algorithm.EMPT(EMPT) <- 'enrich_analysis_plot'
+  .get.algorithm.EMPT(EMPT) <- 'gsea_curve_plot'
   .get.info.EMPT(EMPT) <- 'EMP_enrich_analysis_curveplot'
   class(EMPT) <- 'EMP_enrich_analysis_curveplot'
   EMPT
@@ -53,8 +54,8 @@ EMP_curveplot_enrich <- function(obj,plot_category = 1,seed =123,geneSetID,...) 
 
 .show_EMP_curveplot_enrich <- function(obj,plot) {
   switch(plot,
-         "pic" = print(obj@deposit$enrich_analysis_plot$pic),
-         "html" = print(obj@deposit$enrich_analysis_plot$html)
+         "pic" = print(obj@plot_deposit$gsea_curve_plot$pic),
+         "html" = print(obj@plot_deposit$gsea_curve_plot$html)
   )
 }
 
