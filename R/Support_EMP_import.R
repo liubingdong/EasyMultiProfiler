@@ -202,6 +202,27 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
     real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
     colnames(temp_name) <- real_tax_info[1:ncol(temp_name)]
 
+    # make the dupicate anotation into NA
+    strings_to_remove3 <- c(
+      "uncultured", "unculturebacterium", "uncultureorganism", "unidentified", "unculturemarine",
+      "uncultureLactobacillus", "uncultureprokaryote", "uncultureBacteroidales", "uncultureDesulfovibrionaceae",
+      "uncultureLachnospiraceae", "uncultureErysipelotrichales", "unculturePrevotella", "uncultureAnaerotruncus",
+      "uncultureRuminococcus", "uncultureWautersiella", "uncultureCandidatus", "uncultureEubacterium",
+      "uncultureClostridiales", "unculturecompost", "uncultureActinobacteridae", "uncultureClostridiaceae",
+      "uncultureOdoribacter", "uncultureCoxiella", "uncultureactinobacterium", "uncultureErysipelotrichaceae",
+      "uncultureAnaerolineae", "uncultureBacteroidaceae", "uncultureAlphaproteobacteria", "unculturerumen",
+      "uncultureRhodospirillaceae", "unculturesoil", "unculturespirochete", "uncultureMethanobacteriales"
+    )
+    occurrences <- colSums(sapply(strings_to_remove3, function(pattern) grepl(pattern, unlist(temp_name))))
+    strings_to_remove3_real <- names(occurrences[occurrences >1]) # search the dupicate anotation which appear more than once
+    temp_name <- apply(temp_name, 2, function(x) {
+      for (string in strings_to_remove3_real) {
+        x <- gsub(string, NA, x)       
+      }
+      return(x)
+    })
+    temp_name <- as.data.frame(temp_name)    
+
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
       .impute_tax() ## impute the NA tax
     temp  %<>% tibble::column_to_rownames('feature') %>% as.matrix()
@@ -216,6 +237,28 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
     real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
     colnames(temp_name) <- real_tax_info[1:ncol(temp_name)]
     
+    # make the dupicate anotation into NA
+    strings_to_remove3 <- c(
+      "uncultured", "unculturebacterium", "uncultureorganism", "unidentified", "unculturemarine",
+      "uncultureLactobacillus", "uncultureprokaryote", "uncultureBacteroidales", "uncultureDesulfovibrionaceae",
+      "uncultureLachnospiraceae", "uncultureErysipelotrichales", "unculturePrevotella", "uncultureAnaerotruncus",
+      "uncultureRuminococcus", "uncultureWautersiella", "uncultureCandidatus", "uncultureEubacterium",
+      "uncultureClostridiales", "unculturecompost", "uncultureActinobacteridae", "uncultureClostridiaceae",
+      "uncultureOdoribacter", "uncultureCoxiella", "uncultureactinobacterium", "uncultureErysipelotrichaceae",
+      "uncultureAnaerolineae", "uncultureBacteroidaceae", "uncultureAlphaproteobacteria", "unculturerumen",
+      "uncultureRhodospirillaceae", "unculturesoil", "unculturespirochete", "uncultureMethanobacteriales"
+    )
+    occurrences <- colSums(sapply(strings_to_remove3, function(pattern) grepl(pattern, unlist(temp_name))))
+    strings_to_remove3_real <- names(occurrences[occurrences >1]) # search the dupicate anotation which appear more than once
+    temp_name <- apply(temp_name, 2, function(x) {
+      for (string in strings_to_remove3_real) {
+        x <- gsub(string, NA, x)       
+      }
+      return(x)
+    })
+    temp_name <- as.data.frame(temp_name)    
+
+
     temp_name <- data.frame(feature = temp$feature,temp_name) %>%
       .impute_tax()  %>% ## impute the NA tax
       dplyr::mutate(feature = paste0('feature_',1:nrow(temp_name)))
