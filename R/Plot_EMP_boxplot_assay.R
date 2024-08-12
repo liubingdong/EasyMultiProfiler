@@ -92,7 +92,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_boxplot
 
-EMP_boxplot.EMP_assay_data <- function(obj,plot_category = 1,seed =123,method = 'wilcox.test',
+EMP_boxplot.EMP_assay_boxplot_union <- function(obj,plot_category = 1,seed =123,method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
@@ -117,28 +117,4 @@ EMP_boxplot.EMP_assay_data <- function(obj,plot_category = 1,seed =123,method = 
 
 }
 
-EMP_boxplot.EMP_decostand <- function(obj,plot_category = 1,seed =123,method = 'wilcox.test',
-                               estimate_group = NULL,group_level = 'default',
-                               ncol = NULL,show = 'pic',palette = NULL,
-                               html_width=NULL,html_height=NULL,
-                               mytheme = 'theme()') {
-  call <- match.call()
-  .get.plot_category.EMPT(obj) <- plot_category
-  .get.history.EMPT(obj) <- call
-  switch(.get.plot_category.EMPT(obj),
-         "1" = {
-           withr::with_seed(seed,EMP_boxplot_assay_default(EMPT=obj,method = method,
-                               estimate_group = estimate_group,group_level = group_level,
-                               ncol = ncol,show = show,palette = palette,
-                               html_width=html_width,html_height=html_height,
-                               mytheme = mytheme))
-         },
-         "2" = {
-           # where is EMP_boxplot_assay_2?
-           # withr::with_seed(seed,EMP_boxplot_assay_2(EMPT,...))
-         }
-
-  )
-
-}
 

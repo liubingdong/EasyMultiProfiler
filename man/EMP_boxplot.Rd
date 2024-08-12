@@ -4,19 +4,16 @@
 \name{EMP_boxplot}
 \alias{EMP_boxplot}
 \alias{EMP_boxplot,EMP_alpha_analysis-method}
-\alias{EMP_boxplot,EMP_assay_data-method}
-\alias{EMP_boxplot,EMP_decostand-method}
+\alias{EMP_boxplot,EMP_assay_boxplot_union-method}
 \alias{EMP_boxplot.EMP_alpha_analysis}
-\alias{EMP_boxplot.EMP_assay_data}
+\alias{EMP_boxplot.EMP_assay_boxplot_union}
 \title{Boxplot for EMPT result}
 \usage{
 EMP_boxplot(obj, ...)
 
 \S4method{EMP_boxplot}{EMP_alpha_analysis}(obj, ...)
 
-\S4method{EMP_boxplot}{EMP_assay_data}(obj, ...)
-
-\S4method{EMP_boxplot}{EMP_decostand}(obj, ...)
+\S4method{EMP_boxplot}{EMP_assay_boxplot_union}(obj, ...)
 
 EMP_boxplot.EMP_alpha_analysis(
   obj,
@@ -34,7 +31,7 @@ EMP_boxplot.EMP_alpha_analysis(
   mytheme = "theme()"
 )
 
-EMP_boxplot.EMP_assay_data(
+EMP_boxplot.EMP_assay_boxplot_union(
   obj,
   plot_category = 1,
   seed = 123,

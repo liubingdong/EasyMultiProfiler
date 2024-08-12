@@ -172,6 +172,8 @@ setClass("EMP_WGCNA_cor_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_WGCNA_cor_heatmap",contains = c("EMP_WGCNA_cor_analysis","EMPT","SummarizedExperiment"))
 
 setClassUnion("EMP_assay_heatmap_union", c("EMP_assay_data","EMP_decostand","EMP_diff_analysis"))
+setClassUnion("EMP_assay_boxplot_union", c("EMP_assay_data","EMP_decostand","EMP_diff_analysis"))
+
 
 setClass("EMP_enrich_analysis",contains = c("EMP_diff_analysis","EMPT","SummarizedExperiment"))
 setClass("EMP_enrich_analysis_dotplot",contains = c("EMP_diff_analysis","EMPT","SummarizedExperiment","EMP_enrich_analysis"))
@@ -232,15 +234,10 @@ setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj, ...){
 #' @param ... ...
 #' @rdname EMP_boxplot
 
-setMethod("EMP_boxplot","EMP_assay_data",function(obj, ...){
-  EMP_boxplot.EMP_assay_data(obj, ...)
+setMethod("EMP_boxplot","EMP_assay_boxplot_union",function(obj, ...){
+  EMP_boxplot.EMP_assay_boxplot_union(obj, ...)
 })
 
-#' @param ... ...
-#' @rdname EMP_boxplot
-setMethod("EMP_boxplot","EMP_decostand",function(obj, ...){
-  EMP_boxplot.EMP_decostand(obj, ...)
-})
 
 #' Scatterplot for EMPT result
 #'
