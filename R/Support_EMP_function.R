@@ -315,6 +315,9 @@ EMP_history <- function(obj) {
 
 
 double_tax_name <- function(df,sep=';') {
+
+  Domain <- Kindom <- Phylum <- Class <- Order <- Family <- Genus <- Species <- Strain <- NULL
+
   if ('Strain' %in% colnames(df) & 'Species' %in% colnames(df)) {
     df <- df |>
       dplyr::mutate(Strain = paste0(Species,sep,Strain))
