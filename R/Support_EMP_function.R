@@ -314,6 +314,50 @@ EMP_history <- function(obj) {
 }
 
 
+double_tax_name <- function(df,sep=';') {
+  if ('Strain' %in% colnames(df) & 'Species' %in% colnames(df)) {
+    df <- df |>
+      dplyr::mutate(Strain = paste0(Species,sep,Strain))
+  }
+  
+  if ('Species' %in% colnames(df) & 'Genus' %in% colnames(df)) {
+    df <- df |>
+      dplyr::mutate(Species = paste0(Genus,sep,Species))
+  }
+  
+  if ('Genus' %in% colnames(df) & 'Family' %in% colnames(df)){
+    df <- df |>
+      dplyr::mutate(Genus = paste0(Family,sep,Genus))
+  }
+  
+  if ('Family' %in% colnames(df) & 'Order' %in% colnames(df)) {
+    df <- df |>
+      dplyr::mutate(Family = paste0(Order,sep,Family))
+  }
+  
+  if ('Order' %in% colnames(df) & 'Class' %in% colnames(df)) {
+    df <- df |>
+      dplyr::mutate(Order = paste0(Class,sep,Order))
+  }
+    
+  if ('Class' %in% colnames(df) & 'Phylum' %in% colnames(df)) {
+    df <- df |>
+      dplyr::mutate(Class = paste0(Phylum,sep,Class))
+  }
+  
+  if ('Phylum' %in% colnames(df) & 'Kindom' %in% colnames(df)) {
+    df <- df |>
+      dplyr::mutate(Phylum = paste0(Kindom,sep,Phylum))
+  }
+  
+  if ('Kindom' %in% colnames(df) & 'Domain' %in% colnames(df)) {
+    df <- df |>
+      dplyr::mutate(Kindom = paste0(Domain,sep,Kindom))
+  }
+  
+  return(df) 
+}
+
 ## Enhance the print for EMP_assay_data
 ## These code below is modified from MicrobiotaProcess
 modify_tbl_format_setup <- function(x, totalX,totalY,by,...){ 
