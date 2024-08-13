@@ -313,7 +313,7 @@ EMP_history <- function(obj) {
   return(df)
 }
 
-
+# double name for microbial tax (deprecated)
 double_tax_name <- function(df,sep=';') {
 
   Domain <- Kindom <- Phylum <- Class <- Order <- Family <- Genus <- Species <- Strain <- NULL
