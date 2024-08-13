@@ -12,11 +12,23 @@
 #' @noRd
 .EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500,keyType=NULL,KEGG_Type='KEGG',species = "all",combineGroup=FALSE,...){
   deposit <- list()
-  sign_group <- NULL
-  condition <- dplyr::enquo(condition)
-  df <- .get.result.EMPT(EMPT,info='EMP_diff_analysis') %>% suppressMessages() %>%
-    dplyr::filter(!!condition) %>%
-    tidyr::drop_na(sign_group) ## filter NA or the result will add NA group!
+  sign_group <- feature_name <- NULL
+
+  diff_df <- .get.result.EMPT(EMPT,info='EMP_diff_analysis') %>% suppressMessages()
+  
+  if (is.null(diff_df)) {
+    if (combineGroup == FALSE) {
+      message('Without EMP_diff_analysis result, paramter combineGroup could not be FALSE!')
+    }
+    combineGroup <- TRUE
+    feature_name <- names(EMPT)
+  }else{
+    condition <- dplyr::enquo(condition)
+    df <- diff_df %>%
+      dplyr::filter(!!condition) %>%
+      tidyr::drop_na(sign_group) ## filter NA or the result will add NA group!
+    feature_name <- df$feature
+  }
   
   if (is.null(keyType)) {
     stop("keyType should be specified as ko, ec or cpd!")
@@ -33,7 +45,7 @@
   message('KEGG database version: ',gson_data@version)
   message('Species: ',gson_data@species)
   if (combineGroup == TRUE) {
-    enrich.data <- clusterProfiler::enricher(gene=df$feature, gson=gson_data,minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+    enrich.data <- clusterProfiler::enricher(gene=feature_name, gson=gson_data,minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
   }else{
     enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
           fun=clusterProfiler::enricher, gson=gson_data, 
@@ -100,14 +112,7 @@ EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500,keyType=
 
   call <- match.call()
 
-  if(!is.null(.get.result.EMPT(obj,info='EMP_diff_analysis'))) {
-    EMPT <- obj
-  }else {
-    stop('The input data be generated from EMP_diff_analysis!')
-  }
-
-
-  EMPT <- .EMP_enrich_analysis(EMPT,{{condition}},minGSSize=minGSSize,maxGSSize=maxGSSize,keyType=keyType,KEGG_Type=KEGG_Type,species=species,combineGroup=combineGroup,...)
+  EMPT <- .EMP_enrich_analysis(obj,{{condition}},minGSSize=minGSSize,maxGSSize=maxGSSize,keyType=keyType,KEGG_Type=KEGG_Type,species=species,combineGroup=combineGroup,...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_enrich_analysis'
   if (action == 'add') {
