@@ -42,5 +42,6 @@ Import microbial data into SummariseExperiment
 Paramter file_format and humann_format help the function import data properly. Data in humann format is usually is generated from Metaphlan and Humann. Data in biom format is usually is generated from Qiime1. Data in qzv format is usually is generated from Qiime2.
 }
 \examples{
-# add example
+# More examples and tutorial could be found on website: 
+# https://liubingdong.github.io/EasyMultiProfiler_tutorial/
 }

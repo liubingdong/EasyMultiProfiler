@@ -107,7 +107,8 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
 #' @export
 #'
 #' @examples
-#' # add example
+#' # More examples and tutorial could be found on website: 
+#' # https://liubingdong.github.io/EasyMultiProfiler_tutorial/
 EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_format=NULL,start_level='Kindom',assay_name=NULL,duplicate_feature=NULL,sep=if (humann_format == "TRUE") '|' else ';') {
   feature <- `.` <- check_duplicated_feature <- biom_df <- biom_data <- tax_data <- otuid <- unzipfiles <- data_file <- NULL
   if(humann_format == TRUE){
@@ -302,7 +303,8 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
 #' @export
 #'
 #' @examples
-#' # add example
+#' # More examples and tutorial could be found on website: 
+#' # https://liubingdong.github.io/EasyMultiProfiler_tutorial/
 EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_format=FALSE) {
   from <- to <- feature <- Name <- NULL
   if(humann_format == T){
@@ -356,7 +358,8 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 #' @export
 #'
 #' @examples
-#' # example
+#' # More examples and tutorial could be found on website: 
+#' # https://liubingdong.github.io/EasyMultiProfiler_tutorial/
 EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay_name=NULL,assay=NULL){
   row_data <- assay_data <- obj <- colname <- feature <- NULL
   if (!is.null(data)) {
@@ -578,7 +581,8 @@ EMP_easy_function_import <- function(file=NULL,data=NULL,type,assay='experiment'
 #' @export
 #' @details Paramter file_format and humann_format help the function import data properly. Data in humann format is usually is generated from Metaphlan and Humann. Data in biom format is usually is generated from Qiime1. Data in qzv format is usually is generated from Qiime2.
 #' @examples
-#' # example
+#' # More examples and tutorial could be found on website: 
+#' # https://liubingdong.github.io/EasyMultiProfiler_tutorial/
 
 EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_name=NULL,sampleID=NULL,coldata=NULL,start_level='Kindom',
                             file_format=NULL,humann_format=FALSE,duplicate_feature=NULL,output='MAE',

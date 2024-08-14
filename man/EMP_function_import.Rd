@@ -30,5 +30,6 @@ SummmariseExperiment object
 Import gene data into SummariseExperiment
 }
 \examples{
-# add example
+# More examples and tutorial could be found on website: 
+# https://liubingdong.github.io/EasyMultiProfiler_tutorial/
 }

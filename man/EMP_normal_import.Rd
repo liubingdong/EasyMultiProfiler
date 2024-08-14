@@ -33,5 +33,6 @@ SummmariseExperiment object
 Import combined data into SummariseExperiment
 }
 \examples{
-# example
+# More examples and tutorial could be found on website: 
+# https://liubingdong.github.io/EasyMultiProfiler_tutorial/
 }
