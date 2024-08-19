@@ -62,6 +62,8 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   EMPT %<>% .group_level_modified(estimate_group = estimate_group,group_level = group_level)
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
 
+
+
   colnames(mapping) <- c("primary","Group")
   length=length(unique(as.character(mapping$primary)))
   times1=length%/%8
@@ -79,14 +81,26 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   ## Due to the purpose of the module, missing value in the group label is not allowed!
   if(any(is.na(plotdata$Group))) {
-    stop('Column ',estimate_group,' has beed deteced missing value, this column could be filtered by EMP_filter firstly!')
+    stop('Column ',estimate_group,' has beed deteced missing value, this sample should be filtered by EMP_filter firstly!')
   }
 
-  pc1 <-.get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_axis']][1] %>% suppressMessages()
-  pc2 <-.get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_axis']][2] %>% suppressMessages()
-  try(pc3 <-.get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_axis']][3] %>% suppressMessages(),silent = T)
-  #plotdata$Group <- factor(plotdata$Group,levels = name_group)
+  axis_name <- colnames(data)[-1]
+  axis_num <- length(unique(axis_name))
 
+  dimension_axis_result <- .get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_axis']] %>% suppressMessages()
+
+  if (!is.null(dimension_axis_result)) {
+    pc1 <-dimension_axis_result[1]
+    pc2 <-dimension_axis_result[2]
+    try(pc3 <-dimension_axis_result[3] %>% suppressMessages(),silent = T)
+    pc1_text <- paste(axis_name[1], "( ",pc1,"%"," )",sep="")
+    pc2_text <- paste(axis_name[2], "( ",pc1,"%"," )",sep="")
+    try(pc3_text <- paste(axis_name[3], "( ",pc1,"%"," )",sep=""),silent = T)
+  }else{
+    pc1_text <- axis_name[1]
+    pc2_text <- axis_name[2]
+    try(pc3_text <- axis_name[3],silent = T)
+  }
 
 
   #PC1和PC2的显著性检验(PC1,PC2,PC3进行组间差异检验)
@@ -101,10 +115,6 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   }
   names(compare) <- 1:ncol(group_combn)
   
-
-  axis_name <- colnames(data)[-1]
-  axis_num <- length(unique(axis_name))
-
 
   #相须图绘制
   p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
@@ -177,8 +187,8 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   p12<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[2]))) +
     ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[2]),2))),size=8,pch = 21)+
     scale_fill_manual(values=col_values,name = "Group") +
-    xlab(paste(axis_name[1], "( ",pc1,"%"," )",sep="")) +
-    ylab(paste(axis_name[2], "( ",pc2,"%"," )",sep="")) +
+    xlab(pc1_text) +
+    ylab(pc2_text) +
     xlim(ggplot_build(p1)$layout$panel_scales_y[[1]]$range$range) +
     ylim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
     theme(text=element_text(size=30))+
@@ -219,8 +229,8 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
     p13<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[3]))) +
       ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=8,pch = 21)+
       scale_fill_manual(values=col_values,name = "Group")+
-      xlab(paste(axis_name[1], "( ",pc1,"%"," )",sep="")) +
-      ylab(paste(axis_name[3], "( ",pc3,"%"," )",sep="")) +
+      xlab(pc1_text) +
+      ylab(pc3_text) +
       xlim(ggplot_build(p1)$layout$panel_scales_y[[1]]$range$range) +
       ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
       theme(text=element_text(size=30))+
@@ -242,8 +252,8 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
     p23<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[2]), !!dplyr::sym(axis_name[3]))) +
       ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[2]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=8,pch = 21)+
       scale_fill_manual(values=col_values,name = "Group")+
-      xlab(paste(axis_name[2], "( ",pc2,"%"," )",sep="")) +
-      ylab(paste(axis_name[3], "( ",pc3,"%"," )",sep="")) +
+      xlab(pc2_text) +
+      ylab(pc3_text) +
       xlim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
       ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
       theme(text=element_text(size=30))+

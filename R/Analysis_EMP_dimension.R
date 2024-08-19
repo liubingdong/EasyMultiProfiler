@@ -1,7 +1,7 @@
 #' @importFrom bigstatsr big_SVD
 #' @importFrom vegan vegdist
 #' @importFrom stats cmdscale
-.EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL){
+.EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL,umap.config=NULL){
   p1 <- p2 <- p3 <- R2X <- NULL
   deposit <- list()
   assay_data  <- assay(EMPT) %>% t()
@@ -116,8 +116,33 @@
            axis_value <- axis_value * 100
 
          },
+         "umap" = {
+          rlang::check_installed(c('BiocManager'), reason = 'for EMP_dimension_analysis().', action = install.packages) 
+          rlang::check_installed(c('umap'), reason = 'for EMP_dimension_analysis().', action = BiocManager::install)  
+
+          if(!is.null(umap.config)){
+            umap.config <- umap.config
+          }else{
+            umap.config <- umap::umap.defaults
+          }
+
+          if(!is.null(distance)){
+            umap.config$metric <- distance
+          }
+          # set 3 axis
+          umap.config$n_components <- 3
+          
+          sample_name <- rownames(assay_data)
+          umap_result <-umap:: umap(assay_data,config = umap.config)
+          dimension_reslut <- umap_result[['layout']] %>% as.data.frame %>%
+             dplyr::mutate(primary = sample_name,.before=1)
+          colnames(dimension_reslut) <- c('primary',paste0('umap',1:(dim(dimension_reslut)[2]-1)))
+          
+          axis_value <- NULL
+
+         },
          {
-           print('method in EMP_reduce_dimension should be pca, pcoa, pls or opls!')
+           print('method in EMP_reduce_dimension should be pca, pcoa, pls, opls or umap!')
          }
   )
   
@@ -142,9 +167,10 @@
 #'
 #' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param method  A character string. Methods include pca, pcoa, pls, opls.
+#' @param method  A character string. Methods include pca, pcoa, pls, opls, umap.
 #' @param distance A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist.
 #' @param estimate_group A character string. Select the group name in the coldata to be considerated.
+#' @param umap.config A list. only activate in umap. More see umap::umap.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #'
@@ -175,8 +201,21 @@
 #'   EMP_filter(feature_condition = pvalue < 0.05) |>
 #'   EMP_dimension_analysis(method = 'opls',estimate_group = 'Sex') |>
 #'   EMP_scatterplot(estimate_group='Sex',show='p12html',ellipse=0.6) ## Visualization
+#' ## umap
+#' MAE |>
+#'   EMP_dimension_analysis(experiment = 'geno_ko',
+#'                          method = 'umap') |>
+#'   EMP_scatterplot(estimate_group='Group',show='p12html')
+#' 
+#' ### modify umap contig
+#' umap.config <- umap::umap.defaults
+#' umap.config$n_neighbors=10
+#' MAE |>
+#'   EMP_dimension_analysis(experiment = 'geno_ko',
+#'                          method = 'umap',umap.config = umap.config) 
+
 EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,use_cached=TRUE,
-                                   estimate_group=NULL,action='add'){
+                                   estimate_group=NULL,umap.config=NULL,action='add'){
   call <- match.call()
 
   if (inherits(obj,"MultiAssayExperiment")) {
@@ -190,7 +229,7 @@ EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,us
     memoise::forget(.EMP_dimension_analysis_m) %>% invisible()
   }
 
-  EMPT %<>% .EMP_dimension_analysis_m(method=method,distance=distance,estimate_group=estimate_group)
+  EMPT %<>% .EMP_dimension_analysis_m(method=method,distance=distance,estimate_group=estimate_group,umap.config=umap.config)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_dimension_analysis'
 

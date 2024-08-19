@@ -11,6 +11,7 @@ EMP_dimension_analysis(
   distance = NULL,
   use_cached = TRUE,
   estimate_group = NULL,
+  umap.config = NULL,
   action = "add"
 )
 }
@@ -19,13 +20,15 @@ EMP_dimension_analysis(
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{A character string. Methods include pca, pcoa, pls, opls.}
+\item{method}{A character string. Methods include pca, pcoa, pls, opls, umap.}
 
 \item{distance}{A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist.}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{estimate_group}{A character string. Select the group name in the coldata to be considerated.}
+
+\item{umap.config}{A list. only activate in umap. More see umap::umap.}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
@@ -59,4 +62,16 @@ MAE |>
   EMP_filter(feature_condition = pvalue < 0.05) |>
   EMP_dimension_analysis(method = 'opls',estimate_group = 'Sex') |>
   EMP_scatterplot(estimate_group='Sex',show='p12html',ellipse=0.6) ## Visualization
+## umap
+MAE |>
+  EMP_dimension_analysis(experiment = 'geno_ko',
+                         method = 'umap') |>
+  EMP_scatterplot(estimate_group='Group',show='p12html')
+
+### modify umap contig
+umap.config <- umap::umap.defaults
+umap.config$n_neighbors=10
+MAE |>
+  EMP_dimension_analysis(experiment = 'geno_ko',
+                         method = 'umap',umap.config = umap.config) 
 }
