@@ -12,13 +12,15 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 ### Install
 
-**Easily install**
+**Easily install (recommend)**
+
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
-pak::pkg_install("liubingdong/EasyMultiProfiler")
+pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
-NOTE 1: For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
+<u>NOTE 1:</u>  For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
+
 ```R
 ## For china main land users could use this
 local({r <- getOption("repos")
@@ -30,13 +32,13 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-NOTE 2: For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try below:
+<u>NOTE 2:</u>  For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try below:
 
 ```R
-pak::pkg_install("liubingdong/EasyMultiProfiler")
+pak::pak("liubingdong/EasyMultiProfiler")
 ```
 
-**Completely install** 
+**Manual install** 
 
 Due to the inclusion of many polular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for your patience during installation, and we do believe EMP could largely speed up your research work.
 
@@ -57,16 +59,17 @@ library(EasyMultiProfiler)
 More installation error and solution: [**Click this**](https://github.com/liubingdong/EasyMultiProfiler/blob/main/tutorial_related/Installation.md)
 
 ### Update new version
-The EasyMultiProfiler package is continuously being updated with more analysis and visualization modules. When an updated version is needed, simply run pak again to update.
+The EasyMultiProfiler package is continuously being updated with more analysis and visualization modules. When a new version is needed, simply run pak again to update.
 ```R
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 
 ### Usage and tutorial
-For more details, please refer to the tutorial:
-[**English version**](https://liubingdong.github.io/EasyMultiProfiler/).
-[**Chinese version**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/).
+For more details, please refer to the tutorial
+<u>English version:</u> [**Web site**](https://liubingdong.github.io/EasyMultiProfiler/)
+
+<u>Chinese version:</u> [**Web site 1**](https://main--gorgeous-smakager-db1548.netlify.app/) [**Web site 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/)
 
 ### Citation
 Under submit
