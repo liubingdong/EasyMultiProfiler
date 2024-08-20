@@ -64,7 +64,9 @@ library(EasyMultiProfiler)
 ```
 
 ### Usage and tutorial
-For more details, please refer to the [**online tutorial**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/).
+For more details, please refer to the tutorial:
+[**English version**](https://liubingdong.github.io/EasyMultiProfiler/).
+[**Chinese version**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/).
 
 ### Citation
 Under submit
