@@ -98,7 +98,9 @@ setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
 
 #' @rdname EMP_result
 #' @examples
+#' 
 #' data(MAE)
+#' \dontrun{
 #' ## obtain the result from EMPT
 #' MAE |>
 #'   EMP_assay_extract('geno_ec') |>
@@ -109,6 +111,7 @@ setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
 #' diff_re <- result |> EMP_result(info = 'EMP_diff_analysis')
 #' alpha_re <- result |> EMP_result(info = 'EMP_alpha_analysis')
 #' enrich_re <- result |> EMP_result(info = 'EMP_enrich_analysis')
+#' }
 #' @return list
 setMethod("EMP_result","EMPT",function(obj,info){
   deposilt_info <- .get.deposit_info.EMPT(obj)
