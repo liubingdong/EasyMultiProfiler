@@ -2,7 +2,7 @@
 % Please edit documentation in R/Preparation_EMP_feature_covert.R
 \name{EMP_feature_convert}
 \alias{EMP_feature_convert}
-\title{Covert featureID of gene experssion or compund abundance}
+\title{Covert featureID of microbial taxonomy, gene experssion or compund abundance}
 \usage{
 EMP_feature_convert(
   obj,
@@ -22,7 +22,7 @@ EMP_feature_convert(
 
 \item{method}{A character string. Methods include mean, sum, median, min, max. When multiple annotations appear on features, merge activate.}
 
-\item{from}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.}
+\item{from}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome only support from tax to tax_full.}
 
 \item{to}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.}
 
@@ -36,7 +36,7 @@ EMP_feature_convert(
 EMPT object
 }
 \description{
-Covert featureID of gene experssion or compund abundance
+Covert featureID of microbial taxonomy, gene experssion or compund abundance
 }
 \examples{
 data(MAE)
@@ -56,4 +56,9 @@ MAE |>
   EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
                estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |> ## get the compound in KEGG format
   EMP_feature_convert(from = 'KEGG',to='HMDB')
+## Add full name for microbial data
+MAE |>
+  EMP_assay_extract('taxonomy') |>
+  EMP_feature_convert(from = 'tax_single',to = 'tax_full') |>
+  EMP_collapse(estimate_group = 'Phylum',collapse_by = 'row')
 }

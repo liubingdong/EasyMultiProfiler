@@ -314,7 +314,7 @@ EMP_history <- function(obj) {
 }
 
 # double name for microbial tax (deprecated)
-double_tax_name <- function(df,sep=';') {
+.double_tax_name <- function(df,sep=';') {
 
   Domain <- Kindom <- Phylum <- Class <- Order <- Family <- Genus <- Species <- Strain <- NULL
 
@@ -358,6 +358,78 @@ double_tax_name <- function(df,sep=';') {
       dplyr::mutate(Kindom = paste0(Domain,sep,Kindom))
   }
   
+  return(df) 
+}
+
+# full name for microbial tax 
+.tax_to_full <- function(df,sep=';') {
+  
+  Domain <- Kindom <- Phylum <- Class <- Order <- Family <- Genus <- Species <- Strain <- NULL
+  
+  total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+
+  raw_col <- colnames(df)
+  
+  if ('Kindom' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Kindom', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Kindom", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }
+  if ('Phylum' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Phylum', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Phylum", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }  
+  if ('Class' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Class', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Class", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }  
+  if ('Order' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Order', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Order", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }
+  if ('Family' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Family', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Family", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }
+  if ('Genus' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Genus', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Genus", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }
+  if ('Species' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Species', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Species", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }
+  if ('Strain' %in% colnames(df)) {
+    need_info <- total_tax_info[1: match('Strain', total_tax_info)]
+    df <- df |>
+      tidyr::unite(col = "Strain", dplyr::any_of(need_info), sep = sep, remove = FALSE)
+  }
+
+  df <- df %>% dplyr::select(dplyr::all_of(raw_col))
+  return(df) 
+}
+
+
+
+# single name for microbial tax 
+.tax_to_single <- function(df,sep=';') {
+  
+  raw_col <- colnames(df)
+  need_col <- raw_col[-1:-2] # del feature and first level
+  
+  pattern <- paste0("(?<=", sep, ")[^", sep, "]*$")
+  for (i in need_col) {
+    df <- df %>% 
+      dplyr::mutate(!!i := stringr::str_extract(df[[i]], pattern))
+  }
+
+  df <- df %>% dplyr::select(dplyr::all_of(raw_col))
   return(df) 
 }
 

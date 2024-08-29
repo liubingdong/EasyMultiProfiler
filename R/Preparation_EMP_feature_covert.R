@@ -1,17 +1,4 @@
 
-#' Title
-#'
-#' @param feature features
-#' @param from from
-#' @param to to
-#' @param species species 
-#' @param OrgDb OrgDb
-#' @importFrom BiocManager install
-#' @importFrom utils install.packages
-#' @return data.frame
-#'
-#' @noRd
-
 .feature_convert_gene <- function(feature, from = "SYMBOL", to = "ENTREZID", species = "none", OrgDb = NULL) {
   
   # Check if package is installed, otherwise install
@@ -51,19 +38,6 @@
 }    
 
 
-#' Title
-#'
-#' @param EMPT EMPT
-#' @param method method
-#' @param from from
-#' @param to to
-#' @param species species 
-#' @param OrgDb OrgDb
-#'
-#' @return data.frame
-#'
-#' @noRd
-
 .EMP_feature_convert_gene <- function(EMPT,method='mean',from,to,species = "none", OrgDb = NULL) {
   feature <- NULL
   raw_feature <- .get.row_info.EMPT(EMPT) %>% dplyr::pull(feature)
@@ -82,19 +56,6 @@
 }
 
 
-
-#' Title
-#'
-#' @param EMPT EMPT
-#' @param from from
-#' @param to to
-#' @param method method 
-#'
-#' @return EMPT object
-#'
-#' @noRd
-
-
 .EMP_feature_convert_cpd <- function(EMPT,method='mean',from,to){
   
   feature <- NULL
@@ -110,13 +71,30 @@
   return(deposit)
 }
 
+.EMP_feature_convert_tax <- function(EMPT,sep=';',from,to){
+  raw_rowdata <- .get.row_info.EMPT(EMPT)
+  if ('old_feature' %in% colnames(raw_rowdata)) {
+    stop("Convert tax name should perform before EMP_collapse!")
+  }else{
+    if (from == 'tax_single' & to == 'tax_full') {
+      new_rowdata <- raw_rowdata |> .tax_to_full(sep=sep)
+    }else if (from == 'tax_full' & to == 'tax_single') {
+      new_rowdata <- raw_rowdata |> .tax_to_single(sep=sep)
+    }else{
+      stop("Parameter from and to must be tax_single or tax_full")
+    }
+  }
+  .get.row_info.EMPT(EMPT) <- new_rowdata
+  return(EMPT)
+}
 
-#' Covert featureID of gene experssion or compund abundance
+
+#' Covert featureID of microbial taxonomy, gene experssion or compund abundance
 #'
 #' @param obj EMPT or MultiAssayExperiment object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include mean, sum, median, min, max. When multiple annotations appear on features, merge activate.
-#' @param from A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.
+#' @param from A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome only support from tax to tax_full.
 #' @param to A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.
 #' @param species A character string. Species includ Human,Mouse,Pig,Zebrafish. If converting feature from other species,please use OrgDb. 
 #' @param OrgDb Supported OrgDb listed in 'https://bioconductor.org/packages/release/BiocViews.html#___OrgDb' 
@@ -143,6 +121,11 @@
 #'   EMP_collapse(experiment = 'untarget_metabol',na_string=c('NA','null','','-'),
 #'                estimate_group = 'MS2kegg',method = 'sum',collapse_by = 'row') |> ## get the compound in KEGG format
 #'   EMP_feature_convert(from = 'KEGG',to='HMDB')
+#' ## Add full name for microbial data
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_feature_convert(from = 'tax_single',to = 'tax_full') |>
+#'   EMP_collapse(estimate_group = 'Phylum',collapse_by = 'row')
 
 EMP_feature_convert <- function(obj,experiment,method='mean',from,to,species = "none",OrgDb = NULL,action='add'){
   call <- match.call()
@@ -154,18 +137,21 @@ EMP_feature_convert <- function(obj,experiment,method='mean',from,to,species = "
     EMPT <- obj
   }
   
-  # Tolerate differences in capitalization.
-  from <- toupper(from)  
-  to <- toupper(to)  
-  
+  if (from == to) {
+    stop("parameter from and to must be different")
+  }
+
   cpd_names_total <- c("CAS", "DTXSID", "DTXCID", "SID", "CID", "KEGG", "ChEBI", "HMDB", "Drugbank")
   gene_names_total <- c('SYMBOL','ENSEMBL','ENTREZID')
+  tax_names_total <- c('tax_single','tax_full')
   
   if (from %in% gene_names_total & to %in% gene_names_total) {
     EMPT <- EMPT %>% .EMP_feature_convert_gene(method=method,from = from,to=to,species = species,OrgDb=OrgDb)
   }else if(from %in% cpd_names_total & to %in% cpd_names_total){
     EMPT <- EMPT %>%.EMP_feature_convert_cpd(method=method,from=from,to=to)
-  }else {
+  }else if(from %in% tax_names_total & to %in% tax_names_total){
+    EMPT <- EMPT %>%.EMP_feature_convert_tax(sep=';',from=from,to=to)
+  }else{
     stop('Pleast check the parameter from and to!')
   }
   
