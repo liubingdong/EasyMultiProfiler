@@ -76,7 +76,8 @@ Suggests:
     formattable (>= 0.2.1),
     glmnet (>= 4.1.8),
     janitor,
-    ggpmisc
+    ggpmisc,
+    umap
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppParallel
 NeedsCompilation: yes

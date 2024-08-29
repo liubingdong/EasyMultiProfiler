@@ -133,7 +133,7 @@
           umap.config$n_components <- 3
           
           sample_name <- rownames(assay_data)
-          umap_result <-umap:: umap(assay_data,config = umap.config)
+          umap_result <-umap::umap(assay_data,config = umap.config)
           dimension_reslut <- umap_result[['layout']] %>% as.data.frame %>%
              dplyr::mutate(primary = sample_name,.before=1)
           colnames(dimension_reslut) <- c('primary',paste0('umap',1:(dim(dimension_reslut)[2]-1)))
