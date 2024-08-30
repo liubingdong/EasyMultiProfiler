@@ -94,8 +94,8 @@
 #' @param obj EMPT or MultiAssayExperiment object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include mean, sum, median, min, max. When multiple annotations appear on features, merge activate.
-#' @param from A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome only support from tax to tax_full.
-#' @param to A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.
+#' @param from A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.
+#' @param to A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.
 #' @param species A character string. Species includ Human,Mouse,Pig,Zebrafish. If converting feature from other species,please use OrgDb. 
 #' @param OrgDb Supported OrgDb listed in 'https://bioconductor.org/packages/release/BiocViews.html#___OrgDb' 
 #' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).

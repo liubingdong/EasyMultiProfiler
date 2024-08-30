@@ -22,9 +22,9 @@ EMP_feature_convert(
 
 \item{method}{A character string. Methods include mean, sum, median, min, max. When multiple annotations appear on features, merge activate.}
 
-\item{from}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome only support from tax to tax_full.}
+\item{from}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.}
 
-\item{to}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.}
+\item{to}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.}
 
 \item{species}{A character string. Species includ Human,Mouse,Pig,Zebrafish. If converting feature from other species,please use OrgDb.}
 
