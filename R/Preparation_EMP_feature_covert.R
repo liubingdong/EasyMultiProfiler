@@ -71,14 +71,14 @@
   return(deposit)
 }
 
-.EMP_feature_convert_tax <- function(EMPT,sep=';',from,to){
+.EMP_feature_convert_tax <- function(EMPT,sep=';',from,add){
   raw_rowdata <- .get.row_info.EMPT(EMPT)
   if ('old_feature' %in% colnames(raw_rowdata)) {
     stop("Convert tax name should perform before EMP_collapse!")
   }else{
-    if (from == 'tax_single' & to == 'tax_full') {
+    if (from == 'tax_single' & add == 'tax_full') {
       new_rowdata <- raw_rowdata |> .tax_to_full(sep=sep)
-    }else if (from == 'tax_full' & to == 'tax_single') {
+    }else if (from == 'tax_full' & add == 'tax_single') {
       new_rowdata <- raw_rowdata |> .tax_to_single(sep=sep)
     }else{
       stop("Parameter from and to must be tax_single or tax_full")
@@ -89,13 +89,51 @@
 }
 
 
-#' Covert featureID of microbial taxonomy, gene experssion or compund abundance
+.build_disease_data <- function(from,add){
+  ref_df <- disease <- feature <- . <- NULL
+  switch(add,
+             "Human_disease" = {ref_df <- human_disease
+                                id_name <- 'doid'
+             },
+             "Mouse_disease" = {ref_df <- mouse_disease
+                                id_name <- 'mpid'
+             },
+             {
+               stop("No proper species for disease is selected!")
+             }
+  )
+  ref_df <- ref_df %>% dplyr::select(!!sym(from),!!sym(id_name),disease) %>%
+    dplyr::filter(!is.na(!!sym(from))) %>%
+    dplyr::filter(!duplicated(.)) %>%
+    dplyr::rename(feature=!!sym(from)) %>%
+    dplyr::filter(dplyr::if_all(-feature,~ !is.na(.))) %>%
+    dplyr::group_by(feature) %>%
+    dplyr::summarise(
+      !!id_name := paste(unique(.data[[id_name]]), collapse = '/'),
+      disease = paste(unique(disease), collapse = '/'))
+  return(ref_df) 
+}
+
+
+.EMP_feature_convert_disease <- function(EMPT,from,add){
+  
+  raw_rowdata <- .get.row_info.EMPT(EMPT)
+  ref_data <- .build_disease_data(from = from,add=add)
+
+  new_rowdata <- dplyr::left_join(raw_rowdata,ref_data,by='feature')
+  .get.row_info.EMPT(EMPT) <- new_rowdata
+  return(EMPT)
+}
+
+
+#' Covert feature of microbial taxonomy, gene experssion or compund abundance
 #'
 #' @param obj EMPT or MultiAssayExperiment object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include mean, sum, median, min, max. When multiple annotations appear on features, merge activate.
-#' @param from A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.
-#' @param to A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.
+#' @param from A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.
+#' @param to A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.
+#' @param add A character string. For microbiome include tax_single and tax_full. For disease include Human_disease and Mouse_disease based on SYMBOL,ENTREZID,ko and ec.
 #' @param species A character string. Species includ Human,Mouse,Pig,Zebrafish. If converting feature from other species,please use OrgDb. 
 #' @param OrgDb Supported OrgDb listed in 'https://bioconductor.org/packages/release/BiocViews.html#___OrgDb' 
 #' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
@@ -124,10 +162,14 @@
 #' ## Add full name for microbial data
 #' MAE |>
 #'   EMP_assay_extract('taxonomy') |>
-#'   EMP_feature_convert(from = 'tax_single',to = 'tax_full') |>
+#'   EMP_feature_convert(from = 'tax_single',add = 'tax_full') |>
 #'   EMP_collapse(estimate_group = 'Phylum',collapse_by = 'row')
-
-EMP_feature_convert <- function(obj,experiment,method='mean',from,to,species = "none",OrgDb = NULL,action='add'){
+#' ## Add disease info and select the related feature
+#' MAE |> 
+#'   EMP_assay_extract('host_gene') |>
+#'   EMP_feature_convert(from = 'SYMBOL',add ='Human_disease') |>
+#'   EMP_assay_extract(pattern = 'cancer',pattern_ref = 'disease')
+EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NULL,species = "none",OrgDb = NULL,action='add'){
   call <- match.call()
   check_result <- NULL
   if (inherits(obj,"MultiAssayExperiment")) {
@@ -137,22 +179,49 @@ EMP_feature_convert <- function(obj,experiment,method='mean',from,to,species = "
     EMPT <- obj
   }
   
-  if (from == to) {
-    stop("parameter from and to must be different")
-  }
-
   cpd_names_total <- c("CAS", "DTXSID", "DTXCID", "SID", "CID", "KEGG", "ChEBI", "HMDB", "Drugbank")
   gene_names_total <- c('SYMBOL','ENSEMBL','ENTREZID')
   tax_names_total <- c('tax_single','tax_full')
+  disease_names_from<- c('SYMBOL','ENTREZID','ko','ec')
+  disease_names_add <- c('Human_disease','Mouse_disease')
+
   
-  if (from %in% gene_names_total & to %in% gene_names_total) {
-    EMPT <- EMPT %>% .EMP_feature_convert_gene(method=method,from = from,to=to,species = species,OrgDb=OrgDb)
-  }else if(from %in% cpd_names_total & to %in% cpd_names_total){
-    EMPT <- EMPT %>%.EMP_feature_convert_cpd(method=method,from=from,to=to)
-  }else if(from %in% tax_names_total & to %in% tax_names_total){
-    EMPT <- EMPT %>%.EMP_feature_convert_tax(sep=';',from=from,to=to)
-  }else{
-    stop('Pleast check the parameter from and to!')
+  if (!is.null(to) & !is.null(add)) {
+    stop("The parameters 'to' and 'add' cannot both be present simultaneously.")
+  }
+  
+  if (!is.null(to)) {
+    
+    if (from == to) {
+      stop("parameter 'from' should be different from 'to'!")
+    }
+
+    if (from %in% gene_names_total & to %in% gene_names_total) {
+      EMPT <- EMPT %>% .EMP_feature_convert_gene(method=method,from=from,to=to,species=species,OrgDb=OrgDb)
+    }else if(from %in% cpd_names_total & to %in% cpd_names_total){
+      EMPT <- EMPT %>%.EMP_feature_convert_cpd(method=method,from=from,to=to)
+    }else{
+      stop('Pleast check the parameter from and to!')
+    }
+  }
+
+  if (!is.null(add)) {
+
+    if (from == add) {
+      stop("parameter 'from' should be different from 'add'!")
+    }
+
+    if(from %in% tax_names_total & add %in% tax_names_total){
+      EMPT <- EMPT %>%.EMP_feature_convert_tax(sep=';',from=from,add=add)
+    }else if (from %in% disease_names_from & add %in% disease_names_add) {
+      EMPT <- EMPT %>%.EMP_feature_convert_disease(from=from,add=add)
+    }else{
+      stop('Pleast check the parameter from and add!')
+    }
+
+    message_info <- list()
+    message_info %<>% append(paste0('Feature information has been added: ',add))
+    .get.message_info.EMPT(EMPT) <- message_info
   }
   
   # Due to the feature change, result should be removed

@@ -433,6 +433,9 @@ EMP_history <- function(obj) {
   return(df) 
 }
 
+
+
+
 ## Enhance the print for EMP_assay_data
 ## These code below is modified from MicrobiotaProcess
 modify_tbl_format_setup <- function(x, totalX,totalY,by,...){ 

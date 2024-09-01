@@ -2,14 +2,15 @@
 % Please edit documentation in R/Preparation_EMP_feature_covert.R
 \name{EMP_feature_convert}
 \alias{EMP_feature_convert}
-\title{Covert featureID of microbial taxonomy, gene experssion or compund abundance}
+\title{Covert feature of microbial taxonomy, gene experssion or compund abundance}
 \usage{
 EMP_feature_convert(
   obj,
   experiment,
   method = "mean",
   from,
-  to,
+  to = NULL,
+  add = NULL,
   species = "none",
   OrgDb = NULL,
   action = "add"
@@ -22,9 +23,11 @@ EMP_feature_convert(
 
 \item{method}{A character string. Methods include mean, sum, median, min, max. When multiple annotations appear on features, merge activate.}
 
-\item{from}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.}
+\item{from}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.}
 
-\item{to}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID. For microbiome include tax_single and tax_full.}
+\item{to}{A character string. For metabolite include CAS,DTXSID,DTXCID,SID,CID,KEGG,ChEBI,HMDB,Drugbank. For gene include SYMBOL,ENSEMBL,ENTREZID.}
+
+\item{add}{A character string. For microbiome include tax_single and tax_full. For disease include Human_disease and Mouse_disease based on SYMBOL,ENTREZID,ko and ec.}
 
 \item{species}{A character string. Species includ Human,Mouse,Pig,Zebrafish. If converting feature from other species,please use OrgDb.}
 
@@ -36,7 +39,7 @@ EMP_feature_convert(
 EMPT object
 }
 \description{
-Covert featureID of microbial taxonomy, gene experssion or compund abundance
+Covert feature of microbial taxonomy, gene experssion or compund abundance
 }
 \examples{
 data(MAE)
@@ -59,6 +62,11 @@ MAE |>
 ## Add full name for microbial data
 MAE |>
   EMP_assay_extract('taxonomy') |>
-  EMP_feature_convert(from = 'tax_single',to = 'tax_full') |>
+  EMP_feature_convert(from = 'tax_single',add = 'tax_full') |>
   EMP_collapse(estimate_group = 'Phylum',collapse_by = 'row')
+## Add disease info and select the related feature
+MAE |> 
+  EMP_assay_extract('host_gene') |>
+  EMP_feature_convert(from = 'SYMBOL',add ='Human_disease') |>
+  EMP_assay_extract(pattern = 'cancer',pattern_ref = 'disease')
 }
