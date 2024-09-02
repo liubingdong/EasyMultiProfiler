@@ -94,8 +94,8 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
     pc2 <-dimension_axis_result[2]
     try(pc3 <-dimension_axis_result[3] %>% suppressMessages(),silent = T)
     pc1_text <- paste(axis_name[1], "( ",pc1,"%"," )",sep="")
-    pc2_text <- paste(axis_name[2], "( ",pc1,"%"," )",sep="")
-    try(pc3_text <- paste(axis_name[3], "( ",pc1,"%"," )",sep=""),silent = T)
+    pc2_text <- paste(axis_name[2], "( ",pc2,"%"," )",sep="")
+    try(pc3_text <- paste(axis_name[3], "( ",pc3,"%"," )",sep=""),silent = T)
   }else{
     pc1_text <- axis_name[1]
     pc2_text <- axis_name[2]
