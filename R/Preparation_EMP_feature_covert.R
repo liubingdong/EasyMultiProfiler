@@ -94,9 +94,11 @@
   switch(add,
              "Human_disease" = {ref_df <- human_disease
                                 id_name <- 'doid'
+                                disease_name <- 'Human_disease'
              },
              "Mouse_disease" = {ref_df <- mouse_disease
                                 id_name <- 'mpid'
+                                disease_name <- 'Mouse_disease'
              },
              {
                stop("No proper species for disease is selected!")
@@ -110,7 +112,7 @@
     dplyr::group_by(feature) %>%
     dplyr::summarise(
       !!id_name := paste(unique(.data[[id_name]]), collapse = '/'),
-      disease = paste(unique(disease), collapse = '/'))
+      !!disease_name := paste(unique(disease), collapse = '/'))
   return(ref_df) 
 }
 
