@@ -170,7 +170,7 @@
 #' MAE |> 
 #'   EMP_assay_extract('host_gene') |>
 #'   EMP_feature_convert(from = 'SYMBOL',add ='Human_disease') |>
-#'   EMP_assay_extract(pattern = 'cancer',pattern_ref = 'disease')
+#'   EMP_assay_extract(pattern = 'cancer',pattern_ref = 'Human_disease')
 EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NULL,species = "none",OrgDb = NULL,action='add'){
   call <- match.call()
   check_result <- NULL

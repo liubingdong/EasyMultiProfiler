@@ -68,5 +68,5 @@ MAE |>
 MAE |> 
   EMP_assay_extract('host_gene') |>
   EMP_feature_convert(from = 'SYMBOL',add ='Human_disease') |>
-  EMP_assay_extract(pattern = 'cancer',pattern_ref = 'disease')
+  EMP_assay_extract(pattern = 'cancer',pattern_ref = 'Human_disease')
 }
