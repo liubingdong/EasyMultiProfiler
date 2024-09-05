@@ -433,8 +433,79 @@ EMP_history <- function(obj) {
   return(df) 
 }
 
+#' Transfer microbial data from EasyMultiProfiler to EasyMciroPlot
+#'
+#' @param obj EMPT object.
+#' @param estimate_group A character string. Select the column in the coldata to add in the mapping file.
+#' @rdname EMP_to_EMP1
+#' @return list
+#' @export
+#' @examples
+#' data(MAE)
+#' # Get the data from EasyMultiProfiler
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_feature_convert(from = 'tax_single',add = 'tax_full') |>
+#'   EMP_to_EMP1(estimate_group = 'Group') -> deposit
+#' \dontrun{ 
+#' # Work in the EasyMicroPlot
+#' library(EasyMicroPlot)
+#' alpha_re <- alpha_plot(data = deposit$data,
+#'                        design = deposit$mapping,
+#'                        min_relative = 0.001,min_ratio = 0.7,method = 'ttest')
+#' }
+EMP_to_EMP1 <- function(obj,estimate_group){
+  
+  primary <- feature <- NULL
 
-
+  deposit <- list()
+  
+  if (!inherits(obj,"EMPT")) {
+    stop('Please input EMPT object!')
+  }else if(inherits(obj,'EMPT')) {
+    EMPT <- obj
+  }
+  
+  rowdata <- EMPT |>
+    EMP_rowdata_extract() 
+  check_feature <- stringr::str_detect(rowdata$feature,';') |> all()
+  if(!check_feature) {
+    stop("This function need full taxonomy with ';', please check input data and EMP_feature_convert!")
+  }
+  
+  if ('old_feature' %in% colnames(rowdata)) {
+    stop("This function only work before EMP_collapse!")
+  }
+  
+  mapping <- EMPT |>
+    EMP_coldata_extract() |>
+    dplyr::select(primary,{{estimate_group}}) |>
+    dplyr::rename(SampleID = primary,Group={{estimate_group}}) |> as.data.frame()
+  
+  meta_data <-  EMPT |>
+    EMP_coldata_extract() |>
+    dplyr::select(primary,where(is.numeric)) |>
+    dplyr::rename(SampleID = primary)
+  
+  
+  tax_level <- obj |> EMP_rowdata_extract() |> dplyr::select(-feature) |> colnames()
+  tax_ava <- c('Phylum','Class','Order','Family','Genus','Species')
+  real_tax <- intersect(tax_level,tax_ava)
+  
+  for (tax_select in real_tax) {
+    assay_df <- obj |> 
+      EMP_collapse(estimate_group = tax_select,method = 'sum',collapse_by = 'row',action = 'get') |>
+      tibble::column_to_rownames('primary') |>
+      t() |> as.data.frame() |> suppressMessages() |>
+      tibble::rownames_to_column('SampleID') 
+    deposit[['data']][[tax_select]] <- assay_df
+  }
+  
+  deposit[['mapping']] <- mapping
+  deposit[['meta_data']] <- meta_data
+  
+  return(deposit)
+}
 
 ## Enhance the print for EMP_assay_data
 ## These code below is modified from MicrobiotaProcess
