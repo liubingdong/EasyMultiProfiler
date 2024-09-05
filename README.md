@@ -19,7 +19,7 @@ if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
-<u>NOTE 1:</u>  For some region with unstable network, users could utilize the local mirrors to avoid unexperted errors before installation.
+<u>NOTE 1:</u>  For some regions with unstable networks, users could utilize the local mirrors to avoid unexpected errors before installation.
 
 ```R
 ## For china main land users could use this
@@ -32,7 +32,7 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-<u>NOTE 2:</u>  For different R versions on windows platform, users need install appropriate rtools to supprot necessary compile envrioment (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restat R and re-try below:
+<u>NOTE 2:</u>  For different R versions on the Windows platform, users need to install appropriate rtools to support the necessary compile environment (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restart R and re-try below:
 
 ```R
 pak::pak("liubingdong/EasyMultiProfiler")
@@ -40,7 +40,7 @@ pak::pak("liubingdong/EasyMultiProfiler")
 
 **Manual install** 
 
-Due to the inclusion of many polular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for your patience during installation, and we do believe EMP could largely speed up your research work.
+Due to the inclusion of many popular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. We suggest manually installing any missing dependencies based on the error prompts if installation errors occur. Thank you for being so patient during installation. We believe EMP could greatly speed up your research work.
 
 ```R
 # In the step, please type in : 1 2 3 4 5 6 7 
@@ -70,10 +70,10 @@ For more details, please refer to the tutorial
 
 <u>English version:</u> [**Web site**](https://liubingdong.github.io/EasyMultiProfiler/)
 
-<u>Chinese version:</u> [**Web site 1**](https://main--gorgeous-smakager-db1548.netlify.app/) [**Web site 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/)
+<u>Chinese version:</u> [**Website 1**](https://main--gorgeous-smakager-db1548.netlify.app/) [**Website 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/)
 
 ### Citation
 Under submit
 
 ### Contributing
-We welcome any contribution, including but not limited to code, idea and tutorial. Please report errors and questions on github [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
+We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
