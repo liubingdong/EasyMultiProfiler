@@ -1095,21 +1095,21 @@
                                 <section class="normal markdown-section">
                                 
                                 <h2 id="71-empfilter">7.1 EMP_filter</h2>
-<p>The function of  EMP_filter is very powerful, which can not only filter features and samples according to rowdata and coldata but also filter them according to data analysis results. To facilitate users&apos; understanding, the following describes the basic parameters of the EMP_filter module: </p>
+<p>The function of module <code>EMP_filter</code> is very powerful, which can not only filter features and samples according to rowdata and coldata but also filter them according to data analysis results. To facilitate the user&apos;s understanding, the following describes the basic parameters of the module <code>EMP_filter</code>: </p>
 <ul>
-<li><strong>obj</strong>: Specify the object to be analyzed, either MAE or EMPT.</li>
+<li><strong>obj</strong>: Specify the object to be analyzed, either <code>MAE</code> or <code>EMPT</code>.</li>
 <li><strong>experiment</strong>: Specify the name of the project to be analyzed (character).</li>
 <li><strong>sample_condition</strong>: Specify the threshold conditions for selecting samples.</li>
 <li><strong>feature_condition</strong>: Specify the threshold conditions for selecting features.</li>
 <li><strong>filterSample</strong>: Specify the names of the samples to be filtered.</li>
 <li><strong>filterFeature</strong>: Specify the names of the features to be filtered.</li>
-<li><strong>action</strong>: Used in conjunction with <code>filterSample</code> and <code>filterFeature</code>, set to <code>kick</code> or <code>select</code>.</li>
+<li><strong>action</strong>: Used in conjunction with parameters <code>filterSample</code> and <code>filterFeature</code>, set to <code>kick</code> or <code>select</code>.</li>
 <li><strong>show_info</strong>: Specify the display method of the output results.</li>
 </ul>
 <div style="background-color: #ffffcc; border: 1px solid #ffcc00; padding: 10px;">
 Note: <br>
 &#x2460; It is necessary to understand the filtering logic in the module <code>EMP_filter</code>. First, samples and features are filtered based on the conditions specified by the parameters <code>sample_condition</code> and <code>feature_condition</code>. Then, samples and features are selected or kicked based on the parameters <code>filterSample</code> and <code>filterFeature</code>. <br>
-&#x2461; If <code>EMP_filter</code> operation does not meet the filtering requirements in once time, the <code>EMP_filter</code> process could be performed multiple times.
+&#x2461; If <code>EMP_filter</code> operation does not meet the filtering requirements in once time, the <code>EMP_filter</code> process can be performed multiple times.
 </div>
 
 
@@ -1118,12 +1118,12 @@ Note: <br>
 </div>
 
 <h3 id="711-filter-the-data-across-all-the-experiments-in-mae">7.1.1 Filter the data across all the experiments in MAE</h3>
-<p>&#x1F3F7;&#xFE0F;<strong>Example 1&#xFF1A;</strong>Screen male subjects older than 30 years from all omics programs.</p>
+<p>&#x1F3F7;&#xFE0F;<strong>Example 1&#xFF1A;</strong>Screen male subjects older than 30 years from all omics projects.</p>
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_filter(sample_condition = Sex == &apos;M&apos; &amp; Age &gt;30)
 </code></pre>
 <p><img src="../tutorial_figs/MAE_male_30.jpg" alt=""></p>
-<p>After filtering, only the samples that meet the conditions that exist in the <code>MAE</code> object, and other analysis modules can be directly used for downstream analysis. For example, users can use the function <code>EMP_coldata_extract</code> to observe the filtered sample.</p>
+<p>After filtering, only the samples that meet the conditions that exist in the <code>MAE</code> object, and other analysis modules can be directly used for downstream analysis. For example, users can use the module <code>EMP_coldata_extract</code> to observe the filtered sample.</p>
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_filter(sample_condition = Sex == &apos;M&apos; &amp; Age &gt;30) |&gt;
   EMP_coldata_extract()
@@ -1155,29 +1155,27 @@ The parameter <code>action</code>  is used only for the parameters <code>filterS
   EMP_filter(Sex == &apos;M&apos; &amp; Age &gt;30,filterSample = &apos;P70597&apos;,action = &apos;kick&apos;)
 </code></pre>
 <p><img src="../tutorial_figs/host_gene_male_30.jpg" style="zoom:100%;"></p>
-<p>&#x1F3F7;&#xFE0F;<strong>Example 2&#xFF1A;</strong>Filter samples based on previous alpha analysis result.</p>
-<p>Select samples with the Shannon value greater than 2.</p>
+<p>&#x1F3F7;&#xFE0F;<strong>Example 2&#xFF1A;</strong>Filter samples based on previous alpha analysis result. Select samples with the Shannon value greater than 2.</p>
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_assay_extract(&apos;taxonomy&apos;) |&gt;
   EMP_alpha_analysis() |&gt;
   EMP_filter(shannon &gt; 2)
 </code></pre>
 <p><img src="../tutorial_figs/tax_alpha_filter.jpg" alt=""></p>
-<p>&#x1F3F7;&#xFE0F;<strong>Example 3&#xFF1A;</strong>Filter samples based on previous differential analysis result.</p>
-<p>Select feature with the adjust P value less than 0.05.</p>
+<p>&#x1F3F7;&#xFE0F;<strong>Example 3&#xFF1A;</strong>Filter samples based on previous difference analysis result. Select feature with the adjust P value less than 0.05.</p>
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_assay_extract(&apos;host_gene&apos;) |&gt;
   EMP_diff_analysis(method = &apos;DESeq2&apos;,.formula = ~Group,p.adjust = &apos;BH&apos;) |&gt;
   EMP_filter(feature_condition = BH &lt; 0.05)
 </code></pre>
 <p><img src="../tutorial_figs/host_gene_diff_filter.jpg" alt=""></p>
-<p>&#x1F3F7;&#xFE0F;<strong>Example 4&#xFF1A;</strong> Filter samples and features in multiple conditions and times</p>
-<p>Extract the experiment <code>geno_ec</code> from the MAE object, perform WGCNA  analysis followed by DESeq2 differential analysis, and then filter the data based on the following criteria:</p>
+<p>&#x1F3F7;&#xFE0F;<strong>Example 4&#xFF1A;</strong> Filter samples and features in multiple conditions and times.</p>
+<p>Extract the assay of  <code>geno_ec</code>. Perform WGCNA  analysis followed by DESeq2 difference analysis, and then filter the data based on the following criteria:</p>
 <ul>
 <li>Samples older than 30 years;</li>
 <li>Core genes identified by edgeR;</li>
 <li>Genes from the WGCNA analysis that are associated significantly with BMI;</li>
-<li>Genes with a p-value less than 0.05 in the differential analysis.</li>
+<li>Genes with a p-value less than 0.05 in the difference analysis.</li>
 </ul>
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_assay_extract(&apos;geno_ec&apos;)  |&gt; 
@@ -1185,18 +1183,18 @@ The parameter <code>action</code>  is used only for the parameters <code>filterS
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |&gt;
   EMP_WGCNA_cor_analysis(coldata_to_assay = c(&apos;BMI&apos;,&apos;PHQ9&apos;,&apos;GAD7&apos;,&apos;HAMD&apos;,&apos;SAS&apos;,&apos;SDS&apos;),
                          method=&apos;spearman&apos;) |&gt;
-  EMP_heatmap_plot() |&gt; # This step could help find the interesting module
+  EMP_heatmap_plot() |&gt; # This step can help find the interesting module
   EMP_diff_analysis(method = &apos;DESeq2&apos;,.formula = ~Group) |&gt;
   EMP_filter(sample_condition = Age &gt;30,
              feature_condition = WGCNA_color == &apos;black&apos; &amp; pvalue &lt; 0.05)
 </code></pre>
 <p><img src="../tutorial_figs/ec_WGCNA_diff_muti_filter.jpg" style="zoom:50%;"></p>
 <h3 id="713-regarding-the-removal-of-data-analysis-results-after-filtering">7.1.3 Regarding the removal of data analysis results after filtering</h3>
-<p>In the analysis workflow in the EasyMultiProfiler package, the analysis results are automatically stored in objects for the function  <code>EMP_filter</code>. However, once the screening is complete, the previously stored results may no longer be right and are therefore automatically cleared away (e.g., the results of the difference analysis and alpha diversity analysis are stored in the container, and then some samples are excluded based on the BMI value). At this stage, the existing differential analysis results are automatically cleared because they are no longer right; The alpha diversity results are not affected by the sample change and will continue to be stored in the container for the next screening). The EasyMultiProfiler package already automates this process and will alert the user in red text that the action has been performed.</p>
+<p>In the analysis workflow in the EasyMultiProfiler package, the analysis results are automatically stored in objects for the module <code>EMP_filter</code>. However, once the screening is complete, the previously stored results may no longer be right and are therefore automatically cleared away (e.g., the results of the difference analysis and alpha diversity analysis are stored in the container, and then some samples are excluded based on the BMI value). At this stage, the existing difference analysis results are automatically cleared because they are no longer right; The alpha diversity results are not affected by the sample change and will continue to be stored in the object for the next screening). The EasyMultiProfiler package already automates this process and will alert the user in red text that the action has been performed.</p>
 <h3 id="714-regarding-the-display-of-filtered-data">7.1.4 Regarding the display of filtered data</h3>
-<p>In the analysis workflow of the EasyMultiProfiler package, after filtering with the <code>EMP_filter</code> module, the output will by default retain the display results from the previous analysis module. For example, if the previous module performed alpha diversity calculations, and EMP_filter is used to filter based on the Age&gt;30 condition, the EMP_filter output will continue to display the filtered results from the previous module. If the result is cleared due to changes in samples or features (as detailed in section 7.1.3), the output will instead reflect the current state of the dataset assay.</p>
+<p>In the analysis workflow of the EasyMultiProfiler package, after filtering with the module <code>EMP_filter</code>, the output will by default retain the display results from the previous analysis module. For example, if the previous module performed alpha diversity calculations, and <code>EMP_filter</code> is used to filter based on the Age&gt;30 condition, the <code>EMP_filter</code> output will continue to display the filtered results from the previous module. If the result is cleared due to changes in samples or features (as detailed in section 7.1.3), the output will instead reflect the current state of the dataset assay.</p>
 <h3 id="715-regarding-filtered-data-extraction">7.1.5 Regarding filtered Data Extraction</h3>
-<p>In the function <code>EMP_filter</code>, the parameter <code>action</code> is used only to filter with parameters <code>filterSample</code> and <code>filterFeature</code>. If users want to extract the assay data after filtering,  it is a good idea to use the function <code>EMP_assay_extract</code> after the module. </p>
+<p>In the module <code>EMP_filter</code>, the parameter <code>action</code> is used only to filter with parameters <code>filterSample</code> and <code>filterFeature</code>. If users want to extract the assay data after filtering,  it is a good idea to use the module <code>EMP_assay_extract</code> after the module <code>EMP_filter</code>. </p>
 <p>&#x1F3F7;&#xFE0F;<strong>Example&#xFF1A;</strong>Extract assay after filtering.</p>
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_assay_extract(&apos;host_gene&apos;) |&gt;
@@ -1204,7 +1202,7 @@ The parameter <code>action</code>  is used only for the parameters <code>filterS
   EMP_assay_extract(action = &apos;get&apos;)
 </code></pre>
 <footer class="page-footer"><span class="copyright">Copyright &#xA9; 382983280@qq.com 2024 all right reserved&#xFF0C;powered by Gitbook</span><span class="footer-modification">&#x66F4;&#x65B0;&#x65F6;&#x95F4;&#xFF1A;
-2024-08-20 00:39:47
+2024-08-31 18:58:42
 </span></footer>
                                 
                                 </section>
@@ -1248,7 +1246,7 @@ The parameter <code>action</code>  is used only for the parameters <code>filterS
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"7.1 EMP_filter","level":"1.1.7.1","depth":3,"next":{"title":"7.2 EMP_history","level":"1.1.7.2","depth":3,"path":"MD/7.2 数据历史 EMP_history.md","ref":"MD/7.2 数据历史 EMP_history.md","articles":[]},"previous":{"title":"Chapter 7 Data support","level":"1.1.7","depth":2,"path":"MD/7 data support.md","ref":"MD/7 data support.md","articles":[{"title":"7.1 EMP_filter","level":"1.1.7.1","depth":3,"path":"MD/7.1 数据筛选 data_filter.md","ref":"MD/7.1 数据筛选 data_filter.md","articles":[]},{"title":"7.2 EMP_history","level":"1.1.7.2","depth":3,"path":"MD/7.2 数据历史 EMP_history.md","ref":"MD/7.2 数据历史 EMP_history.md","articles":[]},{"title":"7.3 EMP_result","level":"1.1.7.3","depth":3,"path":"MD/7.3 数据结果提取和注入 EMP_result.md","ref":"MD/7.3 数据结果提取和注入 EMP_result.md","articles":[]},{"title":"7.4 EMP_summary","level":"1.1.7.4","depth":3,"path":"MD/7.4 数据概览 EMP_summary.md","ref":"MD/7.4 数据概览 EMP_summary.md","articles":[]},{"title":"7.5 EMP_taxonomy_import","level":"1.1.7.5","depth":3,"path":"MD/7.5 物种数据导入 EMP_taxonomy_import.md","ref":"MD/7.5 物种数据导入 EMP_taxonomy_import.md","articles":[]},{"title":"7.6 EMP_function_import","level":"1.1.7.6","depth":3,"path":"MD/7.6 功能数据导入 EMP_function_import.md","ref":"MD/7.6 功能数据导入 EMP_function_import.md","articles":[]},{"title":"7.7 EMP_normal_import","level":"1.1.7.7","depth":3,"path":"MD/7.7 标准数据导入 EMP_normal_import.md","ref":"MD/7.7 标准数据导入 EMP_normal_import.md","articles":[]},{"title":"7.8 EMP_easy_import","level":"1.1.7.8","depth":3,"path":"MD/7.8 快捷数据导入 EMP_easy_import.md","ref":"MD/7.8 快捷数据导入 EMP_easy_import.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["code","pageview-count","tbfed-pagefooter","favicon","-highlight","prism","google-tongji-with-multiple-channel","search-pro","expandable-chapters","hide-element","back-to-top-button","splitter","auto-scroll-table","-lunr","-search","-sharing","sharing-plus","chapter-fold","livereload"],"styles":{"website":"assets/styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 382983280@qq.com 2024","modify_label":"更新时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"livereload":{},"splitter":{},"google-tongji-with-multiple-channel":{"multipleChannelConfig":{},"url":"https://www.googletagmanager.com/gtag/js","token":"G-YE9M3Z1JB4"},"search-pro":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"fontsettings":{"theme":"white","family":"sans","size":2},"favicon":{"shortcut":"assets/favicon.ico","bookmark":"assets/favicon.ico","appleTouch":"assets/favicon.ico","appleTouchMore":{"120x120":"assets/favicon.ico","180x180":"assets/favicon.ico"}},"back-to-top-button":{},"pageview-count":{},"sharing":{"all":["facebook","google","linkedin","twitter","weibo","qq"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"Bingdong Liu","pdf":{"pageBreaksBefore":"/","headerTemplate":null,"paperSize":"a4","margin":{"right":62,"left":62,"top":36,"bottom":36},"fontSize":12,"fontFamily":"Arial","footerTemplate":null,"chapterMark":"pagebreak","pageNumbers":true},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"isbn":"","variables":{},"title":"Bingdong Liu","language":"zh-hans","links":{"sharing":{"all":true,"facebook":true,"google":true,"twitter":true,"weibo":true},"sidebar":{"EasyMultiProfiler":"https://github.com/liubingdong/EasyMultiProfiler"}},"gitbook":"*","description":"EasyMultiProfiler.","extension":null},"file":{"path":"MD/7.1 数据筛选 data_filter.md","mtime":"2024-08-19T16:39:47.010Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-09-06T03:47:42.582Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"7.1 EMP_filter","level":"1.1.7.1","depth":3,"next":{"title":"7.2 EMP_history","level":"1.1.7.2","depth":3,"path":"MD/7.2 数据历史 EMP_history.md","ref":"MD/7.2 数据历史 EMP_history.md","articles":[]},"previous":{"title":"Chapter 7 Data support","level":"1.1.7","depth":2,"path":"MD/7 data support.md","ref":"MD/7 data support.md","articles":[{"title":"7.1 EMP_filter","level":"1.1.7.1","depth":3,"path":"MD/7.1 数据筛选 data_filter.md","ref":"MD/7.1 数据筛选 data_filter.md","articles":[]},{"title":"7.2 EMP_history","level":"1.1.7.2","depth":3,"path":"MD/7.2 数据历史 EMP_history.md","ref":"MD/7.2 数据历史 EMP_history.md","articles":[]},{"title":"7.3 EMP_result","level":"1.1.7.3","depth":3,"path":"MD/7.3 数据结果提取和注入 EMP_result.md","ref":"MD/7.3 数据结果提取和注入 EMP_result.md","articles":[]},{"title":"7.4 EMP_summary","level":"1.1.7.4","depth":3,"path":"MD/7.4 数据概览 EMP_summary.md","ref":"MD/7.4 数据概览 EMP_summary.md","articles":[]},{"title":"7.5 EMP_taxonomy_import","level":"1.1.7.5","depth":3,"path":"MD/7.5 物种数据导入 EMP_taxonomy_import.md","ref":"MD/7.5 物种数据导入 EMP_taxonomy_import.md","articles":[]},{"title":"7.6 EMP_function_import","level":"1.1.7.6","depth":3,"path":"MD/7.6 功能数据导入 EMP_function_import.md","ref":"MD/7.6 功能数据导入 EMP_function_import.md","articles":[]},{"title":"7.7 EMP_normal_import","level":"1.1.7.7","depth":3,"path":"MD/7.7 标准数据导入 EMP_normal_import.md","ref":"MD/7.7 标准数据导入 EMP_normal_import.md","articles":[]},{"title":"7.8 EMP_easy_import","level":"1.1.7.8","depth":3,"path":"MD/7.8 快捷数据导入 EMP_easy_import.md","ref":"MD/7.8 快捷数据导入 EMP_easy_import.md","articles":[]}]},"dir":"ltr"},"config":{"plugins":["code","pageview-count","tbfed-pagefooter","favicon","-highlight","prism","google-tongji-with-multiple-channel","search-pro","expandable-chapters","hide-element","back-to-top-button","splitter","auto-scroll-table","-lunr","-search","-sharing","sharing-plus","chapter-fold","livereload"],"styles":{"website":"assets/styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 382983280@qq.com 2024","modify_label":"更新时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"livereload":{},"splitter":{},"google-tongji-with-multiple-channel":{"multipleChannelConfig":{},"url":"https://www.googletagmanager.com/gtag/js","token":"G-YE9M3Z1JB4"},"search-pro":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"fontsettings":{"theme":"white","family":"sans","size":2},"favicon":{"shortcut":"assets/favicon.ico","bookmark":"assets/favicon.ico","appleTouch":"assets/favicon.ico","appleTouchMore":{"120x120":"assets/favicon.ico","180x180":"assets/favicon.ico"}},"back-to-top-button":{},"pageview-count":{},"sharing":{"all":["facebook","google","linkedin","twitter","weibo","qq"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"Bingdong Liu","pdf":{"pageBreaksBefore":"/","headerTemplate":null,"paperSize":"a4","margin":{"right":62,"left":62,"top":36,"bottom":36},"fontSize":12,"fontFamily":"Arial","footerTemplate":null,"chapterMark":"pagebreak","pageNumbers":true},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"isbn":"","variables":{},"title":"Bingdong Liu","language":"zh-hans","links":{"sharing":{"all":true,"facebook":true,"google":true,"twitter":true,"weibo":true},"sidebar":{"EasyMultiProfiler":"https://github.com/liubingdong/EasyMultiProfiler"}},"gitbook":"*","description":"EasyMultiProfiler.","extension":null},"file":{"path":"MD/7.1 数据筛选 data_filter.md","mtime":"2024-08-31T10:58:42.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-09-07T14:44:05.421Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
