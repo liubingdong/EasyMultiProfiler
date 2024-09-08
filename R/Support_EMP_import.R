@@ -162,8 +162,9 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   }
 
   colnames(temp)[1] <- 'feature'
-  temp[["feature"]] <- gsub('; ', ';', temp[["feature"]])
-  temp[["feature"]] <- gsub(' ;', ';', temp[["feature"]])
+
+  temp[["feature"]] <- gsub(paste0(sep,' '), sep, temp[["feature"]])
+  temp[["feature"]] <- gsub(paste0(' ',sep), sep, temp[["feature"]])
 
   if (any(is.na(temp[,-1]))) {
     message("The NA value has been detected in the data and changed into 0!")
@@ -182,8 +183,8 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   for (i in strings_to_remove2) {
     temp[["feature"]] <- gsub(i, '', temp[["feature"]])
   }
-  temp[["feature"]] <- gsub(';__', ';', temp[["feature"]])
-  temp[["feature"]] <- gsub(';_', ';', temp[["feature"]])
+  temp[["feature"]] <- gsub(paste0(sep,'__'), sep, temp[["feature"]])
+  temp[["feature"]] <- gsub(paste0('_',sep), sep, temp[["feature"]])
   temp %<>%
     dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_")) 
   
