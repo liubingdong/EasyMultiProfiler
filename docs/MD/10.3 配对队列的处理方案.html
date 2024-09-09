@@ -80,7 +80,7 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="Contact.html" />
+    <link rel="next" href="10.4 微生物数据完整注释问题.html" />
     
     
     <link rel="prev" href="10.2 实验数据快速处理.html" />
@@ -920,7 +920,7 @@
                 <a href="9 更多有用函数.html">
             
                     
-                    Chapter 9 More useful tools
+                    Chapter 9 More Useful Tools
             
                 </a>
             
@@ -1026,6 +1026,19 @@
             
         </li>
     
+        <li class="chapter " data-level="1.1.10.4" data-path="10.4 微生物数据完整注释问题.html">
+            
+                <a href="10.4 微生物数据完整注释问题.html">
+            
+                    
+                    10.4 Full taxonomy annotation
+            
+                </a>
+            
+
+            
+        </li>
+    
 
             </ul>
             
@@ -1095,10 +1108,13 @@
                                 <section class="normal markdown-section">
                                 
                                 <h2 id="103-paired-tests--for--cohorts">10.3 Paired tests  for  cohorts</h2>
-<p>In studies, it is often necessary to analyze the same cohort of subjects before and after the intervention (e.g. comparison of gut microflora before and after probiotic intervention in ulcerative colitis patients) and perform pair-wise testing. To ensure that paired tests work properly, subject numbers need to be specially numbered when importing data.</p>
+<div style="text-align: justify;">
+In studies, it is often necessary to analyze the same cohort of subjects before and after the intervention (e.g. comparison of gut microflora before and after probiotic intervention in ulcerative colitis patients) and perform pair-wise testing. To ensure that paired tests work properly, subject numbers need to be specially numbered when importing data.
+</div>
+
 <p>&#x1F3F7;&#xFE0F;<strong>Example&#xFF1A;</strong> </p>
 <p><strong>Step1: </strong>Process sample-related data.</p>
-<p>To comply with the ordering requirements of the paired test, characters <code>A</code> and <code>B</code>  were added to the subject number in the primary column to distinguish between pre- and post-intervention, respectively.</p>
+<p>To comply with the ordering requirements of the paired test, characters <code>A</code> and <code>B</code>  were added to the subject number in the primary column to distinguish between pre-and post-intervention, respectively.</p>
 <div style="text-align: center;">   
   <img src="../tutorial_figs/paired_meta.jpg" alt="cooc1" style="zoom:50%;">  
 
@@ -1120,13 +1136,12 @@ Note&#xFF1A;<br>
 &#x2461;The modules <code>EMP_boxplot</code> and <code>EMP_scatterplot</code>  are designed to quickly visualize the results of difference tests, but cannot complete paired tests or ANOVA calculations. The user can manually modify the plot  based on the result from module <code>EMP_diff_analysis</code>.
 </div>
 
-
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_assay_extract(experiment = &apos;taxonomy&apos;) |&gt;
   EMP_diff_analysis(method = &apos;wilcox.test&apos;,estimate_group = &apos;Group&apos;,paired=TRUE)
 </code></pre>
 <footer class="page-footer"><span class="copyright">Copyright &#xA9; 382983280@qq.com 2024 all right reserved&#xFF0C;powered by Gitbook</span><span class="footer-modification">&#x66F4;&#x65B0;&#x65F6;&#x95F4;&#xFF1A;
-2024-08-31 21:03:43
+2024-09-09 20:20:26
 </span></footer>
                                 
                                 </section>
@@ -1159,7 +1174,7 @@ Note&#xFF1A;<br>
                 </a>
                 
                 
-                <a href="Contact.html" class="navigation navigation-next " aria-label="Next page: Contact">
+                <a href="10.4 微生物数据完整注释问题.html" class="navigation navigation-next " aria-label="Next page: 10.4 Full taxonomy annotation">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -1170,7 +1185,7 @@ Note&#xFF1A;<br>
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"10.3 Paired test and intervention corhort","level":"1.1.10.3","depth":3,"next":{"title":"Contact","level":"1.2","depth":1,"path":"MD/Contact.md","ref":"MD/Contact.md","articles":[]},"previous":{"title":"10.2 Experiment data","level":"1.1.10.2","depth":3,"path":"MD/10.2 实验数据快速处理.md","ref":"MD/10.2 实验数据快速处理.md","articles":[]},"dir":"ltr"},"config":{"plugins":["code","pageview-count","tbfed-pagefooter","favicon","-highlight","prism","google-tongji-with-multiple-channel","search-pro","expandable-chapters","hide-element","back-to-top-button","splitter","auto-scroll-table","-lunr","-search","-sharing","sharing-plus","chapter-fold","livereload"],"styles":{"website":"assets/styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 382983280@qq.com 2024","modify_label":"更新时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"livereload":{},"splitter":{},"google-tongji-with-multiple-channel":{"multipleChannelConfig":{},"url":"https://www.googletagmanager.com/gtag/js","token":"G-YE9M3Z1JB4"},"search-pro":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"fontsettings":{"theme":"white","family":"sans","size":2},"favicon":{"shortcut":"assets/favicon.ico","bookmark":"assets/favicon.ico","appleTouch":"assets/favicon.ico","appleTouchMore":{"120x120":"assets/favicon.ico","180x180":"assets/favicon.ico"}},"back-to-top-button":{},"pageview-count":{},"sharing":{"all":["facebook","google","linkedin","twitter","weibo","qq"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"Bingdong Liu","pdf":{"pageBreaksBefore":"/","headerTemplate":null,"paperSize":"a4","margin":{"right":62,"left":62,"top":36,"bottom":36},"fontSize":12,"fontFamily":"Arial","footerTemplate":null,"chapterMark":"pagebreak","pageNumbers":true},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"isbn":"","variables":{},"title":"Bingdong Liu","language":"zh-hans","links":{"sharing":{"all":true,"facebook":true,"google":true,"twitter":true,"weibo":true},"sidebar":{"EasyMultiProfiler":"https://github.com/liubingdong/EasyMultiProfiler"}},"gitbook":"*","description":"EasyMultiProfiler.","extension":null},"file":{"path":"MD/10.3 配对队列的处理方案.md","mtime":"2024-08-31T13:03:43.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-09-07T14:44:05.421Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"10.3 Paired test and intervention corhort","level":"1.1.10.3","depth":3,"next":{"title":"10.4 Full taxonomy annotation","level":"1.1.10.4","depth":3,"path":"MD/10.4 微生物数据完整注释问题.md","ref":"MD/10.4 微生物数据完整注释问题.md","articles":[]},"previous":{"title":"10.2 Experiment data","level":"1.1.10.2","depth":3,"path":"MD/10.2 实验数据快速处理.md","ref":"MD/10.2 实验数据快速处理.md","articles":[]},"dir":"ltr"},"config":{"plugins":["code","pageview-count","tbfed-pagefooter","favicon","-highlight","prism","google-tongji-with-multiple-channel","search-pro","expandable-chapters","hide-element","back-to-top-button","splitter","auto-scroll-table","-lunr","-search","-sharing","sharing-plus","chapter-fold","livereload"],"styles":{"website":"assets/styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 382983280@qq.com 2024","modify_label":"更新时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"livereload":{},"splitter":{},"google-tongji-with-multiple-channel":{"multipleChannelConfig":{},"url":"https://www.googletagmanager.com/gtag/js","token":"G-YE9M3Z1JB4"},"search-pro":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"fontsettings":{"theme":"white","family":"sans","size":2},"favicon":{"shortcut":"assets/favicon.ico","bookmark":"assets/favicon.ico","appleTouch":"assets/favicon.ico","appleTouchMore":{"120x120":"assets/favicon.ico","180x180":"assets/favicon.ico"}},"back-to-top-button":{},"pageview-count":{},"sharing":{"all":["facebook","google","linkedin","twitter","weibo","qq"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"Bingdong Liu","pdf":{"pageBreaksBefore":"/","headerTemplate":null,"paperSize":"a4","margin":{"right":62,"left":62,"top":36,"bottom":36},"fontSize":12,"fontFamily":"Arial","footerTemplate":null,"chapterMark":"pagebreak","pageNumbers":true},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"isbn":"","variables":{},"title":"Bingdong Liu","language":"zh-hans","links":{"sharing":{"all":true,"facebook":true,"google":true,"twitter":true,"weibo":true},"sidebar":{"EasyMultiProfiler":"https://github.com/liubingdong/EasyMultiProfiler"}},"gitbook":"*","description":"EasyMultiProfiler.","extension":null},"file":{"path":"MD/10.3 配对队列的处理方案.md","mtime":"2024-09-09T12:20:26.552Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-09-09T12:27:43.876Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

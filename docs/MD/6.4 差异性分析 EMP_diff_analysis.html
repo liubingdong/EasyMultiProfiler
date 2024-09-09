@@ -920,7 +920,7 @@
                 <a href="9 更多有用函数.html">
             
                     
-                    Chapter 9 More useful tools
+                    Chapter 9 More Useful Tools
             
                 </a>
             
@@ -1026,6 +1026,19 @@
             
         </li>
     
+        <li class="chapter " data-level="1.1.10.4" data-path="10.4 微生物数据完整注释问题.html">
+            
+                <a href="10.4 微生物数据完整注释问题.html">
+            
+                    
+                    10.4 Full taxonomy annotation
+            
+                </a>
+            
+
+            
+        </li>
+    
 
             </ul>
             
@@ -1101,7 +1114,8 @@
 <div style="background-color: #ffffcc; border: 1px solid #ffcc00; padding: 10px;">
 Note&#xFF1A;<br>
 &#x2460; In the case of two groups, <code>sign_group</code> displays the group where the feature&apos;s mean is higher than in the other group, but it does not involve statistical testing. In this example, for the feature column Alistipes, <code>sign_Group</code> is Group_B, indicating that the mean of Alistipes in Group_B is higher than in Group_A; combined with the <code>pvalue</code> column, the p-value of the T-test is 0.167, and the Bonferroni-corrected p-value is 1, indicating that the difference in the feature between groups is not statistically significant.<br>
-&#x2461; In the case of more than two groups, <code>sign_group</code> shows the group with the highest mean for the feature among the involved groups, but it does not involve statistical testing. If the p-value in the <code>pvalue</code> column is less than 0.05, it indicates that the means of the involved groups are not all the same. To determine which specific groups have statistically significant differences in means, pairwise comparisons need to be performed.
+&#x2461; In the case of more than two groups, <code>sign_group</code> shows the group with the highest mean for the feature among the involved groups, but it does not involve statistical testing. If the p-value in the <code>pvalue</code> column is less than 0.05, it indicates that the means of the involved groups are not all the same. To determine which specific groups have statistically significant differences in means, pairwise comparisons need to be performed.<br>
+&#x2462; When calculating the fold change between two groups, if feature value is 0, the value will change into be one thousandth of the corresponding feature of the other set. In this case, the fold change is 1000 or 0.001.
 </div>
 
 <pre class="language-"><code class="lang-R">MAE |&gt;
@@ -1155,7 +1169,7 @@ MAE |&gt;
   EMP_assay_extract(&apos;host_gene&apos;) |&gt;
   EMP_diff_analysis(method=&apos;limma_voom_sample_weights&apos;,.formula = ~Sex)
 </code></pre>
-<h3 id="643-difference-analysis-results-filtering-and-visualization">6.4.3 Difference analysis results filtering and visualization</h3>
+<h3 id="643-filtering-and-visualization-based-on-diff-analysis-results">6.4.3 Filtering and visualization based on diff-analysis results</h3>
 <p>The module <code>EMP_filter</code> can assist in quickly filtering and analyzing results. For detailed usage, refer to the help documentation of Module <code>EMP_filter</code>.</p>
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_assay_extract(&apos;geno_ko&apos;) |&gt;
@@ -1169,7 +1183,6 @@ Note&#xFF1A;<br>
 Adding parameter <code>show=&apos;html&apos;</code> to the function <code>EMP_volcanol_plot</code> provides interactive graphics, which helps in quickly identifying specific details of differential features. See section 8.10 EMP_volcanol_plot for more details.
 </div>
 
-
 <pre class="language-"><code class="lang-R">MAE |&gt;
   EMP_decostand(experiment = &apos;geno_ec&apos;,method = &apos;integer&apos;) |&gt;
   EMP_diff_analysis(method=&apos;DESeq2&apos;,.formula = ~Group)  |&gt;
@@ -1181,7 +1194,7 @@ Adding parameter <code>show=&apos;html&apos;</code> to the function <code>EMP_vo
 </div> 
 
 <footer class="page-footer"><span class="copyright">Copyright &#xA9; 382983280@qq.com 2024 all right reserved&#xFF0C;powered by Gitbook</span><span class="footer-modification">&#x66F4;&#x65B0;&#x65F6;&#x95F4;&#xFF1A;
-2024-08-30 16:42:58
+2024-09-09 20:14:40
 </span></footer>
                                 
                                 </section>
@@ -1225,7 +1238,7 @@ Adding parameter <code>show=&apos;html&apos;</code> to the function <code>EMP_vo
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"6.4 EMP_diff_analysis","level":"1.1.6.4","depth":3,"next":{"title":"6.5 EMP_dimension_analysis","level":"1.1.6.5","depth":3,"path":"MD/6.5 降维分析 EMP_dimension_analysis.md","ref":"MD/6.5 降维分析 EMP_dimension_analysis.md","articles":[]},"previous":{"title":"6.3 EMP_cor_analysis","level":"1.1.6.3","depth":3,"path":"MD/6.3 相关性分析 EMP_cor_analysis.md","ref":"MD/6.3 相关性分析 EMP_cor_analysis.md","articles":[]},"dir":"ltr"},"config":{"plugins":["code","pageview-count","tbfed-pagefooter","favicon","-highlight","prism","google-tongji-with-multiple-channel","search-pro","expandable-chapters","hide-element","back-to-top-button","splitter","auto-scroll-table","-lunr","-search","-sharing","sharing-plus","chapter-fold","livereload"],"styles":{"website":"assets/styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 382983280@qq.com 2024","modify_label":"更新时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"livereload":{},"splitter":{},"google-tongji-with-multiple-channel":{"multipleChannelConfig":{},"url":"https://www.googletagmanager.com/gtag/js","token":"G-YE9M3Z1JB4"},"search-pro":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"fontsettings":{"theme":"white","family":"sans","size":2},"favicon":{"shortcut":"assets/favicon.ico","bookmark":"assets/favicon.ico","appleTouch":"assets/favicon.ico","appleTouchMore":{"120x120":"assets/favicon.ico","180x180":"assets/favicon.ico"}},"back-to-top-button":{},"pageview-count":{},"sharing":{"all":["facebook","google","linkedin","twitter","weibo","qq"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"Bingdong Liu","pdf":{"pageBreaksBefore":"/","headerTemplate":null,"paperSize":"a4","margin":{"right":62,"left":62,"top":36,"bottom":36},"fontSize":12,"fontFamily":"Arial","footerTemplate":null,"chapterMark":"pagebreak","pageNumbers":true},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"isbn":"","variables":{},"title":"Bingdong Liu","language":"zh-hans","links":{"sharing":{"all":true,"facebook":true,"google":true,"twitter":true,"weibo":true},"sidebar":{"EasyMultiProfiler":"https://github.com/liubingdong/EasyMultiProfiler"}},"gitbook":"*","description":"EasyMultiProfiler.","extension":null},"file":{"path":"MD/6.4 差异性分析 EMP_diff_analysis.md","mtime":"2024-08-30T08:42:58.000Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-09-07T14:44:05.421Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"6.4 EMP_diff_analysis","level":"1.1.6.4","depth":3,"next":{"title":"6.5 EMP_dimension_analysis","level":"1.1.6.5","depth":3,"path":"MD/6.5 降维分析 EMP_dimension_analysis.md","ref":"MD/6.5 降维分析 EMP_dimension_analysis.md","articles":[]},"previous":{"title":"6.3 EMP_cor_analysis","level":"1.1.6.3","depth":3,"path":"MD/6.3 相关性分析 EMP_cor_analysis.md","ref":"MD/6.3 相关性分析 EMP_cor_analysis.md","articles":[]},"dir":"ltr"},"config":{"plugins":["code","pageview-count","tbfed-pagefooter","favicon","-highlight","prism","google-tongji-with-multiple-channel","search-pro","expandable-chapters","hide-element","back-to-top-button","splitter","auto-scroll-table","-lunr","-search","-sharing","sharing-plus","chapter-fold","livereload"],"styles":{"website":"assets/styles/website.css"},"pluginsConfig":{"tbfed-pagefooter":{"copyright":"Copyright © 382983280@qq.com 2024","modify_label":"更新时间：","modify_format":"YYYY-MM-DD HH:mm:ss"},"chapter-fold":{},"prism":{"css":["prismjs/themes/prism-tomorrow.css"]},"livereload":{},"splitter":{},"google-tongji-with-multiple-channel":{"multipleChannelConfig":{},"url":"https://www.googletagmanager.com/gtag/js","token":"G-YE9M3Z1JB4"},"search-pro":{},"sharing-plus":{"qq":false,"all":["facebook","google","twitter","instapaper","linkedin","pocket","stumbleupon"],"douban":false,"facebook":true,"weibo":false,"instapaper":false,"whatsapp":false,"hatenaBookmark":false,"twitter":true,"messenger":false,"line":false,"vk":false,"pocket":true,"google":false,"viber":false,"stumbleupon":false,"qzone":false,"linkedin":false},"auto-scroll-table":{},"code":{"copyButtons":true},"hide-element":{"elements":[".gitbook-link"]},"fontsettings":{"theme":"white","family":"sans","size":2},"favicon":{"shortcut":"assets/favicon.ico","bookmark":"assets/favicon.ico","appleTouch":"assets/favicon.ico","appleTouchMore":{"120x120":"assets/favicon.ico","180x180":"assets/favicon.ico"}},"back-to-top-button":{},"pageview-count":{},"sharing":{"all":["facebook","google","linkedin","twitter","weibo","qq"]},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false},"expandable-chapters":{}},"theme":"default","author":"Bingdong Liu","pdf":{"pageBreaksBefore":"/","headerTemplate":null,"paperSize":"a4","margin":{"right":62,"left":62,"top":36,"bottom":36},"fontSize":12,"fontFamily":"Arial","footerTemplate":null,"chapterMark":"pagebreak","pageNumbers":true},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"isbn":"","variables":{},"title":"Bingdong Liu","language":"zh-hans","links":{"sharing":{"all":true,"facebook":true,"google":true,"twitter":true,"weibo":true},"sidebar":{"EasyMultiProfiler":"https://github.com/liubingdong/EasyMultiProfiler"}},"gitbook":"*","description":"EasyMultiProfiler.","extension":null},"file":{"path":"MD/6.4 差异性分析 EMP_diff_analysis.md","mtime":"2024-09-09T12:14:40.858Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2024-09-09T12:27:43.876Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
