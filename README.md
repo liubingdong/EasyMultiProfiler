@@ -68,9 +68,9 @@ library(EasyMultiProfiler)
 ### Usage and tutorial
 For more details, please refer to the tutorial
 
-<u>English version:</u> [**Web site**](https://liubingdong.github.io/EasyMultiProfiler/)
+[**Website 1**](https://main--gorgeous-smakager-db1548.netlify.app/) 
 
-<u>Chinese version:</u> [**Website 1**](https://main--gorgeous-smakager-db1548.netlify.app/) [**Website 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/)
+[**Website 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/) 
 
 ### Citation
 Under submit
