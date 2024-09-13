@@ -157,7 +157,7 @@ setClass("EMP_fitline_plot",contains = c("EMP_assay_data","EMPT","SummarizedExpe
 setClass("EMP_alpha_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_alpha_analysis_boxplot",contains = c("EMP_alpha_analysis","EMPT","SummarizedExperiment"))
 
-setClass("EMP_diff_analysis",contains = c("EMPT","SummarizedExperiment"))
+setClass("EMP_diff_analysis",contains = c("EMPT","SummarizedExperiment","EMP_assay_data"))
 setClass("EMP_diff_volcanol_plot",contains = c("EMP_diff_analysis","EMPT","SummarizedExperiment"))
 
 setClass("EMP_dimension_analysis",contains = c("EMPT","SummarizedExperiment"))
