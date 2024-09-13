@@ -63,12 +63,12 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis,cache = cachem::cac
 #'   EMP_alpha_analysis()
 EMP_alpha_analysis <- function(obj,experiment,use_cached = TRUE,action='add',...) {
   call <- match.call()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
 
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
 
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }else {
     stop('Please check the input data for EMP_alpha_analysis!')

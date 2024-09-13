@@ -3,12 +3,12 @@
   primary <- feature <- abundance <- Prob <- NULL
   #call <- match.call()
 
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (is(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
     .get.method.EMPT(EMPT) <- 'assay_filter'
     #.get.estimate_group.EMPT(EMPT) <- estimate_group
-  }else if(inherits(x,'EMPT')) {
+  }else if(is(x,'EMPT')) {
     EMPT <-x
     .get.method.EMPT(EMPT) <- 'assay_filter'
     #estimate_group <- .check_estimate_group.EMPT(x,estimate_group) ## estimate_group is necessary!
@@ -105,12 +105,12 @@
   feature <- primary <- NULL
   #call <- match.call()
 
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (is(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
     .get.method.EMPT(EMPT) <- 'assay_filter'
     .get.estimate_group.EMPT(EMPT) <- estimate_group
-  }else if(inherits(x,'EMPT')) {
+  }else if(is(x,'EMPT')) {
     EMPT <-x
     .get.method.EMPT(EMPT) <- 'assay_filter'
     #estimate_group <- .check_estimate_group.EMPT(x,estimate_group) ## estimate_group is necessary!

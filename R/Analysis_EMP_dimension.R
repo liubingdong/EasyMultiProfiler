@@ -218,10 +218,10 @@ EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,us
                                    estimate_group=NULL,umap.config=NULL,action='add'){
   call <- match.call()
 
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }
 

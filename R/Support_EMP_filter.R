@@ -75,7 +75,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
   sample_condition <- dplyr::enquo(sample_condition)
   feature_condition <- dplyr::enquo(feature_condition)
   message_info <- list()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     if (is.null(experiment)) {
       check_obj <-"MultiAssayExperiment"
     }else{
@@ -86,7 +86,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
       class(obj) <- 'EMP_assay_data'
       .get.info.EMPT(obj) <- 'EMP_assay_data'
     }
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     check_obj <-'EMPT'
     .get.method.EMPT(obj) <- 'filter'
     .get.history.EMPT(obj) <- call
@@ -170,7 +170,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
           class(deposit) <- show_info
           .get.info.EMPT(deposit) <- show_info
         }
-        if(inherits(.get.result.EMPT(deposit) %>% suppressMessages(), c('data.frame','tibble'))){
+        if(is(.get.result.EMPT(deposit) %>% suppressMessages(),'tibble') | is(.get.result.EMPT(deposit) %>% suppressMessages(),'data.frame')) {
           deposit <- deposit
         }else{
           check_result_empty <- .get.result.EMPT(deposit) %>% spsUtil::quiet() %>% is.null() ||

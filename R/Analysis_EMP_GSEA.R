@@ -275,11 +275,11 @@ EMP_GSEA_analysis <- function(obj,condition,experiment,estimate_group=NULL,metho
   rlang::check_installed(c('clusterProfiler'), reason = 'for EMP_GSEA_analysis().', action = BiocManager::install)    
   
   call <- match.call()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }
   

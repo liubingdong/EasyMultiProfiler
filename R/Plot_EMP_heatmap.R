@@ -31,7 +31,7 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
                             show='all',label_size=4,mytheme = 'theme()'){
   var1 <- var2 <- coefficient <- EMP <- NULL
   call <- match.call()
-  if (inherits(obj,"EMP")) {
+  if (is(obj,"EMP")) {
     EMP <- obj
   }else{
     stop('Please check the input data for EMP_heatmap.EMP_cor_analysis!')
@@ -173,10 +173,10 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
                                 show='all',label_size=4,mytheme = 'theme()'){
   WGCNA_color <- WGCNA_module_elements <- `.` <- var2 <- var1 <- coefficient <- NULL
   call <- match.call()
-  if (inherits(obj,"EMP")) {
+  if (is(obj,"EMP")) {
     WGCNA_cluster_result <- .get.result.EMPT(obj@ExperimentList[[1]],info = 'EMP_WGCNA_cluster_analysis')
     result <- obj@deposit[['WGCNA_cor_analysis_result']]
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     result <- .get.result.EMPT(obj,info = 'EMP_WGCNA_cor_analysis')
     WGCNA_cluster_result <- .get.result.EMPT(obj,info = 'EMP_WGCNA_cluster_analysis')
   }else {
@@ -301,14 +301,14 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
     p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
   } 
 
-  if (inherits(obj,"EMP")) {
+  if (is(obj,"EMP")) {
     EMP <- obj
     .get.plot_deposit.EMP(EMP,info='EMP_WGCNA_cor_heatmap') <- p1
     .get.info.EMP(EMP) <- 'EMP_WGCNA_cor_heatmap2'
     .get.history.EMP(EMP) <- call
     class(EMP) <- 'EMP_WGCNA_cor_heatmap2'
     return(EMP)
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
     .get.plot_deposit.EMPT(EMPT,info='EMP_WGCNA_cor_heatmap') <- p1
     .get.info.EMPT(EMPT) <- 'EMP_WGCNA_cor_heatmap'
@@ -345,7 +345,7 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
 
   primary <- value <- NULL
   
-  if (inherits(obj,"EMPT")) {
+  if (is(obj,"EMPT")) {
     EMPT <- obj
   }else{
     stop('Please check the input data for EMP_heatmap.EMP_assay_data!')

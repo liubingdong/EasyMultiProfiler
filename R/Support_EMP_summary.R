@@ -111,9 +111,9 @@ EMP_summary <- function(obj) {
   rlang::check_installed(c('BiocManager'), reason = 'for EMP_summary().', action = install.packages)  
   rlang::check_installed(c('formattable','kableExtra'), reason = 'for EMP_summary().', action = BiocManager::install)
   Sample <- Feature <- `Sample_atrr.` <- `Feature_atrr.` <- Assay <- Assay_status <- Sample_status <- Feature_status <- NULL
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     dt <- .creat_MAE_summary(obj)
-  }else if (inherits(obj,"EMP")) {
+  }else if (is(obj,"EMP")) {
     dt <- .creat_EMP_summary(obj)
   }else{
     stop("EMP_summary only support MultiAssayExperiment and EMP class!")

@@ -8,7 +8,7 @@
 #'
 EMP_netplot_enrich <- function(obj,plot_category = 1,seed =123,showCategory=10,...) {
   call <- match.call()
-  if (inherits(obj,c('EMP_multi_diff_enrich','EMP_multi_same_enrich'))) {  
+  if (is(obj,c('EMP_multi_diff_enrich','EMP_multi_same_enrich'))) {  
     .get.plot_category.EMP(obj) <- plot_category
     .get.history.EMP(obj) <- call
     switch(.get.plot_category.EMP(obj),
@@ -21,7 +21,7 @@ EMP_netplot_enrich <- function(obj,plot_category = 1,seed =123,showCategory=10,.
          }
 
     )    
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     .get.plot_category.EMPT(obj) <- plot_category
     .get.history.EMPT(obj) <- call
     switch(.get.plot_category.EMPT(obj),
@@ -45,7 +45,7 @@ EMP_netplot_enrich <- function(obj,plot_category = 1,seed =123,showCategory=10,.
 EMP_netplot_enrich_default <- function(obj,show='pic',showCategory=10,...) {
   enrich_plot <- list()
 
-  if (inherits(obj,"EMP_multi_same_enrich")) {
+  if (is(obj,"EMP_multi_same_enrich")) {
     p <- obj@deposit[['multi_same_enrich']] %>% 
       cnetplot(showCategory=showCategory,...)
 
@@ -56,7 +56,7 @@ EMP_netplot_enrich_default <- function(obj,show='pic',showCategory=10,...) {
     .get.plot_specific.EMP(obj) <- show
     .get.info.EMP(obj) <- 'EMP_multi_same_enrich_netplot'
     class(obj) <- 'EMP_multi_same_enrich_netplot'
-  }else if (inherits(obj,"EMP_multi_diff_enrich")) {
+  }else if (is(obj,"EMP_multi_diff_enrich")) {
     p <- obj@deposit[['multi_diff_enrich']] %>% 
       cnetplot(showCategory=showCategory,...)
 
@@ -67,7 +67,7 @@ EMP_netplot_enrich_default <- function(obj,show='pic',showCategory=10,...) {
     .get.plot_specific.EMP(obj) <- show
     .get.info.EMP(obj) <- 'EMP_multi_diff_enrich_netplot'
     class(obj) <- 'EMP_multi_diff_enrich_netplot'    
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     p <- EMP_result(obj,info='enrich_data') %>% 
       cnetplot(showCategory=showCategory,...)
 
@@ -89,11 +89,11 @@ EMP_netplot_enrich_default <- function(obj,show='pic',showCategory=10,...) {
 
 
 .show_EMP_netplot_enrich <- function(obj,plot) {
-  if (inherits(obj,"EMP_multi_same_enrich")) {
+  if (is(obj,"EMP_multi_same_enrich")) {
       result <- .get.plot_deposit.EMP(obj,info = 'multi_same_enrich_netplot')
-  }else if (inherits(obj,"EMP_multi_diff_enrich")) {
+  }else if (is(obj,"EMP_multi_diff_enrich")) {
       result <- .get.plot_deposit.EMP(obj,info = 'multi_diff_enrich_netplot')
-  }else if (inherits(obj,"EMPT")) {
+  }else if (is(obj,"EMPT")) {
       result <- .get.plot_deposit.EMPT(obj,info = 'enrich_analysis_netplot')
   }
   switch(plot,

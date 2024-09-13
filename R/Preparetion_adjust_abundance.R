@@ -82,11 +82,11 @@ EMP_adjust_abundance <- function(obj,experiment,
                                 method='combat_seq',use_cached=TRUE,
                                 .factor_unwanted,.factor_of_interest,action='add',...) {
   call <- match.call()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     x <- .as.EMPT(obj,
                   experiment = experiment)
     .get.method.EMPT(x) <- method
-  }else if(inherits(obj,'EMPT')){
+  }else if(is(obj,'EMPT')){
     x <- obj
     .get.method.EMPT(x) <- method
     class(x) <- 'EMP_assay_data'

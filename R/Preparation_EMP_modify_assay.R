@@ -30,10 +30,10 @@ EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',
   
   . <- NULL
 
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }
   

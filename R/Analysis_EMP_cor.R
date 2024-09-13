@@ -385,7 +385,7 @@ EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rval
 
   call <- match.call()
   
-  if (!inherits(EMP,"EMP")) {
+  if (!is(EMP,"EMP")) {
     stop("Please input the EMP format!")
   }
 

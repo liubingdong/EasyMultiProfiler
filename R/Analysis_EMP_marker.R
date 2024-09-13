@@ -248,11 +248,11 @@ EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=1
   
   primary <- NULL
 
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
     .get.method.EMPT(EMPT) <- method
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <-obj
     .get.method.EMPT(EMPT) <- method
   }

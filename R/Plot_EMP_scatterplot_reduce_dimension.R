@@ -41,7 +41,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   call <- match.call()
   
   # just change to unified naming.
-  if (inherits(obj,"EMPT")) {
+  if (is(obj,"EMPT")) {
     EMPT <- obj
   }else{
     stop("please check the input data for EMP_scatterplot.EMP_dimension_analysis!")

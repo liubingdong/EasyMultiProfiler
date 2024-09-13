@@ -179,11 +179,11 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
                               use_cached = TRUE,action='add',group_level=NULL,
                               core=NULL,...){
   call <- match.call()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
     .get.method.EMPT(EMPT) <- method
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
     .get.method.EMPT(EMPT) <- method
   }

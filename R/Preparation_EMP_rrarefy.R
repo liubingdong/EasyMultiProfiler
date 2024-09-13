@@ -92,10 +92,10 @@
 
 EMP_rrarefy <- function(obj,experiment,raresize=NULL,seed=123,only_show_depth=FALSE,use_cached = TRUE,action = 'add',...) {
   call <- match.call()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     x <- .as.EMPT(obj,
                   experiment = experiment)
-  }else if(inherits(obj,'EMPT')){
+  }else if(is(obj,'EMPT')){
     x <- obj
     class(x) <- 'EMP_assay_data'
   }else {
@@ -111,7 +111,7 @@ EMP_rrarefy <- function(obj,experiment,raresize=NULL,seed=123,only_show_depth=FA
 
   EMPT <- .EMP_rrarefy_m(EMPT=x,raresize=raresize,seed=seed,only_show_depth=only_show_depth,...)
   # in case that .EMP_rrarefy only return depth message
-  if (inherits(EMPT,'EMPT')) {
+  if (is(EMPT,'EMPT')) {
     .get.history.EMPT(EMPT) <- call
     class(EMPT) <- 'EMP_assay_data'
   }

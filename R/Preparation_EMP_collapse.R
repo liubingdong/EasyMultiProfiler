@@ -12,14 +12,14 @@
 EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),
     collapse_sep=' ',collapse_boolean='any',action='add',...) {
   `.sample` <- counts <- feature <- primary <- old_feature <- . <- NULL 
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (is(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
     estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
     .get.estimate_group.EMPT(EMPT) <- estimate_group
     .get.experiment.EMPT(EMPT) <- experiment
     class(EMPT) <- 'EMP_assay_data'
-  }else if(inherits(x,'EMPT')){
+  }else if(is(x,'EMPT')){
     EMPT <- x
     estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
     experiment <- .get.experiment.EMPT(EMPT)
@@ -146,14 +146,14 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @noRd 
 EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_string=c('NA','null',''),collapse_sep=' ',collapse_boolean='any',action='add',...) {
   `.feature` <- counts <- primary <- feature <- old_feature <- . <-  NULL
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (is(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x,
                      experiment = experiment)
     estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
     .get.estimate_group.EMPT(EMPT) <- estimate_group
     .get.experiment.EMPT(EMPT) <- experiment
     class(EMPT) <- 'EMP_assay_data'
-  }else if(inherits(x,'EMPT')){
+  }else if(is(x,'EMPT')){
     EMPT <- x
     estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
     experiment <- .get.experiment.EMPT(EMPT)

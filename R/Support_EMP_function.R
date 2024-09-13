@@ -108,7 +108,7 @@ as.EMP <- function(object,select=NULL) {
   deposit <- new(Class = 'EMP')
   
   
-  if (inherits(object,'MultiAssayExperiment')) {
+  if (is(object,'MultiAssayExperiment')) {
     if (is.null(select)) {
       stop("When input data is MultiAssayExperiment, parameter select need to be specified! ")
     }else{
@@ -117,7 +117,7 @@ as.EMP <- function(object,select=NULL) {
         data_list[[i]] <- object %>% .as.EMPT(i)
       }
     }
-  }else if(inherits(object,'list')) {
+  }else if(is(object,'list')) {
     data_list <- object
   }else {
     stop("Please check the input data for as.EMP!")
@@ -125,9 +125,9 @@ as.EMP <- function(object,select=NULL) {
   
   experiment_name <- c()
   for (i in data_list) {
-    if (inherits(i,'EMP')) {
+    if (is(i,'EMP')) {
       each_experiment_name <- .get.experiment.EMP(i)
-    }else if (inherits(i,'EMPT')) {
+    }else if (is(i,'EMPT')) {
       each_experiment_name <- .get.experiment.EMPT(i)
     }
     experiment_name  <- append(experiment_name,each_experiment_name)
@@ -136,9 +136,9 @@ as.EMP <- function(object,select=NULL) {
   
   real_data_list <- list()
   for (i in data_list) {
-    if (inherits(i,'EMP')) {
+    if (is(i,'EMP')) {
       each_data <- i@ExperimentList
-    }else if (inherits(i,'EMPT')) {
+    }else if (is(i,'EMPT')) {
       each_data <- i
     }
     counts <- length(real_data_list) +1
@@ -264,7 +264,7 @@ as.EMP <- function(object,select=NULL) {
 #'   EMP_history()  ## get all the history about what happened to the object
 
 EMP_history <- function(obj) {
-  if (inherits(obj,"EMP")) {
+  if (is(obj,"EMP")) {
     his_info2 <- .get.history.EMP(obj,all = T) 
     his_names <- names(his_info2)
     for (i in 1:length(his_info2)) {
@@ -275,7 +275,7 @@ EMP_history <- function(obj) {
       his_info2[[his_names[i]]] <- his_info_each %>% unlist()
     }
     return(his_info2)
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     his_info <- .get.history.EMPT(obj) %>% as.character()
     for (i in 1:length(his_info)) {
       his_info[i] <-  gsub('\"', '', his_info[i])
@@ -460,9 +460,9 @@ EMP_to_EMP1 <- function(obj,estimate_group){
 
   deposit <- list()
   
-  if (!inherits(obj,"EMPT")) {
+  if (!is(obj,"EMPT")) {
     stop('Please input EMPT object!')
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }
   

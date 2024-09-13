@@ -122,10 +122,10 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 
   call <- match.call()
 
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     x <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(obj,'EMPT')){
+  }else if(is(obj,'EMPT')){
     x <- obj
     class(x) <- 'EMP_assay_data'
   }else {
@@ -166,7 +166,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 .EMP_WGCNA_cor_analysis_EMPT <-function(obj,method='spearman',coldata_to_assay=NULL,action='add'){
   var1 <- NULL
   
-  if (inherits(obj,"EMPT")) {
+  if (is(obj,"EMPT")) {
     EMPT <- obj
   }else{
     stop('Please check the input data!')
@@ -249,7 +249,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #' @importFrom WGCNA orderMEs
 .EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman',action='add'){
   primary <- var1 <- NULL
-  if (inherits(obj,"EMP")) {
+  if (is(obj,"EMP")) {
     EMP <- obj
   }else{
     stop('Please check the input data!')
@@ -422,7 +422,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_assay=NULL,use_cached=TRUE,action='add'){
   deposit <- NULL
   call <- match.call()
-  if (inherits(obj,"EMP")) {
+  if (is(obj,"EMP")) {
     if (use_cached == FALSE) {
       memoise::forget(.EMP_WGCNA_cor_analysis_EMP_m) %>% invisible()
     }       
@@ -430,7 +430,7 @@ EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_
     if (action=='add') {
       .get.history.EMP(deposit) <- call
     }
-  }else if (inherits(obj,"EMPT")) {
+  }else if (is(obj,"EMPT")) {
     if (use_cached == FALSE) {
       memoise::forget(.EMP_WGCNA_cor_analysis_EMPT_m) %>% invisible()
     }       

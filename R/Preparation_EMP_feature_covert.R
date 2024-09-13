@@ -174,10 +174,10 @@
 EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NULL,species = "none",OrgDb = NULL,action='add'){
   call <- match.call()
   check_result <- NULL
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }
   

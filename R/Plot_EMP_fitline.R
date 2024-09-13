@@ -220,9 +220,9 @@
 
 
 .show_EMP_fitplot<- function(obj,plot) {
-  if(inherits(obj,'EMPT')){
+  if(is(obj,'EMPT')){
     result <- .get.plot_deposit.EMPT(obj,info = 'EMP_fitline_plot')
-  }else if (inherits(obj,'EMP')) {
+  }else if (is(obj,'EMP')) {
     result <- .get.plot_deposit.EMP(obj,info = 'EMP_fitline_plot')
   }
   switch(plot,

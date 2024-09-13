@@ -2,10 +2,10 @@
 .EMP_impute <- function(obj,experiment,coldata = TRUE,assay = FALSE, rowdata = FALSE,.formula=. ~ .,
                        pmm.k = 10, num.trees = 1000, seed = 123,verbose = 0,action='add',...){
   call <- match.call()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }
 

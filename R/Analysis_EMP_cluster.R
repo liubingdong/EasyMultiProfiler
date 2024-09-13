@@ -18,12 +18,12 @@
   rlang::check_installed(c('dendextend'), reason = 'for EMP_cluster_analysis().', action = BiocManager::install)   
   colname <- primary <- `.` <- NULL
   #call <- match.call()
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
 
     EMPT <- .as.EMPT(obj,
                      experiment = experiment)
 
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
   }else {
     stop('Please check the input data for .EMP_cluster_analysis!')

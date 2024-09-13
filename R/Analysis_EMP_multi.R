@@ -75,7 +75,7 @@ EMP_multi_analysis <- function(EMP,select=NULL,method='feature',combineFun='enri
   rlang::check_installed(c('BiocManager'), reason = 'for EMP_multi_analysis().', action = install.packages) 
   rlang::check_installed(c('clusterProfiler'), reason = 'for EMP_multi_analysis().', action = BiocManager::install)  
   
-  if (!inherits(EMP,"EMP")) {
+  if (!is(EMP,"EMP")) {
     stop("Please input the EMP format!")
   }
 

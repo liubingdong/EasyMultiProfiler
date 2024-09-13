@@ -1,10 +1,11 @@
+#' @importFrom methods is
 .EMP_assay_extract_EMP <- function (x,experiment,
                                     pattern_ref = 'Name',pattern=NULL,
                                     exact=FALSE,action='add') {
   #call <- match.call()
-  if (inherits(x,"MultiAssayExperiment")) {
+  if (is(x,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(x, experiment = experiment)
-  }else if(inherits(x,'EMPT')) {
+  }else if(is(x,'EMPT')) {
     EMPT <-x
   }
 
@@ -89,7 +90,7 @@ EMP_assay_extract <- function (obj,experiment,pattern_ref = 'Name',pattern = NUL
   deposit <- NULL
   call <- match.call()
 
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     if (use_cached == FALSE) {
       memoise::forget(.EMP_assay_extract_EMP_m) %>% invisible()
     }    
@@ -99,7 +100,7 @@ EMP_assay_extract <- function (obj,experiment,pattern_ref = 'Name',pattern = NUL
     if (action=='add') {
       .get.history.EMPT(deposit) <- call # Here is already EMPT.
     }
-  }else if (inherits(obj,"EMPT")) {
+  }else if (is(obj,"EMPT")) {
     if (use_cached == FALSE) {
       memoise::forget(.EMP_assay_extract_EMPT_m) %>% invisible()
     }    
@@ -143,7 +144,7 @@ EMP_assay_extract <- function (obj,experiment,pattern_ref = 'Name',pattern = NUL
 #' dim(total_row_data)
 EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern = NULL,exact=FALSE){
 
-  if (inherits(obj,"MultiAssayExperiment")) {
+  if (is(obj,"MultiAssayExperiment")) {
     if (!is.null(experiment)) {
       deposit <- rowData(obj[[experiment]]) %>% as.data.frame() %>% tibble::as_tibble()
       if (!is.null(pattern)) {
@@ -163,7 +164,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
       }
     }
 
-  }else if(inherits(obj,'EMPT')) {
+  }else if(is(obj,'EMPT')) {
     EMPT <- obj
     deposit <- rowData(EMPT) %>% as.data.frame() %>% tibble::as_tibble()
 
@@ -207,14 +208,14 @@ EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_
     assay <- colname <- primary <- NULL
     call <- match.call()
     
-    if (inherits(obj,'EMPT')) {
+    if (is(obj,'EMPT')) {
       experiment <- .get.experiment.EMPT(obj)
       coldata <- colData(obj) %>% 
         as.data.frame() %>% 
         tibble::rownames_to_column('primary') %>% 
         dplyr::arrange(primary) %>%
         tibble::as_tibble() 
-    }else if (inherits(obj,'MultiAssayExperiment')){
+    }else if (is(obj,'MultiAssayExperiment')){
       colData(obj) %>% as.data.frame()%>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() -> coldata
       if (!is.null(experiment)) {
         real_colname <- obj[[experiment]] %>% colnames()
