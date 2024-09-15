@@ -10,8 +10,8 @@
          "pca" = {
            if(!is.null(distance)){
              message("Parameter distance in pca is euclidean!")
-             distance <- 'euclidean'
            }
+           distance <- 'euclidean'
            sample_name <- rownames(assay_data)
            assay_data <- assay_data |> bigstatsr::as_FBM()
            pca_result <- bigstatsr::big_SVD(assay_data,k = 3)
@@ -168,7 +168,7 @@
 #' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method  A character string. Methods include pca, pcoa, pls, opls, umap.
-#' @param distance A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist.
+#' @param distance A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist including "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
 #' @param estimate_group A character string. Select the group name in the coldata to be considerated.
 #' @param umap.config A list. only activate in umap. More see umap::umap.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).

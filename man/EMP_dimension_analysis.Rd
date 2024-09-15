@@ -22,7 +22,7 @@ EMP_dimension_analysis(
 
 \item{method}{A character string. Methods include pca, pcoa, pls, opls, umap.}
 
-\item{distance}{A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist.}
+\item{distance}{A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist including "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
