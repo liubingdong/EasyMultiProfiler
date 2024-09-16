@@ -68,7 +68,7 @@ library(EasyMultiProfiler)
 ### Usage and tutorial
 For more details, please refer to the tutorial:
 
-Website: [**Source 1**](https://main--gorgeous-smakager-db1548.netlify.app/)  [**Source 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/) 
+Website: [**Source 1**](https://main--gorgeous-smakager-db1548.netlify.app/)  [**Source 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/) [**Source 3**](http://easymultiprofiler.xielab.net) 
 
 ### Citation
 Under submit
