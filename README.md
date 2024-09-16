@@ -66,11 +66,9 @@ library(EasyMultiProfiler)
 ```
 
 ### Usage and tutorial
-For more details, please refer to the tutorial
+For more details, please refer to the tutorial:
 
-[**Website 1**](https://main--gorgeous-smakager-db1548.netlify.app/) 
-
-[**Website 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/) 
+Website: [**Source 1**](https://main--gorgeous-smakager-db1548.netlify.app/)  [**Source 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/) 
 
 ### Citation
 Under submit
