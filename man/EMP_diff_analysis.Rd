@@ -37,7 +37,7 @@ EMP_diff_analysis(
 
 \item{group_level}{A series of character strings. Determine the comparison order of groups.}
 
-\item{core}{A number. Select the core numbers in the parallel compute to speed up the result.}
+\item{core}{A number. Select the core numbers in the parallel compute to speed up the result.When no core is set and the number of features exceeds 2000, the default will use all CPU cores minus one.}
 
 \item{...}{Further parameters passed to the function tidybulk::test_differential_abundance, or statistical function in the stats package.}
 }
