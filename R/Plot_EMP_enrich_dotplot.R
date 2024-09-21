@@ -10,7 +10,7 @@
 #' # add example
 EMP_dotplot_enrich <- function(obj,plot_category = 1,seed =123,color='p.adjust',showCategory=10,...) {
   call <- match.call()
-  if (is(obj,c('EMP_multi_diff_enrich','EMP_multi_same_enrich'))) {  
+  if (is(obj,'EMP_multi_diff_enrich') | is(obj,'EMP_multi_same_enrich')) {  
     .get.plot_category.EMP(obj) <- plot_category
     .get.history.EMP(obj) <- call
     switch(.get.plot_category.EMP(obj),
