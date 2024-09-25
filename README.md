@@ -71,7 +71,9 @@ For more details, please refer to the tutorial:
 Website: [**Source 1**](https://main--gorgeous-smakager-db1548.netlify.app/)  [**Source 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/) [**Source 3**](http://easymultiprofiler.xielab.net) 
 
 ### Citation
-Under submit
+The official article for **EasyMultiProfiler** is still under submission. If this package can assist with your work, please feel free to cite its predecessor **EasyMicroPlot**  as below:
+
+EasyMicroPlot : An Efficient and Convenient R Package in Microbiome Downstream Analysis and Visualization for Clinical Study. doi: [10.3389/fgene.2021.803627](https://www.frontiersin.org/articles/10.3389/fgene.2021.803627/full)
 
 ### Contributing
 We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
