@@ -128,9 +128,7 @@
   }
   
   data_list <- check_duplicate_col(data_list)
-  
-  df <- unlist(data_list)
-  
+    
   # contruct the relationship
   total_data <- data_list
   data_length <- length(total_data)
@@ -307,35 +305,6 @@ kick_check <- function(data){
   } 
   return(kick_id)
 }
-
-
-
-check_duplicate_col <- function(list_of_dfs) {
-  # collect the colname
-  all_column_names <- unlist(lapply(list_of_dfs, names))
-  
-  # check duplicate
-  duplicated_column_names <- all_column_names[duplicated(all_column_names)]
-  
-  # if true , add experiment name to the colname
-  if (length(duplicated_column_names) > 0) {
-    for (df_name in names(list_of_dfs)) {
-      df <- list_of_dfs[[df_name]]
-      duplicated_cols <- names(df) %in% duplicated_column_names
-      if (any(duplicated_cols)) {
-        new_col_names <- paste(df_name, names(df), sep = "_")
-        names(df)[duplicated_cols] <- new_col_names[duplicated_cols]
-        colnames(df)[1] <- 'SampleID'
-        list_of_dfs[[df_name]] <- df
-        
-      }
-    }
-  }
-  
-  return(list_of_dfs)
-  
-}
-
 
 #' Correlation analysis
 #'
