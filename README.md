@@ -19,7 +19,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 **Let EMP enhance your research and transform your data analysis experience!**
 
-**Example below: **
+**Example below**
 
 ![example-1](tutorial_related/tutorial_figs/example-1.jpg)
 
