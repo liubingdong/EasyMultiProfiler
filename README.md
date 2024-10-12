@@ -9,6 +9,19 @@
 
 The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from start to finish.
 
+### What Can EasyMultiProfiler Offer?
+
+- **Quick Screening**: Simplify sample selection across multiple omics for efficient research.
+- **Dynamic Processing**: Effortlessly switch between standardization, differential analysis, correlation, enrichment analysis, etc.
+- **One-Step Analysis**: Effortlessly execute complex methods like WGCNA and GSEA in a single step.
+- **Streamlined Workflow**: Experience a clear, organized data analysis process that enhances productivity and clarity.
+- **Caching Technology**: Leverage built-in caching to save time and computational resources during data exploration.
+
+**Let EMP enhance your research and transform your data analysis experience!**
+
+**Example below: **
+
+![example-1](tutorial_related/tutorial_figs/example-1.jpg)
 
 ### Install
 
@@ -77,3 +90,4 @@ EasyMicroPlot : An Efficient and Convenient R Package in Microbiome Downstream
 
 ### Contributing
 We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
+
