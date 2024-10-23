@@ -28,6 +28,19 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
     stop('Please check the input data for EMP_collapse_byrow!')
   }
   
+  # Check the confilct in the collpase for microbial data
+  # Use skip_old_feature=TRUE to avoid the data which has been already collpased into this detect process
+  if (.check_is_tax(EMPT,skip_old_feature=TRUE) & !.check_is_tax_full(EMPT,sep=';')) {
+    if (.check_tax_collapse_confilct(EMPT,estimate_group)) {
+       flag <- .choose_tax_anotation()
+       if (flag == 'full') {
+        EMPT <- EMPT |> EMP_feature_convert(from = 'tax_single',add = 'tax_full')
+       }else{
+        EMPT <- EMPT
+       }
+    }
+  }  
+
   # check the df attr
   df_attr_row <- EMPT@deposit2[['df_attr_row']]
   if (!is.null(df_attr_row)) {

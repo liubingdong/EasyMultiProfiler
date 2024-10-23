@@ -433,6 +433,68 @@ EMP_history <- function(obj) {
   return(df) 
 }
 
+
+# Check the EMPT from microbial data
+#' @importFrom SummarizedExperiment rowData
+.check_is_tax <- function(EMPT,skip_old_feature=FALSE){
+  row_names <- rowData(EMPT) |> colnames()
+  if (skip_old_feature) {
+      total_tax_name <- c('feature','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+  }else{
+      total_tax_name <- c('feature','old_feature','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+  }
+
+  if (all(row_names %in% total_tax_name)) {
+    flag <- TRUE
+  }else{
+    flag <- FALSE
+  }
+  return(flag)
+}
+
+# Check the tax anotation is full or single
+#' @importFrom SummarizedExperiment rowData
+#' @importFrom stringr str_count
+.check_is_tax_full <- function (EMPT,sep=';') {
+  total_tax_name <- c('feature','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+  row_data <- rowData(EMPT) 
+  row_name <- row_data|> colnames()
+  # check the two example in the last column to confirm the tax anotation method
+  flag <- all(str_count(row_data[1,length(row_name)],sep) == which(total_tax_name %in%  row_name[length(row_name)]) -2,
+              str_count(row_data[2,length(row_name)],sep) == which(total_tax_name %in%  row_name[length(row_name)]) -2)
+  return(flag)
+}
+
+
+# Check the confilct in the collpase for microbial data 
+#' @importFrom SummarizedExperiment rowData
+.check_tax_collapse_confilct <- function(EMPT,estimate_group){
+  
+  EMPT_full <- EMPT |> EMP_feature_convert(from = 'tax_single',add = 'tax_full')
+  rowdata_single <- rowData(EMPT) 
+  rowdata_full <- rowData(EMPT_full)
+  
+  flag <- rowdata_single[[estimate_group]] |> unique() |> length() != rowdata_full[[estimate_group]] |> unique() |> length()
+  return(flag)
+}
+
+# make choice for users to deal with the confilct in the collpase
+#' @importFrom utils menu
+.choose_tax_anotation <- function() {
+  selection <- c("Keep the single-level tax anotation.", "Add full-level tax anotation.")
+  choice <- menu(selection, title = "Detected the confilcts between single-level and full-level annotation:")
+  
+  if (choice == 0) {
+    return("single")
+  }else if (choice == 1) {
+    return("single")
+  }else {
+    return("full")
+  }
+}
+
+
+
 #' Transfer microbial data from EasyMultiProfiler to EasyMciroPlot
 #'
 #' @param obj EMPT object.
@@ -454,6 +516,7 @@ EMP_history <- function(obj) {
 #'                        design = deposit$mapping,
 #'                        min_relative = 0.001,min_ratio = 0.7,method = 'ttest')
 #' }
+#' @importFrom stringr str_detect
 EMP_to_EMP1 <- function(obj,estimate_group){
   
   primary <- feature <- NULL
@@ -468,7 +531,7 @@ EMP_to_EMP1 <- function(obj,estimate_group){
   
   rowdata <- EMPT |>
     EMP_rowdata_extract() 
-  check_feature <- stringr::str_detect(rowdata$feature,';') |> all()
+  check_feature <- str_detect(rowdata$feature,';') |> all()
   if(!check_feature) {
     stop("This function need full taxonomy with ';', please check input data and EMP_feature_convert!")
   }
