@@ -481,7 +481,7 @@ EMP_history <- function(obj) {
 # make choice for users to deal with the confilct in the collpase
 #' @importFrom utils menu
 .choose_tax_anotation <- function() {
-  selection <- c("Keep the single-level tax anotation.", "Add full-level tax anotation.")
+  selection <- c("Keep single-level tax anotation.", "Add full-level tax anotation.")
   choice <- menu(selection, title = "Detected the confilcts between single-level and full-level annotation:")
   
   if (choice == 0) {
