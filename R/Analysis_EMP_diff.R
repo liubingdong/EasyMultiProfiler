@@ -134,7 +134,7 @@
 #'
 #' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param method A character string. Methods include t.test, wilcox_test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights
+#' @param method A character string. Methods include t.test, wilcox.test, kruskal.test, oneway.test, edgeR_quasi_likelihood, edgeR_likelihood_ratio, edger_robust_likelihood_ratio, DESeq2, limma_voom, limma_voom_sample_weights
 #' @param p.adjust A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)
 #' @param .formula A formula representing the desired linear model. If there is more than one factor, they should be in the order factor of interest + additional factors.
 #' @param estimate_group A character string. Select the group name in the coldata to be calculated.
