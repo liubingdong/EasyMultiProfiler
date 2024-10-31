@@ -35,6 +35,7 @@
 #' @param filterSample A series of character strings. Select samples in the data exactly.
 #' @param filterFeature A series of character strings. Select samples in the data exactly.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
+#' @param keep_result If the input is TRUE, it means to keep all results. If the input is a name, it means to keep the corresponding results.
 #' @param show_info A character string. Set the class of EMPT to show properly.
 #' @param action A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).
 #'
@@ -69,7 +70,7 @@
 
 EMP_filter <- function(obj,sample_condition,feature_condition,
                        filterSample=NULL,filterFeature=NULL,experiment=NULL,
-                       show_info=NULL,action='select'){
+                       show_info=NULL,action='select',keep_result=FALSE){
   primary <- feature <- NULL
   call <- match.call()
   sample_condition <- dplyr::enquo(sample_condition)
@@ -149,7 +150,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
         message_info %<>% append(paste0(feature_filter_num,' of ',total_feature_num,' features were filterd out!'))
 
         # filter the result in the deposit
-        obj %<>% .filter.deposit.EMPT(real_sample,real_feature)
+        obj %<>% .filter.deposit.EMPT(real_sample,real_feature,keep_result=keep_result)
 
         .get.message_info.EMPT(obj) <- message_info
         deposit <- obj %>% .filter.EMPT(filterSample=real_sample,filterFeature=real_feature,action='select') %>% suppressMessages() ##  Here action must be select, dont change!
@@ -190,8 +191,8 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
 
 
 
-.filter.deposit.EMPT <- function(EMPT,real_sample,real_feature){
-  Result <- attribute <- attribute2 <- affect_when_sample_changed <- affect_when_feature_changed <- `.` <- NULL
+.filter.deposit.EMPT <- function(EMPT,real_sample,real_feature,keep_result=keep_result){
+  Result <- attribute <- attribute2 <- affect_when_sample_changed <- affect_when_feature_changed <- `.` <- method <- NULL
   primary <- feature <- NULL
   result_names <- names(EMPT@deposit)
   deposit_info <- .get.deposit_info.EMPT(EMPT) %>% dplyr::filter(Result %in% !!result_names)
@@ -208,6 +209,18 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
 
   for (i in result_names) {
     each_deposit_info <- deposit_info %>% dplyr::filter(Result == !!i)
+    
+    # check the keep result name
+    if (!is.logical(keep_result)) {
+      if (each_deposit_info$Result %in% keep_result) {
+         keep_result <- keep_result
+      }else{
+         keep_result <- each_deposit_info %>% dplyr::filter(source %in% keep_result) %>% dplyr::pull(Result)
+         if (length(keep_result) == 0) {
+          stop('Please check keep_result, it should be one of the analysis names!')
+         }
+      }
+    }
 
     ## Special cases in the EMP_diff_analysis
     if (i == "diff_analysis_result") {
@@ -218,6 +231,11 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
         each_deposit_info$affect_when_sample_changed <- 1
         each_deposit_info$affect_when_feature_changed <- 1
       } 
+    }
+    
+    if (keep_result == TRUE | i %in% keep_result) {
+       each_deposit_info$affect_when_sample_changed <- 0
+       each_deposit_info$affect_when_feature_changed <- 0
     }
 
     result_attribute <- each_deposit_info %>% dplyr::pull(attribute)

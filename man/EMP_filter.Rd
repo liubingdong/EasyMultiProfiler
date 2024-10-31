@@ -12,7 +12,8 @@ EMP_filter(
   filterFeature = NULL,
   experiment = NULL,
   show_info = NULL,
-  action = "select"
+  action = "select",
+  keep_result = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ EMP_filter(
 \item{show_info}{A character string. Set the class of EMPT to show properly.}
 
 \item{action}{A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).}
+
+\item{keep_result}{If the input is TRUE, it means to keep all results. If the input is a name, it means to keep the corresponding results.}
 }
 \value{
 EMPT object
