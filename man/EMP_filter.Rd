@@ -33,7 +33,7 @@ EMP_filter(
 
 \item{action}{A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).}
 
-\item{keep_result}{If the input is TRUE, it means to keep all results. If the input is a name, it means to keep the corresponding results.}
+\item{keep_result}{If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.}
 }
 \value{
 EMPT object

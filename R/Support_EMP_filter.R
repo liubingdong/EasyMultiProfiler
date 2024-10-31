@@ -35,7 +35,7 @@
 #' @param filterSample A series of character strings. Select samples in the data exactly.
 #' @param filterFeature A series of character strings. Select samples in the data exactly.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
-#' @param keep_result If the input is TRUE, it means to keep all results. If the input is a name, it means to keep the corresponding results.
+#' @param keep_result If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.
 #' @param show_info A character string. Set the class of EMPT to show properly.
 #' @param action A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).
 #'
@@ -150,7 +150,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
         message_info %<>% append(paste0(feature_filter_num,' of ',total_feature_num,' features were filterd out!'))
 
         # filter the result in the deposit
-        obj %<>% .filter.deposit.EMPT(real_sample,real_feature,keep_result=keep_result)
+        obj %<>% .filter.deposit.EMPT(real_sample,real_feature,keep_result=keep_result) 
 
         .get.message_info.EMPT(obj) <- message_info
         deposit <- obj %>% .filter.EMPT(filterSample=real_sample,filterFeature=real_feature,action='select') %>% suppressMessages() ##  Here action must be select, dont change!
@@ -171,7 +171,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
           class(deposit) <- show_info
           .get.info.EMPT(deposit) <- show_info
         }
-        if(is(.get.result.EMPT(deposit) %>% suppressMessages(),'tibble') | is(.get.result.EMPT(deposit) %>% suppressMessages(),'data.frame')) {
+        if(is(.get.result.EMPT(deposit) %>% spsUtil::quiet(),'tibble') | is(.get.result.EMPT(deposit) %>% spsUtil::quiet(),'data.frame')) {
           deposit <- deposit
         }else{
           check_result_empty <- .get.result.EMPT(deposit) %>% spsUtil::quiet() %>% is.null() ||
@@ -213,18 +213,17 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
     # check the keep result name
     if (!is.logical(keep_result)) {
       if (each_deposit_info$Result %in% keep_result) {
-         keep_result <- keep_result
+         keep_result_real<- keep_result
       }else{
-         keep_result <- each_deposit_info %>% dplyr::filter(source %in% keep_result) %>% dplyr::pull(Result)
-         if (length(keep_result) == 0) {
-          stop('Please check keep_result, it should be one of the analysis names!')
-         }
+         keep_result_real <- each_deposit_info %>% dplyr::filter(source %in% keep_result) %>% dplyr::pull(Result)
       }
+    }else{
+      keep_result_real <- keep_result
     }
 
     ## Special cases in the EMP_diff_analysis
     if (i == "diff_analysis_result") {
-      diff_method <- .get.result.EMPT(EMPT) %>% dplyr::pull(method) %>% unique()
+      diff_method <- .get.result.EMPT(EMPT,info = 'EMP_diff_analysis') %>% spsUtil::quiet() %>% dplyr::pull(method) %>% unique()
       affect_diff_method <- c('edgeR_quasi_likelihood', 'edgeR_likelihood_ratio', 'edger_robust_likelihood_ratio', 'DESeq2',
                               'limma_voom',  'limma_voom_sample_weights')
       if (diff_method %in% affect_diff_method) {
@@ -233,7 +232,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
       } 
     }
     
-    if (keep_result == TRUE | i %in% keep_result) {
+    if (keep_result == TRUE | i %in% keep_result_real) {
        each_deposit_info$affect_when_sample_changed <- 0
        each_deposit_info$affect_when_feature_changed <- 0
     }
