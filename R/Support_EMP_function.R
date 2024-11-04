@@ -548,7 +548,7 @@ EMP_to_EMP1 <- function(obj,estimate_group){
   meta_data <-  EMPT |>
     EMP_coldata_extract() |>
     dplyr::select(primary,where(is.numeric)) |>
-    dplyr::rename(SampleID = primary)
+    dplyr::rename(SampleID = primary) |> as.data.frame()
   
   
   tax_level <- obj |> EMP_rowdata_extract() |> dplyr::select(-feature) |> colnames()
