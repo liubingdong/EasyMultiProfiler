@@ -1,7 +1,7 @@
 
 #' @import ggplot2
 #' @importFrom ggplot2 geom_smooth
-.EMP_fitline_plot_default.EMPT <- function(EMPT,var_select,formula = y~poly(x,1),se=FALSE,eq_size=3,show='pic',estimate_group=NULL,palette=NULL,mytheme='theme()',html_width = 5, html_height = 5,...){
+.EMP_fitline_plot_default.EMPT <- function(EMPT,var_select,formula = y~poly(x,1,raw = FALSE),se=FALSE,eq_size=3,show='pic',estimate_group=NULL,palette=NULL,mytheme='theme()',html_width = 5, html_height = 5,...){
   
   rlang::check_installed(c('BiocManager'), reason = 'for EMP_fitline_plot().', action = install.packages) 
   rlang::check_installed(c('ggpmisc'), reason = 'for EMP_fitline_plot().', action = BiocManager::install)     
@@ -88,7 +88,7 @@
 }
 
 
-.EMP_fitline_plot_default.EMP <- function(EMP,var_select,select=NULL,formula = y~poly(x,1),se=FALSE,eq_size=3,show='pic',estimate_group=NULL,palette=NULL,mytheme='theme()',html_width = 5, html_height = 5,...){
+.EMP_fitline_plot_default.EMP <- function(EMP,var_select,select=NULL,formula = y~poly(x,1,raw = FALSE),se=FALSE,eq_size=3,show='pic',estimate_group=NULL,palette=NULL,mytheme='theme()',html_width = 5, html_height = 5,...){
   
   rlang::check_installed(c('BiocManager'), reason = 'for EMP_fitline_plot().', action = install.packages) 
   rlang::check_installed(c('ggpmisc'), reason = 'for EMP_fitline_plot().', action = BiocManager::install)  
@@ -236,7 +236,7 @@
 #' @param plot_category An interger.More plot style.(under constrution)
 #' @param seed An interger. Set the random seed to the plot.
 #' @param var_select An series of string. Select two feature to regression.
-#' @param formula a formula object. Using aesthetic names x and y instead of original variable names. [y~poly(x,1)]. Detailed in ggpmisc::stat_poly_line
+#' @param formula a formula object. Using aesthetic names x and y instead of original variable names. [y~poly(x,1,raw = FALSE)]. Detailed in ggpmisc::stat_poly_line
 #' @param se An boolean. Display confidence interval around smooth. [Default:False]
 #' @param eq_size An number. Equation label size. [Default:3]
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
@@ -248,7 +248,7 @@
 #' @rdname EMP_fitline_plot
 
 EMP_fitline_plot.EMPT <- function(obj,plot_category = 1,seed =123,var_select,
-                               estimate_group = NULL,formula=y~poly(x,1),se=FALSE,
+                               estimate_group = NULL,formula=y~poly(x,1,raw = FALSE),se=FALSE,
                                show = 'pic',palette = NULL,eq_size=3,mytheme='theme()',
                                html_width=NULL,html_height=NULL) {
   call <- match.call()
@@ -283,7 +283,7 @@ EMP_fitline_plot.EMPT <- function(obj,plot_category = 1,seed =123,var_select,
 #' @rdname EMP_fitline_plot
 
 EMP_fitline_plot.EMP <- function(obj,plot_category = 1,seed =123,var_select,select=NULL,
-                               estimate_group = NULL,formula=y~poly(x,1),se=FALSE,
+                               estimate_group = NULL,formula=y~poly(x,1,raw = FALSE),se=FALSE,
                                show = 'pic',palette = NULL,eq_size=3,mytheme='theme()',
                                html_width=NULL,html_height=NULL) {
   #call <- match.call()

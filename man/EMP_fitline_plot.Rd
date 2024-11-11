@@ -20,7 +20,7 @@ EMP_fitline_plot.EMPT(
   seed = 123,
   var_select,
   estimate_group = NULL,
-  formula = y ~ poly(x, 1),
+  formula = y ~ poly(x, 1, raw = FALSE),
   se = FALSE,
   show = "pic",
   palette = NULL,
@@ -37,7 +37,7 @@ EMP_fitline_plot.EMP(
   var_select,
   select = NULL,
   estimate_group = NULL,
-  formula = y ~ poly(x, 1),
+  formula = y ~ poly(x, 1, raw = FALSE),
   se = FALSE,
   show = "pic",
   palette = NULL,
@@ -60,7 +60,7 @@ EMP_fitline_plot.EMP(
 
 \item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
 
-\item{formula}{a formula object. Using aesthetic names x and y instead of original variable names. [y~poly(x,1)]. Detailed in ggpmisc::stat_poly_line}
+\item{formula}{a formula object. Using aesthetic names x and y instead of original variable names. [y~poly(x,1,raw = FALSE)]. Detailed in ggpmisc::stat_poly_line}
 
 \item{se}{An boolean. Display confidence interval around smooth. [Default:False]}
 
