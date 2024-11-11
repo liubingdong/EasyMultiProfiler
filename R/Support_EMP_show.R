@@ -100,9 +100,11 @@ setMethod("show", "EMPT",
                      .show_EMP_dimension_analysis_scatterplot(object,.get.plot_specific.EMPT(object))
                    },
                    "EMP_alpha_analysis_boxplot" = {
+                     set.seed(123)
                      .show_EMP_alpha_boxplot(object,.get.plot_specific.EMPT(object))
                    },
                    "EMP_assay_boxplot" = {
+                     set.seed(123)
                      .show_EMP_assay_boxplot(object,.get.plot_specific.EMPT(object))
                    },
                    "EMP_structure_plot" = {

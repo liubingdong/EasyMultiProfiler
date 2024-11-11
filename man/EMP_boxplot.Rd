@@ -18,7 +18,6 @@ EMP_boxplot(obj, ...)
 EMP_boxplot.EMP_alpha_analysis(
   obj,
   plot_category = 1,
-  seed = 123,
   method = "wilcox.test",
   estimate_group = NULL,
   group_level = "default",
@@ -34,7 +33,6 @@ EMP_boxplot.EMP_alpha_analysis(
 EMP_boxplot.EMP_assay_boxplot_union(
   obj,
   plot_category = 1,
-  seed = 123,
   method = "wilcox.test",
   estimate_group = NULL,
   group_level = "default",
@@ -52,8 +50,6 @@ EMP_boxplot.EMP_assay_boxplot_union(
 \item{...}{...}
 
 \item{plot_category}{An interger.More plot style.(under constrution)}
-
-\item{seed}{An interger. Set the random seed to the plot.}
 
 \item{method}{A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).}
 
