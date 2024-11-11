@@ -97,6 +97,7 @@ setMethod("show", "EMPT",
                      .get.result.EMPT(object) %>% print()
                    },
                     "EMP_dimension_analysis_scatterplot" = {
+                      set.seed(123)
                      .show_EMP_dimension_analysis_scatterplot(object,.get.plot_specific.EMPT(object))
                    },
                    "EMP_alpha_analysis_boxplot" = {

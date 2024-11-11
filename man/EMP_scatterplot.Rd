@@ -33,7 +33,7 @@ EMP_scatterplot.EMP_dimension_analysis(
 
 \item{...}{...}
 
-\item{seed}{An interger. Set the random seed to the plot.}
+\item{seed}{An interger. Set the random seed for the adonis permutations.}
 
 \item{group_level}{A string vector. Set the group order in the plot.}
 
