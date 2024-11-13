@@ -57,7 +57,8 @@ setMethod("show", "EMPT",
                      object %>% enhance_print(n=10)
                    },
                    "EMP_enrich_analysis" = {
-                    object@deposit[["enrich_data"]]@result %>% tibble::as_tibble() %>% print(n=Inf)                    
+                    try(object@deposit[["enrich_data"]]@compareClusterResult %>% tibble::as_tibble() %>% print(n=Inf),silent=TRUE)  
+                    try(object@deposit[["enrich_data"]]@result %>% tibble::as_tibble() %>% print(n=Inf),silent=TRUE)                   
                    },
                    "EMP_cluster_analysis" = {
                      cluster_re <- .get.result.EMPT(object)
