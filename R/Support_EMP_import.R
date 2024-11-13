@@ -177,14 +177,27 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   ## Mistake-proofing
   strings_to_remove1 <- c('d__','k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__')
   strings_to_remove2 <- c('d_','k_', 'p_', 'c_', 'o_', 'f_', 'g_', 's_')
-  for (i in strings_to_remove1) {
-    temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+
+  total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+  idx <- which(total_tax_info %in% start_level) 
+  strings_to_remove1_append <- paste0(sep,strings_to_remove1[(idx + 1) : length(strings_to_remove1)])
+  strings_to_remove2_append <- paste0(sep,strings_to_remove2[(idx + 1) : length(strings_to_remove2)])
+
+  for (i in strings_to_remove1_append) {
+    temp[["feature"]] <- gsub(i, sep, temp[["feature"]])
   }
-  for (i in strings_to_remove2) {
-    temp[["feature"]] <- gsub(i, '', temp[["feature"]])
+  temp[["feature"]] <- gsub(strings_to_remove1[idx], '', temp[["feature"]])
+
+  for (i in strings_to_remove2_append) {
+    temp[["feature"]] <- gsub(i, sep, temp[["feature"]])
   }
+  temp[["feature"]] <- gsub(strings_to_remove2[idx], '', temp[["feature"]])
+
+
   temp[["feature"]] <- gsub(paste0(sep,'__'), sep, temp[["feature"]])
   temp[["feature"]] <- gsub(paste0('_',sep), sep, temp[["feature"]])
+
+
   temp %<>%
     dplyr::mutate(feature = stringr::str_replace_all(feature, " ", "_")) 
   
@@ -203,7 +216,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
     temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,quote = "",row.names = NULL,header = FALSE) %>% 
       dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., "")) 
 
-    total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+    #total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
     real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
     colnames(temp_name) <- real_tax_info[1:ncol(temp_name)]
 
@@ -241,7 +254,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
     temp_name <- temp %>% dplyr::pull(feature) %>% read.table(text = .,sep = sep,blank.lines.skip=F,quote = "",row.names = NULL,header = FALSE) %>%
       dplyr::mutate_if(~ any(. == ""), ~ dplyr::na_if(., ""))
 
-    total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
+    #total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
     real_tax_info <- total_tax_info[match(start_level, total_tax_info):length(total_tax_info)]
     colnames(temp_name) <- real_tax_info[1:ncol(temp_name)]
     
