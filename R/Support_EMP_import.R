@@ -175,7 +175,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   rownames(temp) <- NULL # necessary!
   
   ## Mistake-proofing
-  strings_to_remove1 <- c('d__','k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__')
+  strings_to_remove1 <- c('d__','k__', 'p__', 'c__', 'o__', 'f__', 'g__', 's__') # __ must go first than _
   strings_to_remove2 <- c('d_','k_', 'p_', 'c_', 'o_', 'f_', 'g_', 's_')
 
   total_tax_info <- c('Domain','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
@@ -186,15 +186,21 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   for (i in strings_to_remove1_append) {
     temp[["feature"]] <- gsub(i, sep, temp[["feature"]])
   }
-  temp[["feature"]] <- gsub(strings_to_remove1[idx], '', temp[["feature"]])
+  temp[["feature"]] <- gsub(paste0("^", strings_to_remove1[idx]), "", temp[["feature"]])
 
   for (i in strings_to_remove2_append) {
     temp[["feature"]] <- gsub(i, sep, temp[["feature"]])
   }
-  temp[["feature"]] <- gsub(strings_to_remove2[idx], '', temp[["feature"]])
+  temp[["feature"]] <- gsub(paste0("^", strings_to_remove2[idx]), "", temp[["feature"]])
 
+  # Delete the exception of tax anotation for silva in the level of Kindom
+  temp[["feature"]] <- gsub(paste0("^", "d__"), "", temp[["feature"]]) # __ must go first than _
+  temp[["feature"]] <- gsub(paste0("^", "d_"), "", temp[["feature"]])
 
+  # Delete any other exceptions or empty tax annotations
   temp[["feature"]] <- gsub(paste0(sep,'__'), sep, temp[["feature"]])
+  temp[["feature"]] <- gsub(paste0(sep,'_'), sep, temp[["feature"]])
+  temp[["feature"]] <- gsub(paste0('__',sep), sep, temp[["feature"]])
   temp[["feature"]] <- gsub(paste0('_',sep), sep, temp[["feature"]])
 
 
