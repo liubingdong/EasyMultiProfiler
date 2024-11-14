@@ -2,7 +2,7 @@
 
 ## EasyMultiProfiler: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization
 <a href="man/figures/logo.png"><img src="man/figures/logo.png" width=150 align="right" ></a>
-![](https://img.shields.io/badge/R%20language->=4.3.0-brightgreen.svg)
+![](https://img.shields.io/badge/R%20language->=4.3.3-brightgreen.svg)
 ![](https://img.shields.io/badge/Mac%20OSX%20&%20Windows-Available-brightgreen.svg)
 ![](https://img.shields.io/badge/Release%20version-1.0-brightgreen.svg)
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/liubingdong/EasyMultiProfier)
@@ -25,10 +25,14 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 ### Install
 
+<u>The R version must be **4.3.3** or higher.</u>
+
 **Easily install (recommend)**
 
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
+if (!requireNamespace("remotes", quietly=TRUE)) install.packages("remotes")
+remotes::install_version("patchwork",version='1.2.0',force = TRUE)
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
@@ -53,7 +57,7 @@ pak::pak("liubingdong/EasyMultiProfiler")
 
 **Manual install** 
 
-Due to the inclusion of many popular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. We suggest manually installing any missing dependencies based on the error prompts if installation errors occur. Thank you for being so patient during installation. We believe EMP could greatly speed up your research work.
+Due to the inclusion of many popular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for being so patient during installation. We believe EMP could greatly speed up your research work.
 
 ```R
 # In the step, please type in : 1 2 3 4 5 6 7 
@@ -61,6 +65,7 @@ setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/b
                   BioCann = "https://bioconductor.org/packages/3.18/data/annotation"))  
 options(timeout = 600000000) 
 install.packages("remotes") # remotes (>= 2.5.0)
+remotes::install_version("patchwork",version='1.2.0',force = TRUE) # patchwork (1.2.0)
 install.packages("BiocManager") # BiocManager (>= 1.30.22)
 BiocManager::install("base64enc") # base64enc (>= 0.1.3)
 BiocManager::install("WGCNA") # WGCNA (>= 1.72.5)
@@ -69,7 +74,7 @@ remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 
-More installation error and solution: [**Click this**](https://github.com/liubingdong/EasyMultiProfiler/blob/main/tutorial_related/Installation.md)
+More installation errors and solutions: [**Click this**](https://github.com/liubingdong/EasyMultiProfiler/blob/main/tutorial_related/Installation.md)
 
 ### Update new version
 The EasyMultiProfiler package is continuously being updated with more analysis and visualization modules. When a new version is needed, simply run pak again to update.
