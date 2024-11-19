@@ -226,7 +226,8 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
       diff_method <- .get.result.EMPT(EMPT,info = 'EMP_diff_analysis') %>% spsUtil::quiet() %>% dplyr::pull(method) %>% unique()
       affect_diff_method <- c('edgeR_quasi_likelihood', 'edgeR_likelihood_ratio', 'edger_robust_likelihood_ratio', 'DESeq2',
                               'limma_voom',  'limma_voom_sample_weights')
-      if (diff_method %in% affect_diff_method) {
+      # wilcox.test may have continuity correction or exact test,so need all() to lead one match result
+      if (all(diff_method %in% affect_diff_method)) {
         each_deposit_info$affect_when_sample_changed <- 1
         each_deposit_info$affect_when_feature_changed <- 1
       } 
