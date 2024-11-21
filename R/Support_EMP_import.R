@@ -420,7 +420,7 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
   obj <- SummarizedExperiment(assays=list(counts= as.matrix(assay_data)),
                               rowData = row_data)
   if (!is.null(assay_name)) {
-    assayNames(deposit, 1) <- assay_name
+    assayNames(obj, 1) <- assay_name
   }
   return(obj)
 }
