@@ -31,8 +31,6 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
-if (!requireNamespace("remotes", quietly=TRUE)) install.packages("remotes")
-remotes::install_version("patchwork",version='1.2.0',force = TRUE)
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
