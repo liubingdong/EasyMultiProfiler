@@ -38,7 +38,7 @@ Imports:
     methods (>= 4.3.0),
     missRanger (>= 2.4.0),
     MultiAssayExperiment (>= 1.28.0),
-    patchwork (== 1.2.0),
+    patchwork (>= 1.2.0),
     purrr (>= 1.0.2),
     pillar,
     parallel,
