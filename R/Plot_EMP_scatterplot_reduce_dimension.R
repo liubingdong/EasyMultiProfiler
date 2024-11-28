@@ -49,14 +49,12 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   deposit <- list()
 
-  palette <- .get.palette.EMPT(EMPT)
-
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
   if (is.null(palette)) {
     col_values <- .get.palette.EMPT(EMPT)
   }else {
-    col_values = palette
+    col_values <- palette
   }
 
   EMPT %<>% .group_level_modified(estimate_group = estimate_group,group_level = group_level)
