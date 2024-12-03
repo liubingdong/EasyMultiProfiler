@@ -181,6 +181,13 @@ EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NU
     EMPT <- obj
   }
   
+  if (from %in% c('symbol','ensembl','entrezid')) {
+    from <- toupper(from)
+  }
+  if (to %in% c('symbol','ensembl','entrezid')) {
+    to <- toupper(to)
+  }
+
   cpd_names_total <- c("CAS", "DTXSID", "DTXCID", "SID", "CID", "KEGG", "ChEBI", "HMDB", "Drugbank")
   gene_names_total <- c('SYMBOL','ENSEMBL','ENTREZID')
   tax_names_total <- c('tax_single','tax_full')
