@@ -184,7 +184,7 @@ EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NU
   if (from %in% c('symbol','ensembl','entrezid')) {
     from <- toupper(from)
   }
-  if (to %in% c('symbol','ensembl','entrezid')) {
+  if (!is.null(to) && to %in% c('symbol', 'ensembl', 'entrezid')) {
     to <- toupper(to)
   }
 
