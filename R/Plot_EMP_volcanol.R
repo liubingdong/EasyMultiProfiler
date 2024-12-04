@@ -73,7 +73,8 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
                                         "DOWN" = col_values[2],
                                         "none" = "#636363")) +
           theme_bw() + # clean up theme
-          theme(legend.position = "none")
+          theme(legend.position = "none")+
+          eval(parse(text = paste0(mytheme)))
   }else{
       p1 <- ggplot(data, aes(x = log2FC, y = -log10(!!dplyr::sym(y)),label = feature)) +
             ggrepel::geom_text_repel(data=subset(data,key == 'key'),...) +
@@ -93,7 +94,8 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
                                           "DOWN" = col_values[2],
                                           "none" = "#636363")) +
             theme_bw() + # clean up theme
-            theme(legend.position = "none")
+            theme(legend.position = "none") +
+            eval(parse(text = paste0(mytheme)))
   }
  
 
