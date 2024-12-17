@@ -77,10 +77,10 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
           eval(parse(text = paste0(mytheme)))
   }else{
       p1 <- ggplot(data, aes(x = log2FC, y = -log10(!!dplyr::sym(y)),label = feature)) +
-            ggrepel::geom_text_repel(data=subset(data,key == 'key'),...) +
+            # add gene points
             ggiraph::geom_jitter_interactive(aes(tooltip = paste0(feature,' : ',log2FC,' ',!!dplyr::sym(y)),
                                                  color = factor(color)), size = 1.75, alpha = 0.8, na.rm = T)+
-            # add gene points
+            ggrepel::geom_text_repel(data=subset(data,key == 'key'),...) +
             ggtitle(label = title_info) +  # add title
             xlab(expression(log[2]("fold change"))) + # x-axis label
             ylab(substitute(-log[10](x), list(x = as.name(y)))) + # y-axis label
