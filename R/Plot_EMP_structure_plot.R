@@ -1,6 +1,6 @@
 
 #' @importFrom forcats fct_relevel
-EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate_group = NULL,show = 'pic',palette = NULL,
+EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate_group = NULL,bar_level = 'default',show = 'pic',palette = NULL,
                                       ncol = NULL,mytheme = 'theme()'){
 
   primary <- feature <- value <- assay_data <- cols <- mapping <- str_data <- NULL
@@ -41,6 +41,15 @@ EMP_structure_plot_default <-function(EMPT,method = 'mean',top_num = 10,estimate
     top_str_data <- top_str_data %>% dplyr::mutate(feature = forcats::fct_relevel(factor(feature), "Others", after = Inf))
   }
   
+  # set the bar level
+  if ( all(bar_level != 'default') ) {
+    if (setequal(top_str_data$primary,bar_level) ) {
+      top_str_data$primary <- factor(top_str_data$primary,levels = bar_level)
+    }else{
+      warning("Paramer bar_level must be well-matched, the bar_level will be default!")
+    }
+  }
+
   data_plot <- list()
   if (!is.null(estimate_group)) {
     data_plot[['pic']]  <- ggplot(top_str_data, aes(x=primary,y=value, fill = feature))+  geom_col(position = 'stack', width = 0.8) +
@@ -124,6 +133,7 @@ top_exper_caculate <- function(assay_data,estimate_group=NULL,structure_method =
 #' @param method A character string including mean,median,max and min. The name of the statistical test that is applied to select the top feature.
 #' @param top_num An interger. 
 #' @param estimate_group A character string. Select the colname in the coldata to divide the data in the plot.
+#' @param bar_level A series of character string. Reset the bar order.
 #' @param ncol An interger. Set the col number in the facet plot.
 #' @param show A character string include pic (default), html(under constrution).
 #' @param palette A series of character string. Color palette.
@@ -158,7 +168,7 @@ top_exper_caculate <- function(assay_data,estimate_group=NULL,structure_method =
 #'   EMP_structure_plot(top_num=10)
 
 EMP_structure_plot <- function(obj,plot_category = 1,method = 'mean',top_num=10,
-                               estimate_group = NULL,ncol = NULL,show = 'pic',palette = NULL,
+                               estimate_group = NULL,bar_level = 'default',ncol = NULL,show = 'pic',palette = NULL,
                                mytheme = 'theme()') {
   call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
@@ -166,7 +176,7 @@ EMP_structure_plot <- function(obj,plot_category = 1,method = 'mean',top_num=10,
   switch(.get.plot_category.EMPT(obj),
          "1" = {
            EMP_structure_plot_default(EMPT=obj,method = method,top_num = top_num,
-            estimate_group=estimate_group,show=show,palette=palette,ncol=ncol,mytheme=mytheme)
+            estimate_group=estimate_group,bar_level=bar_level,show=show,palette=palette,ncol=ncol,mytheme=mytheme)
          },
          "2" = {
            # where is EMP_boxplot_assay_2?

@@ -10,6 +10,7 @@ EMP_structure_plot(
   method = "mean",
   top_num = 10,
   estimate_group = NULL,
+  bar_level = "default",
   ncol = NULL,
   show = "pic",
   palette = NULL,
@@ -26,6 +27,8 @@ EMP_structure_plot(
 \item{top_num}{An interger.}
 
 \item{estimate_group}{A character string. Select the colname in the coldata to divide the data in the plot.}
+
+\item{bar_level}{A series of character string. Reset the bar order.}
 
 \item{ncol}{An interger. Set the col number in the facet plot.}
 
