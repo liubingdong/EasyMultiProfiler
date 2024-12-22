@@ -21,7 +21,7 @@ EMP_scatterplot.EMP_dimension_analysis(
   adonis_permutations = 999,
   estimate_group = NULL,
   palette = NULL,
-  method = "t.test",
+  method = "wilcox.test",
   key_samples = NULL,
   ellipse = NULL,
   html_width = 15,
@@ -49,7 +49,7 @@ EMP_scatterplot.EMP_dimension_analysis(
 
 \item{palette}{A series of character string. Color palette.}
 
-\item{method}{A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).}
+\item{method}{A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).}
 
 \item{key_samples}{A series of character string. To highlight your interested samples.}
 

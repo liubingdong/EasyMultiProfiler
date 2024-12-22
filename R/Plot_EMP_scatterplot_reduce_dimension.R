@@ -19,7 +19,7 @@
 #' @param distance_for_adonis A character string.Set the distance for adonis. Detailed in the vegan::adonis.
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
 #' @param palette A series of character string. Color palette.
-#' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
+#' @param method A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).
 #' @param key_samples A series of character string. To highlight your interested samples.
 #' @param ellipse A number from 0 to 1. Set the ellipse in the plot.
 #' @param html_width An interger. Set the html width.
@@ -35,7 +35,7 @@
 EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
-                                           method='t.test',key_samples = NULL,
+                                           method='wilcox.test',key_samples = NULL,
                                            ellipse = NULL,html_width=15,html_height=15){
   primary <- Group <- NULL
   call <- match.call()
@@ -274,10 +274,10 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
 
   if (!is.null(ellipse)) {
-    p12 <-p12+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=palette)+guides(colour = "none")
+    p12 <-p12+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=col_values)+guides(colour = "none")
     if (axis_num >= 3) {
-      p13 <-p13+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=palette)+guides(colour = "none")
-      p23 <-p23+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=palette)+guides(colour = "none")
+      p13 <-p13+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=col_values)+guides(colour = "none")
+      p23 <-p23+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=col_values)+guides(colour = "none")
     }
   }
 
