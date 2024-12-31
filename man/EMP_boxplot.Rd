@@ -23,6 +23,7 @@ EMP_boxplot.EMP_alpha_analysis(
   group_level = "default",
   step_increase = 0.1,
   ref.group = NULL,
+  comparisons = NULL,
   ncol = NULL,
   select_metrics = NULL,
   show = "pic",
@@ -41,6 +42,7 @@ EMP_boxplot.EMP_assay_boxplot_union(
   group_level = "default",
   step_increase = 0.1,
   ref.group = NULL,
+  comparisons = NULL,
   ncol = NULL,
   show = "pic",
   palette = NULL,
@@ -66,6 +68,8 @@ EMP_boxplot.EMP_assay_boxplot_union(
 \item{step_increase}{A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.}
 
 \item{ref.group}{a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).}
+
+\item{comparisons}{A list of length-2 vectors. The entries in the vector are either the names of 2 values on the x-axis or the 2 integers that correspond to the index of the columns of interest.(default:NULL)}
 
 \item{ncol}{An interger. Set the col number in the facet plot.}
 

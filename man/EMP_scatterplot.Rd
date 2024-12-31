@@ -25,6 +25,7 @@ EMP_scatterplot.EMP_dimension_analysis(
   key_samples = NULL,
   step_increase = 0.1,
   ref.group = NULL,
+  comparisons = NULL,
   ellipse = NULL,
   html_width = 15,
   html_height = 15,
@@ -59,6 +60,8 @@ EMP_scatterplot.EMP_dimension_analysis(
 \item{step_increase}{A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.}
 
 \item{ref.group}{a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).}
+
+\item{comparisons}{A list of length-2 vectors. The entries in the vector are either the names of 2 values on the x-axis or the 2 integers that correspond to the index of the columns of interest.(default:NULL)}
 
 \item{ellipse}{A number from 0 to 1. Set the ellipse in the plot.}
 

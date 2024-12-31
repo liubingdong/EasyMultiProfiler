@@ -3,7 +3,8 @@
 #' @importFrom ggiraph geom_jitter_interactive
 #' @importFrom ggsignif geom_signif
 EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
-                               estimate_group = NULL,group_level = 'default',step_increase=0.1,ref.group=NULL,
+                               estimate_group = NULL,group_level = 'default',
+                               step_increase=0.1,ref.group=NULL,comparisons = NULL,
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()',...) {
@@ -42,11 +43,15 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
     group_combn <- combn(as.character(group_name),2)
   }
 
-  compare <- list() 
-  for (i in 1:ncol(group_combn)) {
-    compare[[i]] <- group_combn[,i]
+  if (is.null(comparisons)) {
+    comparisons <- list() 
+    for (i in 1:ncol(group_combn)) {
+      comparisons[[i]] <- group_combn[,i]
+    }
+    names(comparisons) <- 1:ncol(group_combn)    
+  }else{
+    comparisons <- comparisons
   }
-  names(compare) <- 1:ncol(group_combn)
 
   data %<>%  tidyr::pivot_longer(cols = c(-primary,-!!dplyr::sym(estimate_group)),
                                        names_to = 'ID',
@@ -57,7 +62,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
     ggplot(., aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
     geom_boxplot(outlier.color=NA) +
     ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,position = position_jitter(height = .00000001))+
-    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = step_increase,...) +
+    ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +
     facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
     xlab(NULL) + 
     ggtitle('Feature Boxplot') +
@@ -94,6 +99,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @param group_level A string vector. Set the group order in the plot.
 #' @param step_increase A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.
 #' @param ref.group a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).
+#' @param comparisons A list of length-2 vectors. The entries in the vector are either the names of 2 values on the x-axis or the 2 integers that correspond to the index of the columns of interest.(default:NULL)
 #' @param ncol An interger. Set the col number in the facet plot.
 #' @param select_metrics A series of character string. Select the alpha metrics to show. 
 #' @param show A character string include pic (default), html.
@@ -105,7 +111,8 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @rdname EMP_boxplot
 
 EMP_boxplot.EMP_assay_boxplot_union <- function(obj,plot_category = 1,method = 'wilcox.test',
-                               estimate_group = NULL,group_level = 'default',step_increase=0.1,ref.group=NULL,
+                               estimate_group = NULL,group_level = 'default',
+                               step_increase=0.1,ref.group=NULL,comparisons = NULL,
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()',...) {
@@ -116,7 +123,7 @@ EMP_boxplot.EMP_assay_boxplot_union <- function(obj,plot_category = 1,method = '
          "1" = {
            withr::with_seed(123,EMP_boxplot_assay_default(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
-                               step_increase = step_increase,ref.group = ref.group,
+                               step_increase = step_increase,ref.group = ref.group,comparisons = comparisons,
                                ncol = ncol,show = show,palette = palette,
                                html_width=html_width,html_height=html_height,
                                mytheme = mytheme,...))
