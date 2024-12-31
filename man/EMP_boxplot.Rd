@@ -21,13 +21,16 @@ EMP_boxplot.EMP_alpha_analysis(
   method = "wilcox.test",
   estimate_group = NULL,
   group_level = "default",
+  step_increase = 0.1,
+  ref.group = NULL,
   ncol = NULL,
   select_metrics = NULL,
   show = "pic",
   palette = NULL,
   html_width = NULL,
   html_height = NULL,
-  mytheme = "theme()"
+  mytheme = "theme()",
+  ...
 )
 
 EMP_boxplot.EMP_assay_boxplot_union(
@@ -36,18 +39,21 @@ EMP_boxplot.EMP_assay_boxplot_union(
   method = "wilcox.test",
   estimate_group = NULL,
   group_level = "default",
+  step_increase = 0.1,
+  ref.group = NULL,
   ncol = NULL,
   show = "pic",
   palette = NULL,
   html_width = NULL,
   html_height = NULL,
-  mytheme = "theme()"
+  mytheme = "theme()",
+  ...
 )
 }
 \arguments{
 \item{obj}{EMPT object}
 
-\item{...}{...}
+\item{...}{Further parameters passed to the function ggsignif::geom_signif}
 
 \item{plot_category}{An interger.More plot style.(under constrution)}
 
@@ -56,6 +62,10 @@ EMP_boxplot.EMP_assay_boxplot_union(
 \item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
 
 \item{group_level}{A string vector. Set the group order in the plot.}
+
+\item{step_increase}{A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.}
+
+\item{ref.group}{a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).}
 
 \item{ncol}{An interger. Set the col number in the facet plot.}
 

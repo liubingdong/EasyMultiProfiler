@@ -21,11 +21,14 @@
 #' @param palette A series of character string. Color palette.
 #' @param method A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).
 #' @param key_samples A series of character string. To highlight your interested samples.
+#' @param step_increase A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.
+#' @param ref.group a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).
 #' @param ellipse A number from 0 to 1. Set the ellipse in the plot.
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param force_adonis Force the function run adnois analysis always.(default:FALSE)
 #' @param adonis_permutations Permutations for the adonis2.(default:999)
+#' @param ... Further parameters passed to the function ggsignif::geom_signif
 #' @rdname EMP_scatterplot
 #' @return EMPT object
 #' @importFrom ggsignif geom_signif
@@ -36,7 +39,8 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
                                            method='wilcox.test',key_samples = NULL,
-                                           ellipse = NULL,html_width=15,html_height=15){
+                                           step_increase=0.1,ref.group=NULL,
+                                           ellipse = NULL,html_width=15,html_height=15,...){
   primary <- Group <- NULL
   call <- match.call()
   
@@ -105,8 +109,19 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   if(!method %in% c('t.test','wilcox.test')){
     stop("method should be t.test or wilcox.test! ")
   }
-  group_combn=combn(as.character(unique(plotdata$Group)),2)
-  #compare=plyr::alply(group_combn,2)
+
+  # choose the compare group
+  group_name <- unique(plotdata[['Group']])
+  if (!is.null(ref.group)) {
+    if (!any(ref.group %in% group_name)) {
+      stop('Please check the parameter ref.group!')
+    }
+    group_combn <- combn(as.character(group_name),2) %>% as.data.frame() %>%
+    dplyr::select(where(~ any(str_detect_multi(., ref.group))))
+  }else{
+    group_combn <- combn(as.character(group_name),2)
+  }
+
   compare <- list() 
   for (i in 1:ncol(group_combn)) {
     compare[[i]] <- group_combn[,i]
@@ -117,7 +132,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   #相须图绘制
   p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
     geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
-    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1)+
+    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = step_increase,...)+
     coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[1]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
@@ -131,7 +146,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
     geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
-    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
+    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = step_increase,...)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
           axis.ticks = element_line(color='black'),
@@ -145,7 +160,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
     geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
-    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
+    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = step_increase,...)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
           axis.ticks = element_line(color='black'),
@@ -160,7 +175,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   if (axis_num == 3) {
     p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA) +
-      ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
+      ggsignif::geom_signif(comparisons = compare,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
       theme_bw()+
       theme(axis.ticks.length = unit(0.4,"lines"),
             axis.ticks = element_line(color='black'),
@@ -212,7 +227,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   if (axis_num >= 3) {
     p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA) +
-      ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
+      ggsignif::geom_signif(comparisons = compare,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
       theme_bw()+
       theme(axis.ticks.length = unit(0.4,"lines"),
             axis.ticks = element_line(color='black'),

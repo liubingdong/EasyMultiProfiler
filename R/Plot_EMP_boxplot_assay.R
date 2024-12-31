@@ -3,10 +3,10 @@
 #' @importFrom ggiraph geom_jitter_interactive
 #' @importFrom ggsignif geom_signif
 EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
-                               estimate_group = NULL,group_level = 'default',
+                               estimate_group = NULL,group_level = 'default',step_increase=0.1,ref.group=NULL,
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
-                               mytheme = 'theme()') {
+                               mytheme = 'theme()',...) {
 
   primary <- value <- `.` <- NULL
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
@@ -30,8 +30,18 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
     data <- data %>% tidyr::drop_na(!!estimate_group)
   }
 
-  group_combn <- combn(as.character(unique(data[[estimate_group]])),2)
-  #compare <- plyr::alply(group_combn,2)
+  # choose the compare group
+  group_name <- unique(data[[estimate_group]])
+  if (!is.null(ref.group)) {
+    if (!any(ref.group %in% group_name)) {
+      stop('Please check the parameter ref.group!')
+    }
+    group_combn <- combn(as.character(group_name),2) %>% as.data.frame() %>%
+    dplyr::select(where(~ any(str_detect_multi(., ref.group))))
+  }else{
+    group_combn <- combn(as.character(group_name),2)
+  }
+
   compare <- list() 
   for (i in 1:ncol(group_combn)) {
     compare[[i]] <- group_combn[,i]
@@ -47,7 +57,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
     ggplot(., aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
     geom_boxplot(outlier.color=NA) +
     ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,position = position_jitter(height = .00000001))+
-    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
+    ggsignif::geom_signif(comparisons = compare,test = method,step_increase = step_increase,...) +
     facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
     xlab(NULL) + 
     ggtitle('Feature Boxplot') +
@@ -82,6 +92,8 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
 #' @param group_level A string vector. Set the group order in the plot.
+#' @param step_increase A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.
+#' @param ref.group a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).
 #' @param ncol An interger. Set the col number in the facet plot.
 #' @param select_metrics A series of character string. Select the alpha metrics to show. 
 #' @param show A character string include pic (default), html.
@@ -89,13 +101,14 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param ... Further parameters passed to the function ggsignif::geom_signif
 #' @rdname EMP_boxplot
 
 EMP_boxplot.EMP_assay_boxplot_union <- function(obj,plot_category = 1,method = 'wilcox.test',
-                               estimate_group = NULL,group_level = 'default',
+                               estimate_group = NULL,group_level = 'default',step_increase=0.1,ref.group=NULL,
                                ncol = NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
-                               mytheme = 'theme()') {
+                               mytheme = 'theme()',...) {
   call <- match.call()
   .get.plot_category.EMPT(obj) <- plot_category
   .get.history.EMPT(obj) <- call
@@ -103,9 +116,10 @@ EMP_boxplot.EMP_assay_boxplot_union <- function(obj,plot_category = 1,method = '
          "1" = {
            withr::with_seed(123,EMP_boxplot_assay_default(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
+                               step_increase = step_increase,ref.group = ref.group,
                                ncol = ncol,show = show,palette = palette,
                                html_width=html_width,html_height=html_height,
-                               mytheme = mytheme))
+                               mytheme = mytheme,...))
          },
          "2" = {
            # where is EMP_boxplot_assay_2?

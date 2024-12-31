@@ -203,7 +203,7 @@ setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enri
 
 #' Boxplot for EMPT result
 #'
-#' @param ... ...
+#' @param ... Further parameters passed to the function ggsignif::geom_signif
 #' @rdname EMP_boxplot
 #'
 #' @return EMPT object
@@ -242,7 +242,7 @@ setMethod("EMP_boxplot","EMP_assay_boxplot_union",function(obj, ...){
 #' Scatterplot for EMPT result
 #'
 #' @param obj object
-#' @param ... ...
+#' @param ... Further parameters passed to the function ggsignif::geom_signif
 #' @rdname EMP_scatterplot
 #'
 #' @export

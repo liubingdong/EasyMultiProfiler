@@ -23,15 +23,18 @@ EMP_scatterplot.EMP_dimension_analysis(
   palette = NULL,
   method = "wilcox.test",
   key_samples = NULL,
+  step_increase = 0.1,
+  ref.group = NULL,
   ellipse = NULL,
   html_width = 15,
-  html_height = 15
+  html_height = 15,
+  ...
 )
 }
 \arguments{
 \item{obj}{EMPT object}
 
-\item{...}{...}
+\item{...}{Further parameters passed to the function ggsignif::geom_signif}
 
 \item{seed}{An interger. Set the random seed for the adonis permutations.}
 
@@ -52,6 +55,10 @@ EMP_scatterplot.EMP_dimension_analysis(
 \item{method}{A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).}
 
 \item{key_samples}{A series of character string. To highlight your interested samples.}
+
+\item{step_increase}{A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.}
+
+\item{ref.group}{a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).}
 
 \item{ellipse}{A number from 0 to 1. Set the ellipse in the plot.}
 
