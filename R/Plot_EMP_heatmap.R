@@ -403,7 +403,7 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
       geom_tile(color = "white") +
-      scale_fill_steps(low = palette[1],high = palette[2],midpoint = median(df$value),show.limits = T) + 
+      scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + 
       xlab(NULL) + ylab(NULL) +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
