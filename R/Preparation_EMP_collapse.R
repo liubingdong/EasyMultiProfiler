@@ -112,13 +112,15 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
   }
   
   col_data <- colData(EMPT)
-  
+  col_data_reorder <- col_data[match(colnames(new_assay_data), rownames(col_data)), ] # make sure the order match the colnames of assay!
+  new_row_data_reorder <- new_row_data[match(rownames(new_assay_data), new_row_data$feature),] # make sure the order match the colnames of assay!
+
   message_info <- list()
   message_info %<>% append(paste0('Feature changed!'))
   message_info %<>% append(paste0('Current feature: ',estimate_group))
   
   data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(new_assay_data)),
-                                                       rowData=new_row_data, colData = col_data)
+                                                       rowData=new_row_data_reorder, colData = col_data_reorder)
   
   EMPT@colData <- data.se@colData
   EMPT@assays <-data.se@assays
@@ -249,13 +251,17 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
   
   row_data <- EMPT %>% EMP_rowdata_extract()
   new_col_data %<>% tibble::column_to_rownames('primary')
-    
+
+
+  new_col_data_reorder <- new_col_data[match(colnames(new_assay_data), rownames(new_col_data)), ] # make sure the order match the colnames of assay!
+  row_data_reorder <- row_data[match(rownames(new_assay_data), row_data$feature),] # make sure the order match the colnames of assay!
+   
   message_info <- list()
   message_info %<>% append(paste0('Primary changed!'))
   message_info %<>% append(paste0('Current primary: ',estimate_group))
   
   data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(new_assay_data)),
-                                                        rowData=row_data, colData = new_col_data)
+                                                        rowData=row_data_reorder, colData = new_col_data_reorder)
   
   
   EMPT@colData <- data.se@colData

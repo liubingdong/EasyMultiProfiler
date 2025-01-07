@@ -90,9 +90,11 @@ str_detect_multi <- function(string,pattern,exact=FALSE){
 
   rowdata <- rowData(x[[experiment]])
 
-  data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(assay_data)),
-                      rowData=rowdata, colData = mapping)
+  mapping_reorder <- mapping[match(colnames(assay_data), rownames(mapping)), ] # make sure the order match the colnames of assay!
+  rowdata_reorder <- rowdata[match(rownames(assay_data), rowdata$feature),] # make sure the order match the colnames of assay!
 
+  data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(assay_data)),
+                      rowData=rowdata_reorder, colData = mapping_reorder)
 
   EMPT <- new(Class = 'EMPT',
               data.se,

@@ -244,8 +244,11 @@ EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_
       coldata %<>%  tibble::column_to_rownames('primary') %>% DataFrame()
       rowdata <- data.frame(feature = rownames(assay_data),Name = rownames(assay_data))
 
+      coldata_reorder <- coldata[match(colnames(assay_data), rownames(coldata)), ] # make sure the order match the colnames of assay!
+      rowdata_reorder <- rowdata[match(rownames(assay_data), rowdata$feature),] # make sure the order match the colnames of assay!
+
       data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(assay_data)),
-                                                            rowData=rowdata, colData = coldata)
+                                                            rowData=rowdata_reorder, colData = coldata_reorder)
 
       EMPT <- new(Class = 'EMPT')
 
