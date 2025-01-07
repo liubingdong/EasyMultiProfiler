@@ -101,7 +101,7 @@
 
 }
 
-.EMP_decostand_m <- memoise::memoise(.EMP_decostand,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_decostand_m <- memoise::memoise(.EMP_decostand,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 #' Standardization Methods
 #'

@@ -354,7 +354,9 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   set.seed(seed)
   adonis_data <- assay(EMPT) %>% t()
-  adonis_result <- vegan::adonis2(adonis_data~Group,data = mapping,method = distance_for_adonis,permutations = adonis_permutations)
+  adonis_result <- adonis2_m(formula=adonis_data~Group,data = mapping,
+    method = distance_for_adonis,permutations = adonis_permutations) |> suppressWarnings()
+
   p5 <- ggplot() +
     geom_text(aes(x = -0.5,y = 0.6,
                   label = paste(distance_for_adonis,
@@ -413,3 +415,9 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   class(EMPT) <- 'EMP_dimension_analysis_scatterplot'
   return(EMPT)
 }
+
+#' @importFrom memoise memoise
+#' @importFrom vegan adonis2
+adonis2_m <- memoise::memoise(adonis2,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
+
+

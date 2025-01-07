@@ -110,7 +110,7 @@
 
 
 #' @importFrom memoise memoise
-.EMP_cluster_analysis_m <- memoise::memoise(.EMP_cluster_analysis,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_cluster_analysis_m <- memoise::memoise(.EMP_cluster_analysis,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 #' Identify clusters for sample or feature
 #'

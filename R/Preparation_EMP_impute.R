@@ -57,7 +57,7 @@
 }
 
 #' @importFrom memoise memoise
-.EMP_impute_m <- memoise::memoise(.EMP_impute,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_impute_m <- memoise::memoise(.EMP_impute,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 #' Fast Imputation of Missing Values by Chained Random Forests
 #'

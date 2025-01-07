@@ -53,8 +53,8 @@
 }
 
 
-.EMP_assay_extract_EMP_m <- memoise::memoise(.EMP_assay_extract_EMP,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
-.EMP_assay_extract_EMPT_m <- memoise::memoise(.EMP_assay_extract_EMPT,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_assay_extract_EMP_m <- memoise::memoise(.EMP_assay_extract_EMP,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
+.EMP_assay_extract_EMPT_m <- memoise::memoise(.EMP_assay_extract_EMPT,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
 

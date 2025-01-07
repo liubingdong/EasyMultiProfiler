@@ -62,7 +62,7 @@
 
 
 
-.EMP_rrarefy_m <- memoise::memoise(.EMP_rrarefy,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_rrarefy_m <- memoise::memoise(.EMP_rrarefy,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 #' Rarefaction abundance or experssion Richness
 #'

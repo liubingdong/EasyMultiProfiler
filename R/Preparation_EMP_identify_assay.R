@@ -182,10 +182,10 @@
 
 
 #' @importFrom memoise memoise
-.EMP_assay_filter_default_m <- memoise::memoise(.EMP_assay_filter_default,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_assay_filter_default_m <- memoise::memoise(.EMP_assay_filter_default,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 #' @importFrom memoise memoise
-.EMP_assay_filter_bulk_m <- memoise::memoise(.EMP_assay_filter_bulk,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_assay_filter_bulk_m <- memoise::memoise(.EMP_assay_filter_bulk,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
 

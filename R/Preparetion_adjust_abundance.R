@@ -43,7 +43,7 @@
 }
 
 #' @importFrom memoise memoise
-.EMP_adjust_abundance_m <- memoise::memoise(.EMP_adjust_abundance,cache = cachem::cache_mem(max_size = 2048 * 1024^2))
+.EMP_adjust_abundance_m <- memoise::memoise(.EMP_adjust_abundance,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
 #' Adjust experssion or abundance for unexpected bias or batch effect
