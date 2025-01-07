@@ -382,7 +382,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
       group_level <- group_level
     }
     # if 0 value, select the 0.0001 value in other group
-    means %<>% dplyr::mutate(across(everything(), ~ ifelse(. == 0, ifelse(is.na(dplyr::lag(.)), dplyr::lead(.), dplyr::lag(.)) * 0.001, .)))
+    means %<>% dplyr::mutate(across(-sym(!!estimate_group), ~ ifelse(. == 0, ifelse(is.na(dplyr::lag(.)), dplyr::lead(.), dplyr::lag(.)) * 0.001, .)))
     df1 <-means %>% dplyr::filter(!!sym(estimate_group) == group_level[1])
     df2 <-means %>% dplyr::filter(!!sym(estimate_group) == group_level[2])
     fold_change <- df1[,-1]/df2[,-1]
