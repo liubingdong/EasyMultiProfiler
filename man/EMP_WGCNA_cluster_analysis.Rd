@@ -18,6 +18,7 @@ EMP_WGCNA_cluster_analysis(
   gcInterval = NULL,
   TOMType = "unsigned",
   minModuleSize = 30,
+  deepSplit = 2,
   reassignThreshold = 0,
   mergeCutHeight = 0.25,
   numericLabels = TRUE,
@@ -52,6 +53,8 @@ EMP_WGCNA_cluster_analysis(
 \item{TOMType}{one of "none", "unsigned", "signed", "signed Nowick", "unsigned 2", "signed 2" and "signed Nowick 2". If "none", adjacency will be used for clustering. See WGCNA::TOMsimilarityFromExpr for details.}
 
 \item{minModuleSize}{minimum module size for module detection. See WCGNA::cutreeDynamic for more details.}
+
+\item{deepSplit}{integer value between 0 and 4. Provides a simplified control over how sensitive module detection should be to module splitting, with 0 least and 4 most sensitive. See WCGNA::cutreeDynamic for more details.}
 
 \item{reassignThreshold}{p-value ratio threshold for reassigning genes between modules.}
 

@@ -5,7 +5,7 @@
                                         networkType = "unsigned",
                                         moreNetworkConcepts = FALSE,
                                         gcInterval = NULL,
-                                        TOMType = "unsigned", minModuleSize = 30,
+                                        TOMType = "unsigned", minModuleSize = 30,deepSplit=2,
                                         reassignThreshold = 0, mergeCutHeight = 0.25,
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
                                         # saveTOMs = T,...) {
@@ -37,7 +37,7 @@
   #save(assay_data, check_best_power, TOMType, minModuleSize, reassignThreshold, mergeCutHeight, numericLabels, pamRespectsDendro, saveTOMs, file = "test.Rdata")
   # net = WGCNA::blockwiseModules(assay_data, power = check_best_power,
   net <- WGCNA_blockwiseModules(assay_data, power = check_best_power,
-                         TOMType = TOMType, minModuleSize = minModuleSize,
+                         TOMType = TOMType, minModuleSize = minModuleSize,deepSplit=deepSplit,
                          reassignThreshold = reassignThreshold, mergeCutHeight = mergeCutHeight,
                          numericLabels = numericLabels, pamRespectsDendro = pamRespectsDendro,
                          # saveTOMs = saveTOMs,...)
@@ -87,6 +87,7 @@
 #' @param gcInterval a number specifying in interval (in terms of individual genes) in which garbage collection will be performed. The actual interval will never be less than blockSize.
 #' @param TOMType one of "none", "unsigned", "signed", "signed Nowick", "unsigned 2", "signed 2" and "signed Nowick 2". If "none", adjacency will be used for clustering. See WGCNA::TOMsimilarityFromExpr for details.
 #' @param minModuleSize minimum module size for module detection. See WCGNA::cutreeDynamic for more details.
+#' @param deepSplit integer value between 0 and 4. Provides a simplified control over how sensitive module detection should be to module splitting, with 0 least and 4 most sensitive. See WCGNA::cutreeDynamic for more details.
 #' @param reassignThreshold p-value ratio threshold for reassigning genes between modules.
 #' @param mergeCutHeight dendrogram cut height for module merging.
 #' @param numericLabels logical: should the returned modules be labeled by colors (FALSE), or by numbers (TRUE)?
@@ -114,7 +115,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
                                         networkType = "unsigned",
                                         moreNetworkConcepts = FALSE,
                                         gcInterval = NULL,
-                                        TOMType = "unsigned", minModuleSize = 30,
+                                        TOMType = "unsigned", minModuleSize = 30,deepSplit=2,
                                         reassignThreshold = 0, mergeCutHeight = 0.25,
                                         numericLabels = TRUE, pamRespectsDendro = FALSE,
                                         # saveTOMs = T,action='add',...) {
@@ -141,7 +142,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
                                         networkType = networkType,
                                         moreNetworkConcepts = moreNetworkConcepts,
                                         gcInterval = gcInterval,
-                                        TOMType = TOMType, minModuleSize = minModuleSize,
+                                        TOMType = TOMType, minModuleSize = minModuleSize,deepSplit = deepSplit,
                                         reassignThreshold = reassignThreshold, mergeCutHeight = mergeCutHeight,
                                         numericLabels = numericLabels, pamRespectsDendro = pamRespectsDendro,
                                         # saveTOMs = saveTOMs,...)
