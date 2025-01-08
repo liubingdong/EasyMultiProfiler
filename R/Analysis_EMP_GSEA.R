@@ -208,7 +208,7 @@
 #' @param estimate_group A character string. Select the column you are interested in the coldata.
 #' @param method A character string. Methods include signal2Noise, cor, log2FC.
 #' @param cor_method A character string including pearson, spearman. The alogarithm cor_method used in method = "cor".
-#' @param group_level A series of character strings. Determine the comparison order of groups when method = "log2FC".
+#' @param group_level A series of character strings. Determine the comparison order of groups when method = "signal2Noise".
 #' @param pseudocount A number. The alogarithm pseudocount used in method = "signal2Noise", adjust the 0 in the signal2Noise result into pseudocount value. (default:0.0001)
 #' @param pvalueCutoff A character string. Adjusted pvalue cutoff on enrichment tests to report.
 #' @param threshold A number. The alogarithm threshold used in method = "signal2Noise",filter out the feature below the signal2Noise threshold.

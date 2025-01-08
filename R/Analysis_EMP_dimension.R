@@ -31,7 +31,7 @@
            check_dim <- dim(assay_data)[1] * dim(assay_data)[2]
            check_sample_num <- dim(assay_data)[1]
            if (check_dim > 1e+05 | check_sample_num > 500) {
-             message_wrap("Inputting large-scale data may lead to longer computation time. It is recommended to use other dimensionality reduction methods or filter the data first.")
+             message_wrap("Large-scale data need longer computation time in PCoA.")
            }
            
            pca_result <- stats::cmdscale(assay_data_dis,k=3,eig=T)
