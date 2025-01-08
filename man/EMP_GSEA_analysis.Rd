@@ -38,7 +38,7 @@ EMP_GSEA_analysis(
 
 \item{cor_method}{A character string including pearson, spearman. The alogarithm cor_method used in method = "cor".}
 
-\item{group_level}{A series of character strings. Determine the comparison order of groups when method = "log2FC".}
+\item{group_level}{A series of character strings. Determine the comparison order of groups when method = "signal2Noise".}
 
 \item{keyType}{A character string. keyType include ko, ec, cpd, entrezid.}
 
