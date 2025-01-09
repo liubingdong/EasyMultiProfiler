@@ -2,18 +2,25 @@
 % Please edit documentation in R/Analysis_EMP_enrich.R
 \name{EMP_enrich_analysis}
 \alias{EMP_enrich_analysis}
-\title{KEGG enrichment for EMPT object}
+\title{Enrichment for EMPT object}
 \usage{
 EMP_enrich_analysis(
   obj,
   condition,
   minGSSize = 1,
   maxGSSize = 500,
-  keyType = NULL,
-  KEGG_Type = "KEGG",
-  species = "all",
   action = "add",
   combineGroup = FALSE,
+  gson = NULL,
+  method = "kegg",
+  TERM2GENE = NULL,
+  TERM2NAME = NA,
+  KEGG_Type = "KEGG",
+  species = "all",
+  OrgDb = NULL,
+  keyType = "entrezid",
+  ont = if (method == "go") "MF" else "DO",
+  organism = if (method == "reactome") "human" else "Homo sapiens",
   ...
 )
 }
@@ -26,34 +33,55 @@ EMP_enrich_analysis(
 
 \item{maxGSSize}{Maximal size of genes annotated for testing.}
 
-\item{keyType}{A character string. keyType include ko, ec, cpd, entrezid.}
-
-\item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG.}
-
-\item{species}{A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'}
-
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
 \item{combineGroup}{A boolean. Whether the function combine the enrichment or not.}
 
-\item{...}{Further parameters passed to clusterProfiler::compareCluster or clusterProfiler::enricher.}
+\item{gson}{a GSON object, if not NULL, use it as annotation data.}
+
+\item{method}{enrichment method, one of "kegg", "go", "reactome", "wikipathway" and "do".}
+
+\item{TERM2GENE}{user input annotation of TERM TO GENE mapping, a data.frame of 2 column with term and gene. Only used when gson is NULL.}
+
+\item{TERM2NAME}{user input of TERM TO NAME mapping, a data.frame of 2 column with term and name. Only used when gson is NULL.}
+
+\item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.}
+
+\item{species}{A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/}
+
+\item{OrgDb}{OrgDb in Go analysis.}
+
+\item{keyType}{For KEGG analysis, keyType include ko, ec, cpd, entrezid. For Go analysis, keyType include entrezid and symbol.}
+
+\item{ont}{For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".}
+
+\item{organism}{For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".}
+
+\item{...}{Further parameters passed to compareCluster,enricher, enrichGO, enrichPathway, enrichDO in clusterProfiler package.}
 }
 \value{
 EMPT object
 }
 \description{
-KEGG enrichment for EMPT object
+Enrichment for EMPT object
 }
+\section{Detaild about method}{
+
+The EMP_enrich_analysis moudle performed based on cluserProfiler, more detailed information are available on:
+
+http://yulab-smu.top/biomedical-knowledge-mining-book/index.html
+}
+
 \examples{
 \dontrun{
 data(MAE)
-## Make the enrichment after EMP_diff_analysis
+# Make the enrichment after EMP_diff_analysis
 MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') 
 
-## Make the enrichment after EMP_diff_analysis and Visualization
+# Make the enrichment Visualization
 MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
@@ -66,13 +94,39 @@ MAE |>
   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') |>
   EMP_netplot()
 
-
-## Transcriptomic data
+# Transcriptomic data
+## KEGG analysis
 MAE |>
   EMP_assay_extract(experiment = 'host_gene') |>
   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
-  EMP_enrich_analysis(keyType ='entrezid',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=0.05,species = 'hsa') |>
+  EMP_enrich_analysis(pvalue<0.05,method = 'kegg',species = 'hsa',keyType='entrezid',
+                      pvalueCutoff=0.05) 
+
+## GO analysis
+library(org.Hs.eg.db)
+MAE |>
+  EMP_assay_extract(experiment = 'host_gene') |>
+  EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
+  EMP_enrich_analysis(pvalue<0.05,method = 'go',OrgDb=org.Hs.eg.db,ont='MF',readable=TRUE,
+                      pvalueCutoff=0.05) |>
+  EMP_dotplot(show=6)
+
+## DOSE analysis
+MAE |>
+  EMP_assay_extract(experiment = 'host_gene') |>
+  EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
+  EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="DO",organism= 'hsa',readable=TRUE) |>
+  EMP_dotplot(show=5)
+
+## Reactome analysis
+MAE |>
+  EMP_assay_extract(experiment = 'host_gene') |>
+  EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
+  EMP_enrich_analysis(pvalue<0.05,method = 'Reactome',organism= 'human',readable=TRUE) |>
   EMP_dotplot()
 }
 }

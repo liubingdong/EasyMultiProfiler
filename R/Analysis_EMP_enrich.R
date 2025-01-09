@@ -1,19 +1,117 @@
-#' Title
-#'
-#' @param EMPT wait_for_add
-#' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05
-#' @param keyType A character string. Methods include ko, ec, cpd and entrezid.
-#' @param minGSSize minimal size of genes annotated by Ontology term for testing.
-#' @param maxGSSize maximal size of genes annotated for testing.
-#' @param use_cache A boolean. Whether the function use the results in cache or re-compute.
-#' @param ... Further parameters passed to clusterProfiler::compareCluster.
+enrich_kegg <- function(df, feature_name, kegg.params, minGSSize, maxGSSize, combineGroup, ...) {
+  keyType <- kegg.params$keyType
+  KEGG_Type <- kegg.params$KEGG_Type
+  species <- kegg.params$species
+  if (is.null(keyType)) {
+    stop("keyType should be specified as ko, ec, cpd or entrezid!")
+  }else if(!keyType %in% c('ko','ec','cpd','entrezid')){
+    stop("keyType should be ko, ec, cpd or entrezid!")
+  }
+
+  if(!KEGG_Type %in% c('KEGG','MKEGG')){
+    stop("keyType should be KEGG or MKEGG!")
+  }
+  gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species)
+
+  
+  message('KEGG database version: ',gson_data@version)
+  message('Species: ',gson_data@species)
+
+  if (combineGroup == TRUE) {
+    enrich.data <- clusterProfiler::enricher(gene=feature_name, gson=gson_data,minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+  }else{
+    enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
+          fun=clusterProfiler::enricher, gson=gson_data, 
+          minGSSize=minGSSize, maxGSSize=maxGSSize,...)     
+  }
+  return(enrich.data)
+}
+
+enrich_go <- function(df, feature_name, go.params, minGSSize, maxGSSize, combineGroup, ...) {
+  if (is.null(go.params$OrgDb)) {
+    stop("Go analysis need OrgDb!")
+  }else{
+    OrgDb <- go.params$OrgDb
+  }
+  keyType <- go.params$keyType |> toupper()
+  ont <- go.params$ont
+  if (combineGroup == TRUE) {
+    enrich.data <- clusterProfiler::enrichGO(gene=feature_name, OrgDb=OrgDb, keyType = keyType, ont = ont,
+            minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+  }else{
+    enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
+            fun=clusterProfiler::enrichGO, OrgDb=OrgDb, keyType = keyType, ont = ont,
+            minGSSize=minGSSize, maxGSSize=maxGSSize,...)    
+  }
+
+  return(enrich.data)   
+}
+
+enrich_reactome <- function(df, feature_name, reactome.params, minGSSize, maxGSSize, combineGroup, ...) {
+  organism <- reactome.params$organism
+  if (combineGroup == TRUE) {
+    enrich.data <- ReactomePA::enrichPathway(gene=feature_name, organism = organism,
+          minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+  }else{
+    enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
+            fun=ReactomePA::enrichPathway, organism = organism,
+            minGSSize=minGSSize, maxGSSize=maxGSSize,...)    
+  }
+
+
+  return(enrich.data)   
+}
+
+enrich_wikipathway <- function(df, feature_name, wikipathway.params, combineGroup, ...) {
+  organism <- wikipathway.params$organism
+  if (combineGroup == TRUE) {
+    enrich.data <- clusterProfiler::enrichWP(gene=feature_name, organism = organism,...) 
+  }else{
+    enrich.data <- clusterProfiler::enrichWP(feature~sign_group, data=df, 
+            fun=ReactomePA::enrichPathway, organism = organism,...)    
+  }
+
+
+  return(enrich.data) 
+}
+
+enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combineGroup, ...) {
+  ont <- do.params$ont
+  organism <- do.params$organism
+  if (combineGroup == TRUE) {
+    enrich.data <- DOSE::enrichDO(gene=feature_name, ont = ont, organism = organism,
+            minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+  }else{
+    enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
+            fun=DOSE::enrichDO, ont = ont, organism = organism,
+            minGSSize=minGSSize, maxGSSize=maxGSSize,...)    
+  }
+
+
+  return(enrich.data)  
+}
+
+
 #' @importFrom clusterProfiler enricher
 #' @importFrom clusterProfiler compareCluster
-#' @noRd
-.EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500,keyType=NULL,KEGG_Type='KEGG',species = "all",combineGroup=FALSE,...){
+.EMP_enrich_analysis <- function(EMPT,condition,minGSSize =1,maxGSSize =500, method = "kegg", 
+  combineGroup=FALSE, gson = NULL, TERM2GENE = NULL,
+  TERM2NAME = NA,
+  kegg.params = list(keyType = NULL,
+                     KEGG_Type='KEGG',
+                     species = "all"),
+  go.params = list(OrgDb = NULL,
+                   keyType = "ENTREZID",
+                   ont = "MF"),
+  reactome.params = list(organism = "human"),
+  wikipathway.params = list(organism = "Homo sapiens"),
+  do.params = list(ont = "DO",
+                   organism = "hsa"),
+  ...){
+  method <- tolower(method)
+  method <- match.arg(method, c("kegg", "go", "reactome", "do")) ## del wikipathway 
   deposit <- list()
   sign_group <- feature_name <- NULL
-
   diff_df <- .get.result.EMPT(EMPT,info='EMP_diff_analysis') %>% suppressMessages()
   
   if (is.null(diff_df)) {
@@ -30,60 +128,108 @@
     feature_name <- df$feature
   }
   
-  if (is.null(keyType)) {
-    stop("keyType should be specified as ko, ec or cpd!")
-  }else if(!keyType %in% c('ko','ec','cpd','entrezid')){
-    stop("keyType should be ko, ec, cpd or entrezid!")
+  if (!is.null(TERM2GENE)) {
+    gson <- NULL
+    if (combineGroup == TRUE) {
+      enrich.data <- clusterProfiler::enricher(gene=feature_name, TERM2GENE = TERM2GENE,
+        TERM2NAME = TERM2NAME, minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+    }else{
+      enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
+            fun=clusterProfiler::enricher, TERM2GENE = TERM2GENE,
+            TERM2NAME = TERM2NAME, minGSSize=minGSSize, maxGSSize=maxGSSize,...)     
+    }
+    EMPT@deposit[['enrich_data']] <- enrich.data
+    .get.algorithm.EMPT(EMPT) <- 'enrich_analysis'
+    .get.info.EMPT(EMPT) <- 'EMP_enrich_analysis' 
+    return(EMPT) 
   }
 
-  if(!KEGG_Type %in% c('KEGG','MKEGG')){
-    stop("keyType should be KEGG or MKEGG!")
+  if (!is.null(gson)) {
+    if (combineGroup == TRUE) {
+    enrich.data <- clusterProfiler::enricher(gene=feature_name, gson=gson,minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
+    } else {
+      enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
+            fun=clusterProfiler::enricher, gson=gson, 
+            minGSSize=minGSSize, maxGSSize=maxGSSize,...)     
+    }
+    EMPT@deposit[['enrich_data']] <- enrich.data
+    .get.algorithm.EMPT(EMPT) <- 'enrich_analysis'
+    .get.info.EMPT(EMPT) <- 'EMP_enrich_analysis' 
+    return(EMPT) 
   }
 
-  gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species)
+  if (method == "kegg") {
+    if (kegg.params$KEGG_Type == 'KEGG') {
+      KEGG_info <- 'KEGG payhway'
+    }else if (kegg.params$KEGG_Type == 'MKEGG') {
+      KEGG_info <- 'KEGG module'
+    }else {
+      KEGG_info <- kegg.params$KEGG_Type
+    }
+    message("KEGG analysis performed: \nkeyType: ",kegg.params$keyType,'\t KEGG_Type: ',KEGG_info,'\t species: ',kegg.params$species)
+    enrich.data <- enrich_kegg(df, feature_name = feature_name, kegg.params = kegg.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
+  } 
   
-  message('KEGG database version: ',gson_data@version)
-  message('Species: ',gson_data@species)
-  if (combineGroup == TRUE) {
-    enrich.data <- clusterProfiler::enricher(gene=feature_name, gson=gson_data,minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
-  }else{
-    enrich.data <- clusterProfiler::compareCluster(feature~sign_group, data=df, 
-          fun=clusterProfiler::enricher, gson=gson_data, 
-          minGSSize=minGSSize, maxGSSize=maxGSSize,...)     
+  if (method == "go") {
+    message("Go analysis performed: \nkeyType: ",go.params$keyType,'\t ont: ',go.params$ont)
+    enrich.data <- enrich_go(df, feature_name = feature_name, go.params = go.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
+  } 
+  if (method == "reactome") {
+    message("Reactome analysis performed: \norganism: ",reactome.params$organism)
+    enrich.data <- enrich_reactome(df, feature_name = feature_name, reactome.params = reactome.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
+  } 
+  if (method == "wikipathway") {
+    enrich.data <- enrich_wikipathway(df, feature_name = feature_name, wikipathway.params = wikipathway.params,combineGroup = combineGroup, ...)
+  } 
+  if (method == "do") {
+    if (do.params$ont == 'DOLite') {
+      stop("DOLite was removed in the current version.")
+    }
+    message("DOSE analysis performed: \nont: ",do.params$ont,"\t organism: ",do.params$organism)
+    enrich.data <- enrich_do(df, feature_name = feature_name, do.params = do.params, minGSSize=minGSSize, maxGSSize=maxGSSize, combineGroup = combineGroup, ...)
   }
-
-  EMPT@deposit[['enrich_data']] <- enrich.data
+   EMPT@deposit[['enrich_data']] <- enrich.data
   .get.algorithm.EMPT(EMPT) <- 'enrich_analysis'
   .get.info.EMPT(EMPT) <- 'EMP_enrich_analysis' 
-  return(EMPT) 
+  return(EMPT)  
 }
 
-#' KEGG enrichment for EMPT object
+#' Enrichment for EMPT object
 #'
 #' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05
+#' @param method enrichment method, one of "kegg", "go", "reactome", "wikipathway" and "do".
+#' @param TERM2GENE user input annotation of TERM TO GENE mapping, a data.frame of 2 column with term and gene. Only used when gson is NULL.
+#' @param TERM2NAME user input of TERM TO NAME mapping, a data.frame of 2 column with term and name. Only used when gson is NULL.
 #' @param minGSSize Minimal size of genes annotated by Ontology term for testing.
 #' @param maxGSSize Maximal size of genes annotated for testing.
-#' @param keyType A character string. keyType include ko, ec, cpd, entrezid.
-#' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG.
-#' @param species A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'
 #' @param combineGroup A boolean. Whether the function combine the enrichment or not.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to clusterProfiler::compareCluster or clusterProfiler::enricher.
+#' @param gson a GSON object, if not NULL, use it as annotation data.
+#' @param keyType For KEGG analysis, keyType include ko, ec, cpd, entrezid. For Go analysis, keyType include entrezid and symbol.
+#' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.
+#' @param species A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/
+#' @param OrgDb OrgDb in Go analysis.
+#' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".
+#' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
+#' @param ... Further parameters passed to compareCluster,enricher, enrichGO, enrichPathway, enrichDO in clusterProfiler package.
 #'
 #' @return EMPT object
 #' @export
+#' @section Detaild about method:
+#' The EMP_enrich_analysis moudle performed based on cluserProfiler, more detailed information are available on:
 #'
+#' http://yulab-smu.top/biomedical-knowledge-mining-book/index.html
 #' @examples
 #' \dontrun{
 #' data(MAE)
-#' ## Make the enrichment after EMP_diff_analysis
+#' # Make the enrichment after EMP_diff_analysis
 #' MAE |>
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
 #'   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') 
 #' 
-#' ## Make the enrichment after EMP_diff_analysis and Visualization
+#' # Make the enrichment Visualization
 #' MAE |>
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
@@ -96,23 +242,76 @@
 #'   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') |>
 #'   EMP_netplot()
 #' 
-#' 
-#' ## Transcriptomic data
+#' # Transcriptomic data
+#' ## KEGG analysis
 #' MAE |>
 #'   EMP_assay_extract(experiment = 'host_gene') |>
 #'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
-#'   EMP_enrich_analysis(keyType ='entrezid',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=0.05,species = 'hsa') |>
+#'   EMP_enrich_analysis(pvalue<0.05,method = 'kegg',species = 'hsa',keyType='entrezid',
+#'                       pvalueCutoff=0.05) 
+#' 
+#' ## GO analysis
+#' library(org.Hs.eg.db)
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'host_gene') |>
+#'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
+#'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
+#'   EMP_enrich_analysis(pvalue<0.05,method = 'go',OrgDb=org.Hs.eg.db,ont='MF',readable=TRUE,
+#'                       pvalueCutoff=0.05) |>
+#'   EMP_dotplot(show=6)
+#' 
+#' ## DOSE analysis
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'host_gene') |>
+#'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
+#'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
+#'   EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="DO",organism= 'hsa',readable=TRUE) |>
+#'   EMP_dotplot(show=5)
+#' 
+#' ## Reactome analysis
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'host_gene') |>
+#'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
+#'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
+#'   EMP_enrich_analysis(pvalue<0.05,method = 'Reactome',organism= 'human',readable=TRUE) |>
 #'   EMP_dotplot()
 #' }
-EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500,keyType=NULL,KEGG_Type='KEGG',species = "all",action='add',combineGroup=FALSE,...){
-  
+EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500, action='add',combineGroup=FALSE,gson=NULL,
+                               method = "kegg", 
+                               TERM2GENE = NULL,
+                               TERM2NAME = NA,
+                               KEGG_Type='KEGG',species = "all", # kegg.params
+                               OrgDb = NULL, keyType = "entrezid", # go.params
+                               ont = if (method == "go") "MF" else "DO", # go.params and do.params
+                               organism = if (method == "reactome") "human" else "Homo sapiens", # wikipathway.params and reactome.params
+                               ...){
+  kegg.params = list(keyType = keyType,
+                   KEGG_Type = KEGG_Type,
+                   species = species)
+  go.params = list(OrgDb = OrgDb,
+                   keyType = keyType,
+                   ont = ont)
+  reactome.params = list(organism = organism)
+  wikipathway.params = list(organism = organism)
+  do.params = list(ont = ont,
+                   organism = organism)
+
   rlang::check_installed(c('BiocManager'), reason = 'for EMP_enrich_analysis().', action = install.packages) 
   rlang::check_installed(c('clusterProfiler'), reason = 'for EMP_enrich_analysis().', action = BiocManager::install)  
 
   call <- match.call()
 
-  EMPT <- .EMP_enrich_analysis(obj,{{condition}},minGSSize=minGSSize,maxGSSize=maxGSSize,keyType=keyType,KEGG_Type=KEGG_Type,species=species,combineGroup=combineGroup,...)
+  EMPT <- .EMP_enrich_analysis(obj,{{condition}},minGSSize=minGSSize,maxGSSize=maxGSSize, combineGroup=combineGroup,gson=gson, 
+                            method = method,
+                            TERM2GENE = TERM2GENE,
+                            TERM2NAME = TERM2NAME,
+                            kegg.params = kegg.params,
+                            go.params = go.params,
+                            reactome.params = reactome.params,
+                            wikipathway.params = wikipathway.params,
+                            do.params = do.params,
+                            ...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_enrich_analysis'
   if (action == 'add') {
