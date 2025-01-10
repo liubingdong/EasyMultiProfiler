@@ -1,3 +1,4 @@
+#' @importFrom clusterProfiler enricher
 enrich_kegg <- function(df, feature_name, kegg.params, minGSSize, maxGSSize, combineGroup, ...) {
   keyType <- kegg.params$keyType
   KEGG_Type <- kegg.params$KEGG_Type
@@ -27,6 +28,7 @@ enrich_kegg <- function(df, feature_name, kegg.params, minGSSize, maxGSSize, com
   return(enrich.data)
 }
 
+#' @importFrom clusterProfiler enrichGO
 enrich_go <- function(df, feature_name, go.params, minGSSize, maxGSSize, combineGroup, ...) {
   if (is.null(go.params$OrgDb)) {
     stop("Go analysis need OrgDb!")
@@ -47,6 +49,7 @@ enrich_go <- function(df, feature_name, go.params, minGSSize, maxGSSize, combine
   return(enrich.data)   
 }
 
+#' @importFrom ReactomePA enrichPathway
 enrich_reactome <- function(df, feature_name, reactome.params, minGSSize, maxGSSize, combineGroup, ...) {
   organism <- reactome.params$organism
   if (combineGroup == TRUE) {
@@ -75,6 +78,7 @@ enrich_wikipathway <- function(df, feature_name, wikipathway.params, combineGrou
   return(enrich.data) 
 }
 
+#' @importFrom DOSE enrichDO
 enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combineGroup, ...) {
   ont <- do.params$ont
   organism <- do.params$organism
@@ -175,6 +179,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
     enrich.data <- enrich_go(df, feature_name = feature_name, go.params = go.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
   } 
   if (method == "reactome") {
+    reactome.params$organism <- match.arg(reactome.params$organism, c("human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly"))
     message("Reactome analysis performed: \norganism: ",reactome.params$organism)
     enrich.data <- enrich_reactome(df, feature_name = feature_name, reactome.params = reactome.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
   } 
@@ -185,6 +190,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
     if (do.params$ont == 'DOLite') {
       stop("DOLite was removed in the current version.")
     }
+    do.params$organism <- match.arg(do.params$organism, c("hsa","mmu"))
     message("DOSE analysis performed: \nont: ",do.params$ont,"\t organism: ",do.params$organism)
     enrich.data <- enrich_do(df, feature_name = feature_name, do.params = do.params, minGSSize=minGSSize, maxGSSize=maxGSSize, combineGroup = combineGroup, ...)
   }
