@@ -9,12 +9,10 @@ EMP_GSEA_analysis(
   condition,
   experiment,
   estimate_group = NULL,
-  method,
+  method = NULL,
+  enrich_method = "kegg",
   cor_method = "pearson",
   group_level = NULL,
-  keyType = NULL,
-  KEGG_Type = "KEGG",
-  species = "all",
   pseudocount = 1e-04,
   pvalueCutoff = 1,
   threshold = NULL,
@@ -22,6 +20,15 @@ EMP_GSEA_analysis(
   threshold_p = 0.05,
   seed = TRUE,
   action = "add",
+  gson = NULL,
+  TERM2GENE = NULL,
+  TERM2NAME = NA,
+  KEGG_Type = "KEGG",
+  species = "all",
+  OrgDb = NULL,
+  keyType = "entrezid",
+  ont = if (enrich_method == "go") "MF" else "DO",
+  organism = if (method == "reactome") "human" else "Homo sapiens",
   ...
 )
 }
@@ -36,15 +43,11 @@ EMP_GSEA_analysis(
 
 \item{method}{A character string. Methods include signal2Noise, cor, log2FC.}
 
+\item{enrich_method}{enrichment method, one of "kegg", "go", "reactome" and "do".}
+
 \item{cor_method}{A character string including pearson, spearman. The alogarithm cor_method used in method = "cor".}
 
-\item{group_level}{A series of character strings. Determine the comparison order of groups when method = "signal2Noise".}
-
-\item{keyType}{A character string. keyType include ko, ec, cpd, entrezid.}
-
-\item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG.}
-
-\item{species}{A character string. Species includ all, hsa, mmu,...Supported organism listed in 'https://www.genome.jp/kegg/catalog/org_list.html'}
+\item{group_level}{A series of character strings. Determine the comparison order of groups when method = "log2FC".}
 
 \item{pseudocount}{A number. The alogarithm pseudocount used in method = "signal2Noise", adjust the 0 in the signal2Noise result into pseudocount value. (default:0.0001)}
 
@@ -56,11 +59,29 @@ EMP_GSEA_analysis(
 
 \item{threshold_p}{A number. The alogarithm threshold used in method = "cor",filter out the feature above the cor test pavlue threshold.}
 
-\item{seed}{An interger. Set the random seed to the plot.}
+\item{seed}{An interger. Set a random seed to ensure the results are reproducible.}
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{Further parameters passed to clusterProfiler::GSEA.}
+\item{gson}{a GSON object, if not NULL, use it as annotation data.}
+
+\item{TERM2GENE}{user input annotation of TERM TO GENE mapping, a data.frame of 2 column with term and gene. Only used when gson is NULL.}
+
+\item{TERM2NAME}{user input of TERM TO NAME mapping, a data.frame of 2 column with term and name. Only used when gson is NULL.}
+
+\item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.}
+
+\item{species}{A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/}
+
+\item{OrgDb}{OrgDb in Go analysis.}
+
+\item{keyType}{For KEGG analysis, keyType include ko, ec, cpd, entrezid. For Go analysis, keyType include entrezid and symbol.}
+
+\item{ont}{For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".}
+
+\item{organism}{For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".}
+
+\item{...}{Further parameters passed to clusterProfiler::GSEA, clusterProfiler::gseGO, ReactomePA::gsePathway and DOSE::gseDO}
 }
 \value{
 EMPT object
@@ -68,28 +89,73 @@ EMPT object
 \description{
 Gene set enrichment analysis.
 }
+\section{Detaild about method}{
+
+The EMP_GSEA_analysis moudle performed based on cluserProfiler, more detailed information are available on:
+
+http://yulab-smu.top/biomedical-knowledge-mining-book/index.html
+}
+
 \examples{
 \dontrun{
 data(MAE)
+
+# KEGG
 ## based on cor analysis
-MAE |>
+MAE |> EMP_assay_extract('geno_ko') |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='cor',
+                    enrich_method = 'kegg',
+                    keyType='ko',
                     estimate_group = 'BMI',cor_method = 'spearman',
                     threshold_r = 0.3,threshold_p = 0.05, ## filter by coe and pvalue
-                    pvalueCutoff = 0.05,keyType = 'ko')
+                    pvalueCutoff = 0.05)
+
 ## based on diff analysis
 MAE |>
-  EMP_diff_analysis(experiment = 'geno_ko',method='DESeq2',.formula = ~0+Group,
+  EMP_diff_analysis(experiment = 'geno_ec',method='DESeq2',.formula = ~0+Group,
                     group_level=c('Group_A','Group_B')) |>
-  EMP_GSEA_analysis(method='log2FC',pvalue<0.05,
-                    keyType = 'ko',KEGG_Type = 'KEGG')
+  EMP_GSEA_analysis(method='log2FC',pvalue<0.05,enrich_method = 'kegg',
+                    keyType = 'ec',KEGG_Type = 'KEGG',pvalueCutoff = 0.05)
 
 ## based on signal2Noise
 MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
-                    estimate_group = 'Group',
+                    estimate_group = 'Group',enrich_method = 'kegg',
                     pvalueCutoff = 0.05,keyType = 'ko')
 
+# GO
+library(org.Hs.eg.db)
+MAE |> 
+  EMP_assay_extract('host_gene') |>
+  EMP_GSEA_analysis(method='signal2Noise',ont = 'MF',keyType = 'symbol',
+                    organism='hsa',OrgDb = org.Hs.eg.db,
+                    estimate_group = 'Group',enrich_method = 'go',
+                    pvalueCutoff = 1) 
+
+MAE |> 
+  EMP_assay_extract('host_gene') |>
+  EMP_GSEA_analysis(method='cor',ont = 'MF',keyType = 'symbol',
+                    OrgDb = org.Hs.eg.db,estimate_group = 'BMI',
+                    cor_method = 'spearman',
+                    enrich_method = 'go') 
+
+# reactome
+MAE |> 
+  EMP_assay_extract('host_gene') |>
+  EMP_feature_convert(from = 'SYMBOL',to='ENTREZID',species = 'Human') |>
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
+  EMP_GSEA_analysis(method='log2FC',
+                    organism='human',
+                    enrich_method = 'reactome') 
+
+# DO
+MAE |> 
+  EMP_assay_extract('host_gene') |>
+  EMP_feature_convert(from = 'SYMBOL',to='ENTREZID',species = 'Human') |>
+  EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
+  EMP_GSEA_analysis(method='log2FC',
+                    organism='hsa',
+                    enrich_method = 'do') 
 
 ## Visualization
 MAE |>
