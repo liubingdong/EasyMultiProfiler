@@ -39,7 +39,7 @@ EMP_enrich_analysis(
 
 \item{gson}{a GSON object, if not NULL, use it as annotation data.}
 
-\item{method}{enrichment method, one of "kegg", "go", "reactome", "wikipathway" and "do".}
+\item{method}{enrichment method, one of "kegg", "go", "reactome" and "do".}
 
 \item{TERM2GENE}{user input annotation of TERM TO GENE mapping, a data.frame of 2 column with term and gene. Only used when gson is NULL.}
 
