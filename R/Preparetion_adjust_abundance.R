@@ -96,6 +96,11 @@ EMP_adjust_abundance <- function(obj,experiment,
   if (use_cached == FALSE) {
     memoise::forget(.EMP_adjust_abundance_m) %>% invisible()
   }
+
+  # avoid the factor error after filter
+  try(x[[.factor_unwanted]] <- droplevels(x[[.factor_unwanted]]),silent = TRUE)
+  try(x[[.factor_of_interest]] <- droplevels(x[[.factor_of_interest]]),silent = TRUE)
+  
   EMPT <- .EMP_adjust_abundance_m(EMPT=x,method=method,.factor_unwanted,.factor_of_interest,...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_assay_data'
