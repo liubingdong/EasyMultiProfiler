@@ -657,3 +657,30 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
   writeLines(c(header, body, footer))
   invisible(x)
 }
+
+
+#' Save result into GlobalEnv
+#' @param data data 
+#' @param var_name the name of data in the GlobalEnv
+#' @param ... Further parameters passed to assign
+#' @rdname EMP_save_var
+#' @return EMPT object
+#' @export
+#' @examples
+#' data(MAE)
+#' MAE |> 
+#'   EMP_assay_extract('host_gene',pattern = 'A1BG',pattern_ref = 'feature') |>
+#'   EMP_save_var('temp_data') |>
+#'   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') |>
+#'   EMP_heatmap_plot()
+#' 
+#' temp_data
+EMP_save_var <- function(data, var_name,...) {
+  assign(var_name, data, envir = .GlobalEnv,...)  
+  return(data) 
+}
+
+
+
+
+
