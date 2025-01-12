@@ -2,22 +2,24 @@
 % Please edit documentation in R/Support_EMP_function.R
 \name{EMP_save_var}
 \alias{EMP_save_var}
-\title{Save result into GlobalEnv}
+\title{Save result into environment}
 \usage{
-EMP_save_var(data, var_name, ...)
+EMP_save_var(data, var_name, envir = .GlobalEnv, ...)
 }
 \arguments{
 \item{data}{data}
 
-\item{var_name}{the name of data in the GlobalEnv}
+\item{var_name}{a name to be assigned to data.}
 
-\item{...}{Further parameters passed to assign}
+\item{envir}{the \link{environment} to use.}
+
+\item{...}{Further parameters passed to assign.}
 }
 \value{
 EMPT object
 }
 \description{
-Save result into GlobalEnv
+Save result into environment
 }
 \examples{
 data(MAE)

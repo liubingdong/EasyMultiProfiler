@@ -659,10 +659,11 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
 }
 
 
-#' Save result into GlobalEnv
+#' Save result into environment 
 #' @param data data 
-#' @param var_name the name of data in the GlobalEnv
-#' @param ... Further parameters passed to assign
+#' @param var_name  a name to be assigned to data.
+#' @param envir the \link{environment} to use.
+#' @param ... Further parameters passed to assign.
 #' @rdname EMP_save_var
 #' @return EMPT object
 #' @export
@@ -675,8 +676,8 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
 #'   EMP_heatmap_plot()
 #' 
 #' temp_data
-EMP_save_var <- function(data, var_name,...) {
-  assign(var_name, data, envir = .GlobalEnv,...)  
+EMP_save_var <- function(data, var_name,envir = .GlobalEnv,...) {
+  assign(var_name, data, envir = envir,...)  
   return(data) 
 }
 
