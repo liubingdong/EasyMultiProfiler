@@ -1,10 +1,17 @@
 #' @importFrom bigstatsr big_SVD
 #' @importFrom vegan vegdist
 #' @importFrom stats cmdscale
-.EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL,umap.config=NULL){
+.EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL,umap.config=NULL,
+                                    scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001){
   p1 <- p2 <- p3 <- R2X <- NULL
   deposit <- list()
-  assay_data  <- assay(EMPT) %>% t()
+
+  if (!is.null(scale)) {
+    EMPT_trans <- EMPT |> EMP_decostand(method=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
+    assay_data  <- assay(EMPT_trans) %>% t()
+  }else{
+    assay_data  <- assay(EMPT) %>% t()
+  }
   
   switch(method,
          "pca" = {
@@ -177,7 +184,9 @@
 #' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001). 
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
-#'
+#' @section Detaild about scale:
+#' When the scale parameter is enabled, data normalization only takes effect within this function and does not affect the original data in the EMPT. 
+#' If you need to transform the data, consider using the EMP_EMP_decostand function in the workflow.
 #' @return EMPT object
 #' @export
 #'
@@ -230,15 +239,12 @@ EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,us
     EMPT <- obj
   }
 
-  if (!is.null(scale)) {
-    EMPT <- EMPT |> EMP_decostand(method=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
-  }
-
   if (use_cached == FALSE) {
     memoise::forget(.EMP_dimension_analysis_m) %>% invisible()
   }
 
-  EMPT %<>% .EMP_dimension_analysis_m(method=method,distance=distance,estimate_group=estimate_group,umap.config=umap.config)
+  EMPT <- EMPT |> .EMP_dimension_analysis_m(method=method,distance=distance,estimate_group=estimate_group,umap.config=umap.config,
+                                            scale=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_dimension_analysis'
 

@@ -50,6 +50,12 @@ EMPT object
 \description{
 Dimension reduction of the abundance or experssion data
 }
+\section{Detaild about scale}{
+
+When the scale parameter is enabled, data normalization only takes effect within this function and does not affect the original data in the EMPT. 
+If you need to transform the data, consider using the EMP_EMP_decostand function in the workflow.
+}
+
 \examples{
 data(MAE)
 ## PCA

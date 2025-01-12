@@ -9,7 +9,7 @@
 #' @param clust_method A character string. More see fastcluster::hclust (default: complete) 
 #' @param label_size A number. Set the label size. (default:4) 
 #' @param tree_size A number between 0 and 1. Set the clust tree size. (default:0.1) 
-#' @section Palettes:
+#' @section Detaild about Palettes:
 #' The following palettes are available for use with these scales:
 #' \describe{
 #'   BrBG, PiYG, PRGn, PuOr, RdBu, RdGy, RdYlBu, RdYlGn, Spectral,
@@ -341,6 +341,9 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 #' @importFrom ggtree ggtree
 #' @importFrom stats dist
 #' @importFrom fastcluster hclust
+#' @section Detaild about scale:
+#' When the scale parameter is enabled, data normalization only takes effect within this function and does not affect the original data in the EMPT. 
+#' If you need to transform the data, consider using the EMP_EMP_decostand function in the workflow.
 
 EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkred"),rotate=FALSE,
                                        scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001,
@@ -357,10 +360,11 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   } 
   
   if (!is.null(scale)) {
-    EMPT <- EMPT |> EMP_decostand(method=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
+    EMPT_trans <- EMPT |> EMP_decostand(method=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
+    result <- .get.result.EMPT(EMPT_trans,info = 'EMP_assay_data') %>% suppressMessages()
+  }else{
+    result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages()
   }
-
-  result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages()
   
   if (any(is.na(result))) {
     stop("The NA value has been detected, please check the assay data!")

@@ -103,7 +103,7 @@ EMPT or EMP object
 \description{
 EMP heatmap plot
 }
-\section{Palettes}{
+\section{Detaild about Palettes}{
 
 The following palettes are available for use with these scales:
 \describe{
@@ -114,6 +114,12 @@ The following palettes are available for use with these scales:
 }
 
 Modify the palette through the `palette` argument.
+}
+
+\section{Detaild about scale}{
+
+When the scale parameter is enabled, data normalization only takes effect within this function and does not affect the original data in the EMPT. 
+If you need to transform the data, consider using the EMP_EMP_decostand function in the workflow.
 }
 
 \examples{
