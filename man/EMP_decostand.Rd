@@ -47,7 +47,7 @@ The following method from vegan::decostand are available：
 \describe{
   relative(total), max, frequency, normalize, range,
   rank, standardize, pa, chi.square,
-  hellinger, log, alr, clr, rclr
+  hellinger, log, alr, clr, rclr, integer
 }
 
 When standardizing data, it's important to consider whether the data processing direction should be by sample or by feature. 
@@ -96,6 +96,8 @@ Adding pseudocount will inevitably introduce some bias; see the rclr method for 
 This method does not use pseudocounts, unlike the standard clr.
 Robust clr divides the values by geometric mean of the observed features; zero values are kept as zeroes, and not taken into account. 
 In high dimensional data, the geometric mean of rclr is a good approximation of the true geometric mean. (default bySample = TRUE)
+ 
+15. integer: rounding of numbers using the function Round.
 }
 
 \examples{

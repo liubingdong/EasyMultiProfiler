@@ -119,7 +119,7 @@
 #' \describe{
 #'   relative(total), max, frequency, normalize, range,
 #'   rank, standardize, pa, chi.square,
-#'   hellinger, log, alr, clr, rclr
+#'   hellinger, log, alr, clr, rclr, integer
 #' }
 #'
 #' When standardizing data, it's important to consider whether the data processing direction should be by sample or by feature. 
@@ -170,6 +170,8 @@
 #' Robust clr divides the values by geometric mean of the observed features; zero values are kept as zeroes, and not taken into account. 
 #' In high dimensional data, the geometric mean of rclr is a good approximation of the true geometric mean. (default bySample = TRUE)
 #'  
+#' 15. integer: rounding of numbers using the function Round.
+#' 
 #' @return EMPT object
 #' @export
 #'
@@ -200,6 +202,8 @@ EMP_decostand <- function(obj,experiment,method,bySample='default',logbase =2,us
   if (use_cached == FALSE) {
     memoise::forget(.EMP_decostand_m) %>% invisible()
   }
+  method <- match.arg(method,c("relative","total","max","frequency","normalize","range",
+    "rank","standardize","pa","hellinger","log","alr","clr","rclr","integer"))
   EMPT <- .EMP_decostand_m(EMPT=x,method=method,bySample=bySample,logbase=logbase,pseudocount=pseudocount,...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_decostand'
