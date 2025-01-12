@@ -10,6 +10,10 @@ EMP_dimension_analysis(
   method = "pcoa",
   distance = NULL,
   use_cached = TRUE,
+  scale = NULL,
+  bySample = "default",
+  logbase = 2,
+  pseudocount = 1e-07,
   estimate_group = NULL,
   umap.config = NULL,
   action = "add"
@@ -25,6 +29,14 @@ EMP_dimension_analysis(
 \item{distance}{A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist including "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
+
+\item{scale}{A character string. The parameter works in the same way as the method in EMP_decostand.}
+
+\item{bySample}{A boolean. Whether the function decostand by the sample or feature. Detaled information in the EMP_decostand.}
+
+\item{logbase}{An interger. The logarithm base used in method = "log".(default=2). Detaled information in the EMP_decostand.}
+
+\item{pseudocount}{A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001).}
 
 \item{estimate_group}{A character string. Select the group name in the coldata to be considerated.}
 

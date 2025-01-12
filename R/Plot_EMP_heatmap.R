@@ -329,6 +329,10 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 #' @param clust_method A character string. More see fastcluster::hclust (default: complete) 
 #' @param tree_size A number between 0 and 1. Set the clust tree size. (default:0.1) 
 #' @param label_size A number. Set the label size. (default:4) 
+#' @param scale   A character string. The parameter works in the same way as the method in EMP_decostand. (Only activated for EMP_assay_data)
+#' @param bySample A boolean. Whether the function decostand by the sample or feature. Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)
+#' @param logbase An interger. The logarithm base used in method = "log".(default=2). Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)
+#' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001). (Only activated for EMP_assay_data)
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
 #' @rdname EMP_heatmap_plot
 #' @importFrom forcats fct_relevel
@@ -339,8 +343,9 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 #' @importFrom fastcluster hclust
 
 EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkred"),rotate=FALSE,
-                                         clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,label_size=4,
-                                         mytheme = 'theme()'){
+                                       scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001,
+                                       clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,label_size=4,
+                                       mytheme = 'theme()'){
   call <- match.call()
 
   primary <- value <- NULL
@@ -351,6 +356,10 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
     stop('Please check the input data for EMP_heatmap.EMP_assay_data!')
   } 
   
+  if (!is.null(scale)) {
+    EMPT <- EMPT |> EMP_decostand(method=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
+  }
+
   result <- .get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages()
   
   if (any(is.na(result))) {

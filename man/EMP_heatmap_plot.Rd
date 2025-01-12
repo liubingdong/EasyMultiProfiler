@@ -51,6 +51,10 @@ EMP_heatmap.EMP_assay_data(
   obj,
   palette = c("steelblue", "white", "darkred"),
   rotate = FALSE,
+  scale = NULL,
+  bySample = "default",
+  logbase = 2,
+  pseudocount = 1e-07,
   clust_row = FALSE,
   clust_col = FALSE,
   dist_method = "euclidean",
@@ -84,6 +88,14 @@ EMP_heatmap.EMP_assay_data(
 \item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
 
 \item{rotate}{A boolean. Whether rotate the heatmap or not. (Only activated for EMP_assay_data)}
+
+\item{scale}{A character string. The parameter works in the same way as the method in EMP_decostand. (Only activated for EMP_assay_data)}
+
+\item{bySample}{A boolean. Whether the function decostand by the sample or feature. Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)}
+
+\item{logbase}{An interger. The logarithm base used in method = "log".(default=2). Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)}
+
+\item{pseudocount}{A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001). (Only activated for EMP_assay_data)}
 }
 \value{
 EMPT or EMP object

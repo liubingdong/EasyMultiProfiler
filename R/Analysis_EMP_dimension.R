@@ -171,6 +171,10 @@
 #' @param distance A character string. The logarithm distance used in method = "pcoa".Detailed in the vegan::vegdist including "manhattan", "euclidean", "canberra", "clark", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup", "binomial", "chao", "cao", "mahalanobis", "chisq", "chord", "hellinger", "aitchison", or "robust.aitchison".
 #' @param estimate_group A character string. Select the group name in the coldata to be considerated.
 #' @param umap.config A list. only activate in umap. More see umap::umap.
+#' @param scale   A character string. The parameter works in the same way as the method in EMP_decostand.
+#' @param bySample A boolean. Whether the function decostand by the sample or feature. Detaled information in the EMP_decostand.
+#' @param logbase An interger. The logarithm base used in method = "log".(default=2). Detaled information in the EMP_decostand.
+#' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001). 
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #'
@@ -215,7 +219,8 @@
 #'                          method = 'umap',umap.config = umap.config) 
 
 EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,use_cached=TRUE,
-                                   estimate_group=NULL,umap.config=NULL,action='add'){
+                                  scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001,
+                                  estimate_group=NULL,umap.config=NULL,action='add'){
   call <- match.call()
 
   if (is(obj,"MultiAssayExperiment")) {
@@ -223,6 +228,10 @@ EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,us
                      experiment = experiment)
   }else if(is(obj,'EMPT')) {
     EMPT <- obj
+  }
+
+  if (!is.null(scale)) {
+    EMPT <- EMPT |> EMP_decostand(method=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
   }
 
   if (use_cached == FALSE) {
