@@ -53,6 +53,12 @@ options("url.method"="libcurl")
 pak::pak("liubingdong/EasyMultiProfiler")
 ```
 
+<u>NOTE 3:</u>  EasyMultiProfiler has consistently been updating its versions while striving to maintain compatibility with the original code and syntax. Specific versions can be installed using the pak package to ensure consistency in users' data analyses.  Version could be found on  https://github.com/liubingdong/EasyMultiProfiler/commits/main/.
+
+```R
+pak::pak("liubingdong/EasyMultiProfiler@82a4776")
+```
+
 **Manual install** 
 
 Due to the inclusion of many popular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for being so patient during installation. We believe EMP could greatly speed up your research work.
