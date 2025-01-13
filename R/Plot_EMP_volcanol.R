@@ -48,7 +48,7 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
 
 
   xlim_max <-data$log2FC %>% abs() %>% max(na.rm = T)
-  xlim_break <-c(0,4,6,8,10,12,24,30,50,100)
+  xlim_break <-c(0,1.5,2,4,6,8,10,12,24,30,50,100)
   idx <- (xlim_break < xlim_max) %>% sum() +1
   xlim_break <- xlim_break[1:idx]
   xlim_break <- c(xlim_break,xlim_break*-1) %>% unique() %>% sort()
