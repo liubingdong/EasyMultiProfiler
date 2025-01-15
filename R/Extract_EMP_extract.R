@@ -1,5 +1,5 @@
 #' @importFrom methods is
-.EMP_assay_extract_EMP <- function (x,experiment,
+.EMP_assay_extract_MAE <- function (x,experiment,
                                     pattern_ref = 'Name',pattern=NULL,
                                     exact=FALSE,action='add') {
   #call <- match.call()
@@ -19,6 +19,32 @@
     warning('action should be one of add or get!')
   }
 }
+
+
+#' @importFrom methods is
+.EMP_assay_extract_EMP <- function (x,experiment,
+                                    pattern_ref = 'Name',pattern=NULL,
+                                    exact=FALSE,action='add') {
+
+  ExperimentList <- .get.ExperimentList.EMP(x)
+  EMPT <- ExperimentList[[experiment]]
+  if (is.null(EMPT)) {
+    experiment_name <- names(ExperimentList)
+    stop("experiment name should be one of ",paste(experiment_name,collapse=','))
+  }
+
+  EMPT %<>%.EMP_assay_extract_EMPT(pattern_ref = pattern_ref,pattern=pattern,
+                                   exact=exact,action = 'add') ## action must be add here!
+  if (action == 'add') {
+    return(EMPT)
+  } else if(action == 'get') {
+    return(.get.result.EMPT(EMPT))
+  }else{
+    warning('action should be one of add or get!')
+  }
+}
+
+
 
 .EMP_assay_extract_EMPT <- function (EMPT,
                                pattern_ref = 'Name',pattern = NULL,
@@ -53,6 +79,7 @@
 }
 
 
+.EMP_assay_extract_MAE_m <- memoise::memoise(.EMP_assay_extract_MAE,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 .EMP_assay_extract_EMP_m <- memoise::memoise(.EMP_assay_extract_EMP,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 .EMP_assay_extract_EMPT_m <- memoise::memoise(.EMP_assay_extract_EMPT,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
@@ -61,7 +88,7 @@
 
 #' Extract assay data
 #'
-#' @param obj MultiAssayExperiment or EMPT object.
+#' @param obj MultiAssayExperiment, EMP and EMPT object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
 #' @param pattern_ref A character string. Select which column in the rowdata to extract assay data from.
 #' @param pattern A character string. Select which pattern in the rowdata to extract assay data.
@@ -92,9 +119,9 @@ EMP_assay_extract <- function (obj,experiment,pattern_ref = 'Name',pattern = NUL
 
   if (is(obj,"MultiAssayExperiment")) {
     if (use_cached == FALSE) {
-      memoise::forget(.EMP_assay_extract_EMP_m) %>% invisible()
+      memoise::forget(.EMP_assay_extract_MAE_m) %>% invisible()
     }    
-    deposit <- .EMP_assay_extract_EMP_m(x=obj,experiment=experiment,
+    deposit <- .EMP_assay_extract_MAE_m(x=obj,experiment=experiment,
                                     pattern_ref = pattern_ref,pattern=pattern,
                                     exact=exact,action=action)
     if (action=='add') {
@@ -110,9 +137,19 @@ EMP_assay_extract <- function (obj,experiment,pattern_ref = 'Name',pattern = NUL
     if (action=='add') {
       .get.history.EMPT(deposit) <- call    
     }    
+  }else if (is(obj,"EMP")) {
+    if (use_cached == FALSE) {
+      memoise::forget(.EMP_assay_extract_EMP_m) %>% invisible()
+    }    
+    deposit <- .EMP_assay_extract_EMP_m(x=obj,experiment=experiment,
+                               pattern_ref = pattern_ref,pattern = pattern,
+                               exact=exact,action = action)
+    if (action=='add') {
+      .get.history.EMPT(deposit) <- call    
+    }
   }else{
     stop("Please check the input data for EMP_assay_extract!")
-  } 
+    } 
   return(deposit)
 }
 
@@ -172,7 +209,7 @@ EMP_rowdata_extract <- function(obj,experiment=NULL,pattern_ref = 'Name',pattern
       deposit %<>% dplyr::filter(str_detect_multi(!!dplyr::sym(pattern_ref),pattern,exact=exact))
     }
   }else {
-    stop("Please check the input data for EMP_rowdata_extract!")
+    stop("EMP_rowdata_extract only support MAE and EMPT object!")
   }
   return(deposit)
 }
@@ -227,7 +264,7 @@ EMP_coldata_extract <- function(obj,experiment=NULL,coldata_to_assay=NULL,assay_
         coldata %<>% dplyr::filter(primary %in% real_sample) %>% dplyr::select_if(~!all(is.na(.))) ## Delete any columns when all values are NA
       }
     }else {
-      stop("Please check the input data for EMP_coldata_extract!")
+      stop("EMP_rowdata_extract only support MAE and EMPT object!")
     }
 
     if (action == 'get') {

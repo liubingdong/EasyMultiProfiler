@@ -15,7 +15,7 @@ EMP_assay_extract(
 )
 }
 \arguments{
-\item{obj}{MultiAssayExperiment or EMPT object.}
+\item{obj}{MultiAssayExperiment, EMP and EMPT object.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
