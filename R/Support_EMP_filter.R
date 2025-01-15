@@ -26,53 +26,11 @@
   return(EMPT)
 }
 
-
-#' Filer experssion or abundance data that match a condition
-#'
-#' @param obj EMPT object.
-#' @param sample_condition Expressions that return a logical value, and are defined in terms of the variables in coldata. If multiple expressions are included, they are combined with the &，| operator. 
-#' @param feature_condition Expressions that return a logical value, and are defined in terms of the variables in rowdata. If multiple expressions are included, they are combined with the &，| operator. 
-#' @param filterSample A series of character strings. Select samples in the data exactly.
-#' @param filterFeature A series of character strings. Select samples in the data exactly.
-#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
-#' @param keep_result If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.
-#' @param show_info A character string. Set the class of EMPT to show properly.
-#' @param action A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).
-#'
-#' @return EMPT object
-#' @export
-#'
-#' @examples
-#' data(MAE)
-#' ## from MultiAssayExperiment
-#' MAE |>
-#'   EMP_filter(sample_condition = BMI>20 & Sex == 'M') |>
-#'   EMP_summary()
-#' 
-#' ## from EMPT
-#' MAE |>
-#'   EMP_assay_extract(experiment = 'host_gene') |>
-#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
-#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
-#'   EMP_filter(feature_condition = fdr < 0.05)
-#'   
-#' MAE |>
-#'   EMP_assay_extract(experiment = 'taxonomy') |>
-#'   EMP_alpha_analysis() |>
-#'   EMP_filter(sample_condition = shannon >3 | invsimpson >19)
-#' 
-#' ## Precise selection
-#' MAE |>
-#'   EMP_assay_extract(experiment = 'taxonomy') |>
-#'   EMP_alpha_analysis() |>
-#'   EMP_filter(sample_condition = shannon >3 | invsimpson >19,
-#'              filterSample = c('P11774','P31579'),action = 'kick') # Accurately kick samples based on satisfying sample_condition
-
-EMP_filter <- function(obj,sample_condition,feature_condition,
+.EMP_filter <- function(obj,sample_condition,feature_condition,
                        filterSample=NULL,filterFeature=NULL,experiment=NULL,
                        show_info=NULL,action='select',keep_result=FALSE){
   primary <- feature <- NULL
-  call <- match.call()
+  #call <- match.call()
   sample_condition <- dplyr::enquo(sample_condition)
   feature_condition <- dplyr::enquo(feature_condition)
   message_info <- list()
@@ -82,15 +40,20 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
     }else{
       obj %<>% .as.EMPT(experiment = experiment)  
       check_obj <-'EMPT'
+      raw_rowdata_name <- .get.row_info.EMPT(obj) %>% colnames()
+      raw_coldata_name <- .get.mapping.EMPT(obj) %>% colnames()
+
+      # Temporarily merge the results in the deposit for filter below
+      obj %<>% .filter.merge.EMPT() %>% suppressMessages()      
       .get.method.EMPT(obj) <- 'filter'
-      .get.history.EMPT(obj) <- call
+      #.get.history.EMPT(obj) <- call
       class(obj) <- 'EMP_assay_data'
       .get.info.EMPT(obj) <- 'EMP_assay_data'
     }
   }else if(is(obj,'EMPT')) {
     check_obj <-'EMPT'
     .get.method.EMPT(obj) <- 'filter'
-    .get.history.EMPT(obj) <- call
+    #.get.history.EMPT(obj) <- call
     ## Get the initial names for recover below
     raw_rowdata_name <- .get.row_info.EMPT(obj) %>% colnames()
     raw_coldata_name <- .get.mapping.EMPT(obj) %>% colnames()
@@ -189,6 +152,7 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
 }
 
 
+.EMP_filter_m <- memoise::memoise(.EMP_filter,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
 .filter.deposit.EMPT <- function(EMPT,real_sample,real_feature,keep_result=keep_result){
@@ -323,3 +287,67 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
 
   return(EMPT)
 }
+
+
+#' Filer experssion or abundance data that match a condition
+#'
+#' @param obj EMPT object.
+#' @param sample_condition Expressions that return a logical value, and are defined in terms of the variables in coldata. If multiple expressions are included, they are combined with the &，| operator. 
+#' @param feature_condition Expressions that return a logical value, and are defined in terms of the variables in rowdata. If multiple expressions are included, they are combined with the &，| operator. 
+#' @param filterSample A series of character strings. Select samples in the data exactly.
+#' @param filterFeature A series of character strings. Select samples in the data exactly.
+#' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
+#' @param keep_result If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.
+#' @param show_info A character string. Set the class of EMPT to show properly.
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param action A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).
+#'
+#' @return EMPT object
+#' @export
+#'
+#' @examples
+#' data(MAE)
+#' ## from MultiAssayExperiment
+#' MAE |>
+#'   EMP_filter(sample_condition = BMI>20 & Sex == 'M') |>
+#'   EMP_summary()
+#' 
+#' ## from EMPT
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'host_gene') |>
+#'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+#'   EMP_filter(feature_condition = fdr < 0.05)
+#'   
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'taxonomy') |>
+#'   EMP_alpha_analysis() |>
+#'   EMP_filter(sample_condition = shannon >3 | invsimpson >19)
+#' 
+#' ## Precise selection
+#' MAE |>
+#'   EMP_assay_extract(experiment = 'taxonomy') |>
+#'   EMP_alpha_analysis() |>
+#'   EMP_filter(sample_condition = shannon >3 | invsimpson >19,
+#'              filterSample = c('P11774','P31579'),action = 'kick') # Accurately kick samples based on satisfying sample_condition
+EMP_filter <- function(obj,sample_condition,feature_condition,
+                       filterSample=NULL,filterFeature=NULL,experiment=NULL,
+                       show_info=NULL,action='select',keep_result=FALSE,use_cached=TRUE){
+  call <- match.call()
+  deposit <- NULL
+  sample_condition <- dplyr::enquo(sample_condition)
+  feature_condition <- dplyr::enquo(feature_condition)
+  if (use_cached == FALSE) {
+    memoise::forget(.EMP_filter_m) %>% invisible()
+  }  
+  deposit <- .EMP_filter_m(obj=obj,sample_condition={{sample_condition}},feature_condition={{feature_condition}},
+                       filterSample=filterSample,filterFeature=filterFeature,experiment=experiment,
+                       show_info=show_info,action=action,keep_result=keep_result)
+  if (is(obj,"MultiAssayExperiment")) {
+    return(deposit)
+  }else if (is(obj,"EMPT")) {
+    .get.history.EMPT(obj) <- call
+    return(deposit)
+  }
+}
+
