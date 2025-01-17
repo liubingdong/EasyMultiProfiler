@@ -1,7 +1,7 @@
 Package: EasyMultiProfiler
 Type: Package
 Title: An Efficient and Convenient R package in Multi-omics Down-Stream Analysis and Visualization
-Version: 0.2.4
+Version: 0.2.5
 Authors@R: c( person(given = "Bingdong", family = "liu",       email = "382983280@qq.com", role = c("aut", "cre")),
               person(given = "Erqiang",  family = "Hu",        email = "13766876214@163.com", role = c("aut", "ctb")))
 Maintainer: Bingdong Liu <382983280@qq.com>
