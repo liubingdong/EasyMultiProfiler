@@ -1,7 +1,7 @@
 #' @importFrom dplyr arrange
 #' @importFrom tibble column_to_rownames
 #' @noRd
-.EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',...) {
+.EMP_cor_analysis <- function(EMP,select=NULL,method='spearman') {
   #call <- match.call()
 
   primary <- var1 <- NULL
@@ -98,7 +98,7 @@
 
 
 
-.EMP_cor_analysis_multi <- function(EMP,select=NULL,method='spearman',pvalue=0.05,rvalue=0,...) {
+.EMP_cor_analysis_multi <- function(EMP,select=NULL,method='spearman',pvalue=0.05,rvalue=0) {
   
   primary <- name <- NULL
 
@@ -138,11 +138,11 @@
   while (data_length>1) {
     if (count_id == 1 ) {
       temp <- rel_cons(data1 = total_data[[1]],data2 = total_data[[2]], 
-                       pvalue = pvalue,rvalue = rvalue,cor_method = method,...)
+                       pvalue = pvalue,rvalue = rvalue,cor_method = method)
     }else{
       keep_idx <- relationship_stock[[count_id-1]]$keep
       temp <- rel_cons(data1 = total_data[[1]][,c('SampleID',keep_idx)], data2 = total_data[[2]], 
-                       pvalue = pvalue,rvalue = rvalue,cor_method = method,...)
+                       pvalue = pvalue,rvalue = rvalue,cor_method = method)
     }
     if (length(temp$keep)>0) {
       relationship_stock[[count_id]] <- temp
@@ -316,7 +316,6 @@ kick_check <- function(data){
 #' @param force_sankey A boolean. Whether force the cor-analysis for the sankey plot or not.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
-#' @param ... ...
 #' @rdname EMP_cor_analysis
 #' @return EMPT object
 #' @export
@@ -348,7 +347,7 @@ kick_check <- function(data){
 #' (k1 + k3 + k2) |> EMP_cor_analysis() |>
 #'   EMP_sankey_plot()
 EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rvalue=0,pvalue=0.05,
-                             use_cached=TRUE,force_sankey=FALSE,...) {
+                             use_cached=TRUE,force_sankey=FALSE) {
 
   experiment_num <- NULL
 
@@ -370,9 +369,9 @@ EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rval
   }
 
   if (experiment_num <= 2) {
-    result <- .EMP_cor_analysis_m(EMP=EMP,select=select,method=method,...)
+    result <- .EMP_cor_analysis_m(EMP=EMP,select=select,method=method)
   }else {
-    result <- .EMP_cor_analysis_multi_m(EMP=EMP,select=select,method=method,...)
+    result <- .EMP_cor_analysis_multi_m(EMP=EMP,select=select,method=method,rvalue=rvalue,pvalue=pvalue)
   }
 
 
