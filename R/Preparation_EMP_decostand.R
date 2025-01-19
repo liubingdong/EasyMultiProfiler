@@ -3,81 +3,13 @@
 .EMP_decostand <- function(EMPT,method,bySample='default',logbase,pseudocount=pseudocount,...){
   primary <- NULL
 
-  if (method == 'relative') {
-    method  <- 'total'
-  }
-
   if (bySample != 'default' & !is.logical(bySample)) {
    stop('Paramer bySample should be default, TRUE or FALSE!')
   }
 
-  if (bySample != 'default' & is.logical(bySample)) {
-    MARGIN <- ifelse(bySample, 1, 2)
-  }else {
-    switch(method,
-           "total" = {
-            MARGIN <- 1
-           },
-           "max" = {
-             MARGIN <- 2
-           },
-           "frequency" = {
-             MARGIN <- 2
-           },
-           "normalize" = {
-             MARGIN <- 1
-           },
-           "range" = {
-             MARGIN <- 2
-           },
-           "rank" = {
-             MARGIN <- 1
-           },
-           "standardize" = {
-             MARGIN <- 2
-           },
-           "pa" = {
-             MARGIN <- 1
-           },
-           "chi.square" = {
-             MARGIN <- 1
-           },
-           "hellinger" = {
-             MARGIN <- 1
-           },
-           "log" = {
-             MARGIN <- 1
-           },
-           "alr" = {
-             MARGIN <- 1
-           },
-           "clr" = {
-             MARGIN <- 1
-           },
-           "rclr" = {
-             MARGIN <- 1
-           }
-    )
-  }
-
-  # Only the log, pa and integer algorithm do not need to consider the direction of standardization.
-  if (!method %in% c('log','pa','integer')) {
-    decostand_info <- c('Sample','Feature')
-    message_info <- list()
-    message_info %<>% append(paste0('Standardization method proceed by ',decostand_info[MARGIN],'!')) 
-    .get.message_info.EMPT(EMPT) <- message_info
-  }
-
-
-  if (method=="log"){
-    method_name <- paste0(method, logbase)
-  }else{
-    method_name <- method
-  }
-
-  if (method == 'total') {
-    method_name  <- 'relative'
-  }
+  MARGIN <- check_MARGIN(method=method,bySample=bySample)
+  method_name <- check_method_name(method=method,suffix=logbase)
+  message_info <- message_MARGIN(method=method,MARGIN = MARGIN)
 
   ## .calc_rclr unused argument pseudocount
   if (method == 'rclr') {
@@ -86,15 +18,30 @@
   }else if(method == 'integer'){
     assay_decostand_data <- assay(EMPT) %>% t() %>% 
      round(digits = 0)
-  }else {
-    assay_decostand_data <- assay(EMPT) %>% t() %>% 
-    vegan::decostand(method = method, MARGIN = MARGIN,logbase=logbase,pseudocount=pseudocount,...)
-  }
+  }else{
+    method_trans <- parse_log_string(method,suffix=logbase)
 
+    if (unlist(method_trans)[1] == 'relative') {
+      method_trans[[1]] <- 'total'
+    }  
+
+    if (unlist(method_trans)[1] == 'log') {
+       assay_decostand_data <- assay(EMPT) %>% t()
+       if (!is.na(method_trans$log_addition)) {
+         assay_decostand_data <- assay_decostand_data + method_trans$log_addition
+       }    
+       assay_decostand_data[assay_decostand_data > 0 & !is.na(assay_decostand_data)] <- log(assay_decostand_data[assay_decostand_data > 0 & !is.na(assay_decostand_data)], 
+        base = method_trans$suffix) 
+    }else{
+      assay_decostand_data <- assay(EMPT) %>% t() %>% 
+        vegan::decostand(method = unlist(method_trans)[1], MARGIN = MARGIN,pseudocount=pseudocount,...)
+    }
+  }
 
   .get.assay.EMPT(EMPT) <- assay_decostand_data %>% as.data.frame() %>% tibble::rownames_to_column('primary') %>% tibble::as_tibble() %>% dplyr::select(primary,everything())
   .get.method.EMPT(EMPT) <- method_name
   .get.assay_name.EMPT(EMPT) <- method_name
+  .get.message_info.EMPT(EMPT) <- message_info
   .get.algorithm.EMPT(EMPT) <- 'EMP_decostand'
   .get.info.EMPT(EMPT) <- 'EMP_decostand'
   return(EMPT)
@@ -150,7 +97,9 @@
 #'
 #' 10. hellinger: square root of method = "relative" (Legendre & Gallagher 2001).(default bySample = TRUE)
 #'
-#' 11. log: logarithmic transformation. Higher bases give less weight to quantities and more to presences, and logbase = Inf gives the presence/absence scaling.
+#' 11. log: logarithmic transformation(Here is differrent from decostand in the vegan package). The transformation only applies a logarithmic change to values greater than 0, while values equal to 0 remain unchanged. 
+#' The method can be written as log2+1, which means adding 1 to all data first, followed by a base-2 logarithmic transformation. 
+#' If written as log or log+1, it will operate according to the specified logarithmic base.
 #'
 #' 12. alr: Additive log ratio ("alr") transformation (Aitchison 1986) reduces data skewness and compositionality bias. 
 #' The transformation assumes positive values, pseudocounts can be added with the argument pseudocount. 
@@ -202,8 +151,8 @@ EMP_decostand <- function(obj,experiment,method,bySample='default',logbase =2,us
   if (use_cached == FALSE) {
     memoise::forget(.EMP_decostand_m) %>% invisible()
   }
-  method <- match.arg(method,c("relative","total","max","frequency","normalize","range",
-    "rank","standardize","pa","hellinger","log","alr","clr","rclr","integer"))
+  #method <- match.arg(method,c("relative","total","max","frequency","normalize","range",
+  #  "rank","standardize","pa","hellinger","log","alr","clr","rclr","integer"))
   EMPT <- .EMP_decostand_m(EMPT=x,method=method,bySample=bySample,logbase=logbase,pseudocount=pseudocount,...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_decostand'
@@ -214,4 +163,138 @@ EMP_decostand <- function(obj,experiment,method,bySample='default',logbase =2,us
   }else{
     warning('action should be one of add or get!')
   }
+}
+
+
+#' @importFrom stringr str_detect
+#' @importFrom stringr str_match
+parse_log_string <- function(input_string,suffix=2) {
+  # 检查是否包含 log
+  if (!str_detect(input_string, "^log")) {
+    return(input_string)
+  }
+  
+  # 匹配不同的情况
+  match <- str_match(input_string, "^log(\\d*)(?:\\+(\\d+))?$")
+  
+  if (is.na(match[1, 1])) {
+    stop("Please check the method format in the EMP_decostand.")
+  }
+  
+  # 提取 log 和相关部分
+  log_part <- "log"
+  suffix <- ifelse(match[1, 2] == "", suffix, as.numeric(match[1, 2]))
+  addition <- ifelse(is.na(match[1, 3]), NA, as.numeric(match[1, 3]))
+  
+  # 返回结果
+  return(list(
+    log = log_part,
+    suffix = suffix,
+    log_addition = addition
+  ))
+}
+
+log_name_create<- function(parse_log_string){
+  if (!is.na(parse_log_string$log_addition)) {
+    log_method_name <- paste0(parse_log_string$log, parse_log_string$suffix,'+',parse_log_string$log_addition)
+  }else{
+    log_method_name <- paste0(parse_log_string$log, parse_log_string$suffix)
+  }
+  return(log_method_name)
+}
+
+check_MARGIN <- function (method,bySample) {
+  method <- parse_log_string(method) |> unlist()
+  if (method[1] == 'relative') {
+    method[1] <- 'total'
+  }
+  if (bySample != 'default' & is.logical(bySample)) {
+    MARGIN <- ifelse(bySample, 1, 2)
+  }else {
+    switch(method[1],
+           "total" = {
+             MARGIN <- 1
+           },
+           "max" = {
+             MARGIN <- 2
+           },
+           "frequency" = {
+             MARGIN <- 2
+           },
+           "normalize" = {
+             MARGIN <- 1
+           },
+           "range" = {
+             MARGIN <- 2
+           },
+           "rank" = {
+             MARGIN <- 1
+           },
+           "standardize" = {
+             MARGIN <- 2
+           },
+           "pa" = {
+             MARGIN <- 1
+           },
+           "chi.square" = {
+             MARGIN <- 1
+           },
+           "hellinger" = {
+             MARGIN <- 1
+           },
+           "log" = {
+             MARGIN <- 1
+           },
+           "alr" = {
+             MARGIN <- 1
+           },
+           "clr" = {
+             MARGIN <- 1
+           },
+           "rclr" = {
+             MARGIN <- 1
+           }, 
+           "integer" = {
+             MARGIN <- 1
+           },              
+           {
+             stop("MARGIN is missing!")
+           }
+    )
+  }
+  return(MARGIN)
+}
+
+message_MARGIN <- function(method,MARGIN=MARGIN,suffix=2){
+  message_info <- list()
+  method_trans <- parse_log_string(method,suffix=suffix)
+  method_trans_unlist <- unlist(method_trans)
+  if (!method_trans_unlist[1] %in% c('log','pa','integer')) {
+    decostand_info <- c('Sample','Feature')
+    message_info %<>% append(paste0('Standardization method proceed according to ',decostand_info[MARGIN],'!')) 
+  }
+  
+  if (method_trans_unlist[1] == 'log') {
+    method_name <- log_name_create(method_trans)
+    message_info %<>% append(paste0('Standardization method proceed by ',method_name,'!')) 
+  }
+  
+  return(message_info)
+}
+
+check_method_name <- function(method,suffix=2){
+  method_trans <- parse_log_string(method,suffix=suffix)
+  method_trans_unlist <- unlist(method_trans)
+  
+  if (method_trans_unlist[1]=="log"){
+    method_name <- log_name_create(parse_log_string = method_trans)
+  }else{
+    method_name <- method_trans
+  }
+  
+  if (method_trans_unlist[1] == 'total') {
+    method_name  <- 'relative'
+  }
+  
+  return(method_name)
 }

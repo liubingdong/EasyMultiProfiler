@@ -78,7 +78,9 @@ However, the results from cmdscale would still differ, since CA is a weighted or
 
 10. hellinger: square root of method = "relative" (Legendre & Gallagher 2001).(default bySample = TRUE)
 
-11. log: logarithmic transformation. Higher bases give less weight to quantities and more to presences, and logbase = Inf gives the presence/absence scaling.
+11. log: logarithmic transformation(Here is differrent from decostand in the vegan package). The transformation only applies a logarithmic change to values greater than 0, while values equal to 0 remain unchanged. 
+The method can be written as log2+1, which means adding 1 to all data first, followed by a base-2 logarithmic transformation. 
+If written as log or log+1, it will operate according to the specified logarithmic base.
 
 12. alr: Additive log ratio ("alr") transformation (Aitchison 1986) reduces data skewness and compositionality bias. 
 The transformation assumes positive values, pseudocounts can be added with the argument pseudocount. 
