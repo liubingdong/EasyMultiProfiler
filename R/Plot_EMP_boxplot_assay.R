@@ -107,7 +107,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
-#' @param ... Further parameters passed to the function ggsignif::geom_signif
+#' @param ... Additional parameters, see also \code{\link[ggsignif]{geom_signif}}
 #' @rdname EMP_boxplot
 
 EMP_boxplot.EMP_assay_boxplot_union <- function(obj,plot_category = 1,method = 'wilcox.test',

@@ -13,7 +13,7 @@ EMP_save_var(data, var_name, envir = .GlobalEnv, ...)
 
 \item{envir}{the \link{environment} to use.}
 
-\item{...}{Further parameters passed to assign.}
+\item{...}{Addtional parameters, see also \code{\link[base]{assign}}.}
 }
 \value{
 EMPT object

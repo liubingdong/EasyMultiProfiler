@@ -15,9 +15,9 @@ EMP_curveplot_enrich(obj, plot_category = 1, seed = 123, geneSetID, ...)
 \arguments{
 \item{obj}{Object in EMPT format.}
 
-\item{...}{Further parameters passed to the function enrichplot::gseaplot2}
+\item{...}{Additional parameters, see also \code{\link[enrichplot]{gseaplot2}}}
 
-\item{plot_category}{An interger.More plot style.}
+\item{plot_category}{An interger.More plot style.[under constrution]}
 
 \item{seed}{An interger. Set the random seed to the plot.(default:123)}
 

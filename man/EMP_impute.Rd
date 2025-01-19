@@ -45,7 +45,7 @@ EMP_impute(
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{Further parameters passed to the function missRanger::missRanger.}
+\item{...}{Additional parameters, see also \code{\link[missRanger]{missRanger}}}
 }
 \value{
 EMPT object

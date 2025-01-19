@@ -55,7 +55,7 @@ EMP_boxplot.EMP_assay_boxplot_union(
 \arguments{
 \item{obj}{EMPT object}
 
-\item{...}{Further parameters passed to the function ggsignif::geom_signif}
+\item{...}{Additional parameters, see also \code{\link[ggsignif]{geom_signif}}}
 
 \item{plot_category}{An interger.More plot style.(under constrution)}
 

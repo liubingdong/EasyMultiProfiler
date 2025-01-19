@@ -663,7 +663,7 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
 #' @param data data 
 #' @param var_name  a name to be assigned to data.
 #' @param envir the \link{environment} to use.
-#' @param ... Further parameters passed to assign.
+#' @param ... Addtional parameters, see also \code{\link[base]{assign}}.
 #' @rdname EMP_save_var
 #' @return EMPT object
 #' @export

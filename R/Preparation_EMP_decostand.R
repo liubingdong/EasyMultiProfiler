@@ -60,7 +60,7 @@
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001)
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to the function vegan::decostand.
+#' @param ... Addtional parameters, see also \code{\link[vegan]{decostand}}.
 #' @section Detaild about method:
 #' The following method from vegan::decostand are available：
 #' \describe{

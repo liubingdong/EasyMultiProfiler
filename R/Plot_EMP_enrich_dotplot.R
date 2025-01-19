@@ -3,7 +3,7 @@
 #' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param color A character string. Variable that used to color enriched terms, e.g. 'pvalue', 'p.adjust' or 'qvalue'
 #' @param showCategory A number or a list of terms. If it is a number, the first n terms will be displayed. If it is a list of terms, the selected terms will be displayed.
-#' @param ... Further parameters passed to enrichplot::dotplot.
+#' @param ... Addtional parameters, see also \code{\link[enrichplot]{dotplot}}.
 #' @rdname EMP_dotplot
 #'
 #' @examples

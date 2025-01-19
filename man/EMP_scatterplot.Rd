@@ -35,7 +35,7 @@ EMP_scatterplot.EMP_dimension_analysis(
 \arguments{
 \item{obj}{EMPT object}
 
-\item{...}{Further parameters passed to the function ggsignif::geom_signif}
+\item{...}{Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}}
 
 \item{seed}{An interger. Set the random seed for the adonis permutations.}
 

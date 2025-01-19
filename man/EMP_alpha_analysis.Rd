@@ -15,7 +15,7 @@ EMP_alpha_analysis(obj, experiment, use_cached = TRUE, action = "add", ...)
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{Further parameters passed to the function vegan::diversity}
+\item{...}{Addtional parameters, see also \code{\link[vegan]{diversity}}.}
 }
 \value{
 EMPT object

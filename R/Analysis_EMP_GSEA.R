@@ -373,8 +373,7 @@ get_enrich_data <- function(method = "kegg", geneList,
 #' @param OrgDb OrgDb in Go analysis.
 #' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
-#' @param ... Further parameters passed to clusterProfiler::GSEA, clusterProfiler::gseGO, ReactomePA::gsePathway and DOSE::gseDO
-#'
+#' @param ... Further parameters passed to \code{\link[clusterProfiler]{GSEA}} for KEGG, \code{\link[clusterProfiler]{gseGO}} for Go, \code{\link[ReactomePA]{gsePathway}} for reactome and \code{\link[DOSE]{gseDO}} for DOSE.
 #' @return EMPT object
 #' @export
 #' @section Detaild about method:

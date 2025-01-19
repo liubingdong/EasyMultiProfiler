@@ -21,7 +21,7 @@ EMP_netplot_enrich(obj, plot_category = 1, seed = 123, showCategory = 10, ...)
 \arguments{
 \item{obj}{EMP or EMPT object}
 
-\item{...}{Further parameters passed to enrichplot::cnetplot.}
+\item{...}{Additional parameters, see also \code{\link[enrichplot]{cnetplot}}}
 
 \item{plot_category}{An interger. More plot style.(under constrution)}
 

@@ -201,7 +201,7 @@
 #' @param verbose An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to the function Boruta::Boruta, randomForest, xgboost::xgboost, glmnet::cv.glmnet.
+#' @param ... Further parameters passed to the function \code{\link[Boruta]{Boruta}}, \code{\link[randomForest]{randomForest}}, \code{\link[xgboost]{xgboost}} and \code{\link[glmnet]{cv.glmnet}}.
 #' @importFrom memoise forget
 #' @return EMPT object
 #' @export

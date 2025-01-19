@@ -218,8 +218,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #' @param OrgDb OrgDb in Go analysis.
 #' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
-#' @param ... Further parameters passed to compareCluster,enricher, enrichGO, enrichPathway, enrichDO in clusterProfiler package.
-#'
+#' @param ... Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[clusterProfiler]{enrichPathway}}, \code{\link[clusterProfiler]{enrichDO}}.
 #' @return EMPT object
 #' @export
 #' @section Detaild about method:

@@ -39,7 +39,7 @@ EMP_collapse(
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
-\item{...}{Further parameters passed to the function mean, sum, median, min, max in the base package.}
+\item{...}{Further parameters passed to the function \code{\link[base]{mean}}, \code{\link[base]{sum}}, \code{\link[base]{median}}, \code{\link[base]{min}}, \code{\link[base]{max}} in the base package.}
 }
 \value{
 EMPT object

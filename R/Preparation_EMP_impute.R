@@ -73,7 +73,7 @@
 #' @param verbose Controls how much info is printed to screen. 0 to print nothing.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to the function missRanger::missRanger.
+#' @param ... Additional parameters, see also \code{\link[missRanger]{missRanger}}
 #' @importFrom missRanger missRanger
 #'
 #' @return EMPT object

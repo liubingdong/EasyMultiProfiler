@@ -81,7 +81,7 @@ EMP_GSEA_analysis(
 
 \item{organism}{For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".}
 
-\item{...}{Further parameters passed to clusterProfiler::GSEA, clusterProfiler::gseGO, ReactomePA::gsePathway and DOSE::gseDO}
+\item{...}{Further parameters passed to \code{\link[clusterProfiler]{GSEA}} for KEGG, \code{\link[clusterProfiler]{gseGO}} for Go, \code{\link[ReactomePA]{gsePathway}} for reactome and \code{\link[DOSE]{gseDO}} for DOSE.}
 }
 \value{
 EMPT object

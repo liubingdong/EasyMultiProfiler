@@ -36,10 +36,7 @@ EMP_volcanol_plot(
 
 \item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
 
-\item{...}{Further parameters passed to ggrepel::geom_text_repel}
-}
-\value{
-EMPT object
+\item{...}{Further parameters passed to \code{\link[ggrepel]{geom_text_repel}}.}
 }
 \description{
 EMP volcanol plot

@@ -39,7 +39,7 @@ EMP_diff_analysis(
 
 \item{core}{A number. Select the core numbers in the parallel compute to speed up the result.When no core is set and the number of features exceeds 2000, the default will use all CPU cores minus one.}
 
-\item{...}{Further parameters passed to the function tidybulk::test_differential_abundance, or statistical function in the stats package.}
+\item{...}{Further parameters passed to the function \code{\link[tidybulk]{test_differential_abundance}} or \code{\link[stats]{t.test}}, \code{\link[stats]{wilcox.test}}, \code{\link[stats]{kruskal.test}},\code{\link[stats]{oneway.test}}.}
 }
 \value{
 EMPT object

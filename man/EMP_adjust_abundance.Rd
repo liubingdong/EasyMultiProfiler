@@ -30,7 +30,7 @@ EMP_adjust_abundance(
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{Further parameters passed to the function tidybulk::adjust_abundance.}
+\item{...}{Further parameters passed to the function \code{\link[tidybulk]{adjust_abundance}}.}
 }
 \value{
 EMPT object

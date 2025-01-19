@@ -54,7 +54,7 @@ EMP_marker_analysis(
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{...}{Further parameters passed to the function Boruta::Boruta, randomForest, xgboost::xgboost, glmnet::cv.glmnet.}
+\item{...}{Further parameters passed to the function \code{\link[Boruta]{Boruta}}, \code{\link[randomForest]{randomForest}}, \code{\link[xgboost]{xgboost}} and \code{\link[glmnet]{cv.glmnet}}.}
 }
 \value{
 EMPT object

@@ -55,7 +55,7 @@
 #' @param .factor_unwanted A tidy select, e.g. column names without double quotation. c(batch, country) These are the factor that we want to adjust for, including unwanted batcheffect, and unwanted biological effects.
 #' @param .factor_of_interest A tidy select, e.g. column names without double quotation. c(treatment) These are the factor that we want to preserve.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to the function tidybulk::adjust_abundance.
+#' @param ... Further parameters passed to the function \code{\link[tidybulk]{adjust_abundance}}.
 #' @importFrom memoise forget
 #'
 #' @return EMPT object

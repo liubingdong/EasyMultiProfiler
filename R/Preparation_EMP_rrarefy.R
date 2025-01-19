@@ -73,8 +73,7 @@
 #' @param only_show_depth A boolean. Whether the function only show the depth or not.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to the function vegan::rrarefy.
-#'
+#' @param ... Additional parameters, see also \code{\link[vegan]{rrarefy}}
 #' @return EMPT object
 #' @export
 #'

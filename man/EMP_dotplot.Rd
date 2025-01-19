@@ -28,7 +28,7 @@ EMP_dotplot_enrich(
 \arguments{
 \item{obj}{EMPT or EMP object}
 
-\item{...}{Further parameters passed to enrichplot::dotplot.}
+\item{...}{Addtional parameters, see also \code{\link[enrichplot]{dotplot}}.}
 
 \item{plot_category}{An interger.More plot style.(under constrution)}
 

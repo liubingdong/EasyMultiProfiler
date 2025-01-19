@@ -122,8 +122,7 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
 #' @param mytheme Modify components of a theme according to the ggplot2::theme.
-#' @param ... Further parameters passed to ggrepel::geom_text_repel
-#' @return EMPT object
+#' @param ... Further parameters passed to \code{\link[ggrepel]{geom_text_repel}}.
 #' @export
 #'
 #' @examples

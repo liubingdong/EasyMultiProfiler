@@ -142,9 +142,8 @@
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param group_level A series of character strings. Determine the comparison order of groups.
 #' @param core A number. Select the core numbers in the parallel compute to speed up the result.When no core is set and the number of features exceeds 2000, the default will use all CPU cores minus one.
-#' @param ... Further parameters passed to the function tidybulk::test_differential_abundance, or statistical function in the stats package.
+#' @param ... Further parameters passed to the function \code{\link[tidybulk]{test_differential_abundance}} or \code{\link[stats]{t.test}}, \code{\link[stats]{wilcox.test}}, \code{\link[stats]{kruskal.test}},\code{\link[stats]{oneway.test}}.
 #' @importFrom memoise forget
-#'
 #' @return EMPT object
 #' @export
 #'

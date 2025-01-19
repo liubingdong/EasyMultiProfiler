@@ -1,5 +1,3 @@
-#' @param EMPT wait_for_add
-#' @param ... wait_for_add
 #' @importFrom tibble column_to_rownames
 #' @importFrom vegan diversity
 #' @importFrom dplyr select
@@ -46,7 +44,7 @@ EMP_alpha_analysis_m <- memoise::memoise(.EMP_alpha_analysis,cache = cachem::cac
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param ... Further parameters passed to the function vegan::diversity
+#' @param ... Addtional parameters, see also \code{\link[vegan]{diversity}}.
 #' @importFrom memoise forget
 #'
 #' @return EMPT object

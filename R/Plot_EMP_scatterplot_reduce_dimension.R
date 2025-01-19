@@ -29,7 +29,8 @@
 #' @param html_height An interger. Set the html height.
 #' @param force_adonis Force the function run adnois analysis always.(default:FALSE)
 #' @param adonis_permutations Permutations for the adonis2.(default:999)
-#' @param ... Further parameters passed to the function ggsignif::geom_signif
+#' @param ... Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}
+
 #' @rdname EMP_scatterplot
 #' @return EMPT object
 #' @importFrom ggsignif geom_signif
