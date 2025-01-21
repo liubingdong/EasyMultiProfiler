@@ -115,4 +115,8 @@ MAE |>
 ## Transfer data into logformat.
 MAE |>
   EMP_decostand(experiment = 'geno_ec',method = 'log',logbase = 2) 
+
+## Add 1 to all the data, then apply a log transformation.
+MAE |>
+  EMP_decostand(experiment = 'geno_ec',method = 'log3+1') 
 }

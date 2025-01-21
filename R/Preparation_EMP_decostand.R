@@ -137,6 +137,10 @@
 #' ## Transfer data into logformat.
 #' MAE |>
 #'   EMP_decostand(experiment = 'geno_ec',method = 'log',logbase = 2) 
+#'
+#' ## Add 1 to all the data, then apply a log transformation.
+#' MAE |>
+#'   EMP_decostand(experiment = 'geno_ec',method = 'log3+1') 
 EMP_decostand <- function(obj,experiment,method,bySample='default',logbase =2,use_cached = TRUE,pseudocount=0.0000001,action='add',...){
   call <- match.call()
   if (is(obj,"MultiAssayExperiment")) {
