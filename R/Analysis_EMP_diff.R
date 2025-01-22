@@ -42,6 +42,8 @@
 
   melt_EMPT <- tiny_EMPT %>% tidybulk::tidybulk()
 
+  try( melt_EMPT[[estimate_group]] <- droplevels(melt_EMPT[[estimate_group]]),silent = TRUE)
+
   check_group <- melt_EMPT %>% dplyr::pull(estimate_group) %>% dplyr::n_distinct() == 2
   if(!check_group ) {
     stop('For ',method,' only support supports two-category group!')
@@ -86,7 +88,13 @@
     design_info <- paste0(origin_group_level[1],' vs ', origin_group_level[2])
     design_info_detail <- strsplit(design_info,'vs') %>% unlist() %>% trimws()
   }else {
-    design_raw_info <- factor(colData(EMPT)[[estimate_group]]) %>% unique()
+    
+    if (!is.factor(melt_EMPT[[estimate_group]])) {
+      melt_EMPT[[estimate_group]] <- factor(melt_EMPT[[estimate_group]])
+    }
+
+    design_raw_info <- melt_EMPT[[estimate_group]] %>% unique() %>% sort()
+
     design_info <- paste0(design_raw_info[2],' vs ',design_raw_info[1])
     design_info_detail <- rev(design_raw_info)
   }
@@ -140,7 +148,7 @@
 #' @param estimate_group A character string. Select the group name in the coldata to be calculated.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
-#' @param group_level A series of character strings. Determine the comparison order of groups.
+#' @param group_level A series of character strings. Determine the comparison order of groups. when group_level activted,.formula should be ~0+[your interested group] for edger and limma.
 #' @param core A number. Select the core numbers in the parallel compute to speed up the result.When no core is set and the number of features exceeds 2000, the default will use all CPU cores minus one.
 #' @param ... Further parameters passed to the function \code{\link[tidybulk]{test_differential_abundance}} or \code{\link[stats]{t.test}}, \code{\link[stats]{wilcox.test}}, \code{\link[stats]{kruskal.test}},\code{\link[stats]{oneway.test}}.
 #' @importFrom memoise forget
@@ -376,7 +384,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
 
   if (length(subgroup) == 2 & assay_name %in% c('relative','counts','integer','coldata')) {
     if (is.null(group_level)) {
-      group_level <- means[[estimate_group]] %>% as.factor() %>% rev()
+      group_level <- means[[estimate_group]] %>% unique()
     }else {
       group_level <- group_level
     }

@@ -35,7 +35,7 @@ EMP_diff_analysis(
 
 \item{action}{A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
-\item{group_level}{A series of character strings. Determine the comparison order of groups.}
+\item{group_level}{A series of character strings. Determine the comparison order of groups. when group_level activted,.formula should be ~0+[your interested group] for edger and limma.}
 
 \item{core}{A number. Select the core numbers in the parallel compute to speed up the result.When no core is set and the number of features exceeds 2000, the default will use all CPU cores minus one.}
 
