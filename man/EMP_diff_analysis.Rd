@@ -47,6 +47,14 @@ EMPT object
 \description{
 Differential expression or abundance analysis
 }
+\section{Detaild about p.adjust}{
+
+When using common transcriptome differential analysis methods, such as DESeq2, it’s important to note that the method internally filters genes before adjusting p-values. 
+As a result, the adjusted p-values may differ from those obtained using unfiltered data. 
+To ensure consistency, you can first apply gene filtering using the EMP_identify_assay function with the edgeR method. 
+This approach ensures that the adjusted p-values remain consistent.
+}
+
 \examples{
 data(MAE)
 ## t.test or wilcox.test
