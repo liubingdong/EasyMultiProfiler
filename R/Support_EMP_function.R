@@ -681,6 +681,53 @@ EMP_save_var <- function(data, var_name,envir = .GlobalEnv,...) {
   return(data) 
 }
 
+#' Info output with style and color
+#' @param str data 
+#' @param order  a name to be assigned to data.
+#' @param pure logical. Default message, warning and stop.
+#' @param show character including message, warning and stop.
+#' @param call. logical, indicating if the call should become part of the warning or error message.
+#' @param ... See also \code{\link[base]{message}}, \code{\link[base]{warning}} and \code{\link[base]{stop}}.
+#' @export
+#' @author Bingdong Liu
+#' @section Detaild :
+#' This function performed followed by the ANSI.
+#'
+#' @examples
+#' # blue
+#' EMP_message('Hello World',color = 94,order = 0)
+#' # green 
+#' EMP_message('Hello World',color = 32,order = 0)
+#' # green and bold
+#' EMP_message('Hello World',color = 32,order = 1)
+#' # background  
+#' EMP_message('Hello World',color = 31,order = 7)
+#' # underline 
+#' EMP_message('Hello World',color = 32,order = 4)
+#' # italics 
+#' EMP_message('Hello World',color = 32,order = 3)
+#' # blurred
+#' EMP_message('Hello World',color = 32,order = 2)
+#' 
+#' # warning with background  
+#' EMP_message('Hello World',color = 31,order = 7,show='warning')
+#' 
+#' # stop with background  
+#' EMP_message('Hello World',color = 31,order = 7,show='stop')
+EMP_message <- function(str,order=0,color=32,pure=FALSE,show='message',call.=FALSE,...) {
+  stopifnot(is.logical(pure))
+  show <- match.arg(show,c('message','stop','warning'))
+  if (pure) {
+    info <- str
+  }else{
+    info <- paste0("\033[",order,";",color,"m",str,"\033[0m")
+  }
+  switch (show,
+    'message' = {message(info,...)},
+    'warning' = {warning(info,call. = call.,...)},
+    'stop' = {stop(info,call. = call.,...)}
+  )
+}
 
 
 
