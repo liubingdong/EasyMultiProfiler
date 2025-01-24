@@ -1,4 +1,4 @@
-# Due to some unexpected conflicts, we extract some source code from the open-source R package and modifed them to fit EMP package.
+# Due to some unexpected conflicts and reduce the install difficulty, we extract some source code from the open-source R package and modifed them to fit EMP package.
 # We strongly appreciate their contribution and if any issues, please contact us with Email: 382983280@qq.com
 
 
@@ -557,4 +557,3 @@ WGCNA_blockwiseModules <- function (datExpr, weights = NULL, checkMissingData = 
         dendrograms = dendros, TOMFiles = TOMFiles, blockGenes = blockGenes, 
         blocks = blocks, MEsOK = MEsOK)
 }
-

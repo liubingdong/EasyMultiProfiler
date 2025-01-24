@@ -310,7 +310,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
  if (force_adonis == FALSE) {
    if (check_dim > 8.1e+07 | check_sample_num > 500) {
-   message_wrap("Large-scale data require more time for adonis. If need this, please enable the force_adonis = TRUE.")
+   EMP_message("Large-scale data require more time for adonis.\nIf need this, please enable the force_adonis = TRUE.",color = 31,order = 1,show='message')
    }
  }else if (force_adonis == TRUE) {
    check_dim <- 1

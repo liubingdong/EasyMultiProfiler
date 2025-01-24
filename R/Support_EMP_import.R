@@ -2,7 +2,8 @@
 ##' @importFrom yulab.utils yread
 kegg_rest <- function(rest_url) {
     `.` <- NULL
-    message('Reading KEGG annotation online: "', rest_url, '"...')
+    info_output <- paste0('Reading KEGG annotation online: "', rest_url, '"...')
+    EMP_message(info_output,color = 32,order = 1,show='message')
     # content <- readLines(f)
     content <- yread(rest_url)
     content %<>% strsplit(., "\t") %>% do.call('rbind', .)
@@ -32,7 +33,7 @@ humann_function_import <- function(file=NULL,data=NULL,type) {
   temp %<>% dplyr::filter(!stringr::str_detect(feature,'\\|') & !stringr::str_detect(feature,'UN'))
   
   if (any(is.na(temp[,-1]))) {
-    message("The NA value has been detected in the data and changed into 0!")
+    EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
     temp[,-1][is.na(temp[,-1])] <- 0
   }
 
@@ -61,7 +62,7 @@ humann_taxonomy_import <- function(file=NULL,data=NULL,sep = '|') {
   temp%<>%dplyr::filter(stringr::str_detect(feature,'\\|t_'))
 
   if (any(is.na(temp[,-1]))) {
-    message("The NA value has been detected in the data and changed into 0!")
+    EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
     temp[,-1][is.na(temp[,-1])] <- 0
   }
 
@@ -143,7 +144,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
                    tibble::rownames_to_column('feature') 
                }, 
                {
-                  stop('parameter file_format must be NULL, biom or qzv')
+                  stop('Parameter file_format must be NULL, biom or qzv')
                }
  
         )        
@@ -167,7 +168,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
   temp[["feature"]] <- gsub(paste0(' ',sep), sep, temp[["feature"]])
 
   if (any(is.na(temp[,-1]))) {
-    message("The NA value has been detected in the data and changed into 0!")
+    EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
     temp[,-1][is.na(temp[,-1])] <- 0
   }
 
@@ -211,7 +212,7 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
     check_duplicated_feature <- any(duplicated(temp$feature))
     if(check_duplicated_feature){
       duplicate_feature <- TRUE
-      message("The duplicated name in the feature have been detected. Parameter duplicate_feature is forced to be TRUE.")
+      EMP_message("The duplicated name in the feature have been detected.\nParameter duplicate_feature is forced to be TRUE.",color = 32,order = 1,show='message')
     }else{
       duplicate_feature <- FALSE
     }
@@ -345,7 +346,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
     colnames(temp)[1] <- 'feature'
 
     if (any(is.na(temp[,-1]))) {
-      message("The NA value has been detected in the data and changed into 0!")
+      EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
       temp[,-1][is.na(temp[,-1])] <- 0
     }
 
@@ -395,7 +396,7 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
       sampleID <- dfmap %>% as.data.frame() %>% dplyr::filter(assay == !!assay) %>%
         dplyr::pull(colname)
     }else{
-      message('The function will consider all column as samples. If the data contain rowdata, please define sampleID!')
+      EMP_message("The function will consider all column as samples.\nIf the data contain rowdata, please define sampleID!",color = 32,order = 1,show='message')
       sampleID <- colnames(data)[-1]
     }
   }
@@ -403,7 +404,7 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
   colnames(data)[1] <- 'feature'
 
   if (any(is.na(data[,sampleID]))) {
-    message("The NA value has been detected in the data and changed into 0!")
+    EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
     data[,sampleID][is.na(data[,sampleID])] <- 0
   }
 
@@ -441,7 +442,7 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
     sampleID <- colnames(data)[-1]
 
     if (any(is.na(data[,-1]))) {
-      message("The NA value has been detected in the data and changed into 0!")
+      EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
       data[,-1][is.na(data[,-1])] <- 0
     }
     
@@ -457,7 +458,7 @@ EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sample
   }else{
 
     if (any(is.na(data[,sampleID]))) {
-      message("The NA value has been detected in the data and changed into 0!")
+      EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
       data[,sampleID][is.na(data[,sampleID])] <- 0
     }  
       

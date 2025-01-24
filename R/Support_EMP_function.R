@@ -683,7 +683,8 @@ EMP_save_var <- function(data, var_name,envir = .GlobalEnv,...) {
 
 #' Info output with style and color
 #' @param str data 
-#' @param order  a name to be assigned to data.
+#' @param order order.
+#' @param color color.
 #' @param pure logical. Default message, warning and stop.
 #' @param show character including message, warning and stop.
 #' @param call. logical, indicating if the call should become part of the warning or error message.
@@ -693,7 +694,59 @@ EMP_save_var <- function(data, var_name,envir = .GlobalEnv,...) {
 #' @section Detaild :
 #' This function performed followed by the ANSI.
 #'
+#' For color example:
+#'
+#' 30: Black
+#'
+#' 31: Red
+#'
+#' 32: Green
+#'
+#' 33: Yellow
+#'
+#' 34: Blue
+#'
+#' 35: Magenta
+#'
+#' 36: Cyan
+#'
+#' 37: White
+#'
+#'
+#' For order example:
+#'
+#' 0: Regular
+#'
+#' 1: Bold
+#'
+#' 2: blurred
+#'
+#' 3: Italic
+#'
+#' 4: Underline
+#'
+#' 5: Blinking text
+#'
+#' 9: Strikethrough
+#'
+#' 40: Black background
+#'
+#' 41: Red background
+#'
+#' 42: Green background
+#'
+#' 43: Yellow background
+#'
+#' 44: Blue background
+#'
+#' 45: Magenta background
+#'
+#' 46: Cyan background
+#'
+#' 47: White background
+#'
 #' @examples
+#' \dontrun{
 #' # blue
 #' EMP_message('Hello World',color = 94,order = 0)
 #' # green 
@@ -714,6 +767,7 @@ EMP_save_var <- function(data, var_name,envir = .GlobalEnv,...) {
 #' 
 #' # stop with background  
 #' EMP_message('Hello World',color = 31,order = 7,show='stop')
+#' }
 EMP_message <- function(str,order=0,color=32,pure=FALSE,show='message',call.=FALSE,...) {
   stopifnot(is.logical(pure))
   show <- match.arg(show,c('message','stop','warning'))

@@ -17,7 +17,9 @@ EMP_message(
 \arguments{
 \item{str}{data}
 
-\item{order}{a name to be assigned to data.}
+\item{order}{order.}
+
+\item{color}{color.}
 
 \item{pure}{logical. Default message, warning and stop.}
 
@@ -33,9 +35,61 @@ Info output with style and color
 \section{Detaild }{
 
 This function performed followed by the ANSI.
+
+For color example:
+
+30: Black
+
+31: Red
+
+32: Green
+
+33: Yellow
+
+34: Blue
+
+35: Magenta
+
+36: Cyan
+
+37: White
+
+
+For order example:
+
+0: Regular
+
+1: Bold
+
+2: blurred
+
+3: Italic
+
+4: Underline
+
+5: Blinking text
+
+9: Strikethrough
+
+40: Black background
+
+41: Red background
+
+42: Green background
+
+43: Yellow background
+
+44: Blue background
+
+45: Magenta background
+
+46: Cyan background
+
+47: White background
 }
 
 \examples{
+\dontrun{
 # blue
 EMP_message('Hello World',color = 94,order = 0)
 # green 
@@ -56,6 +110,7 @@ EMP_message('Hello World',color = 31,order = 7,show='warning')
 
 # stop with background  
 EMP_message('Hello World',color = 31,order = 7,show='stop')
+}
 }
 \author{
 Bingdong Liu

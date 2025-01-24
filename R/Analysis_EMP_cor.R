@@ -150,7 +150,7 @@
       data_length <- data_length-1  
       count_id <- count_id+1
     }else{
-      message('No proper relationship was constructed, please reset the parameters! ')
+      EMP_message("No proper relationship was constructed, please reset the parameters!",color = 31,order = 1,show='warning')
       break
     }
   }

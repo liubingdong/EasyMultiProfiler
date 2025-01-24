@@ -16,7 +16,7 @@
   switch(method,
          "pca" = {
            if(!is.null(distance)){
-             message("Parameter distance in pca is euclidean!")
+             EMP_message("Parameter distance in pca is euclidean!",color = 32,order = 1,show='message')
            }
            distance <- 'euclidean'
            sample_name <- rownames(assay_data)
@@ -38,7 +38,7 @@
            check_dim <- dim(assay_data)[1] * dim(assay_data)[2]
            check_sample_num <- dim(assay_data)[1]
            if (check_dim > 1e+05 | check_sample_num > 500) {
-             message_wrap("Large-scale data need longer computation time in PCoA.")
+            EMP_message("Large-scale data need longer computation time in PCoA.",color = 32,order = 1,show='message')
            }
            
            pca_result <- stats::cmdscale(assay_data_dis,k=3,eig=T)
@@ -52,7 +52,7 @@
            rlang::check_installed(c('BiocManager'), reason = 'for EMP_dimension_analysis().', action = install.packages) 
            rlang::check_installed(c('ropls'), reason = 'for EMP_dimension_analysis().', action = BiocManager::install)            
            if(!is.null(distance)){
-             message("Parameter distance in pls is useless!")
+             EMP_message("Parameter distance in pls is useless!",color = 32,order = 1,show='message')
              distance <- NULL
            }
            estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
@@ -82,7 +82,7 @@
            rlang::check_installed(c('BiocManager'), reason = 'for EMP_dimension_analysis().', action = install.packages) 
            rlang::check_installed(c('ropls'), reason = 'for EMP_dimension_analysis().', action = BiocManager::install)       
            if(!is.null(distance)){
-             message("Parameter distance in opls is useless!")
+             EMP_message("Parameter distance in opls is useless!",color = 32,order = 1,show='message')
              distance <- NULL
            }
            estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
@@ -104,8 +104,7 @@
            
            
            if(!is.null(opsda_raw) & length(opsda_raw@modelDF) == 0) {
-             message_wrap("No model was built because the first predictive component was already not significant!")
-             message_wrap("Filter the input data may improve the issue!")
+             EMP_message("No model was built because the first predictive component was not significant!\nFilter the input data may improve the issue!",color = 31,order = 1,show='warning')
              stop()
            }
            
@@ -149,7 +148,7 @@
 
          },
          {
-           print('method in EMP_reduce_dimension should be pca, pcoa, pls, opls or umap!')
+           stop('Parameter method in EMP_reduce_dimension should be pca, pcoa, pls, opls or umap!')
          }
   )
   
@@ -258,7 +257,7 @@ EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,us
     try(deposit[['dimension_VIP']] <- EMPT@deposit$dimension_VIP,silent = T)
     return(deposit)
   }else{
-    warning('action should be one of add or get!')
+    warning('Parameter action should be one of add or get!')
   }
 
 }

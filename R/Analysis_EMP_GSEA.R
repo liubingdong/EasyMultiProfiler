@@ -141,17 +141,19 @@ get_enrich_data <- function(method = "kegg", geneList,
     }else {
       KEGG_info <- kegg.params$KEGG_Type
     }    
-    message("KEGG analysis performed: \nkeyType: ",kegg.params$keyType,'\t KEGG_Type: ',KEGG_info,'\t species: ',kegg.params$species)    
-    enrich.data <- gsea_kegg(geneList, kegg.params, pvalueCutoff = pvalueCutoff, seed = seed, ...)
+    info_ouput <- paste0("KEGG analysis performed: \nkeyType: ",kegg.params$keyType,'\t KEGG_Type: ',KEGG_info,'\t species: ',kegg.params$species)
+    EMP_message(info_ouput,color=32,order=1,show='message')       
+    enrich.data <- gsea_kegg(geneList, kegg.params, pvalueCutoff = pvalueCutoff, seed = seed, ...) |> suppressMessages()
   }
   if (method == "go") {
-    message("Go analysis performed: \nkeyType: ",go.params$keyType,'\t ont: ',go.params$ont)    
-    enrich.data <- gsea_go(geneList, go.params, pvalueCutoff = pvalueCutoff, seed = seed, ...)
+    info_ouput <- paste0("Go analysis performed: \nkeyType: ",go.params$keyType,'\t ont: ',go.params$ont)
+    EMP_message(info_ouput,color=32,order=1,show='message')    
+    enrich.data <- gsea_go(geneList, go.params, pvalueCutoff = pvalueCutoff, seed = seed, ...) |> suppressMessages()
   }
   if (method == "reactome") {
     reactome.params$organism <- match.arg(reactome.params$organism, c("human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly"))
-    message("Reactome analysis performed: \norganism: ",reactome.params$organism)    
-    enrich.data <- gsea_reactome(geneList, reactome.params, pvalueCutoff = pvalueCutoff, seed = seed, ...)
+    info_ouput <- paste0("Reactome analysis performed: \norganism: ",reactome.params$organism)       
+    enrich.data <- gsea_reactome(geneList, reactome.params, pvalueCutoff = pvalueCutoff, seed = seed, ...) |> suppressMessages()
   }
   if (method == "wikipathway") {
     enrich.data <- gsea_reactome(geneList, wikipathway.params, ...)
@@ -159,8 +161,9 @@ get_enrich_data <- function(method = "kegg", geneList,
   
   if (method == "do") {
     do.params$organism <- match.arg(do.params$organism, c("hsa","mmu"))
-    message("DOSE analysis performed: \nont: ",do.params$ont,"\t organism: ",do.params$organism)    
-    enrich.data <- gsea_do(geneList, do.params, pvalueCutoff = pvalueCutoff, seed = seed, ...)
+    info_ouput <- paste0("DOSE analysis performed: \nont: ",do.params$ont,"\t organism: ",do.params$organism)
+    EMP_message(info_ouput,color=32,order=1,show='message')          
+    enrich.data <- gsea_do(geneList, do.params, pvalueCutoff = pvalueCutoff, seed = seed, ...) |> suppressMessages()
   } 
   return(enrich.data)
 }
@@ -212,10 +215,9 @@ get_enrich_data <- function(method = "kegg", geneList,
 
     EMPT@deposit[['enrich_data']] <- enrich.data
     .get.estimate_group_info.EMPT(EMPT) <- Signal2Noise_data %>% dplyr::pull(var = vs) %>% unique()
-    message('VS info: ',.get.estimate_group_info.EMPT(EMPT))
-    message('The Signal2Noise values are arranged in descending order.')
+    EMP_message(paste0('VS info: ',.get.estimate_group_info.EMPT(EMPT)),color = 32,order = 1,show='message')
+    EMP_message("The Signal2Noise values are arranged in descending order.",color = 32,order = 1,show='message')
     return(EMPT)
-
 }
 
 #' @importFrom dplyr desc
@@ -294,8 +296,8 @@ get_enrich_data <- function(method = "kegg", geneList,
     .get.estimate_group.EMPT(EMPT) <- estimate_group
     .get.algorithm.EMPT(EMPT) <- 'enrich_analysis'
     .get.info.EMPT(EMPT) <- 'EMP_enrich_analysis'
-    message('Correlation analysis based on ',estimate_group)
-    message('The correlation analysis values are arranged in descending order.')
+    EMP_message(paste0('Correlation analysis based on ',estimate_group),color = 32,order = 1,show='message')
+    EMP_message("The correlation analysis values are arranged in descending order.",color = 32,order = 1,show='message')
     return(EMPT)
 }
 
@@ -342,8 +344,8 @@ get_enrich_data <- function(method = "kegg", geneList,
   EMPT@deposit[['enrich_data']] <- enrich.data
   .get.algorithm.EMPT(EMPT) <- 'enrich_analysis'
   .get.info.EMPT(EMPT) <- 'EMP_enrich_analysis'
-  message('VS info: ',.get.estimate_group_info.EMPT(EMPT))
-  message('The log2FC values are arranged in descending order.')
+  EMP_message(paste0('VS info: ',.get.estimate_group_info.EMPT(EMPT)),color = 32,order = 1,show='message')
+  EMP_message("The log2FC values are arranged in descending order.",color = 32,order = 1,show='message')
   return(EMPT)
 }
 

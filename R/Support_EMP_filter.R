@@ -21,7 +21,7 @@
         dplyr::filter(feature %in% !!filterFeature)
     }
   }else {
-    warning('action must be one of kick or select!')
+    warning('Parameter action must be one of kick or select!')
   }
   return(EMPT)
 }
@@ -125,7 +125,7 @@
         # delete the plot
         if (!length(deposit@plot_deposit) == 0) {
           deposit@plot_deposit <- NULL
-          message("Because condtion has changed, all plot results will be removed!")
+          EMP_message("Because condtion has changed, all plot results will be removed!",color = 32,order = 1,show='message')
         }
 
         deposit@deposit_append <- NULL ### WGCNA delete
@@ -232,8 +232,9 @@
         }
       }else{
         EMPT@deposit[[i]] <- NULL
-        message_wrap("If any ",affect_cause, " in the experiment have changed, the ",i,
-                     " will become NULL and ",result_source, " should be re-run if needed.")
+        info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
+                     " will become NULL.\n",result_source, " should be re-run if needed.")
+        EMP_message(info_output,color = 32,order = 1,show='message')
       }
     }else if(result_attribute == 'feature'){
       if (!affect_status) {
@@ -248,13 +249,16 @@
         }
       }else{
         EMPT@deposit[[i]] <- NULL
-        message_wrap("If any ",affect_cause, " in the experiment have changed, the ",i,
-                     " will become NULL and ",result_source, " should be re-run if needed.")
+        info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
+                     " will become NULL.\n",result_source, " should be re-run if needed.")
+        EMP_message(info_output,color = 32,order = 1,show='message')
+
       }
     }else if(result_attribute == 'all'){
       EMPT@deposit[[i]] <-NULL
-      message_wrap("If any ",affect_cause, " in the experiment have changed, the ",i,
-                   " will become NULL and ",result_source, " should be re-run if needed.")
+      info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
+                   " will become NULL.\n",result_source, " should be re-run if needed.")
+      EMP_message(info_output,color = 32,order = 1,show='message')
     }else{
       stop("The attribute in the deposit_info should be primary, feature or all!")
     }

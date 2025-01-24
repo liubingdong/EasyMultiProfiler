@@ -47,7 +47,8 @@
   # Use the pseudodist to replace the NA 
   data_distance <- as.data.frame(as.matrix(data_distance))
   if (any(is.na(data_distance))) {
-    message("NA value in distance calculation, pseudodist = ",pseudodist,' activated.')
+    info_output <- paste0("NA value in distance calculation, pseudodist = ",pseudodist,' activated.')
+    EMP_message(info_output,color = 32,order = 1,show='message')
     data_distance <- data_distance %>%
       dplyr::mutate_all(function(x) tidyr::replace_na(x, pseudodist))
   }
@@ -104,7 +105,7 @@
  }else if (action=='get') {
     return(cluster_result)
  }else{
-    stop('action should be one of add or get!')
+    stop('Parameter action should be one of add or get!')
  }
 }
 

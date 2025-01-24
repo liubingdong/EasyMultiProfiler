@@ -3,7 +3,7 @@
   
   # Check if package is installed, otherwise install
   if (find.package("AnnotationDbi", quiet = TRUE) %>% length() == 0) {
-    message("EMP_feature_convert need install package AnnotationDbi!")
+    EMP_message("EMP_feature_convert need the package AnnotationDbi!",color = 32,order = 1,show='message')
     if (!requireNamespace("BiocManager", quietly = TRUE))
       install.packages("BiocManager", repos = "https://cloud.r-project.org")
     BiocManager::install("AnnotationDbi", ask = FALSE)
@@ -202,7 +202,7 @@ EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NU
   if (!is.null(to)) {
     
     if (from == to) {
-      stop("parameter 'from' should be different from 'to'!")
+      stop("The parameter 'from' should be different from 'to'!")
     }
 
     if (from %in% gene_names_total & to %in% gene_names_total) {
@@ -238,7 +238,7 @@ EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NU
   check_result <- length(EMPT@deposit)!=0 | length(EMPT@deposit_append)!=0 | length(EMPT@plot_deposit)!=0
 
   if (check_result) {
-    message('Due to the feature change, all results should be re-run if needed.')
+    EMP_message('Due to the feature change, please re-run all results if necessary.',color=32,order=1,show='message')
     EMPT@deposit <- NULL
     EMPT@deposit_append <- NULL
     EMPT@plot_deposit <- NULL

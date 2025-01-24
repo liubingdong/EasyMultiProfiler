@@ -15,7 +15,7 @@
       .get.mapping.EMPT(EMPT) <- .get.mapping.EMPT(EMPT) %>%
         missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
-      message('Coldata has no NA value!')
+      EMP_message('Coldata has no NA value!',color=31,order=1,show='warning')
     }
   }
 
@@ -24,7 +24,7 @@
       .get.row_info.EMPT(EMPT) <- .get.row_info.EMPT(EMPT) %>%
         missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
-      message('Rowdata has no NA value!')
+      EMP_message('Rowdata has no NA value!',color=31,order=1,show='warning')
     }
   }
 
@@ -33,7 +33,7 @@
       .get.assay.EMPT(EMPT) <- .get.assay.EMPT(EMPT) %>%
         missRanger::missRanger(pmm.k = pmm.k, num.trees = num.trees, seed = seed,verbose = verbose,formula=.formula,...)
     }else{
-      message('Assay data has no NA value!')
+      EMP_message('Assay data has no NA value!',color=31,order=1,show='warning')
     }
   }
 

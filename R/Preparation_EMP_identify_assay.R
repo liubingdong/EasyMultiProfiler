@@ -24,7 +24,8 @@
       if (!estimate_group %in% col_name) {
         estimate_group <- NULL
       }else {
-        message('EMP_identify_assay will work according to estimate_group = ',estimate_group)
+        info_output <- paste0('EMP_identify_assay will work according to estimate_group = ',estimate_group)
+        EMP_message(info_output,color = 32,order = 1,show='message')
       }
     }
   }else{
@@ -69,8 +70,8 @@
 
 
   }else{
-    message('No group or design set. Assuming all samples belong to one group.')
-
+    info_output <- paste0('No group or design set. Assuming all samples belong to one group.')
+    EMP_message(info_output,color = 32,order = 1,show='message')
     data %>%
       tidyr::pivot_longer(cols = c(-primary),
                           names_to = 'feature',
@@ -127,7 +128,8 @@
       if (!estimate_group %in% col_name) {
         estimate_group <- NULL
       }else {
-        message('EMP_identify_assay will work according to estimate_group = ',estimate_group)
+        info_output <- paste0('EMP_identify_assay will work according to estimate_group = ',estimate_group)
+        EMP_message(info_output,color = 32,order = 1,show='message')
       }
     }
 
@@ -150,14 +152,16 @@
 
   if (is.null(estimate_group)) {
     factor_of_interest <- NULL
+    info_output <- paste0('No group or design set. Assuming all samples belong to one group.')
+    EMP_message(info_output,color = 32,order = 1,show='message')
   }else{
     factor_of_interest <- as.symbol(estimate_group)
   }
-
+    
   EMPT%>%
     tidybulk::keep_abundant(factor_of_interest = !!factor_of_interest,
                             minimum_counts = min,
-                            minimum_proportion = min_ratio)  %>% .get.row_info.EMPT() %>%
+                            minimum_proportion = min_ratio)  %>% suppressMessages() %>% .get.row_info.EMPT() %>%
     dplyr::pull(feature) -> id
 
   EMPT %<>% EMP_filter(filterFeature = id,action = 'select') %>% suppressMessages()
@@ -255,7 +259,7 @@ EMP_identify_assay <- function(obj,experiment=NULL,estimate_group=NULL,
                                                 action='add')
          },
          {
-           print('method should be one of default or edgeR')
+           print('Parameter method should be one of default or edgeR')
          }
   )
   if (action=='add') {
@@ -264,6 +268,6 @@ EMP_identify_assay <- function(obj,experiment=NULL,estimate_group=NULL,
   }else if(action=='get'){
     return(.get.assay.EMPT(EMPT))
   }else{
-    warning('action should be one of add or get!')
+    warning('Parameter action should be one of add or get!')
   }
 }

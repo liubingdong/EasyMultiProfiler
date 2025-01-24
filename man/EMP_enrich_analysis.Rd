@@ -57,7 +57,7 @@ EMP_enrich_analysis(
 
 \item{organism}{For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".}
 
-\item{...}{Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[clusterProfiler]{enrichPathway}}, \code{\link[clusterProfiler]{enrichDO}}.}
+\item{...}{Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[ReactomePA]{enrichPathway}}, \code{\link[DOSE]{enrichDO}}.}
 }
 \value{
 EMPT object

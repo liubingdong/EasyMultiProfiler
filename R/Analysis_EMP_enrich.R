@@ -14,9 +14,8 @@ enrich_kegg <- function(df, feature_name, kegg.params, minGSSize, maxGSSize, com
   }
   gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species)
 
-  
-  message('KEGG database version: ',gson_data@version)
-  message('Species: ',gson_data@species)
+  EMP_message(paste0('KEGG database version: ',gson_data@version),color=32,order=1,show='message')
+  EMP_message(paste0('Species: ',gson_data@species),color=32,order=1,show='message')
 
   if (combineGroup == TRUE) {
     enrich.data <- clusterProfiler::enricher(gene=feature_name, gson=gson_data,minGSSize=minGSSize, maxGSSize=maxGSSize,...) 
@@ -120,7 +119,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
   
   if (is.null(diff_df)) {
     if (combineGroup == FALSE) {
-      message('Without EMP_diff_analysis result, paramter combineGroup could not be FALSE!')
+      EMP_message("Without EMP_diff_analysis result, paramter combineGroup could not be FALSE!",color = 31,order = 1,show='message')
     }
     combineGroup <- TRUE
     feature_name <- names(EMPT)
@@ -170,17 +169,20 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
     }else {
       KEGG_info <- kegg.params$KEGG_Type
     }
-    message("KEGG analysis performed: \nkeyType: ",kegg.params$keyType,'\t KEGG_Type: ',KEGG_info,'\t species: ',kegg.params$species)
+    info_ouput <- paste0("KEGG analysis performed: \nkeyType: ",kegg.params$keyType,'\t KEGG_Type: ',KEGG_info,'\t species: ',kegg.params$species)
+    EMP_message(info_ouput,color=32,order=1,show='message')
     enrich.data <- enrich_kegg(df, feature_name = feature_name, kegg.params = kegg.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
   } 
   
   if (method == "go") {
-    message("Go analysis performed: \nkeyType: ",go.params$keyType,'\t ont: ',go.params$ont)
+    info_ouput <- paste0("Go analysis performed: \nkeyType: ",go.params$keyType,'\t ont: ',go.params$ont)
+    EMP_message(info_ouput,color=32,order=1,show='message')
     enrich.data <- enrich_go(df, feature_name = feature_name, go.params = go.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
   } 
   if (method == "reactome") {
     reactome.params$organism <- match.arg(reactome.params$organism, c("human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly"))
-    message("Reactome analysis performed: \norganism: ",reactome.params$organism)
+    info_ouput <- paste0("Reactome analysis performed: \norganism: ",reactome.params$organism)
+    EMP_message(info_ouput,color=32,order=1,show='message')
     enrich.data <- enrich_reactome(df, feature_name = feature_name, reactome.params = reactome.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
   } 
   if (method == "wikipathway") {
@@ -191,7 +193,8 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
       stop("DOLite was removed in the current version.")
     }
     do.params$organism <- match.arg(do.params$organism, c("hsa","mmu"))
-    message("DOSE analysis performed: \nont: ",do.params$ont,"\t organism: ",do.params$organism)
+    info_ouput <- paste0("DOSE analysis performed: \nont: ",do.params$ont,"\t organism: ",do.params$organism)
+    EMP_message(info_ouput,color=32,order=1,show='message')    
     enrich.data <- enrich_do(df, feature_name = feature_name, do.params = do.params, minGSSize=minGSSize, maxGSSize=maxGSSize, combineGroup = combineGroup, ...)
   }
    EMPT@deposit[['enrich_data']] <- enrich.data
@@ -218,7 +221,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #' @param OrgDb OrgDb in Go analysis.
 #' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
-#' @param ... Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[clusterProfiler]{enrichPathway}}, \code{\link[clusterProfiler]{enrichDO}}.
+#' @param ... Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[ReactomePA]{enrichPathway}}, \code{\link[DOSE]{enrichDO}}.
 #' @return EMPT object
 #' @export
 #' @section Detaild about method:
@@ -324,7 +327,7 @@ EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500, action=
   }else if(action == 'get') {
     return(.get.result.EMPT(EMPT))
   }else{
-    warning('action should be one of add or get!')
+    warning('Parameter action should be one of add or get!')
   }  
 }
 

@@ -34,25 +34,25 @@ setMethod("show", "EMPT",
             switch(info,
                    "EMP_assay_data" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      object %>% enhance_print(n=10)
                    },              
                    "EMP_decostand" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      object %>% enhance_print(n=10)
                    },
                    "EMP_rrarefy" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      object %>% enhance_print(n=10)
                    },
                    "EMP_diff_analysis" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }                    
                      object %>% enhance_print(n=10)
                    },
@@ -87,7 +87,7 @@ setMethod("show", "EMPT",
                    },
                    "EMP_alpha_analysis" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      object %>% enhance_print(n=10)
                    },
@@ -144,31 +144,31 @@ setMethod("show", "EMPT",
   switch(info,
                    "EMP_assay_data" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(.get.assay.EMPT(object))
                    },
                    "EMP_decostand" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(.get.assay.EMPT(object))
                    },
                    "EMP_rrarefy" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(.get.assay.EMPT(object))
                    },
                    "EMP_diff_analysis" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(object@deposit[["diff_analysis_result"]])
                    },
                    "EMP_dimension_analysis" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      deposit <- list()
                      deposit[['dimension_coordinate']] <- object@deposit$dimension_coordinate
@@ -317,25 +317,25 @@ setMethod("show", "EMP",
   switch(info,
                   "EMP_cor_analysis" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(object@deposit[["cor_analysis_result"]])
                    },
                   "EMP_cor_heatmap" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(.get.plot_deposit.EMP(object,info='EMP_cor_heatmap'))
                    },
                   "EMP_cor_sankey" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(.get.plot_deposit.EMP(object,info='EMP_cor_sankey'))
                    },
                   "EMP_WGCNA_cor_analysis2" = {
                      for (str in object@message_info) {
-                      message_wrap(str)
+                      EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(object@deposit[["WGCNA_cor_analysis_result"]])
                    },

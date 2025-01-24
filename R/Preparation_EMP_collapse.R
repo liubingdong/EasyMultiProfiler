@@ -361,7 +361,7 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @param action A character string. A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param collapse_by A character string. Methods include col or row.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
-#' @param ... Further parameters passed to the function \code{\link[base]{mean}}, \code{\link[base]{sum}}, \code{\link[base]{median}}, \code{\link[base]{min}}, \code{\link[base]{max}} in the base package. 
+#' @param ... Further parameters passed to the function \code{\link[base]{mean}}, \code{\link[base]{sum}}, \code{\link[stats]{median}}, \code{\link[base]{min}}, \code{\link[base]{max}} in the base package. 
 #' @importFrom tidybulk tidybulk
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
