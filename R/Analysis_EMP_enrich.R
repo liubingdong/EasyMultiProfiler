@@ -175,7 +175,6 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
   } 
   
   if (method == "go") {
-    OrgDb <- go.params$OrgDb
     message("Go analysis performed: \nkeyType: ",go.params$keyType,'\t ont: ',go.params$ont)
     enrich.data <- enrich_go(df, feature_name = feature_name, go.params = go.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
   } 
