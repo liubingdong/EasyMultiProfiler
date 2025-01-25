@@ -155,7 +155,7 @@
 .EMP_filter_m <- memoise::memoise(.EMP_filter,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
-.filter.deposit.EMPT <- function(EMPT,real_sample,real_feature,keep_result=keep_result){
+.filter.deposit.EMPT <- function(EMPT,real_sample,real_feature,keep_result=FALSE){
   Result <- attribute <- attribute2 <- affect_when_sample_changed <- affect_when_feature_changed <- `.` <- method <- NULL
   primary <- feature <- NULL
   result_names <- names(EMPT@deposit)
@@ -164,8 +164,25 @@
   total_sample_num <- dim(EMPT)[2]
   total_feature_num <- dim(EMPT)[1]
 
-  check_samples <- ifelse((total_sample_num - length(real_sample)) == 0,0,1)
-  check_features <- ifelse((total_feature_num - length(real_feature)) == 0,0,1)
+  if (is.logical(real_sample)) {
+    if (real_sample == TRUE) {
+      check_samples <- 0
+    }else{
+      check_samples <- 1
+    }
+  }else{
+    check_samples <- ifelse((total_sample_num - length(real_sample)) == 0,0,1)
+  }
+
+  if (is.logical(real_feature)) {
+    if (real_feature == TRUE) {
+      check_features <- 0
+    }else{
+      check_features <- 1
+    }
+  }else{
+    check_features <- ifelse((total_sample_num - length(real_feature)) == 0,0,1)
+  }
 
   # for debug
   #print(check_samples)

@@ -409,6 +409,15 @@ EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',n
   }else{
     stop("Please set parameter collapse_by (row or col)! ")
   }
+
+  check_result <- length(deposit@deposit)!=0 | length(deposit@deposit_append)!=0 | length(deposit@plot_deposit)!=0
+  if (check_result) {
+    EMP_message('After EMP_collapse, all results and figures are unavailable!',color=32,order=1,show='message')
+    deposit@deposit <- NULL
+    deposit@deposit_append <- NULL
+    deposit@plot_deposit <- NULL
+  }
+
   if (action == 'add') {
     .get.history.EMPT(deposit) <- call
   }

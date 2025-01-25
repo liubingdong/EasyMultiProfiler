@@ -238,7 +238,7 @@ EMP_feature_convert <- function(obj,experiment,method='mean',from,to=NULL,add=NU
   check_result <- length(EMPT@deposit)!=0 | length(EMPT@deposit_append)!=0 | length(EMPT@plot_deposit)!=0
 
   if (check_result) {
-    EMP_message('Due to the feature change, please re-run all results if necessary.',color=32,order=1,show='message')
+    EMP_message('Due to the feature change, all results and figures are unavailable!',color=32,order=1,show='message')
     EMPT@deposit <- NULL
     EMPT@deposit_append <- NULL
     EMPT@plot_deposit <- NULL

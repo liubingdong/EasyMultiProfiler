@@ -15,7 +15,7 @@ EMP_message(
 )
 }
 \arguments{
-\item{str}{data}
+\item{str}{data.}
 
 \item{order}{order.}
 

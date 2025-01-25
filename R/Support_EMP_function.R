@@ -660,7 +660,7 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
 
 
 #' Save result into environment 
-#' @param data data 
+#' @param data data. 
 #' @param var_name  a name to be assigned to data.
 #' @param envir the \link{environment} to use.
 #' @param ... Addtional parameters, see also \code{\link[base]{assign}}.
@@ -682,7 +682,7 @@ EMP_save_var <- function(data, var_name,envir = .GlobalEnv,...) {
 }
 
 #' Info output with style and color
-#' @param str data 
+#' @param str data. 
 #' @param order order.
 #' @param color color.
 #' @param pure logical. Default message, warning and stop.

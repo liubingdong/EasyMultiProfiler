@@ -7,7 +7,7 @@
 EMP_save_var(data, var_name, envir = .GlobalEnv, ...)
 }
 \arguments{
-\item{data}{data}
+\item{data}{data.}
 
 \item{var_name}{a name to be assigned to data.}
 
