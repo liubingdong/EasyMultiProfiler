@@ -27,8 +27,8 @@ setMethod(".get.mapping.EMPT<-","EMPT",function(obj,value){
   assay_content <- assay(obj)
   assay_content <- assay_content %>% as.data.frame() %>% dplyr::select(dplyr::all_of(!!new_sample_name))
 
-  coldata_reorder <- coldata[match(colnames(assay_content), rownames(coldata)), ] # make sure the order match the colnames of assay!
-  rowdata_reorder <- rowdata[match(rownames(assay_content), rowdata$feature),] # make sure the order match the colnames of assay!
+  coldata_reorder <- coldata[match(colnames(assay_content), rownames(coldata)),,drop = FALSE] # make sure the order match the colnames of assay!
+  rowdata_reorder <- rowdata[match(rownames(assay_content), rowdata$feature),,drop = FALSE] # make sure the order match the colnames of assay!
 
   data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(assay_content)),
                                                         rowData=rowdata_reorder, colData = coldata_reorder)
@@ -70,8 +70,8 @@ setMethod(".get.row_info.EMPT<-","EMPT",function(obj,value){
 
   coldata <- colData(obj)
 
-  coldata_reorder <- coldata[match(colnames(assay_content), rownames(coldata)), ] # make sure the order match the colnames of assay!
-  rowdata_reorder <- rowdata[match(rownames(assay_content), rowdata$feature),] # make sure the order match the colnames of assay!
+  coldata_reorder <- coldata[match(colnames(assay_content), rownames(coldata)),,drop = FALSE ] # make sure the order match the colnames of assay!
+  rowdata_reorder <- rowdata[match(rownames(assay_content), rowdata$feature),,drop = FALSE] # make sure the order match the colnames of assay!
 
   data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(assay_content)),
                                                         rowData=rowdata_reorder, colData = coldata_reorder)
@@ -304,8 +304,8 @@ setMethod(".get.SE.EMPT","EMPT",function(obj){
   sample.da<-colData(obj)
   row.da <- rowData(obj)
 
-  coldata_reorder <- sample.da[match(colnames(count.da), rownames(sample.da)), ] # make sure the order match the colnames of assay!
-  rowdata_reorder <- row.da[match(rownames(count.da), row.da$feature),] # make sure the order match the colnames of assay!
+  coldata_reorder <- sample.da[match(colnames(count.da), rownames(sample.da)),,drop = FALSE] # make sure the order match the colnames of assay!
+  rowdata_reorder <- row.da[match(rownames(count.da), row.da$feature),,drop = FALSE] # make sure the order match the colnames of assay!
 
   SE <- SummarizedExperiment::SummarizedExperiment(assays=list(counts = as.matrix(count.da)), colData = coldata_reorder,rowData =rowdata_reorder) 
   SE
@@ -351,8 +351,8 @@ setMethod(".get.assay.EMPT<-","EMPT",function(obj,value){
     tibble::column_to_rownames('primary') %>% 
     t() 
 
-  coldata_reorder <- coldata[match(colnames(value), rownames(coldata)), ] # make sure the order match the colnames of assay!
-  rowdata_reorder <- rowdata[match(rownames(value), rowdata$feature),] # make sure the order match the colnames of assay!
+  coldata_reorder <- coldata[match(colnames(value), rownames(coldata)),,drop = FALSE] # make sure the order match the colnames of assay!
+  rowdata_reorder <- rowdata[match(rownames(value), rowdata$feature),,drop = FALSE] # make sure the order match the colnames of assay!
   
   data.se <- SummarizedExperiment::SummarizedExperiment(assays=list(counts=as.matrix(value)),
                                                     rowData=rowdata_reorder, colData = coldata_reorder)
