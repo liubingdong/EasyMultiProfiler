@@ -112,8 +112,8 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
   }
   
   col_data <- colData(EMPT)
-  col_data_reorder <- col_data[match(colnames(new_assay_data), rownames(col_data)), ] # make sure the order match the colnames of assay!
-  new_row_data_reorder <- new_row_data[match(rownames(new_assay_data), new_row_data$feature),] # make sure the order match the colnames of assay!
+  col_data_reorder <- col_data[match(colnames(new_assay_data), rownames(col_data)),,drop = FALSE] # make sure the order match the colnames of assay!
+  new_row_data_reorder <- new_row_data[match(rownames(new_assay_data), new_row_data$feature),,drop = FALSE] # make sure the order match the colnames of assay!
 
   message_info <- list()
   message_info %<>% append(paste0('Feature changed!'))
@@ -253,8 +253,8 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
   new_col_data %<>% tibble::column_to_rownames('primary')
 
 
-  new_col_data_reorder <- new_col_data[match(colnames(new_assay_data), rownames(new_col_data)), ] # make sure the order match the colnames of assay!
-  row_data_reorder <- row_data[match(rownames(new_assay_data), row_data$feature),] # make sure the order match the colnames of assay!
+  new_col_data_reorder <- new_col_data[match(colnames(new_assay_data), rownames(new_col_data)),,drop = FALSE] # make sure the order match the colnames of assay!
+  row_data_reorder <- row_data[match(rownames(new_assay_data), row_data$feature),,drop = FALSE] # make sure the order match the colnames of assay!
    
   message_info <- list()
   message_info %<>% append(paste0('Primary changed!'))
@@ -409,16 +409,15 @@ EMP_collapse <- function (obj,experiment=NULL,estimate_group=NULL,method='sum',n
   }else{
     stop("Please set parameter collapse_by (row or col)! ")
   }
-
-  check_result <- length(deposit@deposit)!=0 | length(deposit@deposit_append)!=0 | length(deposit@plot_deposit)!=0
-  if (check_result) {
-    EMP_message('After EMP_collapse, all results and figures are unavailable!',color=32,order=1,show='message')
-    deposit@deposit <- NULL
-    deposit@deposit_append <- NULL
-    deposit@plot_deposit <- NULL
-  }
-
-  if (action == 'add') {
+  
+  if (action == "add") {
+    check_result <- length(deposit@deposit)!=0 | length(deposit@deposit_append)!=0 | length(deposit@plot_deposit)!=0
+    if (check_result) {
+      EMP_message('After EMP_collapse, all results and figures are unavailable!',color=32,order=1,show='message')
+      deposit@deposit <- NULL
+      deposit@deposit_append <- NULL
+      deposit@plot_deposit <- NULL
+    }
     .get.history.EMPT(deposit) <- call
   }
   return(deposit)
