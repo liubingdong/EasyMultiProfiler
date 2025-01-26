@@ -10,9 +10,8 @@
   min_raresize <- min(rowSums(assay_data))
   max_raresize <- max(rowSums(assay_data))
   if (only_show_depth ==T) {
-      message_wrap('Min depth: ',min_raresize)
-      message_wrap('Max depth: ',max_raresize)
-
+      EMP_message(paste0('Min depth: ',min_raresize),color=32,order=1,show='message')
+      EMP_message(paste0('Max depth: ',max_raresize),color=32,order=1,show='message')
   }else {
       message_info %<>% append(paste0('Min depth: ',min_raresize))
       message_info %<>% append(paste0('Max depth: ',max_raresize))
@@ -29,8 +28,8 @@
         assay_data <- assay_data[rowSums(assay_data) >= raresize, ,drop=FALSE]
         if (length(trim_sample_id) != 0) {
           message_info %<>% append(paste0(length(trim_sample_id)," of ",total_sample_num," Samples were removed, ",
-                       "because their abundance were below the rarefaction: ",
-                       paste(trim_sample_id,collapse = ' ')))
+                       "because their abundance were below the rarefaction: \n",
+                       paste(trim_sample_id,collapse = '\n')))
         }
       }
     }else
@@ -43,8 +42,8 @@
 
     if (length(trim_feature_id) != 0) {
       message_info %<>% append(paste0(length(trim_feature_id)," of ",total_feature_num, " Features were removed, ",
-                   "because they are no longer present in any sample after rarefaction: ",
-                   paste(trim_feature_id,collapse = ' ')))
+                   "because they are no longer present in any sample after rarefaction: \n",
+                   paste(trim_feature_id,collapse = '\n')))
     }
 
     rrarefy_data <- res[, !remove_feature,drop=F] %>%
