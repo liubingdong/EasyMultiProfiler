@@ -63,7 +63,7 @@ gsea_kegg <- function(geneList, kegg.params, pvalueCutoff, seed, ...) {
         stop("keyType should be KEGG or MKEGG!")
       }
   
-    gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species)
+    gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species) |> suppressMessages()
 
     enrich.data <- clusterProfiler::GSEA(geneList,gson = gson_data,pvalueCutoff=pvalueCutoff,seed=seed,...) %>% suppressWarnings()
     return(enrich.data)

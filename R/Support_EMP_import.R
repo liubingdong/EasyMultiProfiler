@@ -2,8 +2,8 @@
 ##' @importFrom yulab.utils yread
 kegg_rest <- function(rest_url) {
     `.` <- NULL
-    info_output <- paste0('Reading KEGG annotation online: "', rest_url, '"...')
-    EMP_message(info_output,color = 32,order = 1,show='message')
+    #info_output <- paste0('Reading KEGG annotation online: "', rest_url, '"...')
+    #EMP_message(info_output,color = 32,order = 1,show='message')
     # content <- readLines(f)
     content <- yread(rest_url)
     content %<>% strsplit(., "\t") %>% do.call('rbind', .)

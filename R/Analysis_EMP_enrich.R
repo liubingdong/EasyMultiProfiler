@@ -12,7 +12,7 @@ enrich_kegg <- function(df, feature_name, kegg.params, minGSSize, maxGSSize, com
   if(!KEGG_Type %in% c('KEGG','MKEGG')){
     stop("keyType should be KEGG or MKEGG!")
   }
-  gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species)
+  gson_data <- build_gson(keyType = keyType, KEGG_Type = KEGG_Type, species = species) |> suppressMessages()
 
   EMP_message(paste0('KEGG database version: ',gson_data@version),color=32,order=1,show='message')
   EMP_message(paste0('Species: ',gson_data@species),color=32,order=1,show='message')
