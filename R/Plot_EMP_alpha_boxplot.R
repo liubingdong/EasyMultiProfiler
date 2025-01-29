@@ -1,5 +1,5 @@
 #' @param obj EMPT object
-#' @param plot_category An interger.More plot style.(under constrution)
+#' @param plot_category A character string including default and violin.
 #' @param method A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
 #' @param group_level A string vector. Set the group order in the plot.
@@ -18,7 +18,7 @@
 #' @importFrom withr with_seed
 
 
-EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 1,method = 'wilcox.test',
+EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 'default',method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                step_increase = 0.1,ref.group = NULL,comparisons = NULL,
                                ncol = NULL,select_metrics=NULL,show = 'pic',palette = NULL,
@@ -29,7 +29,7 @@ EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 1,method = 'wilco
   .get.history.EMPT(obj) <- call
 
   switch(.get.plot_category.EMPT(obj),
-         "1" = {
+         "default" = {
            withr::with_seed(123,EMP_boxplot_alpha_default(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
                                step_increase = step_increase,ref.group = ref.group,comparisons = comparisons,
@@ -37,13 +37,13 @@ EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 1,method = 'wilco
                                html_width=html_width,html_height=html_height,
                                mytheme = mytheme,...))
          },
-         #"2" = {
-         # withr::with_seed(seed,EMP_boxplot_alpha_2(EMPT,method = method,
-         #                      estimate_group = estimate_group,group_level = group_level,
-         #                      ncol = ncol,select_metrics=select_metrics,show = show,palette = palette,
-         #                      html_width=html_width,html_height=html_height,
-         #                      mytheme = mytheme))
-         #}
+         "violin" = {
+          withr::with_seed(123,EMP_boxplot_alpha_violin(EMPT=obj,method = method,
+                               estimate_group = estimate_group,group_level = group_level,
+                               ncol = ncol,select_metrics=select_metrics,show = show,palette = palette,
+                               html_width=html_width,html_height=html_height,
+                               mytheme = mytheme,...))
+         }
 
   )
 
@@ -152,51 +152,96 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
 }
 
 
-# EMP_boxplot_alpha_2 <- function(EMPT,method = 'wilcox.test',estimate_group = NULL,shape=21,
-#                                 show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()') {
-#   primary <- value <- NULL
-#   call <- match.call()
-#   alpha_plot <- list()
-#   
-#   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
-#   
-#   
-#   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
-#   
-#   alpha_data <- .get.result.EMPT(EMPT) %>%
-#     dplyr::full_join(mapping,by= 'primary')
-#   
-#   group_combn <- combn(as.character(unique(mapping[[estimate_group]])),2)
-#   compare <- plyr::alply(group_combn,2)
-#   
-#   col_values <- .get.palette.EMPT(EMPT)
-#   alpha_data %<>%  tidyr::pivot_longer(cols = c(-primary,-!!dplyr::sym(estimate_group)),
-#                                        names_to = 'ID',
-#                                        values_to = 'value')
-#   
-#   alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
-#     geom_boxplot(outlier.color=NA,shape = shape,alpha=0.5) +
-#     ggiraph::geom_jitter_interactive(aes(tooltip = value),shape=21,position = position_jitter(height = .00000001))+
-#     ggsignif::geom_signif(comparisons = compare,test = method,step_increase = 0.1) +
-#     facet_wrap(ID~., scales = 'free', strip.position = 'top') +
-#     xlab(NULL) +
-#     ylab("Alpha Metrics") +
-#     ggtitle('Alpha analysis Plot') +
-#     scale_fill_manual(values = col_values) +
-#     theme_bw() + eval(parse(text = paste0(mytheme))) +theme_few()
-#   
-#   
-#   alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
-#   
-#   .get.plot_deposit.EMPT(EMPT,info = 'alpha_analysis_plot') <- alpha_plot
-#   .get.plot_specific.EMPT(EMPT) <- show
-#   .get.estimate_group.EMPT(EMPT) <- estimate_group
-#   .get.algorithm.EMPT(EMPT) <- 'alpha_analysis_plot'
-#   .get.info.EMPT(EMPT) <- 'EMP_alpha_analysis_boxplot'
-#   .get.history.EMPT(EMPT) <- call
-#   class(EMPT) <- 'EMP_alpha_analysis_boxplot'
-#   EMPT
-# }
+EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
+                                       estimate_group = NULL,group_level = 'default',
+                                       step_increase = 0.1,ref.group = NULL,comparisons = NULL,
+                                       ncol = NULL,select_metrics = NULL,palette = NULL,
+                                 show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()',...) {
+  primary <- ID <- value <- NULL
+
+  alpha_plot <- list()
+
+  estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
+
+  if (is.null(palette)) {
+    col_values <- .get.palette.EMPT(EMPT)
+  }else {
+    col_values = palette
+  }
+
+  EMPT %<>% .group_level_modified(estimate_group = estimate_group,group_level = group_level)
+
+  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
+
+  alpha_data <- .get.result.EMPT(EMPT,info='EMP_alpha_analysis') %>% suppressMessages() %>%
+    dplyr::full_join(mapping,by= 'primary')
+
+  ## clean the missing value in the group label
+  if(any(is.na(alpha_data[[estimate_group]]))) {
+    warning('Column ',estimate_group,' has beed deteced missing value, all related samples will be removed in the display!')
+    alpha_data <- alpha_data %>% tidyr::drop_na(!!estimate_group)
+  }
+
+  # choose the compare group
+  group_name <- unique(alpha_data[[estimate_group]])
+  if (!is.null(ref.group)) {
+    if (!any(ref.group %in% group_name)) {
+      stop('Please check the parameter ref.group!')
+    }
+    group_combn <- combn(as.character(group_name),2) %>% as.data.frame() %>%
+    dplyr::select(where(~ any(str_detect_multi(., ref.group))))
+  }else{
+    group_combn <- combn(as.character(group_name),2)
+  }
+
+  if (is.null(comparisons)) {
+    comparisons <- list() 
+    for (i in 1:ncol(group_combn)) {
+      comparisons[[i]] <- group_combn[,i]
+    }
+    names(comparisons) <- 1:ncol(group_combn)    
+  }else{
+    comparisons <- comparisons
+  } 
+
+  alpha_data %<>%  tidyr::pivot_longer(cols = c(-primary,-!!dplyr::sym(estimate_group)),
+                                       names_to = 'ID',
+                                       values_to = 'value')
+
+  if (!is.null(select_metrics)) {
+    if (all(select_metrics %in% unique(alpha_data[['ID']]))) {
+      alpha_data %<>% dplyr::filter(ID %in% select_metrics)
+    } else{
+      stop('Please check the select_metrics parameter')
+    }
+  }
+
+
+  alpha_plot[['pic']] <-ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
+    geom_violin(position = position_dodge(width = 0.1), scale = 'width',alpha=0.8) +
+    geom_boxplot(outlier.color=NA,fill="white", width=0.3) +
+    ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,position = position_jitter(height = .00000001))+
+    ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +
+    facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
+    xlab(NULL) +
+    ylab("Alpha Metrics") +
+    ggtitle('Alpha analysis Plot') +
+    scale_fill_manual(values = col_values) + 
+    theme_bw() + 
+    theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
+    eval(parse(text = paste0(mytheme)))
+
+
+  alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
+
+  .get.plot_deposit.EMPT(EMPT,info = 'alpha_analysis_plot') <- alpha_plot
+  .get.plot_specific.EMPT(EMPT) <- show
+  .get.estimate_group.EMPT(EMPT) <- estimate_group
+  .get.algorithm.EMPT(EMPT) <- 'alpha_analysis_plot'
+  .get.info.EMPT(EMPT) <- 'EMP_alpha_analysis_boxplot'
+  class(EMPT) <- 'EMP_alpha_analysis_boxplot'
+  EMPT
+}
 
 
 

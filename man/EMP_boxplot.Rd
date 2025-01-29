@@ -17,7 +17,7 @@ EMP_boxplot(obj, ...)
 
 EMP_boxplot.EMP_alpha_analysis(
   obj,
-  plot_category = 1,
+  plot_category = "default",
   method = "wilcox.test",
   estimate_group = NULL,
   group_level = "default",
@@ -57,7 +57,7 @@ EMP_boxplot.EMP_assay_boxplot_union(
 
 \item{...}{Additional parameters, see also \code{\link[ggsignif]{geom_signif}}}
 
-\item{plot_category}{An interger.More plot style.(under constrution)}
+\item{plot_category}{A character string including default and violin.}
 
 \item{method}{A character string. The name of the statistical test that is applied to the values of the columns (e.g. t.test, wilcox.test etc.).}
 
