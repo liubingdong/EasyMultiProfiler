@@ -21,6 +21,9 @@ EMP_boxplot.EMP_alpha_analysis(
   method = "wilcox.test",
   estimate_group = NULL,
   group_level = "default",
+  dot_size = 2,
+  box_width = if (plot_category == "violin") 0.3 else NULL,
+  box_alpha = if (plot_category == "violin") 0.8 else 1,
   step_increase = 0.1,
   ref.group = NULL,
   comparisons = NULL,
@@ -40,6 +43,9 @@ EMP_boxplot.EMP_assay_boxplot_union(
   method = "wilcox.test",
   estimate_group = NULL,
   group_level = "default",
+  dot_size = 2,
+  box_width = if (plot_category == "violin") 0.3 else NULL,
+  box_alpha = if (plot_category == "violin") 0.8 else 1,
   step_increase = 0.1,
   ref.group = NULL,
   comparisons = NULL,
@@ -64,6 +70,12 @@ EMP_boxplot.EMP_assay_boxplot_union(
 \item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
 
 \item{group_level}{A string vector. Set the group order in the plot.}
+
+\item{dot_size}{A numeric. Set the dot size.}
+
+\item{box_width}{A numeric. Set the box width.}
+
+\item{box_alpha}{A numeric. Set the box alpha.}
 
 \item{step_increase}{A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.}
 
@@ -95,7 +107,8 @@ Boxplot for EMPT result
 data(MAE)
 ## from assay
 MAE |> 
-  EMP_assay_extract('host_gene',pattern = 'A1BG',pattern_ref = 'feature') |>
+  EMP_assay_extract('host_gene',pattern = 'A1BG',
+        pattern_ref = 'feature') |>
   EMP_boxplot(method='t.test',estimate_group='Group')
 
 ## from alpha analysis
@@ -103,4 +116,17 @@ MAE |>
   EMP_assay_extract('taxonomy') |> 
   EMP_alpha_analysis()|>
   EMP_boxplot(method='t.test',estimate_group='Group')
+
+# volin style and more parameter
+MAE |> 
+  EMP_assay_extract('host_gene',
+                    pattern = 'A1BG',pattern_ref = 'feature') |>
+  EMP_boxplot(estimate_group='Group',box_alpha=0.8,
+              box_width=0.3,dot_size=5,plot_category='violin')
+ MAE |>
+   EMP_assay_extract(experiment='taxonomy')|> 
+   EMP_alpha_analysis() |>
+   EMP_boxplot(estimate_group='Group',method='t.test',
+               box_alpha=0.8,dot_size=3,
+               box_width=0.3,plot_category='violin')
 }

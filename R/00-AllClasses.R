@@ -213,7 +213,8 @@ setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enri
 #' data(MAE)
 #' ## from assay
 #' MAE |> 
-#'   EMP_assay_extract('host_gene',pattern = 'A1BG',pattern_ref = 'feature') |>
+#'   EMP_assay_extract('host_gene',pattern = 'A1BG',
+#'         pattern_ref = 'feature') |>
 #'   EMP_boxplot(method='t.test',estimate_group='Group')
 #' 
 #' ## from alpha analysis
@@ -221,6 +222,19 @@ setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enri
 #'   EMP_assay_extract('taxonomy') |> 
 #'   EMP_alpha_analysis()|>
 #'   EMP_boxplot(method='t.test',estimate_group='Group')
+#' 
+#' # volin style and more parameter
+#' MAE |> 
+#'   EMP_assay_extract('host_gene',
+#'                     pattern = 'A1BG',pattern_ref = 'feature') |>
+#'   EMP_boxplot(estimate_group='Group',box_alpha=0.8,
+#'               box_width=0.3,dot_size=5,plot_category='violin')
+#'  MAE |>
+#'    EMP_assay_extract(experiment='taxonomy')|> 
+#'    EMP_alpha_analysis() |>
+#'    EMP_boxplot(estimate_group='Group',method='t.test',
+#'                box_alpha=0.8,dot_size=3,
+#'                box_width=0.3,plot_category='violin')
 setGeneric("EMP_boxplot",function(obj, ...) standardGeneric("EMP_boxplot"))
 
 
