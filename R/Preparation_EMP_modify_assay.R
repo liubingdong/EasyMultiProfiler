@@ -5,7 +5,7 @@
 #' @param condition A character string. Set the condition data will modify.(default: '==0')
 #' @param select_sample A character string. Choose which sample to modify.
 #' @param select_feature A character string. Choose which feature to modify.
-#' @param pseudocount A number. Set the pseudocount data will change into. (default: '0.0001')
+#' @param pseudocount A number or function. Set the pseudocount data will change into. (default: '0.0001')
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @importFrom SummarizedExperiment assay
 #' @rdname EMP_modify_assay
@@ -24,6 +24,15 @@
 #' MAE |>
 #'   EMP_assay_extract('taxonomy') |>
 #'   EMP_modify_assay('<10',pseudocount=0) 
+#' 
+#' ## suport external function
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_modify_assay('==0',pseudocount=function(x) x +1 ) 
+#' 
+#' MAE |>
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_modify_assay('>0',pseudocount=function(x) log(x) ) 
 
 EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',select_feature='all',pseudocount=0.0001,action='add') {
   call <- match.call()
@@ -41,12 +50,20 @@ EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',
     eval(parse(text = paste0("x ", condition)))
   }
   
+  if(is(pseudocount,'numeric') | is(pseudocount,'integer')) {
+    check_funtion <- FALSE
+  }else if (is(pseudocount,'function')){
+    check_funtion <- TRUE
+  }else{
+    stop("Parameter pseudocount should be a number or function!")
+  }
+
   assay_content <- assay(EMPT) 
   
   if (all(select_sample =='all' & select_feature =='all')) {
     assay_content <- assay_content %>%
       as.data.frame() %>%
-      dplyr::mutate_all( ~ ifelse(replace_condition(., condition), pseudocount, .)) %>%
+      dplyr::mutate_all( ~ ifelse(replace_condition(., condition), if (is.function(pseudocount)) pseudocount(.) else pseudocount, .)) %>%
       t() %>% as.data.frame() %>% # after t(), it truns into a martix, so we need  as.data.frame
       tibble::rownames_to_column('primary')
   }else if (all(select_sample =='all' & select_feature !='all')) {
@@ -54,12 +71,12 @@ EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',
     check_select_feature <- all(select_feature %in% featureID)
     
     if (!check_select_feature) {
-      stop("Please make sure select_feature in the data! ")
+      stop("Please make sure select_feature in the data!")
     }
 
     assay_content <- assay_content %>% t() %>%
       as.data.frame() %>% 
-      dplyr::mutate_if(names(.) %in% select_feature, ~ ifelse(replace_condition(., condition), pseudocount, .)) %>%
+      dplyr::mutate_if(names(.) %in% select_feature, ~ ifelse(replace_condition(., condition), if (is.function(pseudocount)) pseudocount(.) else pseudocount, .)) %>%
       as.data.frame() %>%
       tibble::rownames_to_column('primary')
     
@@ -68,12 +85,12 @@ EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',
     check_select_sample <- all(select_sample %in% sampleID)
     
     if (!check_select_sample) {
-      stop("Please make sure select_sample in the data! ")
+      stop("Please make sure select_sample in the data!")
     }
     
     assay_content <- assay_content %>%
       as.data.frame() %>%
-      dplyr::mutate_if(names(.) %in% select_sample, ~ ifelse(replace_condition(., condition), pseudocount, .)) %>%
+      dplyr::mutate_if(names(.) %in% select_sample, ~ ifelse(replace_condition(., condition), if (is.function(pseudocount)) pseudocount(.) else pseudocount, .)) %>%
       t() %>% as.data.frame() %>%
       tibble::rownames_to_column('primary')
   }else if (all(select_sample !='all' & select_feature !='all')) {
@@ -82,23 +99,23 @@ EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',
     check_select_feature <- all(select_feature %in% featureID)
     
     if (!check_select_feature) {
-      stop("Please make sure select_feature in the data! ")
+      stop("Please make sure select_feature in the data!")
     }
     
     sampleID <- colnames(EMPT)
     check_select_sample <- all(select_sample %in% sampleID)
     
     if (!check_select_sample) {
-      stop("Please make sure select_sample in the data! ")
+      stop("Please make sure select_sample in the data!")
     }
     
     assay_content <- assay_content %>%
       as.data.frame() %>%
-      dplyr::mutate_if(names(.) %in% select_sample, ~ ifelse(replace_condition(., condition), pseudocount, .))
+      dplyr::mutate_if(names(.) %in% select_sample, ~ ifelse(replace_condition(., condition), if (is.function(pseudocount)) pseudocount(.) else pseudocount, .))
     
     assay_content <- assay_content %>% t() %>%
       as.data.frame() %>% 
-      dplyr::mutate_if(names(.) %in% select_feature, ~ ifelse(replace_condition(., condition), pseudocount, .)) %>%
+      dplyr::mutate_if(names(.) %in% select_feature, ~ ifelse(replace_condition(., condition), if (is.function(pseudocount)) pseudocount(.) else pseudocount, .)) %>%
       as.data.frame() %>%
       tibble::rownames_to_column('primary')
     
@@ -107,7 +124,11 @@ EMP_modify_assay <- function(obj,condition='==0',experiment,select_sample='all',
    .get.assay.EMPT(EMPT) <- assay_content
   
    .get.method.EMPT(EMPT) <- 'modify_assay'
-   .get.algorithm.EMPT(EMPT) <- paste0(condition,' into ',pseudocount)
+   if (check_funtion) {
+    .get.algorithm.EMPT(EMPT) <- paste(deparse(pseudocount), collapse = " ")
+   }else{
+    .get.algorithm.EMPT(EMPT) <- paste0(condition,' into ',pseudocount)
+   }
    .get.info.EMPT(EMPT) <- 'EMP_assay_data'
    .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_assay_data'

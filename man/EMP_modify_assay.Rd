@@ -25,7 +25,7 @@ EMP_modify_assay(
 
 \item{select_feature}{A character string. Choose which feature to modify.}
 
-\item{pseudocount}{A number. Set the pseudocount data will change into. (default: '0.0001')}
+\item{pseudocount}{A number or function. Set the pseudocount data will change into. (default: '0.0001')}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 }
@@ -47,4 +47,13 @@ MAE |>
 MAE |>
   EMP_assay_extract('taxonomy') |>
   EMP_modify_assay('<10',pseudocount=0) 
+
+## suport external function
+MAE |>
+  EMP_assay_extract('taxonomy') |>
+  EMP_modify_assay('==0',pseudocount=function(x) x +1 ) 
+
+MAE |>
+  EMP_assay_extract('taxonomy') |>
+  EMP_modify_assay('>0',pseudocount=function(x) log(x) ) 
 }
