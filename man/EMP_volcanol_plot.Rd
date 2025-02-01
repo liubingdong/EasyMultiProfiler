@@ -13,6 +13,9 @@ EMP_volcanol_plot(
   html_width = NULL,
   html_height = NULL,
   key_feature = NULL,
+  threshold_x = 0,
+  dot_size = 1.75,
+  dot_alpha = 1,
   mytheme = "theme()",
   ...
 )
@@ -34,7 +37,13 @@ EMP_volcanol_plot(
 
 \item{key_feature}{A series of character string. Label the some feature.}
 
-\item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
+\item{threshold_x}{Set the threshold for log2FC.}
+
+\item{dot_size}{A number. Set the dot size.}
+
+\item{dot_alpha}{A number. Set the dot alpha.}
+
+\item{mytheme}{Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.}
 
 \item{...}{Further parameters passed to \code{\link[ggrepel]{geom_text_repel}}.}
 }
@@ -65,4 +74,13 @@ MAE |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
   EMP_volcanol_plot(key_feature = c('3.6.1.62','1.5.3.19'),
                     min.segment.length = 0, seed = 42, box.padding = 0.5) ## Add arrow
+
+# More parameter
+MAE |>
+  EMP_assay_extract(experiment = 'geno_ec') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+  EMP_volcanol_plot(show='html',key_feature = c('3.6.1.64','1.5.3.19'),
+                    palette = c('#FA7F6F','#96C47D','#BEB8DC'),
+                    dot_size = 3,threshold_x = 0.5,mytheme = "theme_light()",
+                    min.segment.length = 0, seed = 42, box.padding = 0.5)
 }
