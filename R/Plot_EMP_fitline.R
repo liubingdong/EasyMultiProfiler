@@ -32,9 +32,9 @@
     data <- data %>% dplyr::filter(dplyr::if_all(dplyr::all_of(var_select), ~ !is.na(.)))
 
     data_plot[['pic']] <- ggplot(data=data,aes(x=!!sym(var_select[1]),y=!!sym(var_select[2]))) +
+        ggpmisc::stat_poly_line(formula =formula,colour='red',se=se)+
         ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,'\n','x: ',!!sym(var_select[1]),'\n','y: ',!!sym(var_select[2]))),
                                          position = position_jitter(height = .00000001))+
-        ggpmisc::stat_poly_line(formula =formula,colour='red',se=se,...)+
         theme_bw() +  
         xlab(paste0(var_select[1])) + ylab(paste0(var_select[2])) +
         ggpmisc::stat_poly_eq(formula = formula, 
@@ -61,9 +61,10 @@
     data <- data %>% dplyr::filter(dplyr::if_all(dplyr::all_of(c(var_select,estimate_group)), ~ !is.na(.)))
 
     data_plot[['pic']]  <- ggplot(data=data,aes(x=!!sym(var_select[1]),y=!!sym(var_select[2]),colour = !!sym(estimate_group)))+
+      ggpmisc::stat_poly_line(formula = formula,se=se)+  
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,'\n','x: ',!!sym(var_select[1]),'\n','y: ',!!sym(var_select[2]))),
                                        position = position_jitter(height = .00000001),size=3)+
-      ggpmisc::stat_poly_line(formula = formula,se=se,...)+  theme_bw() +  
+      theme_bw() +  
       xlab(paste0(var_select[1])) + ylab(paste0(var_select[2])) +
       ggpmisc::stat_poly_eq(formula = formula, vstep = NULL,
                             aes(label = paste(after_stat(eq.label), "*\", \"*", 
@@ -170,9 +171,9 @@
     data <- data %>% dplyr::filter(dplyr::if_all(dplyr::all_of(var_select), ~ !is.na(.)))
     
     data_plot[['pic']] <- ggplot(data=data,aes(x=!!sym(var_select[1]),y=!!sym(var_select[2]))) +
+      ggpmisc::stat_poly_line(formula =formula,colour='red',se=se)+
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,'\n','x: ',!!sym(var_select[1]),'\n','y: ',!!sym(var_select[2]))),
                                        position = position_jitter(height = .00000001))+
-      ggpmisc::stat_poly_line(formula =formula,colour='red',se=se,...)+
       theme_bw() +  
       xlab(paste0(var_select[1])) + ylab(paste0(var_select[2])) +
       ggpmisc::stat_poly_eq(formula = formula, 
@@ -194,9 +195,9 @@
     data <- data %>% dplyr::filter(dplyr::if_all(dplyr::all_of(c(var_select,estimate_group)), ~ !is.na(.)))
     
     data_plot[['pic']]  <- ggplot(data=data,aes(x=!!sym(var_select[1]),y=!!sym(var_select[2]),colour = !!sym(estimate_group)))+
+      ggpmisc::stat_poly_line(formula = formula,se=se)+
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,'\n','x: ',!!sym(var_select[1]),'\n','y: ',!!sym(var_select[2]))),
-                                       position = position_jitter(height = .00000001),size=3)+
-      ggpmisc::stat_poly_line(formula = formula,se=se,...)+  theme_bw() +  
+                                       position = position_jitter(height = .00000001),size=3)+      theme_bw() +  
       xlab(paste0(var_select[1])) + ylab(paste0(var_select[2])) +
       ggpmisc::stat_poly_eq(formula = formula, vstep = NULL,
                             aes(label = paste(after_stat(eq.label), "*\", \"*", 

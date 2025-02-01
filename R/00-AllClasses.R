@@ -429,7 +429,8 @@ setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
 #'
 #' MAE |>
 #'   EMP_assay_extract('geno_ec') |>
-#'   EMP_fitline_plot(var_select=c('Weight','BMI'),estimate_group='Sex',show='html')
+#'   EMP_fitline_plot(var_select=c('Weight','BMI'),se=TRUE,
+#'                    estimate_group='Sex',show='html')
 #' 
 #' ## For EMP
 #' k1 <- MAE |>
@@ -438,7 +439,8 @@ setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
 #' 
 #' k2 <- MAE |>
 #'   EMP_assay_extract('taxonomy') |>
-#'   EMP_collapse(collapse_by='row',estimate_group = 'Class',method = 'sum') |>
+#'   EMP_collapse(collapse_by='row',estimate_group = 'Class',
+#'                method = 'sum') |>
 #'   EMP_decostand(method = 'relative')
 #' 
 #' (k1 + k2) |>
