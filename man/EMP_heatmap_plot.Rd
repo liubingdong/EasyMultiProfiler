@@ -85,7 +85,7 @@ EMP_heatmap.EMP_assay_data(
 
 \item{label_size}{A number. Set the label size. (default:4)}
 
-\item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
+\item{mytheme}{Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.}
 
 \item{rotate}{A boolean. Whether rotate the heatmap or not. (Only activated for EMP_assay_data)}
 

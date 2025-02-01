@@ -201,7 +201,7 @@ EMP_boxplot_assay_violin  <- function (EMPT,method = 'wilcox.test',
 #' @param palette A series of character string. Color palette.
 #' @param html_width An interger. Set the html width.
 #' @param html_height An interger. Set the html height.
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param mytheme Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.
 #' @param ... Additional parameters, see also \code{\link[ggsignif]{geom_signif}}
 #' @rdname EMP_boxplot
 

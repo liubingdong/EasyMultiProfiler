@@ -2,7 +2,7 @@
 #' @param obj EMP object
 #' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred).
 #' @param show A character string. Show inluding all, sig and pvalue.(Only supported for EMP_cor_analysis and EMP_WGCNA_cor_analysis)
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param mytheme Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.
 #' @param clust_row A boolean. Whether the function clust the row or not. (default:FALSE) 
 #' @param clust_col A boolean. Whether the function clust the row or not. (default:FALSE) 
 #' @param dist_method A character string. More see stats::dist. (default: euclidean) 
@@ -157,7 +157,7 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
 #' @param obj EMPT or EMP object
 #' @param palette 1-3 character string. Color palette. (default: steelblue, white, darkred)
 #' @param show A character string. Show inluding all, sig and pvalue.
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param mytheme Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.
 #' @param clust_row A boolean. Whether the function clust the row or not. (default:FALSE) 
 #' @param clust_col A boolean. Whether the function clust the row or not. (default:FALSE) 
 #' @param dist_method A character string. More see stats::dist. (default: euclidean) 
@@ -333,7 +333,7 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 #' @param bySample A boolean. Whether the function decostand by the sample or feature. Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)
 #' @param logbase An interger. The logarithm base used in method = "log".(default=2). Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)
 #' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001). (Only activated for EMP_assay_data)
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param mytheme Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.
 #' @rdname EMP_heatmap_plot
 #' @importFrom forcats fct_relevel
 #' @importFrom aplot insert_top

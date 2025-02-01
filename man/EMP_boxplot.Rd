@@ -95,7 +95,7 @@ EMP_boxplot.EMP_assay_boxplot_union(
 
 \item{html_height}{An interger. Set the html height.}
 
-\item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
+\item{mytheme}{Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.}
 }
 \value{
 EMPT object
