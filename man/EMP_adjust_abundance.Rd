@@ -16,7 +16,7 @@ EMP_adjust_abundance(
 )
 }
 \arguments{
-\item{obj}{Object in EMPT or SummarisedExperiment format.}
+\item{obj}{EMPT.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 

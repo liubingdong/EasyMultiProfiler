@@ -82,7 +82,8 @@ Suggests:
     glmnet (>= 4.1.8),
     janitor,
     ggpmisc,
-    umap
+    umap,
+    sva
 VignetteBuilder: knitr
 LinkingTo: Rcpp, RcppParallel
 NeedsCompilation: yes

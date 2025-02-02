@@ -20,6 +20,8 @@
 #' @noRd
 .EMP_adjust_abundance <- function(EMPT,method,.factor_unwanted,.factor_of_interest,...) {
 
+  rlang::check_installed(c('BiocManager'), reason = 'for EMP_cluster_analysis().', action = install.packages) 
+  rlang::check_installed(c('sva'), reason = 'for EMP_cluster_analysis().', action = BiocManager::install)   
   primary <- NULL
   
   coldata <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!.factor_unwanted,!!.factor_of_interest)
@@ -48,7 +50,7 @@
 
 #' Adjust experssion or abundance for unexpected bias or batch effect
 #'
-#' @param obj Object in EMPT or SummarisedExperiment format.
+#' @param obj EMPT.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
 #' @param method A character string. Methods include combat_seq (default), combat and limma_remove_batch_effect.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
