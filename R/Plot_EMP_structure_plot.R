@@ -137,7 +137,7 @@ top_exper_caculate <- function(assay_data,estimate_group=NULL,structure_method =
 #' @param ncol An interger. Set the col number in the facet plot.
 #' @param show A character string include pic (default), html(under constrution).
 #' @param palette A series of character string. Color palette.
-#' @param mytheme Modify components of a theme according to the ggplot2::theme.
+#' @param mytheme Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.
 #' @rdname EMP_structure_plot
 #'
 #' @examples

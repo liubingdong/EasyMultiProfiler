@@ -17,10 +17,10 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
     }
   }
 
-  assay_name <- .get.assay_name.EMPT(EMPT)
-  if (!assay_name %in% c('counts','relative','integer')) {
-    stop('Only counts, relative and integer data in two groups provide volcanol plot!')
-  }
+  #assay_name <- .get.assay_name.EMPT(EMPT)
+  #if (!assay_name %in% c('counts','relative','integer')) {
+  #  stop('Only counts, relative and integer data in two groups provide volcanol plot!')
+  #}
 
   method <- .get.method.EMPT(EMPT)
   estimate_group_info <- .get.estimate_group_info.EMPT(EMPT)

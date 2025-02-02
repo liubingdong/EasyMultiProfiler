@@ -355,8 +355,8 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   set.seed(seed)
   adonis_data <- assay(EMPT) %>% t()
-  adonis_result <- adonis2_m(formula=adonis_data~Group,data = mapping,
-    method = distance_for_adonis,permutations = adonis_permutations) |> suppressWarnings()
+  spsUtil::quiet(adonis_result <- adonis2_m(formula=adonis_data~Group,data = mapping,
+    method = distance_for_adonis,permutations = adonis_permutations),print_cat = FALSE, message = TRUE, warning = TRUE)
 
   p5 <- ggplot() +
     geom_text(aes(x = -0.5,y = 0.6,

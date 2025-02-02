@@ -36,7 +36,7 @@ EMP_structure_plot(
 
 \item{palette}{A series of character string. Color palette.}
 
-\item{mytheme}{Modify components of a theme according to the ggplot2::theme.}
+\item{mytheme}{Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.}
 }
 \value{
 EMPT object

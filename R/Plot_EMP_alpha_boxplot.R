@@ -237,7 +237,6 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
     theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
     eval(parse(text = paste0(mytheme)))
 
-
   alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
 
   .get.plot_deposit.EMPT(EMPT,info = 'alpha_analysis_plot') <- alpha_plot
