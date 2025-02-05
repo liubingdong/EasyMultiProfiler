@@ -258,6 +258,13 @@ setMethod("show", "EMP",
                       cat('Cor-relationship observation:',paste0(object$n.obs,collapse = ' x '),'\n')
                       cat('Cor-relationship method: ',cor_method)
                    },
+                   "EMP_network_analysis" = {
+                    .network_print(object)
+                   },
+                   "EMP_network_plot" = {
+                    show <-.get.plot_specific.EMP(object)
+                    return(.show_EMP_network_plot(object,plot=show))
+                   },
                    "EMP_WGCNA_cor_analysis2" = {
                      object <- object@deposit$WGCNA_cor_analysis_result
                      cat('EMP_WGCNA_cor_analysis:','\n')
@@ -332,6 +339,12 @@ setMethod("show", "EMP",
                       EMP_message(str,color = 32,order = 1,show='message')
                      }
                      return(.get.plot_deposit.EMP(object,info='EMP_cor_sankey'))
+                   },
+                  "EMP_network_analysis" = {
+                     for (str in object@message_info) {
+                      EMP_message(str,color = 32,order = 1,show='message')
+                     }
+                     return(object@deposit[["EMP_network_analysis"]])
                    },
                   "EMP_WGCNA_cor_analysis2" = {
                      for (str in object@message_info) {

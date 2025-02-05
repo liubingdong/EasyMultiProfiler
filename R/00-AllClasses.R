@@ -185,6 +185,9 @@ setClass("EMP_cor_analysis",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_analysis2",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
+setClass("EMP_network_analysis",contains = c("EMP"))
+setClass("EMP_network_plot",contains = c("EMP","EMP_network_analysis"))
+
 setClass("EMP_assay_heatmap",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_cor_heatmap",contains = c("EMP"))
 setClass("EMP_cor_sankey",contains = c("EMP"))
@@ -331,8 +334,6 @@ setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
 })
 
 
-
-
 #' Netplot for enrichment result
 #' @param obj object
 #' @param ... ...
@@ -379,8 +380,6 @@ setMethod("EMP_netplot","EMP_multi_same_enrich",function(obj,...){
 setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
-
-
 
 
 #' Curveplot for enrichment result
