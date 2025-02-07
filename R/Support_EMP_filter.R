@@ -125,7 +125,7 @@
         # delete the plot
         if (!length(deposit@plot_deposit) == 0) {
           deposit@plot_deposit <- NULL
-          EMP_message("Because condtion has changed, all plot results will be removed!",color = 32,order = 1,show='message')
+          #EMP_message("Because condtion has changed, all plot results will be eliminated.",color = 32,order = 1,show='message')
         }
 
         deposit@deposit_append <- NULL ### WGCNA delete
@@ -187,6 +187,10 @@
   # for debug
   #print(check_samples)
   #print(check_features)
+  
+  sample_affect_result <- c()
+  feature_affect_result <- c()
+  all_affect_result <- c()
 
   for (i in result_names) {
     each_deposit_info <- deposit_info %>% dplyr::filter(Result == !!i)
@@ -249,9 +253,10 @@
         }
       }else{
         EMPT@deposit[[i]] <- NULL
-        info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
-                     " will become NULL.\n",result_source, " should be re-run if needed.")
-        EMP_message(info_output,color = 32,order = 1,show='message')
+        # info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
+        #              " will become NULL.\n",result_source, " should be re-run if needed.")
+        # EMP_message(info_output,color = 32,order = 1,show='message')
+        sample_affect_result <- append(sample_affect_result,i)
       }
     }else if(result_attribute == 'feature'){
       if (!affect_status) {
@@ -266,20 +271,56 @@
         }
       }else{
         EMPT@deposit[[i]] <- NULL
-        info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
-                     " will become NULL.\n",result_source, " should be re-run if needed.")
-        EMP_message(info_output,color = 32,order = 1,show='message')
-
+        # info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
+        #              " will become NULL.\n",result_source, " should be re-run if needed.")
+        # EMP_message(info_output,color = 32,order = 1,show='message')
+        feature_affect_result <- append(feature_affect_result,i)
       }
     }else if(result_attribute == 'all'){
       EMPT@deposit[[i]] <-NULL
-      info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
-                   " will become NULL.\n",result_source, " should be re-run if needed.")
-      EMP_message(info_output,color = 32,order = 1,show='message')
+      # info_output <- paste0("If any ",affect_cause, " have changed, the ",i,
+      #              " will become NULL.\n",result_source, " should be re-run if needed.")
+      # EMP_message(info_output,color = 32,order = 1,show='message')
+      all_affect_result <- append(all_affect_result,i)
     }else{
       stop("The attribute in the deposit_info should be primary, feature or all!")
     }
   }
+
+  sample_affect_analysis <- deposit_info |>
+    dplyr::filter(Result %in% {{sample_affect_result}}) |>
+    dplyr::pull(source) |>
+    unique()
+  #if (length(sample_affect_analysis) > 0) {
+  #    sample_affect_analysis_info <- paste0("Due to variations in the samples, The results from ", .concat_str(sample_affect_analysis)," will be eliminated.")
+  #    EMP_message(sample_affect_analysis_info,color = 32,order = 1,show='message')
+  #}
+
+  feature_affect_analysis <- deposit_info |>
+    dplyr::filter(Result %in% {{feature_affect_result}}) |>
+    dplyr::pull(source) |>
+    unique()
+  #if (length(feature_affect_analysis) > 0) {
+  #    feature_affect_analysis_info <- paste0("Due to variations in the features, The results from ", .concat_str(feature_affect_analysis)," will be eliminated.")
+  #    EMP_message(feature_affect_analysis_info,color = 32,order = 1,show='message')
+  #}
+
+
+  all_affect_analysis <- deposit_info |>
+    dplyr::filter(Result %in% {{all_affect_result}}) |>
+    dplyr::pull(source) |>
+    unique()
+  #if (length(all_affect_analysis) > 0) {
+  #    all_affect_analysis_info <- paste0("Due to variations in the samples or features, The results from ", .concat_str(all_affect_analysis)," will be eliminated.")
+  #    EMP_message(all_affect_analysis_info,color = 32,order = 1,show='message')
+  #}
+
+  total_assay_analysis <- c(sample_affect_analysis,feature_affect_analysis,all_affect_analysis) |> unique()
+  if (length(total_assay_analysis) > 0) {
+      total_assay_analysis_info <- paste0("Due to changes in the samples or features, The results from ", .concat_str(total_assay_analysis)," will be eliminated.")
+      EMP_message(total_assay_analysis_info,color = 32,order = 1,show='message')
+  }
+
   if(is.null(.get.info.EMPT(EMPT))) {
     class(EMPT) <- 'EMP_assay_data'
     .get.info.EMPT(EMPT) <- 'EMP_assay_data'
@@ -307,6 +348,17 @@
   }
 
   return(EMPT)
+}
+
+
+.concat_str <- function(str_vector){
+  if (length(str_vector) > 1) {
+    result <- paste(str_vector[-length(str_vector)], collapse = ", ")
+    result <- paste(result, "and", str_vector[length(str_vector)], sep = " ")
+  } else {
+    result <- str_vector
+  }
+  return(result)
 }
 
 

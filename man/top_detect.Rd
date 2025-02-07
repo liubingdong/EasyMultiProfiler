@@ -9,7 +9,7 @@ top_detect(x, n, type = "top", index = TRUE)
 \arguments{
 \item{x}{vec.}
 
-\item{n}{a number above 0.}
+\item{n}{This parameter requires a number greater than 0. If it is greater than 1, selection is based on the numeric value. If it is between 0 and 1, selection is based on a percentage.}
 
 \item{type}{top or bottom.}
 
