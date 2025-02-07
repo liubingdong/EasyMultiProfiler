@@ -3,8 +3,7 @@
 #' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param showCategory A number or a vector of terms. If it is a number, the first n terms will be displayed. If it is a vector of terms, the selected terms will be displayed.
 #' @param ... Additional parameters, see also \code{\link[enrichplot]{cnetplot}}
-#' @rdname EMP_netplot
-#' @export
+#' @rdname EMP_enrich_netplot
 #'
 EMP_netplot_enrich <- function(obj,plot_category = 1,seed =123,showCategory=10,...) {
   call <- match.call()

@@ -4,7 +4,7 @@
 #' @param color A character string. Variable that used to color enriched terms, e.g. 'pvalue', 'p.adjust' or 'qvalue'
 #' @param showCategory A number or a list of terms. If it is a number, the first n terms will be displayed. If it is a list of terms, the selected terms will be displayed.
 #' @param ... Addtional parameters, see also \code{\link[enrichplot]{dotplot}}.
-#' @rdname EMP_dotplot
+#' @rdname EMP_enrich_dotplot
 #'
 #' @examples
 #' # add example

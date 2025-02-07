@@ -785,4 +785,49 @@ EMP_message <- function(str,order=0,color=32,pure=FALSE,show='message',call.=FAL
 
 
 
+#' Detect the top or bottom number
+#' @param x vec. 
+#' @param n This parameter requires a number greater than 0. If it is greater than 1, selection is based on the numeric value. If it is between 0 and 1, selection is based on a percentage.
+#' @param type top or bottom.
+#' @param index output the index or the number.
+#' @export
+#' @author Bingdong Liu
+#' @examples
+#' top_detect(1:10,n = 3,index = FALSE)
+#' 
+#' top_detect(1:10,n = 3,index = TRUE)
+#' 
+#' MAE |>
+#'   EMP_assay_extract(experiment='taxonomy')|> 
+#'   EMP_alpha_analysis() |>
+#'   EMP_filter(top_detect(shannon,3))
+top_detect<- function(x, n, type = 'top',index=TRUE) {
+  type <- match.arg(type, c("top", "bottom"))  
+  
+  if (length(x) < n) {
+    stop("The input n must not exceed the scale of the data!")
+  }
+  
+  # 确保 n 合法（大于 0 且不超过向量长度）
+  if (n <= 0) {
+    stop("n must be greater than 0.")
+  } else if (n < 1) {
+    n <- ceiling(length(x) * n)  
+  } else {
+    n <- min(n, length(unique(x)))  
+  }
+  
+  if (type == "top") {
+    threshold <- sort(unique(x), decreasing = TRUE)[1:n]  
+  } else {
+    threshold <- sort(unique(x))[1:n]  
+  }
 
+  if (index) {
+    result <- x %in% threshold
+    return(result)
+  }else{
+    return(threshold)
+  }
+
+}

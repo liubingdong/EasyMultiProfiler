@@ -242,13 +242,13 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
 #'   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') |>
-#'   EMP_dotplot()
+#'   EMP_enrich_dotplot()
 #' 
 #' MAE |>
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
 #'   EMP_enrich_analysis(keyType ='ec',KEGG_Type = 'KEGG',pvalue<0.05,pvalueCutoff=1,species = 'all') |>
-#'   EMP_netplot()
+#'   EMP_enrich_netplot()
 #' 
 #' # Transcriptomic data
 #' ## KEGG analysis
@@ -267,7 +267,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
 #'   EMP_enrich_analysis(pvalue<0.05,method = 'go',OrgDb=org.Hs.eg.db,ont='MF',readable=TRUE,
 #'                       pvalueCutoff=0.05) |>
-#'   EMP_dotplot(show=6)
+#'   EMP_enrich_dotplot(show=6)
 #' 
 #' ## DOSE analysis
 #' MAE |>
@@ -275,7 +275,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
 #'   EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="DO",organism= 'hsa',readable=TRUE) |>
-#'   EMP_dotplot(show=5)
+#'   EMP_enrich_dotplot(show=5)
 #' 
 #' ## Reactome analysis
 #' MAE |>
@@ -283,7 +283,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
 #'   EMP_enrich_analysis(pvalue<0.05,method = 'Reactome',organism= 'human',readable=TRUE) |>
-#'   EMP_dotplot()
+#'   EMP_enrich_dotplot()
 #' }
 EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500, action='add',combineGroup=FALSE,gson=NULL,
                                method = "kegg", 

@@ -61,7 +61,7 @@ MAE |>
   EMP_filter(feature_condition = WGCNA_color == 'brown' ) |> 
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
   EMP_enrich_analysis(keyType = 'ec',KEGG_Type = 'MKEGG') |>
-  EMP_dotplot()
+  EMP_enrich_dotplot()
 
 ## from two different experiments
 k1 <- MAE |>

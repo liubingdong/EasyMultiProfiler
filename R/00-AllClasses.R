@@ -108,9 +108,10 @@ setClass("EMPT",
                                                 'Boruta_model','Boruta_feature_importance',
                                                 'rf_model','rf_feature_importance',
                                                 'xgb_model','xgb_feature_importance',
-                                                'lasso_model','lasso_feature_importance'),
-                                      affect_when_sample_changed= c(0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
-                                      affect_when_feature_changed=c(1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
+                                                'lasso_model','lasso_feature_importance',
+                                                'net','net_feature_info','net_centrality'),
+                                      affect_when_sample_changed= c(0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
+                                      affect_when_feature_changed=c(1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1),
                                       attribute=c('primary',
                                                   'feature',
                                                   'primary',
@@ -121,13 +122,15 @@ setClass("EMPT",
                                                   'all','feature',
                                                   'all','feature',
                                                   'all','feature',
-                                                  'all','feature'),
+                                                  'all','feature',
+                                                  'all','all','feature'),
                                       attribute2=c('normal','normal','normal','normal','normal','none','none',
                                                    'normal','none','normal',
                                                    'none','normal',
                                                    'none','normal',
                                                    'none','normal',
-                                                   'none','normal'),
+                                                   'none','normal',
+                                                   'none','none','normal'),
                                       source=c('EMP_alpha_analysis','EMP_diff_analysis',
                                                'EMP_cluster_analysis','EMP_cluster_analysis','EMP_WGCNA_cluster_analysis',
                                                'EMP_GSEA_analysis','EMP_enrich_analysis',
@@ -135,7 +138,8 @@ setClass("EMPT",
                                                'EMP_marker_analysis','EMP_marker_analysis',
                                                'EMP_marker_analysis','EMP_marker_analysis',
                                                'EMP_marker_analysis','EMP_marker_analysis',
-                                               'EMP_marker_analysis','EMP_marker_analysis')
+                                               'EMP_marker_analysis','EMP_marker_analysis',
+                                               'EMP_network_analysis','EMP_network_analysis','EMP_network_analysis')
            ),
            experiment = NULL,
            assay_name = NULL,
@@ -185,8 +189,11 @@ setClass("EMP_cor_analysis",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_analysis2",contains = c("EMP"))
 setClass("EMP_WGCNA_cor_heatmap2",contains = c("EMP_WGCNA_cor_analysis2","EMP"))
 
-setClass("EMP_network_analysis",contains = c("EMP"))
-setClass("EMP_network_plot",contains = c("EMP","EMP_network_analysis"))
+
+setClass("EMP_network_analysis",contains = c("EMPT","SummarizedExperiment"))
+setClass("EMP_network_plot",contains = c("EMP_network_analysis","SummarizedExperiment","EMPT"))
+setClass("EMP_network_analysis2",contains = c("EMP"))
+setClass("EMP_network_plot2",contains = c("EMP","EMP_network_analysis2"))
 
 setClass("EMP_assay_heatmap",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_cor_heatmap",contains = c("EMP"))
@@ -289,7 +296,7 @@ setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
 #'
 #' @param obj object
 #' @param ... ...
-#' @rdname EMP_dotplot
+#' @rdname EMP_enrich_dotplot
 #'
 #' @export
 #'
@@ -300,36 +307,36 @@ setMethod("EMP_scatterplot","EMP_dimension_analysis",function(obj,...){
 #'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                     estimate_group = 'Group',
 #'                     pvalueCutoff = 0.05,keyType = 'ko') |>
-#'   EMP_dotplot(color='p.adjust',showCategory=10) 
+#'   EMP_enrich_dotplot(color='p.adjust',showCategory=10) 
 #' }
-setGeneric("EMP_dotplot",function(obj,...) standardGeneric("EMP_dotplot"))
+setGeneric("EMP_enrich_dotplot",function(obj,...) standardGeneric("EMP_enrich_dotplot"))
 
 
 #' @param EMP_enrich_analysis EMP_enrich_analysis
-#' @rdname EMP_dotplot
+#' @rdname EMP_enrich_dotplot
 #'
 #' @export
 #' @return Enrichment dotplot
 
-setMethod("EMP_dotplot","EMP_enrich_analysis",function(obj,...){
+setMethod("EMP_enrich_dotplot","EMP_enrich_analysis",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
 
 #' @param EMP_enrich_analysis EMP_multi_enrich
-#' @rdname EMP_dotplot
+#' @rdname EMP_enrich_dotplot
 #'
 #' @export
 #'
-setMethod("EMP_dotplot","EMP_multi_diff_enrich",function(obj,...){
+setMethod("EMP_enrich_dotplot","EMP_multi_diff_enrich",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
 
 #' @param EMP_enrich_analysis EMP_multi_enrich
-#' @rdname EMP_dotplot
+#' @rdname EMP_enrich_dotplot
 #'
 #' @export
 #'
-setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
+setMethod("EMP_enrich_dotplot","EMP_multi_same_enrich",function(obj,...){
   EMP_dotplot_enrich(obj,...)
 })
 
@@ -337,7 +344,7 @@ setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
 #' Netplot for enrichment result
 #' @param obj object
 #' @param ... ...
-#' @rdname EMP_netplot
+#' @rdname EMP_enrich_netplot
 #'
 #' @export
 #'
@@ -348,45 +355,45 @@ setMethod("EMP_dotplot","EMP_multi_same_enrich",function(obj,...){
 #'   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                     estimate_group = 'Group',
 #'                     pvalueCutoff = 0.05,keyType = 'ko') |>
-#'   EMP_netplot(showCategory=10) 
+#'   EMP_enrich_netplot(showCategory=10) 
 #' }
-setGeneric("EMP_netplot",function(obj,...) standardGeneric("EMP_netplot"))
+setGeneric("EMP_enrich_netplot",function(obj,...) standardGeneric("EMP_enrich_netplot"))
 
 
 
-#' @rdname EMP_netplot
+#' @rdname EMP_enrich_netplot
 #' @return Enrichment netplot object
 #' @export
 #'
 
-setMethod("EMP_netplot","EMP_enrich_analysis",function(obj,...){
+setMethod("EMP_enrich_netplot","EMP_enrich_analysis",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
 
 
-#' @rdname EMP_netplot
+#' @rdname EMP_enrich_netplot
 #' @export
 #'
 
-setMethod("EMP_netplot","EMP_multi_same_enrich",function(obj,...){
+setMethod("EMP_enrich_netplot","EMP_multi_same_enrich",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
 
 
-#' @rdname EMP_netplot
+#' @rdname EMP_enrich_netplot
 #' @export
 #'
 
-setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
+setMethod("EMP_enrich_netplot","EMP_multi_diff_enrich",function(obj,...){
   EMP_netplot_enrich(obj,...)
 })
 
 
-#' Curveplot for enrichment result
+#' Gsea plot for enrichment result
 #'
 #' @param obj object
 #' @param ... ...
-#' @rdname EMP_curveplot
+#' @rdname EMP_gsea_plot
 #'
 #' @export
 #'
@@ -397,17 +404,17 @@ setMethod("EMP_netplot","EMP_multi_diff_enrich",function(obj,...){
 #'  EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                    estimate_group = 'Group',
 #'                    pvalueCutoff = 0.05,keyType = 'ko') |>
-#'  EMP_curveplot(geneSetID='map00680')
+#'  EMP_gsea_plot(geneSetID='map00680')
 #' }
-setGeneric("EMP_curveplot",function(obj,...) standardGeneric("EMP_curveplot"))
+setGeneric("EMP_gsea_plot",function(obj,...) standardGeneric("EMP_gsea_plot"))
 
 
-#' @rdname EMP_curveplot
+#' @rdname EMP_gsea_plot
 #'
 #' @export
 #'
 
-setMethod("EMP_curveplot","EMP_enrich_analysis",function(obj,...){
+setMethod("EMP_gsea_plot","EMP_enrich_analysis",function(obj,...){
   EMP_curveplot_enrich(obj,...)
 })
 

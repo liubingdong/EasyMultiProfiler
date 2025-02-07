@@ -104,6 +104,6 @@ k4 <- MAE |>
 ## Visualization
 (k1+k2) |>
   EMP_multi_analysis(method = 'same_feature_enrich',keyType = 'ec',combineFun='ActivePathways') |>
-  EMP_dotplot()
+  EMP_enrich_dotplot()
 }
 }

@@ -10,7 +10,8 @@ EMP_network_plot(
   weighted = TRUE,
   threshold = 0,
   shape = "circle",
-  node_color = c("#F0E442", "#009E73", "#E69F00", "#CC79A7", "#8491B4FF"),
+  node_color = c("#F0E442", "#009E73", "#E69F00", "#CC79A7", "#8491B4FF", "#F39B7FFF",
+    "#4DBBD5FF", "#E64B35FF", "#D55E00", "#00A087FF", "#56B4E9", "#B2182B"),
   node_info = NULL,
   vsize = NULL,
   esize = NULL,
@@ -21,6 +22,8 @@ EMP_network_plot(
   label.cex = 0.4,
   label.color = "black",
   label.prop = 0.9,
+  edge.labels = FALSE,
+  edge.label.cex = 0.5,
   legend.cex = 0.3,
   legend.mode = NULL,
   show = "net",
@@ -28,7 +31,7 @@ EMP_network_plot(
 )
 }
 \arguments{
-\item{obj}{EMP object.}
+\item{obj}{EMPT or EMP object.}
 
 \item{layout}{Placement of the nodes including spring and circle.}
 
@@ -60,6 +63,10 @@ EMP_network_plot(
 
 \item{label.prop}{Controls the proportion of the width of the node that the label rescales to. Defaults to 0.9.}
 
+\item{edge.labels}{If FALSE, no edge labels are plotted. If TRUE, numerical edge weights are printed on the edges.}
+
+\item{edge.label.cex}{Either a single number or a number per edge used as a scalar of the edge label size. Defaults to 0.5.}
+
 \item{legend.cex}{Scalar of the legend. defaults to 0.4.}
 
 \item{legend.mode}{Character string indicating the type of legend to be drawn. "groups" indicates the legend should be based on the groups object, "names" indicates the legend should be based on the nodeNames object, and style1 and style2 indicate the legend should be based on both. Defaults to "style1" if both "groups" and "nodeNames" arguments are used.}
@@ -73,7 +80,7 @@ Network plot
 }
 \examples{
 data(MAE)
-
+For muti experiment
 k1 <- MAE |>
   EMP_assay_extract('taxonomy') |>
   EMP_collapse(estimate_group = 'Genus',collapse_by = 'row') |>
@@ -88,11 +95,12 @@ k2 <- MAE |>
 
 (k1 + k2 ) |> 
   EMP_network_analysis() |> 
-  EMP_network_plot(show = 'node',layout = 'spring',
-                   vsize = 5,
+  EMP_network_plot(show = 'net',layout = 'spring',
+                   edge.labels=TRUE,edge.label.cex=0.5,
+                   vsize = 5,threshold = 0.4,
                    node_info = c('Phylum','MS2class'),
                    legend.cex=0.3,label.cex = 1,label.prop = 0.9,
-                   fade = T,shape = 'circle',font=2)
+                   fade = TRUE,shape = 'circle',font=2)
 (k1 + k2 ) |> 
   EMP_network_analysis() |> 
   EMP_network_plot(show = 'node') # get the node importance

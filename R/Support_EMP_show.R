@@ -75,12 +75,13 @@ setMethod("show", "EMPT",
                      deposit[['WGCNA_cluster_df']] %>% print()
                    },
                    "EMP_WGCNA_cor_analysis" = {
-                      object <- .get.result.EMPT(object)
-                      cat('EMP_WGCNA_cor_analysis:','\n')
-                      cat('Cor-relationship matrix:',dim(object$correlation)[1],'x',dim(object$correlation)[2],'\n')
-                      cat(object$cor_info[1],'observation:',object$n.obs[1],'\n')
-                      cat(object$cor_info[2],'observation:',object$n.obs[2],'\n')
-                      cat('Intersect observation:',object$n.obs[3])
+                      object <- .get.result.EMPT(object,info = 'EMP_WGCNA_cor_analysis')
+                      str <- paste0('EMP_WGCNA_cor_analysis:','\n',
+                                     'Cor-relationship matrix:',dim(object$correlation)[1],'x',dim(object$correlation)[2],'\n',
+                                     object$cor_info[1],'observation:',object$n.obs[1],'\n',
+                                     object$cor_info[2],'observation:',object$n.obs[2],'\n',
+                                     'Intersect observation:',object$n.obs[3])
+                      EMP_message(str,color = 32,order = 1,show='message')
                    },
                     "EMP_WGCNA_cor_heatmap" = {
                       .get.result.EMPT(object) %>% print()
@@ -96,6 +97,11 @@ setMethod("show", "EMPT",
                    },
                    "EMP_dimension_analysis" = {
                      .get.result.EMPT(object) %>% print()
+                   },
+                   "EMP_network_analysis" = {
+                    .network_print(object)
+                    deposit <- .get.result.EMPT(object) |> suppressMessages()
+                    deposit[['net_centrality']] %>% print()
                    },
                     "EMP_dimension_analysis_scatterplot" = {
                       set.seed(123)
@@ -129,7 +135,11 @@ setMethod("show", "EMPT",
                    },
                    "EMP_fitline_plot" = {
                      .show_EMP_fitplot(object,.get.plot_specific.EMPT(object)) %>% suppressWarnings()
-                   }
+                   },
+                   "EMP_network_plot" = {
+                    show <-.get.plot_specific.EMPT(object)
+                    return(.show_EMP_network_plot(object,plot=show))                   
+                  }
                    )
           }
 )
@@ -176,6 +186,16 @@ setMethod("show", "EMPT",
                      deposit[['dimension_axis']] <- object@deposit$dimension_axis
                      return(deposit)
                    },
+                    "EMP_network_analysis" = {
+                     for (str in object@message_info) {
+                      EMP_message(str,color = 32,order = 1,show='message')
+                     }
+                     deposit <- list()
+                     deposit[['net']] <- object@deposit[['net']] 
+                     deposit[['net_feature_info']] <- object@deposit[['net_feature_info']] 
+                     deposit[['net_centrality']] <- object@deposit[['net_centrality']] 
+                     return(deposit)
+                   },   
                    "EMP_cluster_analysis" = {
                      check_sample_cluster <- is.null(object@deposit[['sample_cluster_result']])
                      check_feature_cluster <- is.null(object@deposit[['feature_cluster_result']])
@@ -246,32 +266,36 @@ setMethod("show", "EMP",
                    "EMP_list_data" = {
                      experiment_names <- names(object@ExperimentList)
                      experiment_num <- length(object@ExperimentList)
-                     cat('EMP object contains',experiment_num, 'experiment list:','\n')
-                     for (i in names(object@ExperimentList)) {
-                       cat(i,'\n')
-                     }
+                     str1 <- paste0('EMP object contains',experiment_num, 'experiment list:','\n')
+                     str2 <- paste(names(object@ExperimentList),collapse ='\n')
+                     str3 <- paste0(str1,str2)
+                     EMP_message(str3,color = 32,order = 1,show='message')
                    },
                    "EMP_cor_analysis" = {
                       cor_method <- .get.method.EMP(object)
                       object <- .get.result.EMP(object,info = 'EMP_cor_analysis')
-                      cat('EMP_cor_analysis:','\n')
-                      cat('Cor-relationship observation:',paste0(object$n.obs,collapse = ' x '),'\n')
-                      cat('Cor-relationship method: ',cor_method)
+                      str <- paste0('EMP_cor_analysis:','\n',
+                             'Cor-relationship observation:',paste0(object$n.obs,collapse = ' x '),'\n',
+                             'Cor-relationship method: ',cor_method)
+                      EMP_message(str,color = 32,order = 1,show='message')
                    },
-                   "EMP_network_analysis" = {
+                   "EMP_network_analysis2" = {
                     .network_print(object)
+                    deposit <- .get.result.EMP(object) |> suppressMessages()
+                    deposit[['net_centrality']] %>% print()
                    },
-                   "EMP_network_plot" = {
+                   "EMP_network_plot2" = {
                     show <-.get.plot_specific.EMP(object)
                     return(.show_EMP_network_plot(object,plot=show))
                    },
                    "EMP_WGCNA_cor_analysis2" = {
                      object <- object@deposit$WGCNA_cor_analysis_result
-                     cat('EMP_WGCNA_cor_analysis:','\n')
-                     cat('Cor-relationship matrix:',dim(object$correlation)[1],'x',dim(object$correlation)[2],'\n')
-                     cat(object$cor_info[1],'observation:',object$n.obs[1],'\n')
-                     cat(object$cor_info[2],'observation:',object$n.obs[2],'\n')
-                     cat('Intersect observation:',object$n.obs[3])
+                     str <- paste0('EMP_WGCNA_cor_analysis:','\n',
+                                    'Cor-relationship matrix:',dim(object$correlation)[1],'x',dim(object$correlation)[2],'\n',
+                                    object$cor_info[1],'observation:',object$n.obs[1],'\n',
+                                    object$cor_info[2],'observation:',object$n.obs[2],'\n',
+                                    'Intersect observation:',object$n.obs[3])
+                     EMP_message(str,color = 32,order = 1,show='message')
                    },
                     "EMP_WGCNA_cor_heatmap2" = {
                       .get.result.EMP(object) %>% print()
@@ -340,7 +364,7 @@ setMethod("show", "EMP",
                      }
                      return(.get.plot_deposit.EMP(object,info='EMP_cor_sankey'))
                    },
-                  "EMP_network_analysis" = {
+                  "EMP_network_analysis2" = {
                      for (str in object@message_info) {
                       EMP_message(str,color = 32,order = 1,show='message')
                      }

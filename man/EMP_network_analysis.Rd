@@ -5,20 +5,21 @@
 \title{Network analysis}
 \usage{
 EMP_network_analysis(
-  EMP,
+  obj,
   select = NULL,
   method = "cor",
   corMethod = "spearman",
   weighted = TRUE,
   missing = "pairwise",
   threshold = 0,
+  coldata_to_assay = NULL,
   use_cached = TRUE,
   action = "add",
   ...
 )
 }
 \arguments{
-\item{EMP}{Object in EMP format.}
+\item{obj}{EMPT or EMP.}
 
 \item{select}{A character string. The experiment name in the EMP object.}
 
@@ -26,9 +27,13 @@ EMP_network_analysis(
 
 \item{corMethod}{A character string. Methods include spearman, cor, cov, npn and cor_auto.}
 
+\item{weighted}{Logical, should the analyzed network be weighted?}
+
 \item{missing}{How to handle missing data? "pairwise" for pairwise deletion, "listwise" for listwise deletion, "fiml" for full-information maximum likelihood and "stop" to stop with an error.}
 
 \item{threshold}{Thresholding to use in partial correlation networks. Can be a fixed number to threshold all absolute edges below this value, 'locfdr' for local FDR, or any option corresponding to adjustments in \code{\link[psych]{corr.p}} ('none', 'sig', 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY' or 'fdr')). Can also be used for default = "IsingSampler" but can only be set to a logical enabling or disabling significance thresholding.}
+
+\item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
@@ -64,13 +69,13 @@ k2 <- MAE |>
   EMP_diff_analysis(method='DESeq2', .formula = ~Group) |>
   EMP_filter(feature_condition = pvalue<0.05)
 
-(k1 + k2 ) |> 
-  EMP_network_analysis() |> 
-  EMP_network_plot(show = 'node',layout = 'spring',
-                   vsize = 5,
-                   node_info = c('Phylum','MS2class'),
-                   legend.cex=0.3,label.cex = 1,label.prop = 0.9,
-                   fade = T,shape = 'circle',font=2)
+
+For single experiment
+k1  |>
+  EMP_network_analysis() |>
+  EMP_filter(feature_condition = top_detect(Closeness,1))  # filter the top node according to the network analysis
+
+For muti experiment
 (k1 + k2 ) |> 
   EMP_network_analysis() |> 
   EMP_network_plot(show = 'node') # get the node importance

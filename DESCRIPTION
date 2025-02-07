@@ -14,6 +14,7 @@ Imports:
     BiocManager (>= 1.30.22),    
     Boruta (>= 8.0.0),
     biomformat,
+    bootnet,
     clusterProfiler (>= 4.10.0),
     data.table,
     DESeq2,
@@ -47,6 +48,7 @@ Imports:
     pillar,
     parallel,
     qvalue (>= 2.34.0),
+    qgraph,
     randomForest (>= 4.7.1.1),
     rlang (>= 1.1.3),
     Rcpp,
@@ -69,7 +71,6 @@ Imports:
     yulab.utils (>= 0.1.4)
 RoxygenNote: 7.3.2
 Suggests: 
-    bootnet,
     knitr,
     dendextend,  
     rmarkdown,

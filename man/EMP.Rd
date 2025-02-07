@@ -36,19 +36,21 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_dimension_analysis}}
 	\item \code{\link{EMP_enrich_analysis}}
 	\item \code{\link{EMP_marker_analysis}}
+	\item \code{\link{EMP_multi_analysis}}
+	\item \code{\link{EMP_network_analysis}}
 	\item \code{\link{EMP_GSEA_analysis}}
 	\item \code{\link{EMP_WGCNA_cluster_analysis}}
 	\item \code{\link{EMP_WGCNA_cor_analysis}}
-	\item \code{\link{EMP_multi_analysis}}
  }
 {Data Virtualization} : 
 \itemize{
-  \item \code{\link{EMP_boxplot}}
-  \item \code{\link{EMP_curveplot}}  
-	\item \code{\link{EMP_dotplot}}
+  \item \code{\link{EMP_boxplot}}  
+	\item \code{\link{EMP_enrich_dotplot}}
+	\item \code{\link{EMP_enrich_netplot}} 
 	\item \code{\link{EMP_fitline_plot}}	
+	\item \code{\link{EMP_network_plot}} 
+	\item \code{\link{EMP_gsea_plot}}
 	\item \code{\link{EMP_heatmap_plot}}
-	\item \code{\link{EMP_netplot}} 
   \item \code{\link{EMP_sankey_plot}}
 	\item \code{\link{EMP_scatterplot}}
 	\item \code{\link{EMP_structure_plot}} 	
@@ -72,6 +74,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{str_detect_multi}} 
 	\item \code{\link{EMP_to_EMP1}} 
 	\item \code{\link{EMP_message}} 
+	\item \code{\link{top_detect}} 
  }
 }
 \seealso{

@@ -162,18 +162,18 @@ MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
-  EMP_curveplot(geneSetID='map00680')
+  EMP_gesa_plot(geneSetID='map00680')
   
 MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
-  EMP_dotplot(color='p.adjust',showCategory=10) 
+  EMP_enrich_dotplot(color='p.adjust',showCategory=10) 
 
 MAE |>
   EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
                     estimate_group = 'Group',
                     pvalueCutoff = 0.05,keyType = 'ko') |>
-  EMP_netplot(showCategory=5) 
+  EMP_enrich_netplot(showCategory=5) 
 }
 }
