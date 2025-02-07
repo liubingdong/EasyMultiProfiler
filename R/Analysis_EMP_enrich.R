@@ -48,7 +48,7 @@ enrich_go <- function(df, feature_name, go.params, minGSSize, maxGSSize, combine
   return(enrich.data)   
 }
 
-#' @importFrom ReactomePA enrichPathway
+
 enrich_reactome <- function(df, feature_name, reactome.params, minGSSize, maxGSSize, combineGroup, ...) {
   organism <- reactome.params$organism
   if (combineGroup == TRUE) {

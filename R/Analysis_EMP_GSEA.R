@@ -83,7 +83,7 @@ gsea_go <- function(geneList, go.params, pvalueCutoff, seed, ...) {
   return(enrich.data)
 }
 
-#' @importFrom ReactomePA gsePathway
+
 gsea_reactome <- function(geneList, reactome.params, pvalueCutoff, seed, ...) {
   organism <- reactome.params$organism
   enrich.data <- ReactomePA::gsePathway(geneList, organism = organism, pvalueCutoff=pvalueCutoff,seed=seed,...) %>% suppressWarnings()
