@@ -80,7 +80,17 @@ Network plot
 }
 \examples{
 data(MAE)
-For muti experiment
+
+# For single experiment
+MAE |>
+  EMP_assay_extract('taxonomy') |>
+  EMP_collapse(estimate_group = 'Genus',collapse_by = 'row') |>
+  EMP_diff_analysis(method='wilcox.test', estimate_group = 'Group') |>
+  EMP_filter(feature_condition = pvalue<0.05) |>
+  EMP_network_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7')) |>
+  EMP_network_plot(node_info = 'Class',label.cex = 1,edge.labels = TRUE)
+
+# For muti experiment
 k1 <- MAE |>
   EMP_assay_extract('taxonomy') |>
   EMP_collapse(estimate_group = 'Genus',collapse_by = 'row') |>

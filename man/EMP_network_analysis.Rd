@@ -70,12 +70,12 @@ k2 <- MAE |>
   EMP_filter(feature_condition = pvalue<0.05)
 
 
-For single experiment
+#For single experiment
 k1  |>
   EMP_network_analysis() |>
   EMP_filter(feature_condition = top_detect(Closeness,1))  # filter the top node according to the network analysis
 
-For muti experiment
+#For muti experiment
 (k1 + k2 ) |> 
   EMP_network_analysis() |> 
   EMP_network_plot(show = 'node') # get the node importance

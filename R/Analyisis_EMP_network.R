@@ -3,6 +3,9 @@
 #' @importFrom qgraph centralityTable
 .EMP_network_analysis_EMP <- function(EMP,select=NULL,method='cor',corMethod='spearman',weighted=TRUE,
                               missing='pairwise',threshold=0,...){
+  
+  measure <- value <- node <- feature <- NULL
+
   if (is.null(select)) {
     select <- names(EMP@ExperimentList)
   }else{
@@ -55,7 +58,8 @@
 .EMP_network_analysis_EMPT <- function(EMPT,method='cor',corMethod='spearman',weighted=TRUE,
                                   missing='pairwise',threshold=0,coldata_to_assay=NULL,...){
 
-  
+  measure <- value <- node <- feature <- NULL
+
   if (is.null(coldata_to_assay)) {
     coldata <- NULL
     assay_df <-  .get.assay.EMPT(EMPT) |>
@@ -164,12 +168,12 @@
 #'   EMP_filter(feature_condition = pvalue<0.05)
 #' 
 #' 
-#' For single experiment
+#' #For single experiment
 #' k1  |>
 #'   EMP_network_analysis() |>
 #'   EMP_filter(feature_condition = top_detect(Closeness,1))  # filter the top node according to the network analysis
 #'
-#' For muti experiment
+#' #For muti experiment
 #' (k1 + k2 ) |> 
 #'   EMP_network_analysis() |> 
 #'   EMP_network_plot(show = 'node') # get the node importance

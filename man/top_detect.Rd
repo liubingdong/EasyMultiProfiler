@@ -23,6 +23,8 @@ top_detect(1:10,n = 3,index = FALSE)
 
 top_detect(1:10,n = 3,index = TRUE)
 
+data(MAE)
+
 MAE |>
   EMP_assay_extract(experiment='taxonomy')|> 
   EMP_alpha_analysis() |>
