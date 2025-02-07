@@ -151,6 +151,8 @@ get_enrich_data <- function(method = "kegg", geneList,
     enrich.data <- gsea_go(geneList, go.params, pvalueCutoff = pvalueCutoff, seed = seed, ...) |> suppressMessages()
   }
   if (method == "reactome") {
+    rlang::check_installed(c('BiocManager'), reason = 'for enrich_reactome().', action = install.packages)  
+    rlang::check_installed(c('ReactomePA'), reason = 'for enrich_reactome().', action = BiocManager::install)
     reactome.params$organism <- match.arg(reactome.params$organism, c("human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly"))
     info_ouput <- paste0("Reactome analysis performed: \norganism: ",reactome.params$organism)       
     enrich.data <- gsea_reactome(geneList, reactome.params, pvalueCutoff = pvalueCutoff, seed = seed, ...) |> suppressMessages()
