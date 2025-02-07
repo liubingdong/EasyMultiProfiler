@@ -180,6 +180,8 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
     enrich.data <- enrich_go(df, feature_name = feature_name, go.params = go.params, minGSSize = minGSSize, maxGSSize = maxGSSize, combineGroup = combineGroup, ...)
   } 
   if (method == "reactome") {
+    rlang::check_installed(c('BiocManager'), reason = 'for enrich_reactome().', action = install.packages)  
+    rlang::check_installed(c('ReactomePA'), reason = 'for enrich_reactome().', action = BiocManager::install)
     reactome.params$organism <- match.arg(reactome.params$organism, c("human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly"))
     info_ouput <- paste0("Reactome analysis performed: \norganism: ",reactome.params$organism)
     EMP_message(info_ouput,color=32,order=1,show='message')
