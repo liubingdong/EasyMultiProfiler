@@ -49,7 +49,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 	\item \code{\link{EMP_enrich_netplot}} 
 	\item \code{\link{EMP_fitline_plot}}	
 	\item \code{\link{EMP_network_plot}} 
-	\item \code{\link{EMP_gsea_plot}}
+	\item \code{\link{EMP_GSEA_plot}}
 	\item \code{\link{EMP_heatmap_plot}}
   \item \code{\link{EMP_sankey_plot}}
 	\item \code{\link{EMP_scatterplot}}

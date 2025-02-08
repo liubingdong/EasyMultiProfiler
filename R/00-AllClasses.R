@@ -393,7 +393,7 @@ setMethod("EMP_enrich_netplot","EMP_multi_diff_enrich",function(obj,...){
 #'
 #' @param obj object
 #' @param ... ...
-#' @rdname EMP_gsea_plot
+#' @rdname EMP_GSEA_plot
 #'
 #' @export
 #'
@@ -404,17 +404,17 @@ setMethod("EMP_enrich_netplot","EMP_multi_diff_enrich",function(obj,...){
 #'  EMP_GSEA_analysis(experiment = 'geno_ko',method='signal2Noise',
 #'                    estimate_group = 'Group',
 #'                    pvalueCutoff = 0.05,keyType = 'ko') |>
-#'  EMP_gsea_plot(geneSetID='map00680')
+#'  EMP_GSEA_plot(geneSetID='map00680')
 #' }
-setGeneric("EMP_gsea_plot",function(obj,...) standardGeneric("EMP_gsea_plot"))
+setGeneric("EMP_GSEA_plot",function(obj,...) standardGeneric("EMP_GSEA_plot"))
 
 
-#' @rdname EMP_gsea_plot
+#' @rdname EMP_GSEA_plot
 #'
 #' @export
 #'
 
-setMethod("EMP_gsea_plot","EMP_enrich_analysis",function(obj,...){
+setMethod("EMP_GSEA_plot","EMP_enrich_analysis",function(obj,...){
   EMP_curveplot_enrich(obj,...)
 })
 

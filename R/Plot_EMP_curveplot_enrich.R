@@ -27,7 +27,7 @@ EMP_curveplot_enrich_default <- function(EMPT,geneSetID,show='pic',...) {
 #' @param geneSetID geneSet ID
 #' @param seed An interger. Set the random seed to the plot.(default:123)
 #' @param ... Additional parameters, see also \code{\link[enrichplot]{gseaplot2}}
-#' @rdname EMP_gsea_plot
+#' @rdname EMP_GSEA_plot
 #' @importFrom withr with_seed
 #'
 #' @return EMPT object
