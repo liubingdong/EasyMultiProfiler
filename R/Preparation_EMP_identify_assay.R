@@ -82,7 +82,7 @@
 
   }
 
-  EMPT %<>% EMP_filter(filterFeature = id,action = 'select') %>% suppressMessages()
+  EMPT %<>% EMP_filter(filterFeature = id,action = 'select') #%>% suppressMessages()
 
   # delect EMP_filter history record,because history already contains EMP_assay_filter!
   temp_history <- .get.history.EMPT(EMPT)
@@ -164,7 +164,7 @@
                             minimum_proportion = min_ratio)  %>% suppressMessages() %>% .get.row_info.EMPT() %>%
     dplyr::pull(feature) -> id
 
-  EMPT %<>% EMP_filter(filterFeature = id,action = 'select') %>% suppressMessages()
+  EMPT %<>% EMP_filter(filterFeature = id,action = 'select') # %>% suppressMessages()
 
   # delect EMP_filter history record,because history already contains EMP_assay_filter!
   temp_history <- .get.history.EMPT(EMPT)

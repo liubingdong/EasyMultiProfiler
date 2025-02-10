@@ -159,7 +159,7 @@ EMP_network_plot <- function(obj,layout='spring',weighted=TRUE,threshold=0,shape
                                       legend.mode = legend.mode,fade=fade,
                                       DoNotPlot=TRUE,...) 
 
-  centrality_plot <- centralityPlot(network,include='all',print=FALSE) |>
+  centrality_plot <- centralityPlot(network,labels=network$labels,include='all',print=FALSE) |>
                spsUtil::quiet(print_cat = TRUE, message = TRUE, warning = TRUE)
 
   deposit[['net']] <- net_plot
