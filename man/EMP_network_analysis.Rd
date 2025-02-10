@@ -10,8 +10,8 @@ EMP_network_analysis(
   method = "cor",
   corMethod = "spearman",
   weighted = TRUE,
-  missing = "pairwise",
-  threshold = 0,
+  missing = "listwise",
+  threshold = FALSE,
   coldata_to_assay = NULL,
   use_cached = TRUE,
   action = "add",
@@ -23,7 +23,7 @@ EMP_network_analysis(
 
 \item{select}{A character string. The experiment name in the EMP object.}
 
-\item{method}{A character string. Methods include cor, EBICglasso,IsingFit,IsingSampler,pcor,huge,mgm,TMFG,LoGo,relimp,ggmModSelect and graphicalVAR.}
+\item{method}{A character string. Methods include cor, EBICglasso,IsingFit,IsingSampler,pcor,huge and graphicalVAR.}
 
 \item{corMethod}{A character string. Methods include spearman, cor, cov, npn and cor_auto.}
 
@@ -42,7 +42,7 @@ EMP_network_analysis(
 \item{...}{Further parameters passed to the function \code{\link[bootnet]{estimateNetwork}}.}
 }
 \value{
-EMP object
+EMP or EMPT object
 }
 \description{
 Network analysis
@@ -51,7 +51,21 @@ Network analysis
 
 More detailed information are available on :
 
-Epskamp, S., Borsboom, D., & Fried, E. I. (2018). Estimating psychological networks and their accuracy: A tutorial paper. Behavior Research Methods, 50(1), 195–212.
+Epskamp, S., Borsboom, D., & Fried, E. I. (2018). Estimating psychological networks and their accuracy: A tutorial paper. Behavior Research Methods, 50(1), 195–212. 
+
+Here is a brife introduction of document from bootnet package:
+
+1. cor: Correlation network.
+
+2. EBICglasso: Gaussian Markov random field estimation using graphical LASSO and extended Bayesian information criterion to select optimal regularization parameter. Using \code{\link[qgraph]{EBICglasso}} from the qgraph package. Calls bootnet_EBICglasso.
+
+3. IsingSampler: Calls the \code{\link[EstimateIsing]{EstimateIsing}} function from the IsingSampler package.
+
+4. pcor: Partial correlation network (non-regularized Gaussian Markov random field), using \code{\link[corpcor]{cor2pcor}} from the corpcor package. Calls bootnet_pcor.
+
+5. huge: Uses EBIC model selection of GGM networks estimated via the glasso algorithm as implemented in the huge package (as opposed to glasso and qgraph packages used in default = "EBICglasso"). Uses nonparanormal transformation in preparing the data and does not use polychoric correlations. Calls bootnet_huge.
+
+6. graphicalVAR.: Estimates a graphical VAR model using the graphicalVAR package. This results in two networks which can be plotted using the 'graph' argument in the plot method. Calls bootnet_graphicalVAR.
 }
 
 \examples{

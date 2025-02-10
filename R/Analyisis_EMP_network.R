@@ -2,7 +2,7 @@
 #' @importFrom bootnet estimateNetwork
 #' @importFrom qgraph centralityTable
 .EMP_network_analysis_EMP <- function(EMP,select=NULL,method='cor',corMethod='spearman',weighted=TRUE,
-                              missing='pairwise',threshold=0,...){
+                              missing='listwise',threshold=FALSE,...){
   
   measure <- value <- node <- feature <- NULL
 
@@ -24,8 +24,16 @@
   assay_df <-  reduce(assay_list, dplyr::inner_join, by = 'primary') |>
     tibble::column_to_rownames('primary')
 
-  
-  network <- estimateNetwork(assay_df,
+  if (method %in% c('IsingFit','IsingSampler','graphicalVAR','GGMncv')) {
+    network <- bootnet::estimateNetwork(assay_df,
+                                        default = method,
+                                        missing = missing,
+                                        weighted=weighted,...) |> 
+             spsUtil::quiet(print_cat = TRUE, message = TRUE, warning = TRUE)
+  }else if (method %in% c('adalasso','mgm','relimp','TMFG','ggmModSelect','LoGo','piecewiseIsing','SVAR_lavaan')){
+    stop("Due to Pararmeter confict, EasyMultiProfiler could not support ",method,', please refer to bootnet package!')
+  }else{
+      network <- estimateNetwork(assay_df,
                              threshold = threshold,
                              default = method,
                              corMethod = corMethod,
@@ -33,7 +41,8 @@
                              weighted=weighted,
                              nonPositiveDefinite='continue',...) |> 
              spsUtil::quiet(print_cat = TRUE, message = TRUE, warning = TRUE)
-
+  }
+  
   centrality_info <- centralityTable(network) |>
     tidyr::pivot_wider(names_from = measure, values_from = value) |>
     dplyr::select(node,everything()) |>
@@ -56,7 +65,7 @@
 #' @importFrom bootnet estimateNetwork
 #' @importFrom qgraph centralityTable
 .EMP_network_analysis_EMPT <- function(EMPT,method='cor',corMethod='spearman',weighted=TRUE,
-                                  missing='pairwise',threshold=0,coldata_to_assay=NULL,...){
+                                  missing='listwise',threshold=FALSE,coldata_to_assay=NULL,...){
 
   measure <- value <- node <- feature <- NULL
 
@@ -83,22 +92,30 @@
     
   }
 
-  network <- bootnet::estimateNetwork(assay_df,
+  if (method %in% c('IsingFit','IsingSampler','graphicalVAR','GGMncv')) {
+    network <- bootnet::estimateNetwork(assay_df,
+                                        default = method,
+                                        missing = missing,
+                                        weighted=weighted,...) |> 
+             spsUtil::quiet(print_cat = TRUE, message = TRUE, warning = TRUE)
+  }else if (method %in% c('adalasso','mgm','relimp','TMFG','ggmModSelect','LoGo','piecewiseIsing','SVAR_lavaan')){
+    stop("Due to Pararmeter confict, EasyMultiProfiler could not support ",method,', please refer to bootnet package!')
+  }else{
+      network <- estimateNetwork(assay_df,
                              threshold = threshold,
                              default = method,
                              corMethod = corMethod,
                              missing = missing,
                              weighted=weighted,
                              nonPositiveDefinite='continue',...) |> 
-    spsUtil::quiet(print_cat = TRUE, message = TRUE, warning = TRUE)
+             spsUtil::quiet(print_cat = TRUE, message = TRUE, warning = TRUE)
+  }
   
   centrality_info <- qgraph::centralityTable(network) |>
     tidyr::pivot_wider(names_from = measure, values_from = value) |>
     dplyr::select(node,everything()) |>
     dplyr::mutate(feature = network[["labels"]]) |>
     dplyr::select(feature,everything())
-  
-  
   
   EMPT@deposit[['net']] <- network
   EMPT@deposit[['net_feature_info']] <- rowdata_df
@@ -134,7 +151,7 @@
 #'
 #' @param obj EMPT or EMP.
 #' @param select A character string. The experiment name in the EMP object.
-#' @param method A character string. Methods include cor, EBICglasso,IsingFit,IsingSampler,pcor,huge,mgm,TMFG,LoGo,relimp,ggmModSelect and graphicalVAR.
+#' @param method A character string. Methods include cor, EBICglasso,IsingFit,IsingSampler,pcor,huge and graphicalVAR.
 #' @param corMethod A character string. Methods include spearman, cor, cov, npn and cor_auto.
 #' @param weighted Logical, should the analyzed network be weighted?
 #' @param missing How to handle missing data? "pairwise" for pairwise deletion, "listwise" for listwise deletion, "fiml" for full-information maximum likelihood and "stop" to stop with an error.
@@ -143,14 +160,29 @@
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to the function \code{\link[bootnet]{estimateNetwork}}.
+#' @export
 #' @rdname EMP_network_analysis
 #' @section Detaild about network:
 #' More detailed information are available on :
 #'
 #' Epskamp, S., Borsboom, D., & Fried, E. I. (2018). Estimating psychological networks and their accuracy: A tutorial paper. Behavior Research Methods, 50(1), 195–212. 
 #'
-#' @return EMP object
-#' @export
+#' Here is a brife introduction of document from bootnet package:
+#'
+#' 1. cor: Correlation network.
+#'
+#' 2. EBICglasso: Gaussian Markov random field estimation using graphical LASSO and extended Bayesian information criterion to select optimal regularization parameter. Using \code{\link[qgraph]{EBICglasso}} from the qgraph package. Calls bootnet_EBICglasso.
+#'
+#' 3. IsingSampler: Calls the \code{\link[EstimateIsing]{EstimateIsing}} function from the IsingSampler package.
+#'
+#' 4. pcor: Partial correlation network (non-regularized Gaussian Markov random field), using \code{\link[corpcor]{cor2pcor}} from the corpcor package. Calls bootnet_pcor.
+#'
+#' 5. huge: Uses EBIC model selection of GGM networks estimated via the glasso algorithm as implemented in the huge package (as opposed to glasso and qgraph packages used in default = "EBICglasso"). Uses nonparanormal transformation in preparing the data and does not use polychoric correlations. Calls bootnet_huge.
+#'
+#' 6. graphicalVAR.: Estimates a graphical VAR model using the graphicalVAR package. This results in two networks which can be plotted using the 'graph' argument in the plot method. Calls bootnet_graphicalVAR.
+#'
+#'
+#' @return EMP or EMPT object
 #'
 #' @examples
 #'data(MAE)
@@ -178,7 +210,7 @@
 #'   EMP_network_analysis() |> 
 #'   EMP_network_plot(show = 'node') # get the node importance
 EMP_network_analysis <- function(obj,select=NULL,method='cor',corMethod='spearman',weighted=TRUE,
-                              missing='pairwise',threshold=0,coldata_to_assay=NULL,use_cached=TRUE,action='add',...) {
+                              missing='listwise',threshold=FALSE,coldata_to_assay=NULL,use_cached=TRUE,action='add',...) {
 
   call <- match.call()
   
@@ -187,6 +219,20 @@ EMP_network_analysis <- function(obj,select=NULL,method='cor',corMethod='spearma
     memoise::forget(.EMP_network_analysis_EMPT_m) %>% invisible()
   }
   
+  if(method == 'graphicalVAR') {
+    rlang::check_installed(c('BiocManager'), reason = 'for estimateNetwork().', action = install.packages)  
+    rlang::check_installed(c('graphicalVAR'), reason = 'for estimateNetwork().', action = BiocManager::install)
+  }
+ 
+  if(method == 'GGMncv') {
+    rlang::check_installed(c('BiocManager'), reason = 'for estimateNetwork().', action = install.packages)  
+    rlang::check_installed(c('GGMncv'), reason = 'for estimateNetwork().', action = BiocManager::install)
+  } 
+  
+  if(method == 'IsingSampler') {
+    rlang::check_installed(c('BiocManager'), reason = 'for estimateNetwork().', action = install.packages)  
+    rlang::check_installed(c('IsingSampler'), reason = 'for estimateNetwork().', action = BiocManager::install)
+  } 
 
   if (is(obj,"EMP")) {
       result <- .EMP_network_analysis_EMP_m(EMP=obj,select=select,method=method,corMethod=corMethod,weighted=weighted,
