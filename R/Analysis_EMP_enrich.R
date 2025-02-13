@@ -208,7 +208,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #' Enrichment for EMPT object
 #'
 #' @param obj Object in EMPT or MultiAssayExperiment format.
-#' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05
+#' @param condition Expressions that return a logical value according to the result of EMP_diff_analysis. (eg. pvalue < 0.05)
 #' @param method enrichment method, one of "kegg", "go", "reactome" and "do".
 #' @param TERM2GENE user input annotation of TERM TO GENE mapping, a data.frame of 2 column with term and gene. Only used when gson is NULL.
 #' @param TERM2NAME user input of TERM TO NAME mapping, a data.frame of 2 column with term and name. Only used when gson is NULL.

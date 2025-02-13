@@ -27,7 +27,7 @@ EMP_enrich_analysis(
 \arguments{
 \item{obj}{Object in EMPT or MultiAssayExperiment format.}
 
-\item{condition}{Expressions that return a logical value according to the result of EMP_diff_analysis. eg. pvalue < 0.05}
+\item{condition}{Expressions that return a logical value according to the result of EMP_diff_analysis. (eg. pvalue < 0.05)}
 
 \item{minGSSize}{Minimal size of genes annotated by Ontology term for testing.}
 

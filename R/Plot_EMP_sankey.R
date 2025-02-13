@@ -3,7 +3,7 @@
 #' @param palette Colour palette for nodes.
 #' @rdname EMP_sankey_plot
 #' @importFrom networkD3 sankeyNetwork
-EMP_sankey_plot.EMP_cor_analysis <- function(obj,positive_col = '#CC79A7',negtive_col = 'steelblue',palette=c("#009E73","#F0E442","#6c4f9d","#CB563f","#4DBBD5FF","#00A087FF","#b66e1e","#8491B4FF")){
+EMP_sankey_plot.EMP_cor_analysis <- function(obj,positive_col = '#CC79A7',negtive_col = 'steelblue',palette=c("#009E73","#F0E442","#CB563f","#6c4f9d","#4DBBD5FF","#00A087FF","#b66e1e","#8491B4FF")){
 
   name <- NULL
   call <- match.call()
