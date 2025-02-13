@@ -663,21 +663,37 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
 #' @param data data. 
 #' @param var_name  a name to be assigned to data.
 #' @param envir the \link{environment} to use.
+#' @param get_result Logic value. Wether to save the result from EMPT object.
+#' @param info Choose which result to save, when get_result == TRUE.
 #' @param ... Addtional parameters, see also \code{\link[base]{assign}}.
 #' @rdname EMP_save_var
 #' @return EMPT object
 #' @export
 #' @examples
-#' data(MAE)
 #' MAE |> 
-#'   EMP_assay_extract('host_gene',pattern = 'A1BG',pattern_ref = 'feature') |>
+#'   EMP_assay_extract('geno_ec') |>
 #'   EMP_save_var('temp_data') |>
-#'   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') |>
-#'   EMP_heatmap_plot()
-#' 
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+#'   EMP_save_var('diff_result',get_result = TRUE) |>
+#'   EMP_heatmap_plot() 
+#'   
+#' ## EMPT object
 #' temp_data
-EMP_save_var <- function(data, var_name,envir = .GlobalEnv,...) {
-  assign(var_name, data, envir = envir,...)  
+#' ## analysis result
+#' diff_result
+EMP_save_var <- function(data, var_name,envir = .GlobalEnv,get_result = FALSE,info=NULL,...) {
+  if (!is.logical(get_result)) {
+    stop("Parameter get_result shoud be TRUE or FALSE!")
+  }
+  if (get_result == TRUE) {
+    if (is.null(info)) {
+      info <- .get.info.EMPT(data)
+    }
+    result <- EMP_result(data,info=info)
+    assign(var_name, result, envir = envir,...)  
+  }else{
+    assign(var_name, data, envir = envir,...)  
+  }
   return(data) 
 }
 

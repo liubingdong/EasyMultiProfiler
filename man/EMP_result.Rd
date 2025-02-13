@@ -7,9 +7,9 @@
 \alias{EMP_result<-,EMPT-method}
 \title{Extract the existed result from EMPT or inject external result into EMPT}
 \usage{
-EMP_result(obj, info)
+EMP_result(obj, info = NULL)
 
-\S4method{EMP_result}{EMPT}(obj, info)
+\S4method{EMP_result}{EMPT}(obj, info = NULL)
 
 EMP_result(
   obj,

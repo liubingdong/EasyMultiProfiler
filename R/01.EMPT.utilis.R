@@ -100,7 +100,7 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
 #' @export
 
 
-setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
+setGeneric("EMP_result",function(obj,info=NULL) standardGeneric("EMP_result"))
 
 
 #' @rdname EMP_result
@@ -120,20 +120,27 @@ setGeneric("EMP_result",function(obj,info) standardGeneric("EMP_result"))
 #' enrich_re <- result |> EMP_result(info = 'EMP_enrich_analysis')
 #' }
 #' @return list
-setMethod("EMP_result","EMPT",function(obj,info){
+setMethod("EMP_result","EMPT",function(obj,info=NULL){
+  if (is.null(info)) {
+    info <- .get.info.EMPT(obj)
+  }
+  result_list <- list()
   deposilt_info <- .get.deposit_info.EMPT(obj)
   if (info %in% deposilt_info$Result) {
-    obj@deposit[[info]]
+    result_list <- obj@deposit[[info]]
   }else if(info %in% deposilt_info$source){
     real_info <- deposilt_info$Result[deposilt_info$source %in% info]
     result_list <- list()
     for (i in real_info) {
        result_list[[i]] <-obj@deposit[[i]]
     }
-    return(result_list)
+    if (length(result_list) == 1) {
+      result_list <- result_list[[1]]
+    }
   }else{
     warning("please check the info!")
   }
+  return(result_list)
 })
 
 

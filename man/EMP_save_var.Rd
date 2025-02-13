@@ -4,7 +4,14 @@
 \alias{EMP_save_var}
 \title{Save result into environment}
 \usage{
-EMP_save_var(data, var_name, envir = .GlobalEnv, ...)
+EMP_save_var(
+  data,
+  var_name,
+  envir = .GlobalEnv,
+  get_result = FALSE,
+  info = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{data.}
@@ -12,6 +19,10 @@ EMP_save_var(data, var_name, envir = .GlobalEnv, ...)
 \item{var_name}{a name to be assigned to data.}
 
 \item{envir}{the \link{environment} to use.}
+
+\item{get_result}{Logic value. Wether to save the result from EMPT object.}
+
+\item{info}{Choose which result to save, when get_result == TRUE.}
 
 \item{...}{Addtional parameters, see also \code{\link[base]{assign}}.}
 }
@@ -22,12 +33,15 @@ EMPT object
 Save result into environment
 }
 \examples{
-data(MAE)
 MAE |> 
-  EMP_assay_extract('host_gene',pattern = 'A1BG',pattern_ref = 'feature') |>
+  EMP_assay_extract('geno_ec') |>
   EMP_save_var('temp_data') |>
-  EMP_collapse(estimate_group = 'Group',collapse_by = 'col') |>
-  EMP_heatmap_plot()
-
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group)  |>
+  EMP_save_var('diff_result',get_result = TRUE) |>
+  EMP_heatmap_plot() 
+  
+## EMPT object
 temp_data
+## analysis result
+diff_result
 }
