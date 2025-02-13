@@ -2,7 +2,7 @@
 #' @importFrom vegan vegdist
 #' @importFrom stats cmdscale
 .EMP_dimension_analysis <- function(EMPT,method,distance=NULL,estimate_group=NULL,umap.config=NULL,
-                                    scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001){
+                                    scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001,...){
   p1 <- p2 <- p3 <- R2X <- NULL
   deposit <- list()
 
@@ -21,7 +21,7 @@
            distance <- 'euclidean'
            sample_name <- rownames(assay_data)
            assay_data <- assay_data |> bigstatsr::as_FBM()
-           pca_result <- bigstatsr::big_SVD(assay_data,k = 3)
+           pca_result <- bigstatsr::big_SVD(assay_data,k = 3,...)
            colnames(pca_result$u) <- c('PC1','PC2','PC3')
            dimension_reslut <- pca_result$u |> 
              tibble::as_tibble() |> 
@@ -41,7 +41,7 @@
             EMP_message("Large-scale data need longer computation time in PCoA.",color = 32,order = 1,show='message')
            }
            
-           pca_result <- stats::cmdscale(assay_data_dis,k=3,eig=T)
+           pca_result <- stats::cmdscale(assay_data_dis,k=3,eig=T,...)
            colnames(pca_result$points) <- c('PCoA1','PCoA2','PCoA3')
            dimension_reslut <- pca_result$points |> 
              as.data.frame() |>
@@ -67,7 +67,7 @@
                                     group_info,
                                     orthoI=0,
                                     predI=3,
-                                    scaleC = 'none',fig.pdfC='none',info.txtC='none')
+                                    scaleC = 'none',fig.pdfC='none',info.txtC='none',...)
            dimension_reslut <- plsda_raw@scoreMN %>% as.data.frame() %>%
              tibble::rownames_to_column('primary') %>% tibble::as_tibble() %>%
              dplyr::rename(t1 = p1,t2 =p2, t3 =p3)
@@ -100,7 +100,7 @@
            opsda_raw <- ropls::opls(assay_data,
                                     group_info,
                                     orthoI=3,
-                                    predI=1,scaleC = 'none',fig.pdfC='none',info.txtC='none')
+                                    predI=1,scaleC = 'none',fig.pdfC='none',info.txtC='none',...)
            
            
            if(!is.null(opsda_raw) & length(opsda_raw@modelDF) == 0) {
@@ -139,7 +139,7 @@
           umap.config$n_components <- 3
           
           sample_name <- rownames(assay_data)
-          umap_result <-umap::umap(assay_data,config = umap.config)
+          umap_result <-umap::umap(assay_data,config = umap.config,...)
           dimension_reslut <- umap_result[['layout']] %>% as.data.frame %>%
              dplyr::mutate(primary = sample_name,.before=1)
           colnames(dimension_reslut) <- c('primary',paste0('umap',1:(dim(dimension_reslut)[2]-1)))
@@ -183,6 +183,7 @@
 #' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001). 
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param ... Additional parameters, see also \code{\link[bigstatsr]{big_SVD}} for pca, \code{\link[stats]{cmdscale}} for pcoa,\code{\link[ropls]{opls}} for pls and opls, \code{\link[umap]{umap}} for umap.
 #' @section Detaild about scale:
 #' When the scale parameter is enabled, data normalization only takes effect within this function and does not affect the original data in the EMPT. 
 #' If you need to transform the data, consider using the EMP_EMP_decostand function in the workflow.
@@ -228,7 +229,7 @@
 
 EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,use_cached=TRUE,
                                   scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001,
-                                  estimate_group=NULL,umap.config=NULL,action='add'){
+                                  estimate_group=NULL,umap.config=NULL,action='add',...){
   call <- match.call()
 
   if (is(obj,"MultiAssayExperiment")) {
@@ -243,7 +244,7 @@ EMP_dimension_analysis <- function(obj,experiment,method='pcoa',distance=NULL,us
   }
 
   EMPT <- EMPT |> .EMP_dimension_analysis_m(method=method,distance=distance,estimate_group=estimate_group,umap.config=umap.config,
-                                            scale=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount)
+                                            scale=scale,bySample=bySample,logbase =logbase,pseudocount=pseudocount,...)
   .get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_dimension_analysis'
 

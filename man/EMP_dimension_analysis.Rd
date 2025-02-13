@@ -16,7 +16,8 @@ EMP_dimension_analysis(
   pseudocount = 1e-07,
   estimate_group = NULL,
   umap.config = NULL,
-  action = "add"
+  action = "add",
+  ...
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ EMP_dimension_analysis(
 \item{umap.config}{A list. only activate in umap. More see umap::umap.}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
+
+\item{...}{Additional parameters, see also \code{\link[bigstatsr]{big_SVD}} for pca, \code{\link[stats]{cmdscale}} for pcoa,\code{\link[ropls]{opls}} for pls and opls, \code{\link[umap]{umap}} for umap.}
 }
 \value{
 EMPT object
