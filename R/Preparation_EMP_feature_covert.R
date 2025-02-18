@@ -51,7 +51,7 @@
   raw_rowdata <- .get.row_info.EMPT(EMPT)
   new_rowdata <- dplyr::left_join(raw_rowdata,ref_data,by='feature')
   .get.row_info.EMPT(EMPT) <- new_rowdata
-  deposit <- EMPT |> EMP_collapse(estimate_group = to,method = method,collapse_by='row')
+  deposit <- EMPT |> EMP_collapse(estimate_group = to,method = method,collapse_by='row') |> suppressMessages()
   return(deposit)
 }
 
@@ -67,7 +67,7 @@
     dplyr::distinct(feature,.keep_all = TRUE)
   new_rowdata <- dplyr::left_join(raw_rowdata,ref_data,by='feature')
   .get.row_info.EMPT(EMPT) <- new_rowdata
-  deposit <- EMPT |> EMP_collapse(estimate_group = to,method = method,collapse_by='row')
+  deposit <- EMPT |> EMP_collapse(estimate_group = to,method = method,collapse_by='row') |> suppressMessages()
   return(deposit)
 }
 
