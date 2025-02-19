@@ -139,7 +139,7 @@
         }else{
           check_result_empty <- .get.result.EMPT(deposit) %>% spsUtil::quiet() %>% is.null() ||
             .get.result.EMPT(deposit) %>% spsUtil::quiet() %>% length() == 0 ||
-            .get.result.EMPT(deposit) %>% spsUtil::quiet()  == "No info is matched!"
+            all(.get.result.EMPT(deposit) %>% spsUtil::quiet()  == "No info is matched!")
           class(deposit) <- 'EMP_assay_data'
           .get.info.EMPT(deposit) <- 'EMP_assay_data' 
         }    
