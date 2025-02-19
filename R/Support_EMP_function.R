@@ -670,6 +670,8 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
 #' @return EMPT object
 #' @export
 #' @examples
+#' data(MAE)
+#'
 #' MAE |> 
 #'   EMP_assay_extract('geno_ec') |>
 #'   EMP_save_var('temp_data') |>

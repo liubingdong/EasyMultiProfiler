@@ -33,6 +33,8 @@ EMPT object
 Save result into environment
 }
 \examples{
+data(MAE)
+
 MAE |> 
   EMP_assay_extract('geno_ec') |>
   EMP_save_var('temp_data') |>
