@@ -1,7 +1,7 @@
 #' @importFrom dplyr arrange
 #' @importFrom tibble column_to_rownames
 #' @noRd
-.EMP_cor_analysis <- function(EMP,select=NULL,method='spearman') {
+.EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',p.adjust='none') {
   #call <- match.call()
 
   primary <- var1 <- NULL
@@ -65,8 +65,14 @@
   df.cor.p <- CorRcpp(x = data1,y = data2,type = method)
   names(df.cor.p) <- c('correlation','pvalue')
 
+  if (p.adjust == 'none') {
+    df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],3)
+  }else{
+    temp_p <- psych::corr.p(as.matrix(df.cor.p[["correlation"]]) |> round(4),n=length(real_sample), adjust = p.adjust)
+    df.cor.p[["pvalue"]] <- temp_p$p |> as.data.frame() |> round(3)
+  }
+  
   df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
-  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],3)
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
@@ -98,8 +104,13 @@
 
 
 
-.EMP_cor_analysis_multi <- function(EMP,select=NULL,method='spearman',pvalue=0.05,rvalue=0) {
+.EMP_cor_analysis_multi <- function(EMP,select=NULL,method='spearman',pvalue=0.05,rvalue=0,p.adjust='none') {
   
+  # 不同名字会直接影响到corr.p矫正p，且存在不对称p无法确认边的构建
+  if (p.adjust != 'none') {
+    stop("Cor analysis for sankey could not support pvalue adjust!")
+  }
+
   primary <- name <- NULL
 
   if (is.null(select)) {
@@ -138,11 +149,11 @@
   while (data_length>1) {
     if (count_id == 1 ) {
       temp <- rel_cons(data1 = total_data[[1]],data2 = total_data[[2]], 
-                       pvalue = pvalue,rvalue = rvalue,cor_method = method)
+                       pvalue = pvalue,rvalue = rvalue,cor_method = method,p.adjust=p.adjust)
     }else{
       keep_idx <- relationship_stock[[count_id-1]]$keep
       temp <- rel_cons(data1 = total_data[[1]][,c('SampleID',keep_idx)], data2 = total_data[[2]], 
-                       pvalue = pvalue,rvalue = rvalue,cor_method = method)
+                       pvalue = pvalue,rvalue = rvalue,cor_method = method,p.adjust=p.adjust)
     }
     if (length(temp$keep)>0) {
       relationship_stock[[count_id]] <- temp
@@ -240,7 +251,7 @@ check_duplicate_col <- function(list_of_dfs) {
   
 }
 
-rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman'){
+rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman',p.adjust='none'){
   
   SampleID <- value <- NULL
 
@@ -265,10 +276,16 @@ rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman'){
   #data.corr <- agricolae_correlation(data1, data2,method = cor_method)
   data.corr <- CorRcpp(x = data1,y = data2,type = cor_method)
   names(data.corr) <- c('correlation','pvalue')
+  
+  if (p.adjust == 'none') {
+    data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],3)
+  }else{
+    temp_p <- psych::corr.p(as.matrix(data.corr[["correlation"]]) |> round(4),n=length(real_sample),adjust = p.adjust)
+    data.corr[["pvalue"]] <- temp_p$p |> as.data.frame() |> round(3)
+  }
 
   data.corr[["correlation"]] <- round(data.corr[["correlation"]],2)
-  data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],2)
-
+  #data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],2)
 
   occor.r <- data.corr$correlation
   occor.p <- data.corr$pvalue
@@ -313,6 +330,7 @@ kick_check <- function(data){
 #' @param method A character string. Methods include pearson (default), spearman.
 #' @param rvalue A number. Set relation value forthreshold for correlation test (default:0). Only activated in sankey cor-analysis.
 #' @param pvalue A number. Set pvalue forthreshold for correlation test (default:0.05). Only activated in sankey cor-analysis.
+#' @param p.adjust A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:none)
 #' @param force_sankey A boolean. Whether force the cor-analysis for the sankey plot or not.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
@@ -346,13 +364,18 @@ kick_check <- function(data){
 #' #For more experinemnt 
 #' (k1 + k3 + k2) |> EMP_cor_analysis() |>
 #'   EMP_sankey_plot()
-EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rvalue=0,pvalue=0.05,
+EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rvalue=0,pvalue=0.05,p.adjust='none',
                              use_cached=TRUE,force_sankey=FALSE) {
 
   experiment_num <- NULL
 
   call <- match.call()
   
+  if(p.adjust != 'none') {
+    rlang::check_installed(c('BiocManager'), reason = 'for EMP_cor_analysis().', action = install.packages)  
+    rlang::check_installed(c('psych'), reason = 'for EMP_cor_analysis().', action = BiocManager::install)
+  }
+
   if (!is(EMP,"EMP")) {
     stop("Please input the EMP format!")
   }
@@ -369,9 +392,9 @@ EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rval
   }
 
   if (experiment_num <= 2) {
-    result <- .EMP_cor_analysis_m(EMP=EMP,select=select,method=method)
+    result <- .EMP_cor_analysis_m(EMP=EMP,select=select,method=method,p.adjust=p.adjust)
   }else {
-    result <- .EMP_cor_analysis_multi_m(EMP=EMP,select=select,method=method,rvalue=rvalue,pvalue=pvalue)
+    result <- .EMP_cor_analysis_multi_m(EMP=EMP,select=select,method=method,rvalue=rvalue,pvalue=pvalue,p.adjust=p.adjust)
   }
 
 

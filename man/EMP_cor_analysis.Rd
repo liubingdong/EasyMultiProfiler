@@ -11,6 +11,7 @@ EMP_cor_analysis(
   action = "add",
   rvalue = 0,
   pvalue = 0.05,
+  p.adjust = "none",
   use_cached = TRUE,
   force_sankey = FALSE
 )
@@ -27,6 +28,8 @@ EMP_cor_analysis(
 \item{rvalue}{A number. Set relation value forthreshold for correlation test (default:0). Only activated in sankey cor-analysis.}
 
 \item{pvalue}{A number. Set pvalue forthreshold for correlation test (default:0.05). Only activated in sankey cor-analysis.}
+
+\item{p.adjust}{A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:none)}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
