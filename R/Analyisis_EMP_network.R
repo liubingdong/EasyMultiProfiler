@@ -173,7 +173,7 @@
 #'
 #' 2. EBICglasso: Gaussian Markov random field estimation using graphical LASSO and extended Bayesian information criterion to select optimal regularization parameter. Using \code{\link[qgraph]{EBICglasso}} from the qgraph package. Calls bootnet_EBICglasso.
 #'
-#' 3. IsingSampler: Calls the \code{\link[EstimateIsing]{EstimateIsing}} function from the IsingSampler package.
+#' 3. IsingSampler: Calls the \code{\link[IsingSampler]{EstimateIsing}} function from the IsingSampler package.
 #'
 #' 4. pcor: Partial correlation network (non-regularized Gaussian Markov random field), using \code{\link[corpcor]{cor2pcor}} from the corpcor package. Calls bootnet_pcor.
 #'
