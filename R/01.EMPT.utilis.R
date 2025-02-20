@@ -92,7 +92,7 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
 
 
 
-#' Extract the existed result from EMPT or inject external result into EMPT
+#' Extract the existed result or inject external result into EMPT
 #'
 #' @param obj EMPT or MultiAssayExperiment object.
 #' @param info A character string. Result or analysis name in the EMPT object.
@@ -143,8 +143,15 @@ setMethod("EMP_result","EMPT",function(obj,info=NULL){
   return(result_list)
 })
 
+setMethod("EMP_result","EMP",function(obj,info=NULL){
+  if (is.null(info)) {
+    info <- .get.info.EMP(obj)
+  }
+  result_list <-  .get.result.EMP(obj,info=info)
+  return(result_list)
+})
 
-#' @param obj EMPT object.
+#' @param obj EMPT or EMP object.
 #' @param value A data frame or tibble from the external result.
 #' @param value_name A character string. Set the name of external result to inject into EMPT project.
 #' @param affect_when_sample_changed 0 or 1. 0 means that the result is not influenced by sample changes, while 1 means the contrary.

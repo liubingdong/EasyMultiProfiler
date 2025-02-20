@@ -20,7 +20,7 @@ EMP_save_var(
 
 \item{envir}{the \link{environment} to use.}
 
-\item{get_result}{Logic value. Wether to save the result from EMPT object.}
+\item{get_result}{Logic value. Wether to save the result from EMPT or EMP object.}
 
 \item{info}{Choose which result to save, when get_result == TRUE.}
 

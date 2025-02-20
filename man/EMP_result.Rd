@@ -5,7 +5,7 @@
 \alias{EMP_result,EMPT-method}
 \alias{EMP_result<-}
 \alias{EMP_result<-,EMPT-method}
-\title{Extract the existed result from EMPT or inject external result into EMPT}
+\title{Extract the existed result or inject external result into EMPT}
 \usage{
 EMP_result(obj, info = NULL)
 
@@ -32,7 +32,7 @@ EMP_result(
 ) <- value
 }
 \arguments{
-\item{obj}{EMPT object.}
+\item{obj}{EMPT or EMP object.}
 
 \item{info}{A character string. Result or analysis name in the EMPT object.}
 
@@ -56,7 +56,7 @@ list
 EMPT object
 }
 \description{
-Extract the existed result from EMPT or inject external result into EMPT
+Extract the existed result or inject external result into EMPT
 }
 \examples{
 

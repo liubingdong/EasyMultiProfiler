@@ -663,7 +663,7 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
 #' @param data data. 
 #' @param var_name  a name to be assigned to data.
 #' @param envir the \link{environment} to use.
-#' @param get_result Logic value. Wether to save the result from EMPT object.
+#' @param get_result Logic value. Wether to save the result from EMPT or EMP object.
 #' @param info Choose which result to save, when get_result == TRUE.
 #' @param ... Addtional parameters, see also \code{\link[base]{assign}}.
 #' @rdname EMP_save_var
@@ -689,7 +689,13 @@ EMP_save_var <- function(data, var_name,envir = .GlobalEnv,get_result = FALSE,in
   }
   if (get_result == TRUE) {
     if (is.null(info)) {
-      info <- .get.info.EMPT(data)
+      if (is(data,'EMPT')) {
+        info <- .get.info.EMPT(data)
+      }else if (is(data,'EMP')) {
+        info <- .get.info.EMP(data)
+      }else{
+        stop("Parameter get_result only support EMP and EMPT format!")
+      }
     }
     result <- EMP_result(data,info=info)
     assign(var_name, result, envir = envir,...)  
