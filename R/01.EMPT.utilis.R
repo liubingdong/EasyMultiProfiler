@@ -94,15 +94,9 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
 
 #' Extract the existed result or inject external result into EMPT
 #'
-#' @param obj EMPT or MultiAssayExperiment object.
-#' @param info A character string. Result or analysis name in the EMPT object.
-#' @rdname EMP_result
+#' @param obj EMPT or EMP object.
+#' @param info A character string. Result or analysis name in the EMPT or EMP object.
 #' @export
-
-
-setGeneric("EMP_result",function(obj,info=NULL) standardGeneric("EMP_result"))
-
-
 #' @rdname EMP_result
 #' @examples
 #' 
@@ -120,6 +114,9 @@ setGeneric("EMP_result",function(obj,info=NULL) standardGeneric("EMP_result"))
 #' enrich_re <- result |> EMP_result(info = 'EMP_enrich_analysis')
 #' }
 #' @return list
+setGeneric("EMP_result",function(obj,info=NULL) standardGeneric("EMP_result"))
+
+#' @rdname EMP_result
 setMethod("EMP_result","EMPT",function(obj,info=NULL){
   if (is.null(info)) {
     info <- .get.info.EMPT(obj)
@@ -143,6 +140,7 @@ setMethod("EMP_result","EMPT",function(obj,info=NULL){
   return(result_list)
 })
 
+#' @rdname EMP_result
 setMethod("EMP_result","EMP",function(obj,info=NULL){
   if (is.null(info)) {
     info <- .get.info.EMP(obj)

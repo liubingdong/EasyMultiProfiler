@@ -3,6 +3,7 @@
 \name{EMP_result}
 \alias{EMP_result}
 \alias{EMP_result,EMPT-method}
+\alias{EMP_result,EMP-method}
 \alias{EMP_result<-}
 \alias{EMP_result<-,EMPT-method}
 \title{Extract the existed result or inject external result into EMPT}
@@ -10,6 +11,8 @@
 EMP_result(obj, info = NULL)
 
 \S4method{EMP_result}{EMPT}(obj, info = NULL)
+
+\S4method{EMP_result}{EMP}(obj, info = NULL)
 
 EMP_result(
   obj,
@@ -34,7 +37,7 @@ EMP_result(
 \arguments{
 \item{obj}{EMPT or EMP object.}
 
-\item{info}{A character string. Result or analysis name in the EMPT object.}
+\item{info}{A character string. Result or analysis name in the EMPT or EMP object.}
 
 \item{value_name}{A character string. Set the name of external result to inject into EMPT project.}
 
