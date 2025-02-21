@@ -11,7 +11,7 @@ EMP_network_analysis(
   corMethod = "spearman",
   weighted = TRUE,
   missing = "listwise",
-  threshold = FALSE,
+  threshold = "sig",
   coldata_to_assay = NULL,
   use_cached = TRUE,
   action = "add",
@@ -31,7 +31,7 @@ EMP_network_analysis(
 
 \item{missing}{How to handle missing data? "pairwise" for pairwise deletion, "listwise" for listwise deletion, "fiml" for full-information maximum likelihood and "stop" to stop with an error.}
 
-\item{threshold}{Thresholding to use in partial correlation networks. Can be a fixed number to threshold all absolute edges below this value, 'locfdr' for local FDR, or any option corresponding to adjustments in \code{\link[psych]{corr.p}} ('none', 'sig', 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY' or 'fdr')). Can also be used for default = "IsingSampler" but can only be set to a logical enabling or disabling significance thresholding.}
+\item{threshold}{This parameter allows input of strings such as 'none', 'sig', 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', or 'fdr' for statistical calculation on edges, with the default set to 'sig' to select only statistically significant edges; alternatively, it can be a numeric value between 0 and 1, which will remove edges with an absolute value greater than this threshold.}
 
 \item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.}
 

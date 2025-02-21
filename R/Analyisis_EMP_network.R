@@ -2,7 +2,7 @@
 #' @importFrom bootnet estimateNetwork
 #' @importFrom qgraph centralityTable
 .EMP_network_analysis_EMP <- function(EMP,select=NULL,method='cor',corMethod='spearman',weighted=TRUE,
-                              missing='listwise',threshold=FALSE,...){
+                              missing='listwise',threshold='sig',...){
   
   measure <- value <- node <- feature <- NULL
 
@@ -65,7 +65,7 @@
 #' @importFrom bootnet estimateNetwork
 #' @importFrom qgraph centralityTable
 .EMP_network_analysis_EMPT <- function(EMPT,method='cor',corMethod='spearman',weighted=TRUE,
-                                  missing='listwise',threshold=FALSE,coldata_to_assay=NULL,...){
+                                  missing='listwise',threshold='sig',coldata_to_assay=NULL,...){
 
   measure <- value <- node <- feature <- NULL
 
@@ -155,7 +155,7 @@
 #' @param corMethod A character string. Methods include spearman, cor, cov, npn and cor_auto.
 #' @param weighted Logical, should the analyzed network be weighted?
 #' @param missing How to handle missing data? "pairwise" for pairwise deletion, "listwise" for listwise deletion, "fiml" for full-information maximum likelihood and "stop" to stop with an error.
-#' @param threshold Thresholding to use in partial correlation networks. Can be a fixed number to threshold all absolute edges below this value, 'locfdr' for local FDR, or any option corresponding to adjustments in \code{\link[psych]{corr.p}} ('none', 'sig', 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY' or 'fdr')). Can also be used for default = "IsingSampler" but can only be set to a logical enabling or disabling significance thresholding.
+#' @param threshold This parameter allows input of strings such as 'none', 'sig', 'holm', 'hochberg', 'hommel', 'bonferroni', 'BH', 'BY', or 'fdr' for statistical calculation on edges, with the default set to 'sig' to select only statistically significant edges; alternatively, it can be a numeric value between 0 and 1, which will remove edges with an absolute value greater than this threshold.
 #' @param coldata_to_assay A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
@@ -210,7 +210,7 @@
 #'   EMP_network_analysis() |> 
 #'   EMP_network_plot(show = 'node') # get the node importance
 EMP_network_analysis <- function(obj,select=NULL,method='cor',corMethod='spearman',weighted=TRUE,
-                              missing='listwise',threshold=FALSE,coldata_to_assay=NULL,use_cached=TRUE,action='add',...) {
+                              missing='listwise',threshold='sig',coldata_to_assay=NULL,use_cached=TRUE,action='add',...) {
 
   call <- match.call()
   
