@@ -116,11 +116,6 @@
 
 .EMP_cor_analysis_multi <- function(EMP,select=NULL,method='spearman',pvalue=0.05,rvalue=0,p.adjust='none',...) {
   
-  # 不同名字会直接影响到corr.p矫正p，且存在不对称p无法确认边的构建
-  if (p.adjust != 'none') {
-    stop("Cor analysis for sankey could not support pvalue adjust!")
-  }
-
   primary <- name <- NULL
 
   if (is.null(select)) {
@@ -357,7 +352,7 @@ kick_check <- function(data){
 #'
 #' @param EMP Object in EMP format.
 #' @param select A character string. The experiment name in the EMP object.
-#' @param method A character string. Methods include pearson (default), spearman.
+#' @param method A character string. Methods include pearson, spearman (default) and kendall.
 #' @param rvalue A number. Set relation value forthreshold for correlation test (default:0). Only activated in sankey cor-analysis.
 #' @param pvalue A number. Set pvalue forthreshold for correlation test (default:0.05). Only activated in sankey cor-analysis.
 #' @param p.adjust A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:none)
@@ -368,6 +363,8 @@ kick_check <- function(data){
 #' @rdname EMP_cor_analysis
 #' @return EMPT object
 #' @export
+#' @section Detaild about adjust pvalue:
+#' For symmetric matrices, p values adjusted for multiple tests are reported above the diagonal. See also \code{\link[psych]{corr.test}}.
 #'
 #' @examples
 #' data(MAE)

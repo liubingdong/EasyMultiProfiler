@@ -22,7 +22,7 @@ EMP_cor_analysis(
 
 \item{select}{A character string. The experiment name in the EMP object.}
 
-\item{method}{A character string. Methods include pearson (default), spearman.}
+\item{method}{A character string. Methods include pearson, spearman (default) and kendall.}
 
 \item{action}{A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).}
 
@@ -44,6 +44,11 @@ EMPT object
 \description{
 Correlation analysis
 }
+\section{Detaild about adjust pvalue}{
+
+For symmetric matrices, p values adjusted for multiple tests are reported above the diagonal. See also \code{\link[psych]{corr.test}}.
+}
+
 \examples{
 data(MAE)
 k1 <- MAE |>
