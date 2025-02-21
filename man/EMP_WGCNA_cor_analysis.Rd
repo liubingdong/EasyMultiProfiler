@@ -18,7 +18,7 @@ EMP_WGCNA_cor_analysis(
 
 \item{select}{A character string. The experiment name in the EMP object. Only for the EMP object.}
 
-\item{method}{A character string. Methods include pearson (default), spearman.}
+\item{method}{A character string. Methods include pearson, spearman and kendall.(default:spearman)}
 
 \item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.}
 

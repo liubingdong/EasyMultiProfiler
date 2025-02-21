@@ -45,7 +45,7 @@ EMP_GSEA_analysis(
 
 \item{enrich_method}{enrichment method, one of "kegg", "go", "reactome" and "do".}
 
-\item{cor_method}{A character string including pearson, spearman. The alogarithm cor_method used in method = "cor".}
+\item{cor_method}{A character string including pearson, spearman and kendall. The alogarithm cor_method used in method = "cor".}
 
 \item{group_level}{A series of character strings. Determine the comparison order of groups when method = "log2FC".}
 

@@ -164,6 +164,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 }
 
 #' @importFrom dplyr where
+#' @importFrom psych corr.test
 .EMP_WGCNA_cor_analysis_EMPT <-function(obj,method='spearman',coldata_to_assay=NULL,action='add'){
   var1 <- NULL
   
@@ -200,16 +201,22 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
   MEsWW <- na.omit(MEsWW)
 
   real_samples <- intersect(rownames(coldata),rownames(MEsWW))
-  coldata <- coldata %>% dplyr::filter(rownames(coldata) %in% real_samples )
-  MEsWW <- MEsWW %>% dplyr::filter(rownames(MEsWW) %in% real_samples ) 
+  coldata <- coldata %>% dplyr::filter(rownames(coldata) %in% real_samples ) 
+  MEsWW <- MEsWW %>% dplyr::filter(rownames(MEsWW) %in% real_samples )
 
-  #df.cor.p<-agricolae_correlation(x=coldata,y=MEsWW,method = method)
-  df.cor.p <- CorRcpp(x = coldata,y = MEsWW,type = method)
-  names(df.cor.p) <- c('correlation','pvalue')
+  coldata <- coldata[real_samples,]
+  MEsWW <- MEsWW[real_samples,]
 
-  df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
-  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
+  # Cancel the CorRcpp to reduce the dependence of compile envir
+  #df.cor.p <- CorRcpp(x = coldata,y = MEsWW,type = method)
+  #names(df.cor.p) <- c('correlation','pvalue')
+  #df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
+  #df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
 
+  df.cor.p <- list()
+  cor_re <- corr.test(as.matrix(coldata),as.matrix(MEsWW),method=method,adjust='none')
+  df.cor.p[["correlation"]] <- round(cor_re[["r"]],2)
+  df.cor.p[["pvalue"]] <- round(cor_re[["p"]],2)
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
@@ -248,6 +255,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 .EMP_WGCNA_cor_analysis_EMPT_m <- memoise::memoise(.EMP_WGCNA_cor_analysis_EMPT,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 #' @importFrom WGCNA orderMEs
+#' @importFrom psych corr.test
 .EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman',action='add'){
   primary <- var1 <- NULL
   if (is(obj,"EMP")) {
@@ -319,13 +327,16 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
   data2 <- data2[real_samples,]
   MEsWW <- MEsWW[real_samples,]
 
+  # Cancel the CorRcpp to reduce the dependence of compile envir
+  #df.cor.p <- CorRcpp(x = data2,y = MEsWW,type = method)
+  #names(df.cor.p) <- c('correlation','pvalue')
+  #df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
+  #df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
 
-  df.cor.p <- CorRcpp(x = data2,y = MEsWW,type = method)
-  names(df.cor.p) <- c('correlation','pvalue')
-
-  df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
-  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],2)
-
+  df.cor.p <- list()
+  cor_re <- corr.test(as.matrix(data2),as.matrix(MEsWW),method=method,adjust='none')
+  df.cor.p[["correlation"]] <- round(cor_re[["r"]],2)
+  df.cor.p[["pvalue"]] <- round(cor_re[["p"]],2)
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
@@ -368,7 +379,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #'
 #' @param obj EMPT or EMP object.
 #' @param select A character string. The experiment name in the EMP object. Only for the EMP object.
-#' @param method A character string. Methods include pearson (default), spearman.
+#' @param method A character string. Methods include pearson, spearman and kendall.(default:spearman)
 #' @param coldata_to_assay A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).

@@ -13,7 +13,8 @@ EMP_cor_analysis(
   pvalue = 0.05,
   p.adjust = "none",
   use_cached = TRUE,
-  force_sankey = FALSE
+  force_sankey = FALSE,
+  ...
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ EMP_cor_analysis(
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{force_sankey}{A boolean. Whether force the cor-analysis for the sankey plot or not.}
+
+\item{...}{Further parameters passed to the function \code{\link[psych]{corr.test}}.}
 }
 \value{
 EMPT object

@@ -263,16 +263,18 @@ get_enrich_data <- function(method = "kegg", geneList,
       coldata <- coldata %>% dplyr::filter(rownames(coldata) %in% real_samples )
       feature_table <- feature_table %>% dplyr::filter(rownames(feature_table) %in% real_samples ) 
 
-      #data.corr <- psych::corr.test(feature_table, coldata,method = cor_method,adjust='none')
-      #data.corr <- agricolae_correlation(feature_table, coldata,method = cor_method)
-      data.corr <- CorRcpp(x = feature_table,y = coldata,type = cor_method)
-      names(data.corr) <- c('correlation','pvalue')
+      # Cancel the CorRcpp to reduce the dependence of compile envir
+      #data.corr <- CorRcpp(x = feature_table,y = coldata,type = cor_method)
+      #names(data.corr) <- c('correlation','pvalue')
 
-      #data.corr[["correlation"]] <- round(data.corr[["correlation"]],2)
-      #data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],2)
+      data.corr <- list()
+      cor_re <- corr.test(as.matrix(feature_table),as.matrix(coldata),method=cor_method,adjust='none')
+      data.corr[["correlation"]] <- round(cor_re[["r"]],6)
+      data.corr[["pvalue"]] <- round(cor_re[["p"]],6)
+
       data.r <- data.corr$correlation
       data.p <- data.corr$pvalue
-   
+
       data.r[data.p>threshold_p|abs(data.r)<threshold_r] = 0 ## filter according to the threshold
       
       data.r %<>% as.data.frame() %>% 
@@ -359,7 +361,7 @@ get_enrich_data <- function(method = "kegg", geneList,
 #' @param estimate_group A character string. Select the column you are interested in the coldata.
 #' @param method A character string. Methods include signal2Noise, cor, log2FC.
 #' @param enrich_method enrichment method, one of "kegg", "go", "reactome" and "do".
-#' @param cor_method A character string including pearson, spearman. The alogarithm cor_method used in method = "cor".
+#' @param cor_method A character string including pearson, spearman and kendall. The alogarithm cor_method used in method = "cor".
 #' @param group_level A series of character strings. Determine the comparison order of groups when method = "log2FC".
 #' @param pseudocount A number. The alogarithm pseudocount used in method = "signal2Noise", adjust the 0 in the signal2Noise result into pseudocount value. (default:0.0001)
 #' @param pvalueCutoff A character string. Adjusted pvalue cutoff on enrichment tests to report.

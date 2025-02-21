@@ -1,7 +1,8 @@
 #' @importFrom dplyr arrange
 #' @importFrom tibble column_to_rownames
+#' @importFrom psych corr.test
 #' @noRd
-.EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',p.adjust='none') {
+.EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',p.adjust='none',...) {
   #call <- match.call()
 
   primary <- var1 <- NULL
@@ -53,26 +54,35 @@
   #df.cor.p<-agricolae_correlation(x=data1,y=data2,method = method,...)
 
   ## check the consistent value
-  data1<- data1_pre %>%
-    dplyr::select_if(~ dplyr::n_distinct(.) > 1)
+  data1 <- data1_pre %>%
+    dplyr::select_if(~ dplyr::n_distinct(.) > 1) 
   data2 <- data2_pre %>%
-    dplyr::select_if(~ dplyr::n_distinct(.) > 1)
+    dplyr::select_if(~ dplyr::n_distinct(.) > 1) 
 
   if (ncol(data1_pre) != ncol(data1) | ncol(data2_pre) != ncol(data2)) {
      warning(' The consistent value has beed detected and be removed!')
   }
 
-  df.cor.p <- CorRcpp(x = data1,y = data2,type = method)
-  names(df.cor.p) <- c('correlation','pvalue')
-
-  if (p.adjust == 'none') {
-    df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],3)
-  }else{
-    temp_p <- psych::corr.p(as.matrix(df.cor.p[["correlation"]]) |> round(4),n=length(real_sample), adjust = p.adjust)
-    df.cor.p[["pvalue"]] <- temp_p$p |> as.data.frame() |> round(3)
-  }
+  # Cancel the CorRcpp to reduce the dependence of compile envir
+  #df.cor.p <- CorRcpp(x = data1,y = data2,type = method)
+  #names(df.cor.p) <- c('correlation','pvalue')
+  #
+  #if (p.adjust == 'none') {
+  #  df.cor.p[["pvalue"]] <- round(df.cor.p[["pvalue"]],3)
+  #}else{
+  #  temp_p <- psych::corr.p(as.matrix(df.cor.p[["correlation"]]) |> round(4),n=length(real_sample), adjust = p.adjust)
+  #  df.cor.p[["pvalue"]] <- temp_p$p |> as.data.frame() |> round(3)
+  #}
+  #df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
   
-  df.cor.p[["correlation"]] <- round(df.cor.p[["correlation"]],2)
+  df.cor.p <- list()
+  cor_re <- corr.test(as.matrix(data1),as.matrix(data2),method=method,adjust = p.adjust,...)
+  df.cor.p[["correlation"]] <- round(cor_re[["r"]],2)
+  if (p.adjust == 'none') {
+    df.cor.p[["pvalue"]] <- round(cor_re[["p"]],3)
+  }else{
+    df.cor.p[["pvalue"]] <- round(cor_re[["p.adj"]],3)
+  }
 
   df <- df.cor.p$correlation %>%
     as.data.frame() %>%
@@ -104,7 +114,7 @@
 
 
 
-.EMP_cor_analysis_multi <- function(EMP,select=NULL,method='spearman',pvalue=0.05,rvalue=0,p.adjust='none') {
+.EMP_cor_analysis_multi <- function(EMP,select=NULL,method='spearman',pvalue=0.05,rvalue=0,p.adjust='none',...) {
   
   # 不同名字会直接影响到corr.p矫正p，且存在不对称p无法确认边的构建
   if (p.adjust != 'none') {
@@ -149,11 +159,11 @@
   while (data_length>1) {
     if (count_id == 1 ) {
       temp <- rel_cons(data1 = total_data[[1]],data2 = total_data[[2]], 
-                       pvalue = pvalue,rvalue = rvalue,cor_method = method,p.adjust=p.adjust)
+                       pvalue = pvalue,rvalue = rvalue,cor_method = method,p.adjust=p.adjust,...)
     }else{
       keep_idx <- relationship_stock[[count_id-1]]$keep
       temp <- rel_cons(data1 = total_data[[1]][,c('SampleID',keep_idx)], data2 = total_data[[2]], 
-                       pvalue = pvalue,rvalue = rvalue,cor_method = method,p.adjust=p.adjust)
+                       pvalue = pvalue,rvalue = rvalue,cor_method = method,p.adjust=p.adjust,...)
     }
     if (length(temp$keep)>0) {
       relationship_stock[[count_id]] <- temp
@@ -251,7 +261,7 @@ check_duplicate_col <- function(list_of_dfs) {
   
 }
 
-rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman',p.adjust='none'){
+rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman',p.adjust='none',...){
   
   SampleID <- value <- NULL
 
@@ -266,26 +276,46 @@ rel_cons <- function(data1,data2,pvalue=0.05,rvalue=0,cor_method='spearman',p.ad
   
   data1 <- data1 %>% dplyr::filter(SampleID %in% real_sample)  %>% 
     dplyr::arrange(SampleID) %>%
-    tibble::column_to_rownames('SampleID')
+    tibble::column_to_rownames('SampleID') 
   
   data2 <- data2 %>% dplyr::filter(SampleID %in% real_sample)  %>% 
     dplyr::arrange(SampleID) %>%
-    tibble::column_to_rownames('SampleID')
+    tibble::column_to_rownames('SampleID') 
   
- 
-  #data.corr <- agricolae_correlation(data1, data2,method = cor_method)
-  data.corr <- CorRcpp(x = data1,y = data2,type = cor_method)
-  names(data.corr) <- c('correlation','pvalue')
-  
-  if (p.adjust == 'none') {
-    data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],3)
-  }else{
-    temp_p <- psych::corr.p(as.matrix(data.corr[["correlation"]]) |> round(4),n=length(real_sample),adjust = p.adjust)
-    data.corr[["pvalue"]] <- temp_p$p |> as.data.frame() |> round(3)
+
+  ## check the consistent value
+  data1_check <- data1 %>%
+    dplyr::select_if(~ dplyr::n_distinct(.) > 1) 
+  data2_check <- data2 %>%
+    dplyr::select_if(~ dplyr::n_distinct(.) > 1) 
+
+  if (ncol(data1_check) != ncol(data1) | ncol(data2_check) != ncol(data2)) {
+     warning(' The consistent value has beed detected and be removed!')
   }
 
-  data.corr[["correlation"]] <- round(data.corr[["correlation"]],2)
+
+  # Cancel the CorRcpp to reduce the dependence of compile envir
+  #data.corr <- CorRcpp(x = data1,y = data2,type = cor_method)
+  #names(data.corr) <- c('correlation','pvalue')
+  #
+  #if (p.adjust == 'none') {
+  #  data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],3)
+  #}else{
+  #  temp_p <- psych::corr.p(as.matrix(data.corr[["correlation"]]) |> round(4),n=length(real_sample),adjust = p.adjust)
+  #  data.corr[["pvalue"]] <- temp_p$p |> as.data.frame() |> round(3)
+  #}
+  #
+  #data.corr[["correlation"]] <- round(data.corr[["correlation"]],2)
   #data.corr[["pvalue"]] <- round(data.corr[["pvalue"]],2)
+
+  data.corr <- list()
+  cor_re <- corr.test(as.matrix(data1),as.matrix(data2),method=cor_method,adjust = p.adjust,...)
+  data.corr[["correlation"]] <- round(cor_re[["r"]],2)
+  if (p.adjust == 'none') {
+    data.corr[["pvalue"]] <- round(cor_re[["p"]],3)
+  }else{
+    data.corr[["pvalue"]] <- round(cor_re[["p.adj"]],3)
+  }
 
   occor.r <- data.corr$correlation
   occor.p <- data.corr$pvalue
@@ -334,6 +364,7 @@ kick_check <- function(data){
 #' @param force_sankey A boolean. Whether force the cor-analysis for the sankey plot or not.
 #' @param action A character string.A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
+#' @param ... Further parameters passed to the function \code{\link[psych]{corr.test}}. 
 #' @rdname EMP_cor_analysis
 #' @return EMPT object
 #' @export
@@ -365,17 +396,12 @@ kick_check <- function(data){
 #' (k1 + k3 + k2) |> EMP_cor_analysis() |>
 #'   EMP_sankey_plot()
 EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rvalue=0,pvalue=0.05,p.adjust='none',
-                             use_cached=TRUE,force_sankey=FALSE) {
+                             use_cached=TRUE,force_sankey=FALSE,...) {
 
   experiment_num <- NULL
 
   call <- match.call()
   
-  if(p.adjust != 'none') {
-    rlang::check_installed(c('BiocManager'), reason = 'for EMP_cor_analysis().', action = install.packages)  
-    rlang::check_installed(c('psych'), reason = 'for EMP_cor_analysis().', action = BiocManager::install)
-  }
-
   if (!is(EMP,"EMP")) {
     stop("Please input the EMP format!")
   }
@@ -392,9 +418,9 @@ EMP_cor_analysis <- function(EMP,select=NULL,method='spearman',action='add',rval
   }
 
   if (experiment_num <= 2) {
-    result <- .EMP_cor_analysis_m(EMP=EMP,select=select,method=method,p.adjust=p.adjust)
+    result <- .EMP_cor_analysis_m(EMP=EMP,select=select,method=method,p.adjust=p.adjust,...)
   }else {
-    result <- .EMP_cor_analysis_multi_m(EMP=EMP,select=select,method=method,rvalue=rvalue,pvalue=pvalue,p.adjust=p.adjust)
+    result <- .EMP_cor_analysis_multi_m(EMP=EMP,select=select,method=method,rvalue=rvalue,pvalue=pvalue,p.adjust=p.adjust,...)
   }
 
 
