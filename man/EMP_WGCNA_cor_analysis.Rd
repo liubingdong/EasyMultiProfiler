@@ -7,7 +7,7 @@
 EMP_WGCNA_cor_analysis(
   obj,
   select = NULL,
-  method = "spearman",
+  method = "pearson",
   coldata_to_assay = NULL,
   use_cached = TRUE,
   action = "add"
@@ -18,7 +18,7 @@ EMP_WGCNA_cor_analysis(
 
 \item{select}{A character string. The experiment name in the EMP object. Only for the EMP object.}
 
-\item{method}{A character string. Methods include pearson, spearman and kendall.(default:spearman)}
+\item{method}{A character string. Methods include pearson, spearman and kendall.(default:pearson)}
 
 \item{coldata_to_assay}{A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.}
 
@@ -41,14 +41,14 @@ WGCNA_COR_result <- MAE |>
   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),
-                         method='spearman',action='add') # If want the detailed result, set action = 'get'
+                         method='pearson',action='add') # If want the detailed result, set action = 'get'
 
 ## Visualization
 MAE |>
   EMP_assay_extract('geno_ec')  |> 
   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
-  EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+  EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='pearson') |>
   EMP_heatmap_plot(palette = 'Spectral')
 
 ## Filter the interesting module and make the enrichment analysis
@@ -56,7 +56,7 @@ MAE |>
   EMP_assay_extract('geno_ec')  |> 
   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
-  EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+  EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='pearson') |>
   EMP_heatmap_plot(palette = 'Spectral') |>
   EMP_filter(feature_condition = WGCNA_color == 'brown' ) |> 
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
@@ -73,7 +73,7 @@ k2 <- MAE |>
   EMP_assay_extract('host_gene',pattern = c('A1BG','A1CF','A2MP1','AACS'),pattern_ref = 'feature')
 
 (k1 + k2) |>
-  EMP_WGCNA_cor_analysis(method='spearman') |>
+  EMP_WGCNA_cor_analysis(method='pearson') |>
   EMP_heatmap_plot(palette = 'Spectral') 
 }
 }

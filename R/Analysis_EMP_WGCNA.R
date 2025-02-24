@@ -165,7 +165,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 
 #' @importFrom dplyr where
 #' @importFrom psych corr.test
-.EMP_WGCNA_cor_analysis_EMPT <-function(obj,method='spearman',coldata_to_assay=NULL,action='add'){
+.EMP_WGCNA_cor_analysis_EMPT <-function(obj,method='pearson',coldata_to_assay=NULL,action='add'){
   var1 <- NULL
   
   if (is(obj,"EMPT")) {
@@ -256,7 +256,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 
 #' @importFrom WGCNA orderMEs
 #' @importFrom psych corr.test
-.EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='spearman',action='add'){
+.EMP_WGCNA_cor_analysis_EMP <- function(obj,select=NULL,method='pearson',action='add'){
   primary <- var1 <- NULL
   if (is(obj,"EMP")) {
     EMP <- obj
@@ -379,7 +379,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #'
 #' @param obj EMPT or EMP object.
 #' @param select A character string. The experiment name in the EMP object. Only for the EMP object.
-#' @param method A character string. Methods include pearson, spearman and kendall.(default:spearman)
+#' @param method A character string. Methods include pearson, spearman and kendall.(default:pearson)
 #' @param coldata_to_assay A series of character strings. Select the column from coldata to caculate. Only for the EMPT object.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
@@ -395,14 +395,14 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
 #'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
 #'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),
-#'                          method='spearman',action='add') # If want the detailed result, set action = 'get'
+#'                          method='pearson',action='add') # If want the detailed result, set action = 'get'
 #' 
 #' ## Visualization
 #' MAE |>
 #'   EMP_assay_extract('geno_ec')  |> 
 #'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
 #'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
-#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='pearson') |>
 #'   EMP_heatmap_plot(palette = 'Spectral')
 #' 
 #' ## Filter the interesting module and make the enrichment analysis
@@ -410,7 +410,7 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #'   EMP_assay_extract('geno_ec')  |> 
 #'   EMP_identify_assay(method = 'edgeR',estimate_group = 'Group') |>
 #'   EMP_WGCNA_cluster_analysis(RsquaredCut = 0.85,mergeCutHeight=0.4)  |>
-#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='spearman') |>
+#'   EMP_WGCNA_cor_analysis(coldata_to_assay = c('BMI','PHQ9','GAD7','HAMD','SAS','SDS'),method='pearson') |>
 #'   EMP_heatmap_plot(palette = 'Spectral') |>
 #'   EMP_filter(feature_condition = WGCNA_color == 'brown' ) |> 
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
@@ -427,11 +427,11 @@ EMP_WGCNA_cluster_analysis <- function(obj,experiment,use_cached=T,powers=c(1:10
 #'   EMP_assay_extract('host_gene',pattern = c('A1BG','A1CF','A2MP1','AACS'),pattern_ref = 'feature')
 #' 
 #' (k1 + k2) |>
-#'   EMP_WGCNA_cor_analysis(method='spearman') |>
+#'   EMP_WGCNA_cor_analysis(method='pearson') |>
 #'   EMP_heatmap_plot(palette = 'Spectral') 
 #' }
 
-EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='spearman',coldata_to_assay=NULL,use_cached=TRUE,action='add'){
+EMP_WGCNA_cor_analysis <- function(obj,select=NULL,method='pearson',coldata_to_assay=NULL,use_cached=TRUE,action='add'){
   deposit <- NULL
   call <- match.call()
   if (is(obj,"EMP")) {
