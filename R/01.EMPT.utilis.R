@@ -121,23 +121,28 @@ setMethod("EMP_result","EMPT",function(obj,info=NULL){
   if (is.null(info)) {
     info <- .get.info.EMPT(obj)
   }
-  result_list <- list()
-  deposilt_info <- .get.deposit_info.EMPT(obj)
-  if (info %in% deposilt_info$Result) {
-    result_list <- obj@deposit[[info]]
-  }else if(info %in% deposilt_info$source){
-    real_info <- deposilt_info$Result[deposilt_info$source %in% info]
-    result_list <- list()
-    for (i in real_info) {
-       result_list[[i]] <-obj@deposit[[i]]
-    }
-    if (length(result_list) == 1) {
-      result_list <- result_list[[1]]
-    }
+  if (info == 'EMP_assay_data') {
+    result <- .get.assay.EMPT(obj)
+    return(result)
   }else{
-    warning("please check the info!")
+    result_list <- list()
+    deposilt_info <- .get.deposit_info.EMPT(obj)
+    if (info %in% deposilt_info$Result) {
+      result_list <- obj@deposit[[info]]
+    }else if(info %in% deposilt_info$source){
+      real_info <- deposilt_info$Result[deposilt_info$source %in% info]
+      result_list <- list()
+      for (i in real_info) {
+         result_list[[i]] <-obj@deposit[[i]]
+      }
+      if (length(result_list) == 1) {
+        result_list <- result_list[[1]]
+      }
+    }else{
+      warning("please check the info!")
+    }
+    return(result_list)    
   }
-  return(result_list)
 })
 
 #' @rdname EMP_result
