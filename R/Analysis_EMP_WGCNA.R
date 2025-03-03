@@ -43,12 +43,11 @@
                          # saveTOMs = saveTOMs,...)
                          saveTOMs = saveTOMs)
 
-  mergedColors = WGCNA::labels2colors(net$colors)
-
-  WGCNA::plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]], "Module colors",
-                      dendroLabels = FALSE, hang = 0.03,
-                      addGuide = TRUE, guideHang = 0.05,
-                      abHeight=mergeCutHeight)
+  #mergedColors = WGCNA::labels2colors(net$colors)
+  #WGCNA::plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]], "Module colors",
+  #                    dendroLabels = FALSE, hang = 0.03,
+  #                    addGuide = TRUE, guideHang = 0.05,
+  #                    abHeight=mergeCutHeight)
 
   mergedColors = WGCNA::labels2colors(net$colors)
 
@@ -61,6 +60,8 @@
 
 
   #disableWGCNAThreads()
+
+  net[['mergeCutHeight']] <- mergeCutHeight
 
   .get.deposit_append.EMPT(EMPT,info='feature_WGCNA_cluster_result') <- net
   # print("here 2_6 over")

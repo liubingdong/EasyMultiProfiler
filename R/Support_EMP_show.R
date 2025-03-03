@@ -73,6 +73,12 @@ setMethod("show", "EMPT",
                      Module <- WGCNA::labels2colors(net$colors)
                      table(Module) %>% print()
                      deposit[['WGCNA_cluster_df']] %>% print()
+                     mergedColors = WGCNA::labels2colors(net$colors)
+                     WGCNA::plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]], "Module colors",
+                                        dendroLabels = FALSE, hang = 0.03,
+                                        addGuide = TRUE, guideHang = 0.05,
+                                        abHeight=net$mergeCutHeight)
+
                    },
                    "EMP_WGCNA_cor_analysis" = {
                       object <- .get.result.EMPT(object,info = 'EMP_WGCNA_cor_analysis')
