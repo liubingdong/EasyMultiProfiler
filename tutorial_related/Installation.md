@@ -9,7 +9,7 @@ EasyMultiProfiler depends on several R packages, so issues such as environment d
 
 EasyMultiProfiler depends on several R packages, so issues such as environment dependency conflicts may arise during installation. This section covers common installation errors and their solutions.
 
-###  10.5.1 **Easily install**
+###  1 **Easily install**
 
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
@@ -18,7 +18,7 @@ remotes::install_version("patchwork",version='1.2.0',force = TRUE)
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
-#### 1. Common error about the timeout
+#### 1.1 Common error about the timeout
 Solution method:
 >For some regions with unstable network, users could utilize the local mirrors to avoid unexpected errors before installation.
 ```R
@@ -32,7 +32,7 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-#### 2. Common error about the "pkgbuild::check build tools(debug = TRUE)"
+#### 1.2 Common error about the "pkgbuild::check build tools(debug = TRUE)"
 
 <img src="Installation_figs/install_compile_error.jpg" alt="install_compile_error" style="zoom: 50%;" />
 
@@ -47,7 +47,7 @@ options("url.method"="libcurl")
 >Many R packages require a compiler environment during installation. To ensure maximum compatibility, it is recommended that new users install the specified version of gfortran below, rather than the latest version. After successful installation, restart your computer before attempting to install EasyMultiProfiler.
 >Download link: ：[Official Source](https://github.com/R-macos/gcc-12-branch/releases)
 
-#### 3. Common error about "Cannot open lock file: Permission denied"
+#### 1.3 Common error about "Cannot open lock file: Permission denied"
 
 <img src="Installation_figs/pak_error1.jpg" >
 
@@ -58,7 +58,7 @@ options("url.method"="libcurl")
 rm -rf /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/_cache/*
 ```
 
-### 10.5.2 **Manual install** 
+### 2 **Manual install** 
 
 ```R
 # In the step, please type in : 1 2 3 4 5 6 7 
@@ -74,7 +74,7 @@ BiocManager::install("clusterProfiler") # clusterProfiler (>= 4.10.0)
 remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
-#### 1. Common error about the timeout.
+#### 2.1 Common error about the timeout.
 
 Solution method:
 >Because EasyMultiProfiler includes many necessary data to provide comprehensive tools, the package size (~10MB) may lead to install timeout errors for some users in bad network regions. Users could reset the Max link time to make sure the installation is successful.
@@ -82,7 +82,7 @@ Solution method:
 options(timeout = 600000000) 
 ```
 
-#### 2. Common error about the can't find the Bioconductor repository by install_github
+#### 2.2 Common error about the can't find the Bioconductor repository by install_github
 
 Solution method:
 

@@ -27,7 +27,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 <u>The R version must be **4.3.3** or higher.</u>
 
-**Easily install (recommend)**
+**1. Easily install (recommend)**
 
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
@@ -47,7 +47,7 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-<u>NOTE 2:</u>  For different R versions on the Windows platform, users need to install appropriate rtools to support the necessary compile environment (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restart R and re-try below:
+<u>NOTE 2:</u>  If encountering issues related to missing compilation environments, users can resolve them by following the solution. For different R versions on the Windows platform, users need to install appropriate rtools to support the necessary compile environment (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). For Mac os  platform, users could install gfortran([click here ~ 242MB](https://github.com/R-macos/gcc-12-branch/releases)). Afterward, simply restart computer and re-try below:
 
 ```R
 pak::pak("liubingdong/EasyMultiProfiler")
@@ -59,7 +59,7 @@ pak::pak("liubingdong/EasyMultiProfiler")
 pak::pak("liubingdong/EasyMultiProfiler@0c66ed3")
 ```
 
-**Manual install** 
+**2. Manual install** 
 
 Due to the inclusion of many popular analysis tools, the EMP package relies on dependencies distributed across GitHub, CRAN, and Bioconductor repositories. Therefore, users may encounter dependency issues during installation in different network environments. If installation errors occur, we suggest manually installing any missing dependencies based on the error prompts. Thank you for being so patient during installation. We believe EMP could greatly speed up your research work.
 
@@ -78,10 +78,17 @@ remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 
-More installation errors and solutions: [**Click this**](https://github.com/liubingdong/EasyMultiProfiler/blob/main/tutorial_related/Installation.md)
+**3. More installation errors and solutions: ** 
+
+If the above solutions still fail to successfully complete the installation, we have prepared detailed installation guides for you.
+
+[**English version**](http://easymultiprofiler.xielab.net/en/MD/1%20EasyMultiProfiler%20introduction.html#11)
+
+[**中文版本**](http://easymultiprofiler.xielab.net/ch/MD/1%20EasyMultiProfiler%20introduction.html#11)
 
 ### Update new version
 The EasyMultiProfiler package is continuously being updated with more analysis and visualization modules. When a new version is needed, simply run pak again to update.
+
 ```R
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
