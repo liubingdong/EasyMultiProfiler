@@ -56,7 +56,7 @@ pak::pak("liubingdong/EasyMultiProfiler")
 <u>NOTE 3:</u>  EasyMultiProfiler has consistently been updating its versions while striving to maintain compatibility with the original code and syntax. Specific versions can be installed using the pak package to ensure consistency in users' data analyses.  Version could be found on  https://github.com/liubingdong/EasyMultiProfiler/commits/main/.
 
 ```R
-pak::pak("liubingdong/EasyMultiProfiler@82a4776")
+pak::pak("liubingdong/EasyMultiProfiler@0c66ed3")
 ```
 
 **Manual install** 

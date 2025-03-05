@@ -7,7 +7,9 @@
 
 EasyMultiProfiler depends on several R packages, so issues such as environment dependency conflicts may arise during installation. This section covers common installation errors and their solutions.
 
-### **Easily install**
+EasyMultiProfiler depends on several R packages, so issues such as environment dependency conflicts may arise during installation. This section covers common installation errors and their solutions.
+
+###  10.5.1 **Easily install**
 
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
@@ -32,13 +34,21 @@ options("url.method"="libcurl")
 
 #### 2. Common error about the "pkgbuild::check build tools(debug = TRUE)"
 
-Solution method:
+<img src="Installation_figs/install_compile_error.jpg" alt="install_compile_error" style="zoom: 50%;" />
 
->Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restart R and re-try ```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
+<u>**Solution for Windows users :**</u>
 
-<img src="Installation_figs/rtool.jpg" height="300" width="750" />
+>Windows users may encounter an error <u>"Could not find tools necessary to compile a package"<u> during the installation process. To address this, it's essential to install Rtools beforehand (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). Afterward, simply restart R and re-try >```pak::pkg_install("liubingdong/EasyMultiProfiler")```.
+
+<img src="Installation_figs/rtool.jpg" height="300" width="750" style="zoom:67%;" />
+
+<u>**Solution for Mac users :**</u>
+
+>Many R packages require a compiler environment during installation. To ensure maximum compatibility, it is recommended that new users install the specified version of gfortran below, rather than the latest version. After successful installation, restart your computer before attempting to install EasyMultiProfiler.
+>Download link: ：[Official Source](https://github.com/R-macos/gcc-12-branch/releases)
 
 #### 3. Common error about "Cannot open lock file: Permission denied"
+
 <img src="Installation_figs/pak_error1.jpg" >
 
 >For this situation, users could delete the un-downloaded files in the R
@@ -48,7 +58,7 @@ Solution method:
 rm -rf /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/library/_cache/*
 ```
 
-###  **Manual install** 
+### 10.5.2 **Manual install** 
 
 ```R
 # In the step, please type in : 1 2 3 4 5 6 7 
@@ -89,7 +99,7 @@ setRepositories(addURLs = c(BioCsoft = "https://bioconductor.org/packages/3.18/b
 
 Because the patchwork has two versions to lead to unexpected conflict in the package enrichplot, users need to degrade the patchwork from 2.4 to 1.2.0.
 
-<img src="Installation_figs/patchwork_error1.jpg" alt="patchwork_error2" style="zoom:100%;" />
+<img src="../tutorial_figs/patchwork_error1.jpg" alt="patchwork_error2" style="zoom:100%;" />
 
 Solution method 1:
 
@@ -105,3 +115,4 @@ Solution method 2:
 remotes::install_version("patchwork",version='1.2.0',force = TRUE)
 pak::pkg_install("liubingdong/EasyMultiProfiler") ## After restart R
 ```
+
