@@ -37,7 +37,7 @@ library(EasyMultiProfiler)
 <u>NOTE 1:</u>  For some regions with unstable networks, users could utilize the local mirrors to avoid unexpected errors before installation.
 
 ```R
-## For china main land users could use this
+## For example, China main land users could use this
 local({r <- getOption("repos")
 r["CRAN"] <- "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
 options(repos=r)}
@@ -78,7 +78,7 @@ remotes::install_github("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 
-**3. More installation errors and solutions: ** 
+**3. More installation errors and solutions:**
 
 If the above solutions still fail to successfully complete the installation, we have prepared detailed installation guides for you.
 
