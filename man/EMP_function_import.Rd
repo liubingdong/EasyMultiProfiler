@@ -2,7 +2,7 @@
 % Please edit documentation in R/Support_EMP_import.R
 \name{EMP_function_import}
 \alias{EMP_function_import}
-\title{Import gene data into SummariseExperiment}
+\title{Import kegg data into SummariseExperiment}
 \usage{
 EMP_function_import(
   file = NULL,
@@ -17,7 +17,7 @@ EMP_function_import(
 
 \item{data}{A dataframe.The row must be the feature and the column is the sample.}
 
-\item{type}{type}
+\item{type}{A character string including ko and ec.}
 
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
 
@@ -27,7 +27,7 @@ EMP_function_import(
 SummmariseExperiment object
 }
 \description{
-Import gene data into SummariseExperiment
+Import kegg data into SummariseExperiment
 }
 \examples{
 # More examples and tutorial could be found on website: 

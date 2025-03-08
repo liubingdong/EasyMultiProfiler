@@ -2,7 +2,7 @@
 % Please edit documentation in R/Support_EMP_import.R
 \name{EMP_normal_import}
 \alias{EMP_normal_import}
-\title{Import combined data into SummariseExperiment}
+\title{Import table data into SummariseExperiment}
 \usage{
 EMP_normal_import(
   file = NULL,
@@ -10,7 +10,8 @@ EMP_normal_import(
   sampleID = NULL,
   dfmap = NULL,
   assay_name = NULL,
-  assay = NULL
+  assay = NULL,
+  duplicate_feature = NULL
 )
 }
 \arguments{
@@ -25,12 +26,14 @@ EMP_normal_import(
 \item{assay_name}{A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.}
 
 \item{assay}{A character string. Indicate the experiment name of the import data in the dfmap.}
+
+\item{duplicate_feature}{A boolean. Whether the feature exist the dupicated name.}
 }
 \value{
 SummmariseExperiment object
 }
 \description{
-Import combined data into SummariseExperiment
+Import table data into SummariseExperiment
 }
 \examples{
 # More examples and tutorial could be found on website: 

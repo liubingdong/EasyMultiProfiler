@@ -309,11 +309,11 @@ EMP_taxonomy_import <- function(file=NULL,data=NULL,humann_format=FALSE,file_for
  }
  return(deposit) 
 }  
-#' Import gene data into SummariseExperiment
+#' Import kegg data into SummariseExperiment
 #'
 #' @param file A file path. The file should be deposited in txt format.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
-#' @param type type
+#' @param type A character string including ko and ec.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param humann_format A boolean. Whether the function improt the data according to the humann format.
 #' @importFrom SummarizedExperiment assayNames
@@ -345,6 +345,10 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
     }
     colnames(temp)[1] <- 'feature'
 
+    if (any(duplicated(data[,1]))) {
+      stop("Duplicated ko or ec name, please check the data!")
+    }
+
     if (any(is.na(temp[,-1]))) {
       EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
       temp[,-1][is.na(temp[,-1])] <- 0
@@ -365,7 +369,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 }
 
 
-#' Import combined data into SummariseExperiment
+#' Import table data into SummariseExperiment
 #'
 #' @param file A file path. The file should be deposited in txt format.
 #' @param data A dataframe.The row must be the feature and the column is the sample.
@@ -373,6 +377,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 #' @param dfmap A dataframe. Indicate the experiment name, sample source and sample tube details in the omics data.
 #' @param assay_name A character string. Indicate what kind of result the data belongs to, such as counts, relative abundance, TPM, etc.
 #' @param assay A character string. Indicate the experiment name of the import data in the dfmap.
+#' @param duplicate_feature A boolean. Whether the feature exist the dupicated name.
 #' @importFrom dplyr all_of
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @return SummmariseExperiment object
@@ -381,7 +386,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
 #' @examples
 #' # More examples and tutorial could be found on website: 
 #' # https://liubingdong.github.io/EasyMultiProfiler_tutorial/
-EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay_name=NULL,assay=NULL){
+EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay_name=NULL,assay=NULL,duplicate_feature=NULL){
   row_data <- assay_data <- obj <- colname <- feature <- NULL
   if (!is.null(data)) {
     data <- data
@@ -399,6 +404,24 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
       EMP_message("The function will consider all column as samples.\nIf the data contain rowdata, please define sampleID!",color = 32,order = 1,show='message')
       sampleID <- colnames(data)[-1]
     }
+  }
+  
+  if (is.null(duplicate_feature)){
+    check_duplicated_feature <- any(duplicated(data[,1]))
+    if(check_duplicated_feature){
+      duplicate_feature <- TRUE
+      EMP_message("The duplicated name in the feature have been detected.\nParameter duplicate_feature is forced to be TRUE.",color = 32,order = 1,show='message')
+    }else{
+      duplicate_feature <- FALSE
+    }
+  }
+  
+  if (duplicate_feature) {
+    if (colnames(data)[1] == 'feature') {
+      EMP_message("The original first column has been renamed to '.feature'.",color = 32,order = 1,show='message')
+      colnames(data)[1] <- '.feature'
+    }
+    data <- data |> dplyr::mutate(feature = paste0('feature',1:nrow(data)),.before = 1)
   }
   
   colnames(data)[1] <- 'feature'
@@ -428,56 +451,11 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
 
 #' @importFrom SummarizedExperiment SummarizedExperiment
 #' @importFrom MultiAssayExperiment MultiAssayExperiment
-EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sampleID=NULL,assay_name=NULL,coldata=NULL,output='MAE') {
-  row_data <- assay_data <- SE_object <- feature <- Name <- NULL
-  if (!is.null(data)) {
-    data <- data
-  }else {
-    data <- read.table(file=file,header = T,sep = '\t',quote="")
-  }  
+EMP_easy_normal_import <- function(file=NULL,data=NULL,assay='experiment',sampleID=NULL,assay_name=NULL,coldata=NULL,duplicate_feature=NULL,output='MAE') {
   
-  colnames(data)[1] <- 'feature'
+  SE_object <- EMP_normal_import(file=file,data=data,assay=assay,sampleID=sampleID,assay_name=assay_name,duplicate_feature=duplicate_feature)
 
-  if (is.null(sampleID)) {
-    sampleID <- colnames(data)[-1]
-
-    if (any(is.na(data[,-1]))) {
-      EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
-      data[,-1][is.na(data[,-1])] <- 0
-    }
-    
-    data <- data[rowSums(data[,-1]) != 0,] # filter away empty feature!
-    rownames(data) <- NULL # necessary!
-
-    row_data <- data %>% 
-      dplyr::mutate(Name=feature) %>%
-      dplyr::select(feature,Name)
-    
-    assay_data <- data %>%
-      tibble::column_to_rownames('feature')
-  }else{
-
-    if (any(is.na(data[,sampleID]))) {
-      EMP_message("The NA value has been detected in the data and changed into 0!",color = 32,order = 1,show='message')
-      data[,sampleID][is.na(data[,sampleID])] <- 0
-    }  
-      
-    data <- data[rowSums(data[, sampleID]) != 0,] # filter away empty feature!
-    rownames(data) <- NULL # necessary!
-  
-    row_data <- data %>% 
-      dplyr::select(-dplyr::any_of({{sampleID}})) 
-
-    assay_data <- data %>% 
-      dplyr::select(dplyr::any_of({{sampleID}}))
-  }
-  
-  SE_object <- SummarizedExperiment(assays=list(counts= as.matrix(assay_data)),
-                              rowData = row_data)
-  if (!is.null(assay_name)) {
-    assayNames(SE_object, 1) <- assay_name
-  }
-  
+  sampleID <-  dimnames(SE_object)[[2]]   
   if (output == 'SE') {
     return(SE_object)
   }else if(output=='MAE'){
@@ -616,7 +594,7 @@ EMP_easy_import <- function(file=NULL,data=NULL,type,assay='experiment',assay_na
                                                   humann_format=humann_format,output=output)},
          "ec" = {obj <- EMP_easy_function_import(file=file,data=data,type,assay=assay,assay_name=assay_name,coldata=coldata,
                                                   humann_format=humann_format,output=output)},
-         "normal" = {obj <- EMP_easy_normal_import(file=file,data=data,assay=assay,sampleID=sampleID,assay_name=assay_name,coldata=coldata,output=output)},
+         "normal" = {obj <- EMP_easy_normal_import(file=file,data=data,assay=assay,sampleID=sampleID,assay_name=assay_name,coldata=coldata,duplicate_feature=duplicate_feature,output=output)},
          {
            stop('type only support tax, ko, ec and normal!')
          }
