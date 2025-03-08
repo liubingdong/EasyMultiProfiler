@@ -35,7 +35,7 @@ EMP_scatterplot.EMP_dimension_analysis(
 \arguments{
 \item{obj}{EMPT object}
 
-\item{...}{Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}}
+\item{...}{Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}.}
 
 \item{seed}{An interger. Set the random seed for the adonis permutations.}
 
@@ -43,7 +43,7 @@ EMP_scatterplot.EMP_dimension_analysis(
 
 \item{show}{A character string include pic (default), html. This could display graphical results on 3 axes. eg. p12,p12html,p23,p23html}
 
-\item{distance_for_adonis}{A character string.Set the distance for adonis. Detailed in the vegan::adonis.}
+\item{distance_for_adonis}{A character string.Set the distance for adonis. Detailed in \code{\link[vegan]{adonis}}.}
 
 \item{force_adonis}{Force the function run adnois analysis always.(default:FALSE)}
 

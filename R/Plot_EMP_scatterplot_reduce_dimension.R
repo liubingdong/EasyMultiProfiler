@@ -16,7 +16,7 @@
 #' @param seed An interger. Set the random seed for the adonis permutations.
 #' @param group_level A string vector. Set the group order in the plot.
 #' @param show A character string include pic (default), html. This could display graphical results on 3 axes. eg. p12,p12html,p23,p23html
-#' @param distance_for_adonis A character string.Set the distance for adonis. Detailed in the vegan::adonis.
+#' @param distance_for_adonis A character string.Set the distance for adonis. Detailed in \code{\link[vegan]{adonis}}.
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
 #' @param palette A series of character string. Color palette.
 #' @param method A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).
@@ -29,7 +29,7 @@
 #' @param html_height An interger. Set the html height.
 #' @param force_adonis Force the function run adnois analysis always.(default:FALSE)
 #' @param adonis_permutations Permutations for the adonis2.(default:999)
-#' @param ... Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}
+#' @param ... Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}.
 
 #' @rdname EMP_scatterplot
 #' @return EMPT object
@@ -310,12 +310,12 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
  if (force_adonis == FALSE) {
    if (check_dim > 8.1e+07 | check_sample_num > 500) {
-   EMP_message("Large-scale data require more time for adonis.\nIf need this, please enable the force_adonis = TRUE.",color = 31,order = 1,show='message')
+    EMP_message("Large-scale data require more time for adonis.\nIf need this, please enable the force_adonis = TRUE.",color = 31,order = 1,show='message')
    }
- }else if (force_adonis == TRUE) {
+  }else if (force_adonis == TRUE) {
    check_dim <- 1
    check_sample_num <- 1
- }else {
+  }else {
   stop('force_adonis must be TRUE or FALSE')
  }
 
@@ -355,8 +355,13 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   set.seed(seed)
   adonis_data <- assay(EMPT) %>% t()
-  spsUtil::quiet(adonis_result <- adonis2_m(formula=adonis_data~Group,data = mapping,
-    method = distance_for_adonis,permutations = adonis_permutations),print_cat = FALSE, message = TRUE, warning = TRUE)
+  adonis_result <- NULL
+  try(spsUtil::quiet(adonis_result <- adonis2_m(formula=adonis_data~Group,data = mapping,
+    method = distance_for_adonis,permutations = adonis_permutations),print_cat = FALSE, message = TRUE, warning = TRUE))
+
+  if (is.null(adonis_result)) {
+    stop("Function adonis failed, try distance_for_adonis = 'euclidean' again.")
+  }
 
   p5 <- ggplot() +
     geom_text(aes(x = -0.5,y = 0.6,
