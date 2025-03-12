@@ -21,7 +21,7 @@ EMP_decostand(
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
-\item{method}{A character string. Details see vegan::decostand.}
+\item{method}{A character string. including relative, max, frequency, normalize, range, rank, standardize, pa, chi.square, hellinger, log, alr, clr, rclr and integer.}
 
 \item{bySample}{A boolean. Whether the function decostand by the sample or feature.}
 

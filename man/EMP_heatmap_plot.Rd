@@ -89,7 +89,7 @@ EMP_heatmap.EMP_assay_data(
 
 \item{rotate}{A boolean. Whether rotate the heatmap or not. (Only activated for EMP_assay_data)}
 
-\item{scale}{A character string. The parameter works in the same way as the method in EMP_decostand. (Only activated for EMP_assay_data)}
+\item{scale}{A character string,eg relative, clr, standardize, etc. The parameter works in the same way as the method in \code{\link[EasyMultiProfiler]{EMP_decostand}} (Only activated for EMP_assay_data)}
 
 \item{bySample}{A boolean. Whether the function decostand by the sample or feature. Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)}
 

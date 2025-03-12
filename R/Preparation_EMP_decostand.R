@@ -54,7 +54,7 @@
 #'
 #' @param obj Object in EMPT or MultiAssayExperiment format.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object.
-#' @param method A character string. Details see vegan::decostand.
+#' @param method A character string. including relative, max, frequency, normalize, range, rank, standardize, pa, chi.square, hellinger, log, alr, clr, rclr and integer.
 #' @param bySample A boolean. Whether the function decostand by the sample or feature.
 #' @param logbase An interger. The logarithm base used in method = "log".(default=2)
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
