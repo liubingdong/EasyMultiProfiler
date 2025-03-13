@@ -4,7 +4,7 @@
 <a href="man/figures/logo.png"><img src="man/figures/logo.png" width=150 align="right" ></a>
 ![](https://img.shields.io/badge/R%20language->=4.3.3-brightgreen.svg)
 ![](https://img.shields.io/badge/Mac%20OSX%20&%20Windows-Available-brightgreen.svg)
-![](https://img.shields.io/badge/Release%20version-1.0-brightgreen.svg)
+![](https://img.shields.io/badge/Release%20version-0.2.7-brightgreen.svg)
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/liubingdong/EasyMultiProfier)
 
 The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from start to finish.
@@ -103,6 +103,8 @@ Website: [**Source 1**](https://main--gorgeous-smakager-db1548.netlify.app/)  [*
 The official article for **EasyMultiProfiler** is still under submission. If this package can assist with your work, please feel free to cite its predecessor **EasyMicroPlot**  as below:
 
 EasyMicroPlot : An Efficient and Convenient R Package in Microbiome Downstream Analysis and Visualization for Clinical Study. doi: [10.3389/fgene.2021.803627](https://www.frontiersin.org/articles/10.3389/fgene.2021.803627/full)
+
+This package integrates multiple popular tools, and we thank their authors for their contributions. Special thanks to [**Prof. Guangchuang Yu**](https://github.com/YuLab-SMU)  (Southern Medical University, China) for his guidance. We strongly recommend citing the original publications of the corresponding tools when using this package.
 
 ### Contributing
 We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
