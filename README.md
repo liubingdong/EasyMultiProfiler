@@ -104,7 +104,7 @@ The official article for **EasyMultiProfiler** is still under submission. If thi
 
 EasyMicroPlot : An Efficient and Convenient R Package in Microbiome Downstream Analysis and Visualization for Clinical Study. doi: [10.3389/fgene.2021.803627](https://www.frontiersin.org/articles/10.3389/fgene.2021.803627/full)
 
-This package integrates multiple popular tools, and we thank their authors for their contributions. Special thanks to [**Prof. Guangchuang Yu**](https://github.com/YuLab-SMU)  (Southern Medical University, China) for his guidance. We strongly recommend citing the original publications of the corresponding tools when using this package.
+This package integrates multiple widely-used tools, and we sincerely acknowledge their authors for their valuable contributions. Special thanks to [**Prof. Guangchuang Yu**](https://github.com/YuLab-SMU)  (Southern Medical University, China) for his guidance. We strongly recommend citing the original publications of the corresponding tools when using this package.
 
 ### Contributing
 We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
