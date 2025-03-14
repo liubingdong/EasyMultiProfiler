@@ -121,7 +121,7 @@ setMethod("EMP_result","EMPT",function(obj,info=NULL){
   if (is.null(info)) {
     info <- .get.info.EMPT(obj)
   }
-  if (info == 'EMP_assay_data') {
+  if (info %in% c('EMP_assay_data','EMP_decostand')) {
     result <- .get.assay.EMPT(obj)
     return(result)
   }else{
