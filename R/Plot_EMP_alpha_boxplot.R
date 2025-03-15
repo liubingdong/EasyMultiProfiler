@@ -46,6 +46,7 @@ EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 'default',method 
           withr::with_seed(123,EMP_boxplot_alpha_violin(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
                                dot_size=dot_size,box_width=box_width,box_alpha=box_alpha,
+                               step_increase = step_increase,ref.group = ref.group,comparisons = comparisons,
                                ncol = ncol,select_metrics=select_metrics,show = show,palette = palette,
                                html_width=html_width,html_height=html_height,
                                mytheme = mytheme,...))
