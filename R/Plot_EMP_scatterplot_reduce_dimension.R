@@ -21,6 +21,9 @@
 #' @param palette A series of character string. Color palette.
 #' @param method A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).
 #' @param key_samples A series of character string. To highlight your interested samples.
+#' @param dot_size A numeric. Set the dot size.
+#' @param box_width A numeric. Set the box width.
+#' @param box_alpha A numeric. Set the box alpha.
 #' @param step_increase A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.
 #' @param ref.group a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).
 #' @param comparisons A list of length-2 vectors. The entries in the vector are either the names of 2 values on the x-axis or the 2 integers that correspond to the index of the columns of interest.(default:NULL)
@@ -41,6 +44,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
                                            method='wilcox.test',key_samples = NULL,
+                                           dot_size=8,box_width=NULL,box_alpha=1,
                                            step_increase=0.1,ref.group=NULL,comparisons=NULL,
                                            ellipse = NULL,html_width=15,html_height=15,...){
   primary <- Group <- NULL
@@ -136,7 +140,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   #相须图绘制
   p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
-    geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
+    geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
     ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+
     coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[1]),2))),position = "jitter")+
     theme_bw()+
@@ -150,7 +154,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
           legend.position = "none")
 
   p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
-    geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
+    geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
     ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
@@ -164,7 +168,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
           legend.position = "none")
 
   p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
-    geom_boxplot(aes(fill = Group),outlier.colour = NA) +scale_fill_manual(values=col_values)+
+    geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
     ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
     theme_bw()+
     theme(axis.ticks.length = unit(0.4,"lines"),
@@ -179,7 +183,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   if (axis_num == 3) {
     p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
-      geom_boxplot(aes(fill = Group),outlier.colour = NA) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
       ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
       theme_bw()+
       theme(axis.ticks.length = unit(0.4,"lines"),
@@ -203,7 +207,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   #PCoA结果图绘制
   p12<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[2]))) +
-    ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[2]),2))),size=8,pch = 21)+
+    ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[2]),2))),size=dot_size,pch = 21)+
     scale_fill_manual(values=col_values,name = "Group") +
     xlab(pc1_text) +
     ylab(pc2_text) +
@@ -231,7 +235,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
 
   if (axis_num >= 3) {
     p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
-      geom_boxplot(aes(fill = Group),outlier.colour = NA) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
       ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
       theme_bw()+
       theme(axis.ticks.length = unit(0.4,"lines"),
@@ -245,7 +249,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
             legend.position = "none")
 
     p13<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[3]))) +
-      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=8,pch = 21)+
+      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
       scale_fill_manual(values=col_values,name = "Group")+
       xlab(pc1_text) +
       ylab(pc3_text) +
@@ -268,7 +272,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
       guides(fill = guide_legend(ncol = 1))
 
     p23<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[2]), !!dplyr::sym(axis_name[3]))) +
-      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[2]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=8,pch = 21)+
+      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[2]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
       scale_fill_manual(values=col_values,name = "Group")+
       xlab(pc2_text) +
       ylab(pc3_text) +

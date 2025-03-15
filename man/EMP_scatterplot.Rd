@@ -23,6 +23,9 @@ EMP_scatterplot.EMP_dimension_analysis(
   palette = NULL,
   method = "wilcox.test",
   key_samples = NULL,
+  dot_size = 8,
+  box_width = NULL,
+  box_alpha = 1,
   step_increase = 0.1,
   ref.group = NULL,
   comparisons = NULL,
@@ -56,6 +59,12 @@ EMP_scatterplot.EMP_dimension_analysis(
 \item{method}{A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).}
 
 \item{key_samples}{A series of character string. To highlight your interested samples.}
+
+\item{dot_size}{A numeric. Set the dot size.}
+
+\item{box_width}{A numeric. Set the box width.}
+
+\item{box_alpha}{A numeric. Set the box alpha.}
 
 \item{step_increase}{A numeric vector with the increase in fraction of total height for every additional comparison to minimize overlap.}
 
