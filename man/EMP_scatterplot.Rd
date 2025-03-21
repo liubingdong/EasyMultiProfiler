@@ -32,6 +32,7 @@ EMP_scatterplot.EMP_dimension_analysis(
   ellipse = NULL,
   html_width = 15,
   html_height = 15,
+  use_cached = TRUE,
   ...
 )
 }

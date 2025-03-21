@@ -33,14 +33,41 @@
 #' @param force_adonis Force the function run adnois analysis always.(default:FALSE)
 #' @param adonis_permutations Permutations for the adonis2.(default:999)
 #' @param ... Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}.
-
 #' @rdname EMP_scatterplot
 #' @return EMPT object
+EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='default',
+                                           show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
+                                           estimate_group=NULL,palette=NULL,
+                                           method='wilcox.test',key_samples = NULL,
+                                           dot_size=8,box_width=NULL,box_alpha=1,
+                                           step_increase=0.1,ref.group=NULL,comparisons=NULL,
+                                           ellipse = NULL,html_width=15,html_height=15,use_cached=TRUE,...) {
+  call <- match.call()
+
+ 
+  if (use_cached == FALSE) {
+    memoise::forget(.EMP_decostand_m) %>% invisible()
+  }
+  
+  EMPT <- .EMP_scatterplot.EMP_dimension_analysis_m(obj=obj,seed=seed,group_level=group_level,
+                                           show=show,distance_for_adonis=distance_for_adonis,force_adonis=force_adonis,adonis_permutations=adonis_permutations,
+                                           estimate_group=estimate_group,palette=palette,
+                                           method=method,key_samples = key_samples,
+                                           dot_size=dot_size,box_width=box_width,box_alpha=box_alpha,
+                                           step_increase=step_increase,ref.group=ref.group,comparisons=comparisons,
+                                           ellipse = ellipse,html_width=html_width,html_height=html_height,...)
+  .get.history.EMPT(EMPT) <- call
+  return(EMPT)
+}
+
+
+
 #' @importFrom ggsignif geom_signif
 #' @importFrom ggplot2 coord_flip
 #' @importFrom ggplot2 geom_boxplot
 #' @importFrom patchwork plot_layout
-EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='default',
+#' @importFrom vegan adonis2
+.EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
                                            method='wilcox.test',key_samples = NULL,
@@ -48,7 +75,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
                                            step_increase=0.1,ref.group=NULL,comparisons=NULL,
                                            ellipse = NULL,html_width=15,html_height=15,...){
   primary <- Group <- NULL
-  call <- match.call()
+  #call <- match.call()
   
   # just change to unified naming.
   if (is(obj,"EMPT")) {
@@ -360,7 +387,7 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   set.seed(seed)
   adonis_data <- assay(EMPT) %>% t()
   adonis_result <- NULL
-  try(spsUtil::quiet(adonis_result <- adonis2_m(formula=adonis_data~Group,data = mapping,
+  try(spsUtil::quiet(adonis_result <- adonis2(formula=adonis_data~Group,data = mapping,
     method = distance_for_adonis,permutations = adonis_permutations),print_cat = FALSE, message = TRUE, warning = TRUE))
 
   if (is.null(adonis_result)) {
@@ -421,13 +448,12 @@ EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='de
   .get.algorithm.EMPT(EMPT) <- 'dimension_analysis_scatterplot'
   .get.info.EMPT(EMPT) <- 'EMP_dimension_analysis_scatterplot'
   .get.plot_specific.EMPT(EMPT) <- show
-  .get.history.EMPT(EMPT) <- call
+  #.get.history.EMPT(EMPT) <- call
   class(EMPT) <- 'EMP_dimension_analysis_scatterplot'
   return(EMPT)
 }
 
 #' @importFrom memoise memoise
-#' @importFrom vegan adonis2
-adonis2_m <- memoise::memoise(adonis2,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
+.EMP_scatterplot.EMP_dimension_analysis_m <- memoise::memoise(.EMP_scatterplot.EMP_dimension_analysis,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
