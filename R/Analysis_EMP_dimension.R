@@ -167,6 +167,7 @@
   EMPT
 }
 
+#' @importFrom memoise memoise
 .EMP_dimension_analysis_m <- memoise::memoise(.EMP_dimension_analysis,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 #' Dimension reduction of the abundance or experssion data

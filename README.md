@@ -81,9 +81,8 @@ library(EasyMultiProfiler)
 
 If the above solutions still fail to successfully complete the installation, we have prepared detailed installation guides for you.
 
-[**English version**](http://easymultiprofiler.xielab.net/en/MD/1%20EasyMultiProfiler%20introduction.html#11)
-
-[**中文版本**](http://easymultiprofiler.xielab.net/ch/MD/1%20EasyMultiProfiler%20introduction.html#11)
+[**How to fix it**](http://easymultiprofiler.xielab.net/en/MD/1%20EasyMultiProfiler%20introduction.html#11)
+[**如何解决安装问题**](http://easymultiprofiler.xielab.net/ch/MD/1%20EasyMultiProfiler%20introduction.html#11)
 
 ### Update new version
 The EasyMultiProfiler package is continuously being updated with more analysis and visualization modules. When a new version is needed, simply run pak again to update.
