@@ -224,7 +224,7 @@ setMethod(".get.experiment.EMP","EMP",function(obj,info){
 #'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) > 2)
 #'
 #' (k1 + k3 + k2) |> EMP_cor_analysis() |>
-#'   EMP_sankey_plot()
+#'   EMP_sankey_plot(height=600,width=700,fontSize=10,nodeWidth=15,nodePadding=5) # more parameters
 setGeneric("EMP_sankey_plot",function(obj, ...) standardGeneric("EMP_sankey_plot"))
 
 #' @rdname EMP_sankey_plot

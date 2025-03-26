@@ -78,6 +78,8 @@ EMP_scatterplot.EMP_dimension_analysis(
 \item{html_width}{An interger. Set the html width.}
 
 \item{html_height}{An interger. Set the html height.}
+
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 }
 \value{
 EMPT object

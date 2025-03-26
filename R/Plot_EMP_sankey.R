@@ -1,9 +1,17 @@
 #' @param positive_col Edge colour for positive relation. [Default:#CC79A7]
 #' @param negtive_col  Edge colour for negitive relation. [Default:steelblue]
+#' @param fontSize Numeric font size in pixels for the node text labels.
+#' @param nodeWidth Numeric width of each node.
+#' @param nodePadding Numeric essentially influences the width height.
+#' @param height Numeric height for the network graph's frame area in pixels.
+#' @param width  Numeric width for the network graph's frame area in pixels.
 #' @param palette Colour palette for nodes.
+#' @param ... Additional parameters, see also \code{\link[networkD3]{sankeyNetwork}}
 #' @rdname EMP_sankey_plot
 #' @importFrom networkD3 sankeyNetwork
-EMP_sankey_plot.EMP_cor_analysis <- function(obj,positive_col = '#CC79A7',negtive_col = 'steelblue',palette=c("#009E73","#F0E442","#CB563f","#6c4f9d","#4DBBD5FF","#00A087FF","#b66e1e","#8491B4FF")){
+EMP_sankey_plot.EMP_cor_analysis <- function(obj,positive_col = '#CC79A7',negtive_col = 'steelblue',
+                                             fontSize=7,nodeWidth = 15,nodePadding = 10,height = NULL, width = NULL,
+                                             palette=c("#009E73","#F0E442","#CB563f","#6c4f9d","#4DBBD5FF","#00A087FF","#b66e1e","#8491B4FF"),...){
 
   name <- NULL
   call <- match.call()
@@ -56,7 +64,8 @@ EMP_sankey_plot.EMP_cor_analysis <- function(obj,positive_col = '#CC79A7',negtiv
 
 
   p1 <- networkD3::sankeyNetwork(Links = data_long, Nodes = nodes, Source = "IDsource", Target = "IDtarget",
-                                Value = "value", NodeID = "name",sinksRight=F,LinkGroup="group",colourScale=my_color,NodeGroup="group")
+                                 fontSize=fontSize,nodeWidth = nodeWidth,nodePadding = nodePadding,height = height, width = width,
+                                 Value = "value", NodeID = "name",sinksRight=F,LinkGroup="group",colourScale=my_color,NodeGroup="group",...)
 
 
   .get.plot_deposit.EMP(EMP,info='EMP_cor_sankey') <- p1
