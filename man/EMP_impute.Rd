@@ -48,24 +48,30 @@ EMP_impute(
 \item{...}{Additional parameters, see also \code{\link[missRanger]{missRanger}}}
 }
 \value{
-EMPT object
+EMPT or MultiAssayExperiment object
 }
 \description{
 Fast Imputation of Missing Values by Chained Random Forests
 }
 \examples{
-\dontrun{
 data(MAE)
+
+## For MultiAssayExperiment
+MAE |>
+  EMP_impute(.formula = HAMA+HAMD ~ .)
+
+## For EMPT
 ## For coldata
 MAE |>
   EMP_assay_extract('geno_ec') |>
   EMP_impute(assay=FALSE,coldata=TRUE,rowdata=FALSE) |>
   EMP_coldata_extract()
-## Support formula, such as only impute SAS and SDS
+
+### Support formula, such as only impute SAS and SDS
 MAE |>
   EMP_assay_extract('geno_ec') |>
   EMP_impute(.formula = HAMA+HAMD ~ .) |>
-  EMP_coldata_extract()
+  EMP_coldata_extract() 
 
 ## For assay
 MAE |>
@@ -76,5 +82,4 @@ MAE |>
 MAE |>
   EMP_assay_extract('geno_ec') |>
   EMP_impute(assay=FALSE,coldata=FALSE,rowdata=TRUE)
-}
 }

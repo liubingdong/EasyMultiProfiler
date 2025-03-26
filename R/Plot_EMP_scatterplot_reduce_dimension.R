@@ -32,6 +32,7 @@
 #' @param html_height An interger. Set the html height.
 #' @param force_adonis Force the function run adnois analysis always.(default:FALSE)
 #' @param adonis_permutations Permutations for the adonis2.(default:999)
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Additional parameters for adjust the boxplot, see also \code{\link[ggsignif]{geom_signif}}.
 #' @rdname EMP_scatterplot
 #' @return EMPT object
