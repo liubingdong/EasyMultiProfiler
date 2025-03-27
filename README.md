@@ -36,7 +36,8 @@ library(EasyMultiProfiler)
 <u>NOTE 1:</u>  For some regions with unstable networks, users could utilize the local mirrors to avoid unexpected errors before installation.
 
 ```R
-## For example, China main land users could use this
+## For example, China mainland users could use this
+## If the mirror below failed, try another 
 local({r <- getOption("repos")
 r["CRAN"] <- "https://mirrors.tuna.tsinghua.edu.cn/CRAN/"
 options(repos=r)}
@@ -52,10 +53,11 @@ options("url.method"="libcurl")
 pak::pak("liubingdong/EasyMultiProfiler")
 ```
 
-<u>NOTE 3:</u>  EasyMultiProfiler has consistently been updating its versions while striving to maintain compatibility with the original code and syntax. Specific versions can be installed using the pak package to ensure consistency in users' data analyses.  Version could be found on  https://github.com/liubingdong/EasyMultiProfiler/commits/main/.
+<u>NOTE 3:</u>  EasyMultiProfiler has consistently been updating its versions while striving to maintain compatibility with the original code and syntax. Specific versions can be installed using the pak package to ensure consistency in users' data analyses.  Users could install the development version or a particular version. The version list can be found at https://github.com/liubingdong/EasyMultiProfiler/commits/main/.
 
 ```R
-pak::pak("liubingdong/EasyMultiProfiler@0c66ed3")
+pak::pak("liubingdong/EasyMultiProfiler@dev") # Install the development version
+pak::pak("liubingdong/EasyMultiProfiler@e263207") # Install a specific version
 ```
 
 **2. Manual install** 
