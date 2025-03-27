@@ -146,7 +146,6 @@
 #' @param p.adjust A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)
 #' @param .formula A formula representing the desired linear model. If there is more than one factor, they should be in the order factor of interest + additional factors.
 #' @param estimate_group A character string. Select the group name in the coldata to be calculated.
-#' @param paired_group  A character string. Variable name corresponding to paired primary or sample.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param group_level A series of character strings. Determine the comparison order of groups. when group_level activted,.formula should be ~0+[your interested group] for edger and limma.
@@ -183,15 +182,24 @@
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Region+Group)  ## Eliminate the batch_effect in DESeq2
 #' 
 #' 
-#' ### edgeR_quasi_likelihood
+#' ## edgeR_quasi_likelihood
 #' MAE |>
 #'   EMP_assay_extract(experiment = 'geno_ec') |>
 #'   EMP_diff_analysis(method='edgeR_quasi_likelihood',
 #'                     .formula = ~0+Group,group_level = c('Group_B','Group_A')) ## Set the comparison order.
+#'
+#' ## For paired test
+#' MAE |> 
+#'   EMP_assay_extract('host_gene',
+#'                     pattern = 'A1BG',pattern_ref = 'feature') |> 
+#'   EMP_filter(sub_group %in% c('A','B')) |>
+#'   EMP_diff_analysis(method = 't.test',
+#'                     paired_group='patient', # Set the paired group
+#'                     estimate_group = 'sub_group')
 EMP_diff_analysis <- function(obj,experiment,.formula,
-                              method = 'wilcox.test',p.adjust='fdr',estimate_group=NULL,paired_group=NULL,
+                              method = 'wilcox.test',p.adjust='fdr',estimate_group=NULL,
                               use_cached = TRUE,action='add',group_level=NULL,
-                              core='auto',...){
+                              core=NULL,...){
   call <- match.call()
   if (is(obj,"MultiAssayExperiment")) {
     EMPT <- .as.EMPT(obj,
@@ -219,7 +227,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
          "limma_voom"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
          "limma_voom_sample_weights"  = {EMPT <- .EMP_diff_analysis_tidybulk_m(EMPT = EMPT,method=method,p.adjust=p.adjust,group_level=group_level,.formula=.formula,...)},
          {
-           EMPT <- .EMP_diff_analysis_m(EMPT = EMPT,method=method,group_level=group_level,estimate_group=estimate_group,core=core,p.adjust=p.adjust,paired_group=paired_group,...)
+           EMPT <- .EMP_diff_analysis_m(EMPT = EMPT,method=method,group_level=group_level,estimate_group=estimate_group,core=core,p.adjust=p.adjust,...)
          }
   )
   .get.history.EMPT(EMPT) <- call
@@ -235,41 +243,22 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
 
 
 .EMP_diff_analysis <- function(EMPT,method,
-                               estimate_group=NULL,feature_name=NULL,paired_group=NULL,
+                               estimate_group=NULL,feature_name=NULL,
                                p.adjust='fdr',group_level=NULL,core=NULL,...){
   Estimate_group <- primary <- pvalue <- feature <- sign_group <- vs <- NULL
   message_info <- list()
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
-  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,dplyr::any_of(c(!!estimate_group,!!paired_group)))
+  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
 
   ## check the missing value in the group label
   if(any(is.na(mapping[[estimate_group]]))) {
     stop('Column ',estimate_group,' has beed deteced missing value, please check and filter them!')
   }
 
-  if (is.null(paired_group)) {
-      assay_data <- .get.assay.EMPT(EMPT) %>%
+  assay_data <- .get.assay.EMPT(EMPT) %>%
               dplyr::left_join(mapping,by = 'primary') %>%
               dplyr::select(primary,!!estimate_group,everything())
-      paired <- FALSE
-  }else{
-      ## check the missing value in the group label
-      if(any(is.na(mapping[[paired_group]]))) {
-        stop('Column ',paired_group,' has beed deteced missing value, please check and filter them!')
-      }
-      ## check the paired sample and size
-      check_paired_result <- .check_group_consistency(data=mapping,group_col=estimate_group,patient_col=paired_group)
-      if(check_paired_result$all_patients_equal == FALSE) {
-        stop(check_paired_result$message)
-      }
-      assay_data <- .get.assay.EMPT(EMPT) %>%
-              dplyr::left_join(mapping,by = 'primary') %>%
-              dplyr::arrange(!!dplyr::sym(estimate_group),!!dplyr::sym(paired_group)) %>%
-              dplyr::select(primary,!!estimate_group,everything())
-      paired <- TRUE
-  }
-  
   .get.assay_name.EMPT(EMPT) -> assay_name
 
   if (is.null(feature_name)) {
@@ -285,13 +274,13 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
 
   
   # When feature num is not many, core = 1 will be more efficient
-  if (core == 'auto' & length(feature_name) < 2000) {
+  if (is.null(core) & length(feature_name) < 2000) {
     core <- 1
   }
 
   diff_result <- .multi_compare(fun=method,data=assay_data,
                 feature=feature_name,factorNames=estimate_group,
-                subgroup=subgroup,core=core,paired=paired,...) %>% suppressMessages()
+                subgroup=subgroup,core=core,...) %>% suppressMessages()
 
 
   diff_data <-  .get_diff_df(diff_result,feature_name,estimate_group)
@@ -354,37 +343,22 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
 #' @importFrom parallel detectCores
 #' @noRd
 .multi_compare <- function(fun,
-                           data,
-                           feature,
-                           factorNames,
-                           subgroup=NULL,core,...){
+                            data,
+                            feature,
+                            factorNames,
+                            subgroup=NULL,core,...){
   if (!is.null(subgroup)){
     data <- data[data[[factorNames]] %in% subgroup, ,drop=FALSE]
     data[[factorNames]] <- factor(data[[factorNames]], levels=subgroup)
   }
-  
-  if (core==1) {
-    result <- lapply(feature,
-           function(x){
-             tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-             suppressWarnings(do.call(fun,list(tmpformula,data=data, ...)))}) 
-  }else if (core== 'auto'){
-    myfun <- function(x){
-      tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-      suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))
-    }
-    ## set the core
+  myfun <- function(x){
+    tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
+    suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))
+  }
+  ## set the core
+  if(is.null(core)){
     spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
-    snowfall::sfExport('factorNames','data','fun')
-    snowfall::sfExport('myfun')
-    result <- snowfall::sfLapply(feature,myfun)
-    snowfall::sfStop()
-  }else{
-    myfun <- function(x){
-      tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-      suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))
-    }
-    ## set the core
+  }else {
     available_core <- parallel::detectCores() - 1
     if(core>0 & core <= available_core){
       spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = core),print_cat = TRUE, message = FALSE, warning = FALSE)
@@ -392,11 +366,12 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
       warning("The parameter core number is wrong,now parallel execution on ",available_core," CPUs.")
       spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
     }
-    snowfall::sfExport('factorNames','data','fun')
-    snowfall::sfExport('myfun')
-    result <- snowfall::sfLapply(feature,myfun)
-    snowfall::sfStop()
   }
+  ## pass the data from envrionment
+  snowfall::sfExport('factorNames','data','fun')
+  snowfall::sfExport('myfun')
+  result <- snowfall::sfLapply(feature,myfun)
+  snowfall::sfStop()
   return(result)
 }
 
@@ -446,50 +421,4 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
   return(deposit)
 }
 
-.check_group_consistency <- function(data, group_col, patient_col, ignore_order = TRUE) {
-  if (!requireNamespace("dplyr", quietly = TRUE)) {
-    stop("Please install package 'dplyr' to use this function")
-  }
-  
-  # Validate input columns
-  if (!group_col %in% names(data)) {
-    stop("Group column '", group_col, "' not found in data")
-  }
-  if (!patient_col %in% names(data)) {
-    stop("Patient column '", patient_col, "' not found in data")
-  }
-  
-  # Calculate group statistics
-  group_stats <- data %>%
-    dplyr::group_by(!!rlang::sym(group_col)) %>%
-    dplyr::summarise(
-      Patients = if (ignore_order) {
-        paste(sort(!!rlang::sym(patient_col)), collapse = ", ")
-      } else {
-        paste(!!rlang::sym(patient_col), collapse = ", ")
-      },
-      Count = dplyr::n(),
-      .groups = "drop"
-    )
-  
-  # Check consistency
-  all_patients_equal <- dplyr::n_distinct(group_stats$Patients) == 1
-  all_counts_equal <- dplyr::n_distinct(group_stats$Count) == 1
-  
-  # Generate result message
-  result_message <- if (all_patients_equal) {
-    "All groups have identical patient lists and sizes"
-  } else if (all_counts_equal) {
-    paste0("Group sizes match but paired group differ!")
-  } else {
-    paste0("Both paired group and group sizes differ!")
-  }
-  
-  # Return comprehensive results
-  list(
-    group_stats = as.data.frame(group_stats),
-    all_patients_equal = all_patients_equal,
-    all_counts_equal = all_counts_equal,
-    message = result_message
-  )
-}
+
