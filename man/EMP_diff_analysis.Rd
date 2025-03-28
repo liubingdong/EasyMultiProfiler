@@ -79,9 +79,18 @@ MAE |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Region+Group)  ## Eliminate the batch_effect in DESeq2
 
 
-### edgeR_quasi_likelihood
+## edgeR_quasi_likelihood
 MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='edgeR_quasi_likelihood',
                     .formula = ~0+Group,group_level = c('Group_B','Group_A')) ## Set the comparison order.
+
+## Paired test
+MAE |> 
+  EMP_assay_extract('host_gene',
+                    pattern = 'A1BG',pattern_ref = 'feature') |> 
+  EMP_filter(sub_group \%in\% c('A','B')) |>
+  EMP_diff_analysis(method = 't.test',
+                    paired_group='patient', # Set the paired group
+                    estimate_group = 'sub_group')
 }
