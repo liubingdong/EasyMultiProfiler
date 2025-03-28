@@ -109,13 +109,13 @@ Boxplot for EMPT result
 }
 \examples{
 data(MAE)
-## from assay
+# from assay
 MAE |> 
   EMP_assay_extract('host_gene',pattern = 'A1BG',
         pattern_ref = 'feature') |>
   EMP_boxplot(method='t.test',estimate_group='Group')
 
-## from alpha analysis
+# from alpha analysis
 MAE |> 
   EMP_assay_extract('taxonomy') |> 
   EMP_alpha_analysis()|>
@@ -127,10 +127,15 @@ MAE |>
                     pattern = 'A1BG',pattern_ref = 'feature') |>
   EMP_boxplot(estimate_group='Group',box_alpha=0.8,
               box_width=0.3,dot_size=5,plot_category='violin')
- MAE |>
-   EMP_assay_extract(experiment='taxonomy')|> 
-   EMP_alpha_analysis() |>
-   EMP_boxplot(estimate_group='Group',method='t.test',
+MAE |>
+  EMP_assay_extract(experiment='taxonomy')|> 
+  EMP_alpha_analysis() |>
+  EMP_boxplot(estimate_group='Group',method='t.test',
                box_alpha=0.8,dot_size=3,
                box_width=0.3,plot_category='violin')
+# Paired test
+MAE |> 
+  EMP_assay_extract('host_gene',
+                   pattern = 'A1BG',pattern_ref = 'feature') |> 
+  EMP_boxplot(method='t.test',estimate_group='sub_group',paired_group='patient') # Set the paired_group
 }
