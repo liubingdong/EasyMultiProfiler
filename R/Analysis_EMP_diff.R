@@ -366,7 +366,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
                            data,
                            feature,
                            factorNames,
-                           subgroup=NULL,core,...){
+                           subgroup=NULL,core,paired,...){
   if (!is.null(subgroup)){
     data <- data[data[[factorNames]] %in% subgroup, ,drop=FALSE]
     data[[factorNames]] <- factor(data[[factorNames]], levels=subgroup)
@@ -376,7 +376,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
     result <- lapply(feature,
            function(x){
              tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-             suppressWarnings(do.call(fun,list(tmpformula,data=data, ...)))}) 
+             suppressWarnings(do.call(fun,list(tmpformula,data=data,paired=paired,...)))}) 
   }else if (core== 'auto'){
     myfun <- function(x){
       tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
@@ -391,7 +391,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
   }else{
     myfun <- function(x){
       tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-      suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))
+      suppressWarnings(do.call(fun,list(tmpformula,data=data,paired=paired,...)))
     }
     ## set the core
     available_core <- parallel::detectCores() - 1
