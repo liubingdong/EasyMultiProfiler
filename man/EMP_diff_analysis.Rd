@@ -11,10 +11,11 @@ EMP_diff_analysis(
   method = "wilcox.test",
   p.adjust = "fdr",
   estimate_group = NULL,
+  paired_group = NULL,
   use_cached = TRUE,
   action = "add",
   group_level = NULL,
-  core = NULL,
+  core = "auto",
   ...
 )
 }
@@ -30,6 +31,8 @@ EMP_diff_analysis(
 \item{p.adjust}{A character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)}
 
 \item{estimate_group}{A character string. Select the group name in the coldata to be calculated.}
+
+\item{paired_group}{A character string. Variable name corresponding to paired primary or sample.}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
@@ -76,18 +79,9 @@ MAE |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Region+Group)  ## Eliminate the batch_effect in DESeq2
 
 
-## edgeR_quasi_likelihood
+### edgeR_quasi_likelihood
 MAE |>
   EMP_assay_extract(experiment = 'geno_ec') |>
   EMP_diff_analysis(method='edgeR_quasi_likelihood',
                     .formula = ~0+Group,group_level = c('Group_B','Group_A')) ## Set the comparison order.
-
-## For paired test
-MAE |> 
-  EMP_assay_extract('host_gene',
-                    pattern = 'A1BG',pattern_ref = 'feature') |> 
-  EMP_filter(sub_group \%in\% c('A','B')) |>
-  EMP_diff_analysis(method = 't.test',
-                    paired_group='patient', # Set the paired group
-                    estimate_group = 'sub_group')
 }
