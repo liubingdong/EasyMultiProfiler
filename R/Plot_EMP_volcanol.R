@@ -99,7 +99,7 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
 
   data_plot <- list()
   data_plot[['pic']] <- p
-  data_plot[['html']] <- ggiraph::girafe(code = print(p),width = html_width,height = html_height)
+  data_plot[['html']] <- ggiraph::girafe(ggobj = print(p),width = html_width,height = html_height)
 
   .get.plot_deposit.EMPT(EMPT,info = 'EMP_diff_volcanol_plot') <- data_plot
   .get.plot_specific.EMPT(EMPT) <- show

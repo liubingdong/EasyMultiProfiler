@@ -179,7 +179,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
   }
 
 
-  alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
+  alpha_plot[['html']] <- ggiraph::girafe(ggobj = print(alpha_plot[['pic']]),width = html_width,height = html_height)
 
   .get.plot_deposit.EMPT(EMPT,info = 'alpha_analysis_plot') <- alpha_plot
   .get.plot_specific.EMPT(EMPT) <- show
@@ -302,7 +302,7 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
       eval(parse(text = paste0(mytheme)))    
   }
 
-  alpha_plot[['html']] <- ggiraph::girafe(code = print(alpha_plot[['pic']]),width = html_width,height = html_height)
+  alpha_plot[['html']] <- ggiraph::girafe(ggobj = print(alpha_plot[['pic']]),width = html_width,height = html_height)
 
   .get.plot_deposit.EMPT(EMPT,info = 'alpha_analysis_plot') <- alpha_plot
   .get.plot_specific.EMPT(EMPT) <- show

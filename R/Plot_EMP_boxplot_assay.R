@@ -105,7 +105,7 @@ EMP_boxplot_assay_default <- function (EMPT,method = 'wilcox.test',
  
 
 
-  data_plot[['html']] <- ggiraph::girafe(code = print(data_plot[['pic']]),width = html_width,height = html_height)
+  data_plot[['html']] <- ggiraph::girafe(ggobj = print(data_plot[['pic']]),width = html_width,height = html_height)
 
   .get.plot_deposit.EMPT(EMPT,info = 'EMP_assay_boxplot') <- data_plot
   .get.plot_specific.EMPT(EMPT) <- show
@@ -222,7 +222,7 @@ EMP_boxplot_assay_violin  <- function (EMPT,method = 'wilcox.test',
       eval(parse(text = paste0(mytheme)))
   }
 
-  data_plot[['html']] <- ggiraph::girafe(code = print(data_plot[['pic']]),width = html_width,height = html_height)
+  data_plot[['html']] <- ggiraph::girafe(ggobj = print(data_plot[['pic']]),width = html_width,height = html_height)
 
   .get.plot_deposit.EMPT(EMPT,info = 'EMP_assay_boxplot') <- data_plot
   .get.plot_specific.EMPT(EMPT) <- show
