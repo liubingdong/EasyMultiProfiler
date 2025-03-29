@@ -381,21 +381,21 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
 
   if (core==1) {
     result <- lapply(feature,
-                     function(x,subgroup=subgroup){
-                       var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
-                       var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
+                     function(x){
+                       var1 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[1]) |> dplyr::pull(x)
+                       var2 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[2]) |> dplyr::pull(x)
                        if (length(var1) != length(var1)) {
                         stop("Paired test need Paired data!")
                        }
-                       suppressWarnings(do.call(fun,list(var1,var2,data=data,paired=TRUE,...)))})
+                       suppressWarnings(do.call(fun,list(var1,var2,paired=TRUE,...)))})
   }else if (core== 'auto'){
-    myfun <- function(x,subgroup=subgroup){
-      var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
-      var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
+    myfun <- function(x){
+      var1 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[1]) |> dplyr::pull(x)
+      var2 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[2]) |> dplyr::pull(x)
       if (length(var1) != length(var1)) {
        stop("Paired test need Paired data!")
       }      
-      suppressWarnings(do.call(fun,list(var1,var2,data=data,paired=TRUE,...)))
+      suppressWarnings(do.call(fun,list(var1,var2,paired=TRUE,...)))
     }
     ## set the core
     spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
@@ -404,13 +404,13 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
     result <- snowfall::sfLapply(feature,myfun)
     snowfall::sfStop()
   }else{
-    myfun <- function(x,subgroup=subgroup){
-      var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
-      var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
+    myfun <- function(x){
+      var1 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[1]) |> dplyr::pull(x)
+      var2 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[2]) |> dplyr::pull(x)
       if (length(var1) != length(var1)) {
        stop("Paired test need Paired data!")
       }         
-      suppressWarnings(do.call(fun,list(var1,var2,data=data,paired=TRUE,...)))
+      suppressWarnings(do.call(fun,list(var1,var2,paired=TRUE,...)))
     }
     ## set the core
     available_core <- parallel::detectCores() - 1
