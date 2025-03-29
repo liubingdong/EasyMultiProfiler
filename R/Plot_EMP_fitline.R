@@ -77,7 +77,7 @@
       scale_colour_manual(values=palette,name = estimate_group) + eval(parse(text = paste0(mytheme))) 
     
   }
-  data_plot[['html']]  <- ggiraph::girafe(code = print(data_plot[['pic']] ),width = html_width,height = html_height)
+  data_plot[['html']]  <- ggiraph::girafe(ggobj = print(data_plot[['pic']] ),width = html_width,height = html_height)
 
   .get.plot_deposit.EMPT(EMPT,info = 'EMP_fitline_plot') <- data_plot
   .get.plot_specific.EMPT(EMPT) <- show
@@ -210,7 +210,7 @@
       scale_colour_manual(values=palette,name = estimate_group) + eval(parse(text = paste0(mytheme)))
     
   }
-  data_plot[['html']]  <- ggiraph::girafe(code = print(data_plot[['pic']]),width = html_width,height = html_height)
+  data_plot[['html']]  <- ggiraph::girafe(ggobj = print(data_plot[['pic']]),width = html_width,height = html_height)
   
   .get.plot_deposit.EMP(EMP,info = 'EMP_fitline_plot') <- data_plot
   .get.plot_specific.EMP(EMP) <- show

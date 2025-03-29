@@ -419,16 +419,16 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   p12 <- p1 + p5 + p12 + p2 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   set.seed(seed)
-  p12_html=ggiraph::girafe(code = print(p12),width_svg = html_width,height_svg = html_height)
+  p12_html=ggiraph::girafe(ggobj = print(p12),width_svg = html_width,height_svg = html_height)
   if (axis_num >= 3) {
   p23 <- p2_r + p5 + p23 + p3 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   p13 <- p1 + p5 + p13 + p3 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   set.seed(seed)
-  p13_html=ggiraph::girafe(code = print(p13),width_svg = html_width,height_svg = html_height)
+  p13_html=ggiraph::girafe(ggobj = print(p13),width_svg = html_width,height_svg = html_height)
   set.seed(seed)
-  p23_html=ggiraph::girafe(code = print(p23),width_svg = html_width,height_svg = html_height)
+  p23_html=ggiraph::girafe(ggobj = print(p23),width_svg = html_width,height_svg = html_height)
   }
 
 
