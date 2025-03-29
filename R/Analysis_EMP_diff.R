@@ -298,10 +298,16 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
     core <- 1
   }
 
-  diff_result <- .multi_compare(fun=method,data=assay_data,
-                feature=feature_name,factorNames=estimate_group,
-                subgroup=subgroup,core=core,paired=paired,...) %>% suppressMessages()
 
+  if (paired) {
+    diff_result <- .multi_compare_paired(fun=method,data=assay_data,
+                                    feature=feature_name,factorNames=estimate_group,
+                                    subgroup=subgroup,core=core,paired=TRUE,...)  %>% suppressMessages()
+  }else{
+    diff_result <- .multi_compare_unpaired(fun=method,data=assay_data,
+                                          feature=feature_name,factorNames=estimate_group,
+                                          subgroup=subgroup,core=core,...) %>% suppressMessages()
+  }
 
   diff_data <-  .get_diff_df(diff_result,feature_name,estimate_group)
 
@@ -359,27 +365,37 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
 #' @importFrom rlang new_formula
 #' @importFrom parallel detectCores
 #' @noRd
-.multi_compare <- function(fun,
+.multi_compare_paired <- function(fun,
                            data,
                            feature,
                            factorNames,
-                           subgroup=NULL,core,...){
+                           subgroup=NULL,core,paired,...){
   if (!is.null(subgroup)){
     data <- data[data[[factorNames]] %in% subgroup, ,drop=FALSE]
     data[[factorNames]] <- factor(data[[factorNames]], levels=subgroup)
   }
   
+  if(length(subgroup) != 2){
+    stop('Paired test only support 2 groups!')
+  }
+
   if (core==1) {
     result <- lapply(feature,
                      function(x){
                        var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
                        var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
-                       suppressWarnings(do.call(fun,list(var1,var2,data=data,...)))}) 
+                       if (length(var1) != length(var1)) {
+                        stop("Paired test need Paired data!")
+                       }
+                       suppressWarnings(do.call(fun,list(var1,var2,data=data,paired=TRUE,...)))})
   }else if (core== 'auto'){
     myfun <- function(x){
       var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
       var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
-      suppressWarnings(do.call(fun,list(var1,var2,data=data,...)))
+      if (length(var1) != length(var1)) {
+       stop("Paired test need Paired data!")
+      }      
+      suppressWarnings(do.call(fun,list(var1,var2,data=data,paired=TRUE,...)))
     }
     ## set the core
     spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
@@ -391,7 +407,10 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
     myfun <- function(x){
       var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
       var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
-      suppressWarnings(do.call(fun,list(var1,var2,data=data,...)))
+      if (length(var1) != length(var1)) {
+       stop("Paired test need Paired data!")
+      }         
+      suppressWarnings(do.call(fun,list(var1,var2,data=data,paired=TRUE,...)))
     }
     ## set the core
     available_core <- parallel::detectCores() - 1
@@ -408,6 +427,53 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
   }
   return(result)
 }
+
+.multi_compare_unpaired <- function(fun,
+                            data,
+                            feature,
+                            factorNames,
+                            subgroup=NULL,core,...){
+   if (!is.null(subgroup)){
+     data <- data[data[[factorNames]] %in% subgroup, ,drop=FALSE]
+     data[[factorNames]] <- factor(data[[factorNames]], levels=subgroup)
+   }
+ 
+   if (core==1) {
+     result <- lapply(feature,
+            function(x){
+              tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
+              suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))}) 
+   }else if (core== 'auto'){
+     myfun <- function(x){
+       tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
+       suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))
+     }
+     ## set the core
+     spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
+     snowfall::sfExport('factorNames','data','fun')
+     snowfall::sfExport('myfun')
+     result <- snowfall::sfLapply(feature,myfun)
+     snowfall::sfStop()
+   }else{
+     myfun <- function(x){
+       tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
+       suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))
+     }
+     ## set the core
+     available_core <- parallel::detectCores() - 1
+     if(core>0 & core <= available_core){
+       spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = core),print_cat = TRUE, message = FALSE, warning = FALSE)
+     }else{
+       warning("The parameter core number is wrong,now parallel execution on ",available_core," CPUs.")
+       spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
+     }
+     snowfall::sfExport('factorNames','data','fun')
+     snowfall::sfExport('myfun')
+     result <- snowfall::sfLapply(feature,myfun)
+     snowfall::sfStop()
+   }
+   return(result)
+ }
 
 #' @importFrom dplyr across
 .get_sign_fold <- function(assay_data,subgroup,assay_name,group_level=NULL,estimate_group) {
