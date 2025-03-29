@@ -353,9 +353,6 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
   return(df)
 }
 
-## This code '.multi_compare' is modified from package 'MicrobiotaProcess' for diff analysis
-## Here add the parallel function
-
 #' @importFrom spsUtil quiet
 #' @importFrom snowfall sfLapply
 #' @importFrom snowfall sfStop
@@ -366,7 +363,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
                            data,
                            feature,
                            factorNames,
-                           subgroup=NULL,core,paired,...){
+                           subgroup=NULL,core,...){
   if (!is.null(subgroup)){
     data <- data[data[[factorNames]] %in% subgroup, ,drop=FALSE]
     data[[factorNames]] <- factor(data[[factorNames]], levels=subgroup)
@@ -374,13 +371,15 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
   
   if (core==1) {
     result <- lapply(feature,
-           function(x){
-             tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-             suppressWarnings(do.call(fun,list(tmpformula,data=data,paired=paired,...)))}) 
+                     function(x){
+                       var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
+                       var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
+                       suppressWarnings(do.call(fun,list(var1,var2,data=data,...)))}) 
   }else if (core== 'auto'){
     myfun <- function(x){
-      tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-      suppressWarnings(do.call(fun,list(tmpformula,data=data,...)))
+      var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
+      var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
+      suppressWarnings(do.call(fun,list(var1,var2,data=data,...)))
     }
     ## set the core
     spsUtil::quiet(snowfall::sfInit(parallel = TRUE, cpus = parallel::detectCores() - 1),print_cat = TRUE, message = FALSE, warning = FALSE)
@@ -390,8 +389,9 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
     snowfall::sfStop()
   }else{
     myfun <- function(x){
-      tmpformula <- rlang::new_formula(as.name(x), as.name(factorNames))
-      suppressWarnings(do.call(fun,list(tmpformula,data=data,paired=paired,...)))
+      var1 <- data |> dplyr::filter(sub_group == subgroup[1]) |> dplyr::pull(x)
+      var2 <- data |> dplyr::filter(sub_group == subgroup[2]) |> dplyr::pull(x)
+      suppressWarnings(do.call(fun,list(var1,var2,data=data,...)))
     }
     ## set the core
     available_core <- parallel::detectCores() - 1
