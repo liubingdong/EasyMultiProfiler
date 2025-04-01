@@ -283,6 +283,16 @@ setMethod("EMP_boxplot","EMP_assay_boxplot_union",function(obj, ...){
 #'   EMP_collapse(estimate_group = 'Species',collapse_by = 'row')|>
 #'   EMP_dimension_analysis(method = 'pcoa',distance = 'bray')|>
 #'   EMP_scatterplot(show='p12html',estimate_group = 'Group') # eg. p12,p12html,p23,p23html
+#'
+#' # For paired test
+#' MAE |> 
+#'   EMP_assay_extract('taxonomy') |> 
+#'   EMP_collapse(estimate_group = 'Species',collapse_by = 'row') |>
+#'   EMP_filter(sub_group %in% c('A','C')) |>
+#'   EMP_dimension_analysis(method = 'pcoa',distance = 'bray')|>
+#'   EMP_scatterplot(show='p12html',
+#'                   paired_group='patient',
+#'                   estimate_group = 'sub_group') 
 setGeneric("EMP_scatterplot",function(obj,...) standardGeneric("EMP_scatterplot"))
 
 #' @param obj object
