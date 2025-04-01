@@ -21,6 +21,7 @@ EMP_scatterplot.EMP_dimension_analysis(
   adonis_permutations = 999,
   estimate_group = NULL,
   palette = NULL,
+  paired_group = NULL,
   method = "wilcox.test",
   key_samples = NULL,
   dot_size = 8,
@@ -56,6 +57,8 @@ EMP_scatterplot.EMP_dimension_analysis(
 \item{estimate_group}{A character string. Select the colname in the coldata to compare the data in the statistical test.}
 
 \item{palette}{A series of character string. Color palette.}
+
+\item{paired_group}{A character string. Variable name corresponding to paired primary or sample.}
 
 \item{method}{A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).}
 
@@ -94,4 +97,14 @@ MAE |>
   EMP_collapse(estimate_group = 'Species',collapse_by = 'row')|>
   EMP_dimension_analysis(method = 'pcoa',distance = 'bray')|>
   EMP_scatterplot(show='p12html',estimate_group = 'Group') # eg. p12,p12html,p23,p23html
+
+# For paired test
+MAE |> 
+  EMP_assay_extract('taxonomy') |> 
+  EMP_collapse(estimate_group = 'Species',collapse_by = 'row') |>
+  EMP_filter(sub_group \%in\% c('A','C')) |>
+  EMP_dimension_analysis(method = 'pcoa',distance = 'bray')|>
+  EMP_scatterplot(show='p12html',
+                  paired_group='patient',
+                  estimate_group = 'sub_group') 
 }

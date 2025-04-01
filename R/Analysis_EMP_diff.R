@@ -393,7 +393,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
       var1 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[1]) |> dplyr::pull(x)
       var2 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[2]) |> dplyr::pull(x)
       if (length(var1) != length(var1)) {
-       stop("Paired test need Paired data!")
+       stop("Paired test requires equal-length pairs for feature!")
       }      
       suppressWarnings(do.call(fun,list(var1,var2,paired=TRUE,...)))
     }
@@ -408,7 +408,7 @@ EMP_diff_analysis <- function(obj,experiment,.formula,
       var1 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[1]) |> dplyr::pull(x)
       var2 <- data |> dplyr::filter(!!rlang::sym(factorNames) == subgroup[2]) |> dplyr::pull(x)
       if (length(var1) != length(var1)) {
-       stop("Paired test need Paired data!")
+       stop("Paired test requires equal-length pairs for feature!")
       }         
       suppressWarnings(do.call(fun,list(var1,var2,paired=TRUE,...)))
     }
