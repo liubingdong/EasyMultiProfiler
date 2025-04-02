@@ -19,6 +19,8 @@
 #' @param distance_for_adonis A character string.Set the distance for adonis. Detailed in \code{\link[vegan]{adonis}}.
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
 #' @param paired_group  A character string. Variable name corresponding to paired primary or sample.
+#' @param paired_box_line A boolean. Whether show the paired line in the boxplot when paired test activated.(defalut:TRUE)
+#' @param paired_dot_line A boolean. Whether show the paired line in the scatterplot when paired test activated.(defalut:TRUE)
 #' @param palette A series of character string. Color palette.
 #' @param method A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).
 #' @param key_samples A series of character string. To highlight your interested samples.
@@ -39,7 +41,8 @@
 #' @return EMPT object
 EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
-                                           estimate_group=NULL,palette=NULL,paired_group=NULL,
+                                           estimate_group=NULL,palette=NULL,
+                                           paired_group=NULL,paired_box_line=TRUE,paired_dot_line=TRUE,
                                            method='wilcox.test',key_samples = NULL,
                                            dot_size=8,box_width=NULL,box_alpha=1,
                                            step_increase=0.1,ref.group=NULL,comparisons=NULL,
@@ -53,7 +56,8 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   
   EMPT <- .EMP_scatterplot.EMP_dimension_analysis_m(obj=obj,seed=seed,group_level=group_level,
                                            show=show,distance_for_adonis=distance_for_adonis,force_adonis=force_adonis,adonis_permutations=adonis_permutations,
-                                           estimate_group=estimate_group,palette=palette,paired_group=paired_group,
+                                           estimate_group=estimate_group,palette=palette,
+                                           paired_group=paired_group,paired_box_line=paired_box_line,paired_dot_line=paired_dot_line,
                                            method=method,key_samples = key_samples,
                                            dot_size=dot_size,box_width=box_width,box_alpha=box_alpha,
                                            step_increase=step_increase,ref.group=ref.group,comparisons=comparisons,
@@ -71,7 +75,8 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
 #' @importFrom vegan adonis2
 .EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
-                                           estimate_group=NULL,palette=NULL,paired_group=NULL,
+                                           estimate_group=NULL,palette=NULL,
+                                           paired_group=NULL,paired_box_line=TRUE,paired_dot_line=TRUE,
                                            method='wilcox.test',key_samples = NULL,
                                            dot_size=8,box_width=NULL,box_alpha=1,
                                            step_increase=0.1,ref.group=NULL,comparisons=NULL,
@@ -199,7 +204,7 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             axis.text.y=element_text(colour='black',size=20,face = "bold"),
             axis.text.x=element_blank(),
             legend.position = "none")
-
+    
     p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) + scale_fill_manual(values=col_values) +
       ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) + 
@@ -249,6 +254,13 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
               legend.position = "none")
     }
 
+    if (paired_box_line == FALSE) {
+      p1[['layers']] <- p1[['layers']][-3]
+      p2[['layers']] <- p2[['layers']][-3]
+      p2_r[['layers']] <- p2_r[['layers']][-3]
+      try(p3[['layers']] <- p3[['layers']][-3],silent=TRUE)
+    }
+ 
   }else{
     p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
@@ -392,7 +404,14 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
               legend.background = element_rect(colour = "black"),
               legend.key.height=unit(1,"cm")) +
         guides(fill = guide_legend(ncol = 1))
-    }  
+    } 
+
+   if (paired_dot_line == FALSE) {
+      p12[['layers']] <- p12[['layers']][-1]
+      try(p13[['layers']] <- p13[['layers']][-1],silent=TRUE)
+      try(p23[['layers']] <- p23[['layers']][-1],silent=TRUE)
+    }    
+
   }else{
     p12<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[2]))) +
       ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[2]),2))),size=dot_size,pch = 21)+

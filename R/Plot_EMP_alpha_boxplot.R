@@ -11,6 +11,7 @@
 #' @param comparisons A list of length-2 vectors. The entries in the vector are either the names of 2 values on the x-axis or the 2 integers that correspond to the index of the columns of interest.(default:NULL)
 #' @param ncol An interger. Set the col number in the facet plot.
 #' @param paired_group  A character string. Variable name corresponding to paired primary or sample.
+#' @param paired_line A boolean. Whether show the paired line when paired test activated.(defalut:TRUE)
 #' @param select_metrics A series of character string. Select the alpha metrics to show. 
 #' @param show A character string include pic (default), html.
 #' @param palette A series of character string. Color palette.
@@ -25,7 +26,7 @@
 EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 'default',method = 'wilcox.test',
                                estimate_group = NULL,group_level = 'default',
                                dot_size=2,box_width=if (plot_category == "violin") 0.3 else NULL,box_alpha=if (plot_category == "violin") 0.8 else 1,
-                               step_increase = 0.1,ref.group = NULL,comparisons = NULL,paired_group=NULL,
+                               step_increase = 0.1,ref.group = NULL,comparisons = NULL,paired_group=NULL,paired_line=TRUE,
                                ncol = NULL,select_metrics=NULL,show = 'pic',palette = NULL,
                                html_width=NULL,html_height=NULL,
                                mytheme = 'theme()',...) {
@@ -38,7 +39,8 @@ EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 'default',method 
            withr::with_seed(123,EMP_boxplot_alpha_default(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
                                dot_size=dot_size,box_width=box_width,box_alpha=box_alpha,
-                               step_increase = step_increase,ref.group = ref.group,comparisons = comparisons,paired_group=paired_group,
+                               step_increase = step_increase,ref.group = ref.group,comparisons = comparisons,
+                               paired_group=paired_group,paired_line=paired_line,
                                ncol = ncol,select_metrics=select_metrics,show = show,palette = palette,
                                html_width=html_width,html_height=html_height,
                                mytheme = mytheme,...))
@@ -47,7 +49,8 @@ EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 'default',method 
           withr::with_seed(123,EMP_boxplot_alpha_violin(EMPT=obj,method = method,
                                estimate_group = estimate_group,group_level = group_level,
                                dot_size=dot_size,box_width=box_width,box_alpha=box_alpha,
-                               step_increase = step_increase,ref.group = ref.group,comparisons = comparisons,paired_group=paired_group,
+                               step_increase = step_increase,ref.group = ref.group,comparisons = comparisons,
+                               paired_group=paired_group,paired_line=paired_line,
                                ncol = ncol,select_metrics=select_metrics,show = show,palette = palette,
                                html_width=html_width,html_height=html_height,
                                mytheme = mytheme,...))
@@ -71,7 +74,7 @@ EMP_boxplot.EMP_alpha_analysis <- function(obj,plot_category = 'default',method 
 #' @import ggthemes
 EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
                                        estimate_group = NULL,group_level = 'default',dot_size=2,box_width=NULL,box_alpha=1,
-                                       step_increase = 0.1,ref.group = NULL,comparisons = NULL,paired_group=NULL,
+                                       step_increase = 0.1,ref.group = NULL,comparisons = NULL,paired_group=NULL,paired_line=TRUE,
                                        ncol = NULL,select_metrics = NULL,palette = NULL,
                                  show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()',...) {
   primary <- ID <- value <- NULL
@@ -165,9 +168,9 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
   }else{
     alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
       geom_boxplot(outlier.color=NA,width=box_width,alpha=box_alpha) +
+      geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) + 
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,size=dot_size,position = position_jitter(width = 0))+
       ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) +
-      geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) + 
       facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
       xlab(NULL) +
       ylab("Alpha Metrics") +
@@ -175,7 +178,11 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
       scale_fill_manual(values = col_values) + 
       theme_bw() + 
       theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
-      eval(parse(text = paste0(mytheme)))    
+      eval(parse(text = paste0(mytheme))) 
+    # Hide the line  
+    if (paired_line == FALSE) {
+      alpha_plot[['pic']][['layers']] <- alpha_plot[['pic']][['layers']][-2]
+    }  
   }
 
 
@@ -187,13 +194,13 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
   .get.algorithm.EMPT(EMPT) <- 'alpha_analysis_plot'
   .get.info.EMPT(EMPT) <- 'EMP_alpha_analysis_boxplot'
   class(EMPT) <- 'EMP_alpha_analysis_boxplot'
-  EMPT
+  return(EMPT)
 }
 
 
 EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
                                        estimate_group = NULL,group_level = 'default',dot_size=2,box_width=0.3,box_alpha=0.8,
-                                       step_increase = 0.1,ref.group = NULL,comparisons = NULL,paired_group=NULL,
+                                       step_increase = 0.1,ref.group = NULL,comparisons = NULL,paired_group=NULL,paired_line=TRUE,
                                        ncol = NULL,select_metrics = NULL,palette = NULL,
                                  show = 'pic',html_width=NULL,html_height=NULL,mytheme = 'theme()',...) {
   primary <- ID <- value <- NULL
@@ -289,9 +296,9 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
     alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
       geom_violin(position = position_dodge(width = 0.1), scale = 'width',alpha=box_alpha) +
       geom_boxplot(outlier.color=NA,fill="white", width=box_width) +
+      geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) +       
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,size=dot_size,position = position_jitter(width = 0))+
       ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) +
-      geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) + 
       facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
       xlab(NULL) +
       ylab("Alpha Metrics") +
@@ -299,7 +306,11 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
       scale_fill_manual(values = col_values) + 
       theme_bw() + 
       theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
-      eval(parse(text = paste0(mytheme)))    
+      eval(parse(text = paste0(mytheme))) 
+    # Hide the line      
+    if (paired_line == FALSE) {
+      alpha_plot[['pic']][['layers']] <- alpha_plot[['pic']][['layers']][-3]
+    }           
   }
 
   alpha_plot[['html']] <- ggiraph::girafe(ggobj = print(alpha_plot[['pic']]),width = html_width,height = html_height)
@@ -310,7 +321,7 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
   .get.algorithm.EMPT(EMPT) <- 'alpha_analysis_plot'
   .get.info.EMPT(EMPT) <- 'EMP_alpha_analysis_boxplot'
   class(EMPT) <- 'EMP_alpha_analysis_boxplot'
-  EMPT
+  return(EMPT)
 }
 
 
