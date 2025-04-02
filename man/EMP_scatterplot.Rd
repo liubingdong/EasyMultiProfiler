@@ -22,6 +22,8 @@ EMP_scatterplot.EMP_dimension_analysis(
   estimate_group = NULL,
   palette = NULL,
   paired_group = NULL,
+  paired_box_line = TRUE,
+  paired_dot_line = TRUE,
   method = "wilcox.test",
   key_samples = NULL,
   dot_size = 8,
@@ -59,6 +61,10 @@ EMP_scatterplot.EMP_dimension_analysis(
 \item{palette}{A series of character string. Color palette.}
 
 \item{paired_group}{A character string. Variable name corresponding to paired primary or sample.}
+
+\item{paired_box_line}{A boolean. Whether show the paired line in the boxplot when paired test activated.(defalut:TRUE)}
+
+\item{paired_dot_line}{A boolean. Whether show the paired line in the scatterplot when paired test activated.(defalut:TRUE)}
 
 \item{method}{A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).}
 

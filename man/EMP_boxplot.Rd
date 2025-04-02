@@ -28,6 +28,7 @@ EMP_boxplot.EMP_alpha_analysis(
   ref.group = NULL,
   comparisons = NULL,
   paired_group = NULL,
+  paired_line = TRUE,
   ncol = NULL,
   select_metrics = NULL,
   show = "pic",
@@ -51,6 +52,7 @@ EMP_boxplot.EMP_assay_boxplot_union(
   ref.group = NULL,
   comparisons = NULL,
   paired_group = NULL,
+  paired_line = TRUE,
   ncol = NULL,
   show = "pic",
   palette = NULL,
@@ -86,6 +88,8 @@ EMP_boxplot.EMP_assay_boxplot_union(
 \item{comparisons}{A list of length-2 vectors. The entries in the vector are either the names of 2 values on the x-axis or the 2 integers that correspond to the index of the columns of interest.(default:NULL)}
 
 \item{paired_group}{A character string. Variable name corresponding to paired primary or sample.}
+
+\item{paired_line}{A boolean. Whether show the paired line when paired test activated.(defalut:TRUE)}
 
 \item{ncol}{An interger. Set the col number in the facet plot.}
 
