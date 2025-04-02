@@ -98,7 +98,7 @@ library(EasyMultiProfiler)
 ### Usage and tutorial
 For more details, please refer to the tutorial:
 
-Website:  [**Source 1**](http://easymultiprofiler.xielab.net)  [**Source 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/)[**Source 3**](https://main--gorgeous-smakager-db1548.netlify.app/) 
+Website:  [**Source 1**](http://easymultiprofiler.xielab.net)  [**Source 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/)  [**Source 3**](https://main--gorgeous-smakager-db1548.netlify.app/) 
 
 ### Acknowledge
 This package integrates multiple widely-used tools, and we sincerely acknowledge their authors for their valuable contributions. Special thanks to [**Prof. Guangchuang Yu**](https://github.com/YuLab-SMU)  (Southern Medical University, China) for his guidance. We strongly recommend citing the original publications of the corresponding tools when using this package.
