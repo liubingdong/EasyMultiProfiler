@@ -27,6 +27,8 @@ EMP_boxplot.EMP_alpha_analysis(
   step_increase = 0.1,
   ref.group = NULL,
   comparisons = NULL,
+  paired_group = NULL,
+  paired_line = TRUE,
   ncol = NULL,
   select_metrics = NULL,
   show = "pic",
@@ -49,6 +51,8 @@ EMP_boxplot.EMP_assay_boxplot_union(
   step_increase = 0.1,
   ref.group = NULL,
   comparisons = NULL,
+  paired_group = NULL,
+  paired_line = TRUE,
   ncol = NULL,
   show = "pic",
   palette = NULL,
@@ -83,6 +87,10 @@ EMP_boxplot.EMP_assay_boxplot_union(
 
 \item{comparisons}{A list of length-2 vectors. The entries in the vector are either the names of 2 values on the x-axis or the 2 integers that correspond to the index of the columns of interest.(default:NULL)}
 
+\item{paired_group}{A character string. Variable name corresponding to paired primary or sample.}
+
+\item{paired_line}{A boolean. Whether show the paired line when paired test activated.(defalut:TRUE)}
+
 \item{ncol}{An interger. Set the col number in the facet plot.}
 
 \item{select_metrics}{A series of character string. Select the alpha metrics to show.}
@@ -105,13 +113,13 @@ Boxplot for EMPT result
 }
 \examples{
 data(MAE)
-## from assay
+# from assay
 MAE |> 
   EMP_assay_extract('host_gene',pattern = 'A1BG',
         pattern_ref = 'feature') |>
   EMP_boxplot(method='t.test',estimate_group='Group')
 
-## from alpha analysis
+# from alpha analysis
 MAE |> 
   EMP_assay_extract('taxonomy') |> 
   EMP_alpha_analysis()|>
@@ -123,10 +131,15 @@ MAE |>
                     pattern = 'A1BG',pattern_ref = 'feature') |>
   EMP_boxplot(estimate_group='Group',box_alpha=0.8,
               box_width=0.3,dot_size=5,plot_category='violin')
- MAE |>
-   EMP_assay_extract(experiment='taxonomy')|> 
-   EMP_alpha_analysis() |>
-   EMP_boxplot(estimate_group='Group',method='t.test',
+MAE |>
+  EMP_assay_extract(experiment='taxonomy')|> 
+  EMP_alpha_analysis() |>
+  EMP_boxplot(estimate_group='Group',method='t.test',
                box_alpha=0.8,dot_size=3,
                box_width=0.3,plot_category='violin')
+# Paired test
+MAE |> 
+  EMP_assay_extract('host_gene',
+                   pattern = 'A1BG',pattern_ref = 'feature') |> 
+  EMP_boxplot(method='t.test',estimate_group='sub_group',paired_group='patient') # Set the paired_group
 }

@@ -18,6 +18,9 @@
 #' @param show A character string include pic (default), html. This could display graphical results on 3 axes. eg. p12,p12html,p23,p23html
 #' @param distance_for_adonis A character string.Set the distance for adonis. Detailed in \code{\link[vegan]{adonis}}.
 #' @param estimate_group A character string. Select the colname in the coldata to compare the data in the statistical test.
+#' @param paired_group  A character string. Variable name corresponding to paired primary or sample.
+#' @param paired_box_line A boolean. Whether show the paired line in the boxplot when paired test activated.(defalut:TRUE)
+#' @param paired_dot_line A boolean. Whether show the paired line in the scatterplot when paired test activated.(defalut:TRUE)
 #' @param palette A series of character string. Color palette.
 #' @param method A character string. The name of the statistical test that is applied to barplot columns (default:wilcox.test).
 #' @param key_samples A series of character string. To highlight your interested samples.
@@ -39,6 +42,7 @@
 EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
+                                           paired_group=NULL,paired_box_line=TRUE,paired_dot_line=TRUE,
                                            method='wilcox.test',key_samples = NULL,
                                            dot_size=8,box_width=NULL,box_alpha=1,
                                            step_increase=0.1,ref.group=NULL,comparisons=NULL,
@@ -53,6 +57,7 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   EMPT <- .EMP_scatterplot.EMP_dimension_analysis_m(obj=obj,seed=seed,group_level=group_level,
                                            show=show,distance_for_adonis=distance_for_adonis,force_adonis=force_adonis,adonis_permutations=adonis_permutations,
                                            estimate_group=estimate_group,palette=palette,
+                                           paired_group=paired_group,paired_box_line=paired_box_line,paired_dot_line=paired_dot_line,
                                            method=method,key_samples = key_samples,
                                            dot_size=dot_size,box_width=box_width,box_alpha=box_alpha,
                                            step_increase=step_increase,ref.group=ref.group,comparisons=comparisons,
@@ -71,6 +76,7 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
 .EMP_scatterplot.EMP_dimension_analysis  <- function(obj,seed=123,group_level='default',
                                            show='p12',distance_for_adonis=NULL,force_adonis=FALSE,adonis_permutations=999,
                                            estimate_group=NULL,palette=NULL,
+                                           paired_group=NULL,paired_box_line=TRUE,paired_dot_line=TRUE,
                                            method='wilcox.test',key_samples = NULL,
                                            dot_size=8,box_width=NULL,box_alpha=1,
                                            step_increase=0.1,ref.group=NULL,comparisons=NULL,
@@ -96,11 +102,8 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   }
 
   EMPT %<>% .group_level_modified(estimate_group = estimate_group,group_level = group_level)
-  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,!!estimate_group)
+  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,dplyr::any_of(c(!!estimate_group,!!paired_group)))
 
-
-
-  colnames(mapping) <- c("primary","Group")
   length=length(unique(as.character(mapping$primary)))
   times1=length%/%8
   res1=length%%8
@@ -110,10 +113,27 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   col=c(col1,1:res1)
   pich1=rep(c(21:24),times2)
   pich=c(pich1,15:(15+res2))
-  ###########bray
-  ###PCoA分析--轴12
+
   data <- .get.result.EMPT(EMPT,info='EMP_dimension_analysis')[['dimension_coordinate']] %>% suppressMessages()
-  plotdata <- dplyr::left_join(data,mapping,by='primary')
+
+  if (!is.null(paired_group)) {
+    colnames(mapping) <- c("primary","Group","paired_group")
+    plotdata <- dplyr::left_join(data,mapping,by='primary')
+    ## check the missing value in the group label
+    if(any(is.na(plotdata[['paired_group']]))) {
+      stop('Column ',paired_group,' has beed deteced missing value, please check and filter them!')
+    }
+    ## check the paired sample and size
+    check_paired_result <- .check_group_consistency(data=plotdata,group_col='Group',patient_col='paired_group')
+    if(check_paired_result$all_patients_equal == FALSE) {
+      stop(check_paired_result$message)
+    }    
+    plotdata <- plotdata %>% dplyr::arrange(Group,paired_group) 
+  }else{
+    colnames(mapping) <- c("primary","Group")
+    plotdata <- dplyr::left_join(data,mapping,by='primary')
+  }
+
 
   ## Due to the purpose of the module, missing value in the group label is not allowed!
   if(any(is.na(plotdata$Group))) {
@@ -167,52 +187,29 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   }
 
   #相须图绘制
-  p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
-    geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
-    ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+
-    coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[1]),2))),position = "jitter")+
-    theme_bw()+
-    theme(axis.ticks.length = unit(0.4,"lines"),
-          axis.ticks = element_line(color='black'),
-          axis.line = element_line(colour = "black"),
-          axis.title.x=element_blank(),
-          axis.title.y=element_blank(),
-          axis.text.y=element_text(colour='black',size=20,face = "bold"),
-          axis.text.x=element_blank(),
-          legend.position = "none")
+  if (!is.null(paired_group)) {
 
-  p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
-    geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
-    ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
-    theme_bw()+
-    theme(axis.ticks.length = unit(0.4,"lines"),
-          axis.ticks = element_line(color='black'),
-          axis.line = element_line(colour = "black"),
-          axis.title.x=element_blank(),
-          axis.title.y=element_blank(),
-          axis.text.x=element_text(colour='black',size=20,angle = 45,
-                                   vjust = 1,hjust = 1,face = "bold"),
-          axis.text.y=element_blank(),
-          legend.position = "none")
-
-  p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
-    geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
-    ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
-    theme_bw()+
-    theme(axis.ticks.length = unit(0.4,"lines"),
-          axis.ticks = element_line(color='black'),
-          axis.line = element_line(colour = "black"),
-          axis.title.x=element_blank(),
-          axis.title.y=element_blank(),
-          axis.text.y=element_text(colour='black',size=20,face = "bold"),
-          axis.text.x=element_blank(),
-          legend.position = "none")
-
-
-  if (axis_num == 3) {
-    p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
-      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
-      ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
+    p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) + scale_fill_manual(values=col_values) +
+      ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) +
+      coord_flip() + 
+      geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
+      ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[1]),2))))+
+      theme_bw() +
+      theme(axis.ticks.length = unit(0.4,"lines"),
+            axis.ticks = element_line(color='black'),
+            axis.line = element_line(colour = "black"),
+            axis.title.x=element_blank(),
+            axis.title.y=element_blank(),
+            axis.text.y=element_text(colour='black',size=20,face = "bold"),
+            axis.text.x=element_blank(),
+            legend.position = "none")
+    
+    p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) + scale_fill_manual(values=col_values) +
+      ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) + 
+      geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
+      ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2)))) +
       theme_bw()+
       theme(axis.ticks.length = unit(0.4,"lines"),
             axis.ticks = element_line(color='black'),
@@ -223,8 +220,105 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
                                      vjust = 1,hjust = 1,face = "bold"),
             axis.text.y=element_blank(),
             legend.position = "none")
-  }
 
+    p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) + scale_fill_manual(values=col_values)+
+      ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) + coord_flip() + 
+      geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
+      ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2)))) +
+      theme_bw()+
+      theme(axis.ticks.length = unit(0.4,"lines"),
+            axis.ticks = element_line(color='black'),
+            axis.line = element_line(colour = "black"),
+            axis.title.x=element_blank(),
+            axis.title.y=element_blank(),
+            axis.text.y=element_text(colour='black',size=20,face = "bold"),
+            axis.text.x=element_blank(),
+            legend.position = "none")
+
+    if (axis_num == 3) {
+      p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
+        geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
+        ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) +
+        geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) + 
+        ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2)))) +
+        theme_bw()+
+        theme(axis.ticks.length = unit(0.4,"lines"),
+              axis.ticks = element_line(color='black'),
+              axis.line = element_line(colour = "black"),
+              axis.title.x=element_blank(),
+              axis.title.y=element_blank(),
+              axis.text.x=element_text(colour='black',size=20,angle = 45,
+                                       vjust = 1,hjust = 1,face = "bold"),
+              axis.text.y=element_blank(),
+              legend.position = "none")
+    }
+
+    if (paired_box_line == FALSE) {
+      p1[['layers']] <- p1[['layers']][-3]
+      p2[['layers']] <- p2[['layers']][-3]
+      p2_r[['layers']] <- p2_r[['layers']][-3]
+      try(p3[['layers']] <- p3[['layers']][-3],silent=TRUE)
+    }
+ 
+  }else{
+    p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
+      ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+
+      coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[1]),2))),position = "jitter")+
+      theme_bw()+
+      theme(axis.ticks.length = unit(0.4,"lines"),
+            axis.ticks = element_line(color='black'),
+            axis.line = element_line(colour = "black"),
+            axis.title.x=element_blank(),
+            axis.title.y=element_blank(),
+            axis.text.y=element_text(colour='black',size=20,face = "bold"),
+            axis.text.x=element_blank(),
+            legend.position = "none")
+
+    p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
+      ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
+      theme_bw()+
+      theme(axis.ticks.length = unit(0.4,"lines"),
+            axis.ticks = element_line(color='black'),
+            axis.line = element_line(colour = "black"),
+            axis.title.x=element_blank(),
+            axis.title.y=element_blank(),
+            axis.text.x=element_text(colour='black',size=20,angle = 45,
+                                     vjust = 1,hjust = 1,face = "bold"),
+            axis.text.y=element_blank(),
+            legend.position = "none")
+
+    p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
+      ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
+      theme_bw()+
+      theme(axis.ticks.length = unit(0.4,"lines"),
+            axis.ticks = element_line(color='black'),
+            axis.line = element_line(colour = "black"),
+            axis.title.x=element_blank(),
+            axis.title.y=element_blank(),
+            axis.text.y=element_text(colour='black',size=20,face = "bold"),
+            axis.text.x=element_blank(),
+            legend.position = "none")
+
+    if (axis_num == 3) {
+      p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
+        geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
+        ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
+        theme_bw()+
+        theme(axis.ticks.length = unit(0.4,"lines"),
+              axis.ticks = element_line(color='black'),
+              axis.line = element_line(colour = "black"),
+              axis.title.x=element_blank(),
+              axis.title.y=element_blank(),
+              axis.text.x=element_text(colour='black',size=20,angle = 45,
+                                       vjust = 1,hjust = 1,face = "bold"),
+              axis.text.y=element_blank(),
+              legend.position = "none")
+    }
+  }
 
 
   if (!is.null(key_samples)) {
@@ -234,56 +328,19 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   }
 
   #PCoA结果图绘制
-  p12<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[2]))) +
-    ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[2]),2))),size=dot_size,pch = 21)+
-    scale_fill_manual(values=col_values,name = "Group") +
-    xlab(pc1_text) +
-    ylab(pc2_text) +
-    xlim(ggplot_build(p1)$layout$panel_scales_y[[1]]$range$range) +
-    ylim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
-    theme(text=element_text(size=30))+
-    #geom_vline(aes(xintercept = 0),linetype="dotted")+
-    #geom_hline(aes(yintercept = 0),linetype="dotted")+
-    theme(panel.background = element_rect(fill='white', colour='black'),
-          panel.grid=element_blank(),
-          axis.title = element_text(color='black',size=34),
-          axis.ticks.length = unit(0.4,"lines"), axis.ticks = element_line(color='black'),
-          axis.line = element_line(colour = "black"),
-          axis.title.x=element_text(colour='black', size=34),
-          axis.title.y=element_text(colour='black', size=34),
-          axis.text=element_text(colour='black',size=28),
-          legend.title=element_text(size = 24,face = "bold"),
-          legend.text=element_text(size=20),
-          legend.key=element_blank(),legend.position = c('left'),
-          legend.background = element_rect(colour = "black"),
-          legend.key.height=unit(1,"cm")) +
-    guides(fill = guide_legend(ncol = 1))
 
-
-
-  if (axis_num >= 3) {
-    p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
-      geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
-      ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
-      theme_bw()+
-      theme(axis.ticks.length = unit(0.4,"lines"),
-            axis.ticks = element_line(color='black'),
-            axis.line = element_line(colour = "black"),
-            axis.title.x=element_blank(),
-            axis.title.y=element_blank(),
-            axis.text.x=element_text(colour='black',size=20,angle = 45,
-                                     vjust = 1,hjust = 1,face = "bold"),
-            axis.text.y=element_blank(),
-            legend.position = "none")
-
-    p13<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[3]))) +
-      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
-      scale_fill_manual(values=col_values,name = "Group")+
+  if (!is.null(paired_group)) {
+    p12<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[2]))) +
+      geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
+      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[2]),2))),size=dot_size,pch = 21)+
+      scale_fill_manual(values=col_values,name = "Group") +
       xlab(pc1_text) +
-      ylab(pc3_text) +
+      ylab(pc2_text) +
       xlim(ggplot_build(p1)$layout$panel_scales_y[[1]]$range$range) +
-      ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
+      ylim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
       theme(text=element_text(size=30))+
+      #geom_vline(aes(xintercept = 0),linetype="dotted")+
+      #geom_hline(aes(yintercept = 0),linetype="dotted")+
       theme(panel.background = element_rect(fill='white', colour='black'),
             panel.grid=element_blank(),
             axis.title = element_text(color='black',size=34),
@@ -299,14 +356,73 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             legend.key.height=unit(1,"cm")) +
       guides(fill = guide_legend(ncol = 1))
 
-    p23<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[2]), !!dplyr::sym(axis_name[3]))) +
-      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[2]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
-      scale_fill_manual(values=col_values,name = "Group")+
-      xlab(pc2_text) +
-      ylab(pc3_text) +
-      xlim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
-      ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
+    if (axis_num >= 3) {
+      p13<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[3]))) +
+        geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
+        ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
+        scale_fill_manual(values=col_values,name = "Group")+
+        xlab(pc1_text) +
+        ylab(pc3_text) +
+        xlim(ggplot_build(p1)$layout$panel_scales_y[[1]]$range$range) +
+        ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
+        theme(text=element_text(size=30))+
+        theme(panel.background = element_rect(fill='white', colour='black'),
+              panel.grid=element_blank(),
+              axis.title = element_text(color='black',size=34),
+              axis.ticks.length = unit(0.4,"lines"), axis.ticks = element_line(color='black'),
+              axis.line = element_line(colour = "black"),
+              axis.title.x=element_text(colour='black', size=34),
+              axis.title.y=element_text(colour='black', size=34),
+              axis.text=element_text(colour='black',size=28),
+              legend.title=element_text(size = 24,face = "bold"),
+              legend.text=element_text(size=20),
+              legend.key=element_blank(),legend.position = c('left'),
+              legend.background = element_rect(colour = "black"),
+              legend.key.height=unit(1,"cm")) +
+        guides(fill = guide_legend(ncol = 1))
+
+      p23<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[2]), !!dplyr::sym(axis_name[3]))) +
+        geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
+        ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[2]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
+        scale_fill_manual(values=col_values,name = "Group")+
+        xlab(pc2_text) +
+        ylab(pc3_text) +
+        xlim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
+        ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
+        theme(text=element_text(size=30))+
+        theme(panel.background = element_rect(fill='white', colour='black'),
+              panel.grid=element_blank(),
+              axis.title = element_text(color='black',size=34),
+              axis.ticks.length = unit(0.4,"lines"), axis.ticks = element_line(color='black'),
+              axis.line = element_line(colour = "black"),
+              axis.title.x=element_text(colour='black', size=34),
+              axis.title.y=element_text(colour='black', size=34),
+              axis.text=element_text(colour='black',size=28),
+              legend.title=element_text(size = 24,face = "bold"),
+              legend.text=element_text(size=20),
+              legend.key=element_blank(),legend.position = c('left'),
+              legend.background = element_rect(colour = "black"),
+              legend.key.height=unit(1,"cm")) +
+        guides(fill = guide_legend(ncol = 1))
+    } 
+
+   if (paired_dot_line == FALSE) {
+      p12[['layers']] <- p12[['layers']][-1]
+      try(p13[['layers']] <- p13[['layers']][-1],silent=TRUE)
+      try(p23[['layers']] <- p23[['layers']][-1],silent=TRUE)
+    }    
+
+  }else{
+    p12<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[2]))) +
+      ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[2]),2))),size=dot_size,pch = 21)+
+      scale_fill_manual(values=col_values,name = "Group") +
+      xlab(pc1_text) +
+      ylab(pc2_text) +
+      xlim(ggplot_build(p1)$layout$panel_scales_y[[1]]$range$range) +
+      ylim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
       theme(text=element_text(size=30))+
+      #geom_vline(aes(xintercept = 0),linetype="dotted")+
+      #geom_hline(aes(yintercept = 0),linetype="dotted")+
       theme(panel.background = element_rect(fill='white', colour='black'),
             panel.grid=element_blank(),
             axis.title = element_text(color='black',size=34),
@@ -322,8 +438,55 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             legend.key.height=unit(1,"cm")) +
       guides(fill = guide_legend(ncol = 1))
 
+    if (axis_num >= 3) {
+      p13<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[1]), !!dplyr::sym(axis_name[3]))) +
+        ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[1]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
+        scale_fill_manual(values=col_values,name = "Group")+
+        xlab(pc1_text) +
+        ylab(pc3_text) +
+        xlim(ggplot_build(p1)$layout$panel_scales_y[[1]]$range$range) +
+        ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
+        theme(text=element_text(size=30))+
+        theme(panel.background = element_rect(fill='white', colour='black'),
+              panel.grid=element_blank(),
+              axis.title = element_text(color='black',size=34),
+              axis.ticks.length = unit(0.4,"lines"), axis.ticks = element_line(color='black'),
+              axis.line = element_line(colour = "black"),
+              axis.title.x=element_text(colour='black', size=34),
+              axis.title.y=element_text(colour='black', size=34),
+              axis.text=element_text(colour='black',size=28),
+              legend.title=element_text(size = 24,face = "bold"),
+              legend.text=element_text(size=20),
+              legend.key=element_blank(),legend.position = c('left'),
+              legend.background = element_rect(colour = "black"),
+              legend.key.height=unit(1,"cm")) +
+        guides(fill = guide_legend(ncol = 1))
+
+      p23<-ggplot(plotdata, aes(!!dplyr::sym(axis_name[2]), !!dplyr::sym(axis_name[3]))) +
+        ggiraph::geom_point_interactive(aes(fill=Group,tooltip = paste0(primary,'\n','x: ',round(!!dplyr::sym(axis_name[2]),2),'\n','y: ',round(!!dplyr::sym(axis_name[3]),2))),size=dot_size,pch = 21)+
+        scale_fill_manual(values=col_values,name = "Group")+
+        xlab(pc2_text) +
+        ylab(pc3_text) +
+        xlim(ggplot_build(p2)$layout$panel_scales_y[[1]]$range$range) +
+        ylim(ggplot_build(p3)$layout$panel_scales_y[[1]]$range$range) +
+        theme(text=element_text(size=30))+
+        theme(panel.background = element_rect(fill='white', colour='black'),
+              panel.grid=element_blank(),
+              axis.title = element_text(color='black',size=34),
+              axis.ticks.length = unit(0.4,"lines"), axis.ticks = element_line(color='black'),
+              axis.line = element_line(colour = "black"),
+              axis.title.x=element_text(colour='black', size=34),
+              axis.title.y=element_text(colour='black', size=34),
+              axis.text=element_text(colour='black',size=28),
+              legend.title=element_text(size = 24,face = "bold"),
+              legend.text=element_text(size=20),
+              legend.key=element_blank(),legend.position = c('left'),
+              legend.background = element_rect(colour = "black"),
+              legend.key.height=unit(1,"cm")) +
+        guides(fill = guide_legend(ncol = 1))
+    }    
   }
-
+  
 
   if (!is.null(ellipse)) {
     p12 <-p12+ggplot2::stat_ellipse(aes(color=Group,group=Group),level=ellipse)+scale_colour_manual(values=col_values)+guides(colour = "none")
@@ -419,16 +582,16 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   p12 <- p1 + p5 + p12 + p2 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   set.seed(seed)
-  p12_html=ggiraph::girafe(code = print(p12),width_svg = html_width,height_svg = html_height)
+  p12_html=ggiraph::girafe(ggobj = print(p12),width_svg = html_width,height_svg = html_height)
   if (axis_num >= 3) {
   p23 <- p2_r + p5 + p23 + p3 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   p13 <- p1 + p5 + p13 + p3 +
     patchwork::plot_layout(heights = c(1,4),widths = c(4,1),ncol = 2,nrow = 2)
   set.seed(seed)
-  p13_html=ggiraph::girafe(code = print(p13),width_svg = html_width,height_svg = html_height)
+  p13_html=ggiraph::girafe(ggobj = print(p13),width_svg = html_width,height_svg = html_height)
   set.seed(seed)
-  p23_html=ggiraph::girafe(code = print(p23),width_svg = html_width,height_svg = html_height)
+  p23_html=ggiraph::girafe(ggobj = print(p23),width_svg = html_width,height_svg = html_height)
   }
 
 
