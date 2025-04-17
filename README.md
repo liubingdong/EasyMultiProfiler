@@ -4,7 +4,7 @@
 <a href="man/figures/logo.png"><img src="man/figures/logo.png" width=150 align="right" ></a>
 ![](https://img.shields.io/badge/R%20language->=4.3.3-brightgreen.svg)
 ![](https://img.shields.io/badge/Mac%20OSX%20&%20Windows-Available-brightgreen.svg)
-![](https://img.shields.io/badge/Release%20version-0.2.7-brightgreen.svg)
+![](https://img.shields.io/badge/Release%20version-0.2.8-brightgreen.svg)
 
 The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-omics data analysis tool on the R platform. It facilitates various essential tasks related to microbiome, genome, and metabolite downstream analysis, providing a seamless workflow from start to finish.
 
@@ -47,7 +47,7 @@ options("download.file.method"="libcurl")
 options("url.method"="libcurl")
 ```
 
-<u>NOTE 2:</u>  If encountering issues related to missing compilation environments, users can resolve them by following the solution. For different R versions on the Windows platform, users need to install appropriate rtools to support the necessary compile environment (eg. for R 4.3.x need RTool4.3, for R 4.4.x need RTool4.4, [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). For Mac os  platform, users could install gfortran([click here ~ 242MB](https://github.com/R-macos/gcc-12-branch/releases)). Afterward, simply restart computer and re-try below:
+<u>NOTE 2:</u>  If encountering issues related to missing compilation environments, users can resolve them by following the solution. For different R versions on the Windows platform, users need to install appropriate rtools to support the necessary compile environment (eg. for R 4.3.x need RTool43, for R 4.4.x need RTool44,for R 4.5.x need RTool45 [click here ~ 400MB](https://mirrors.tuna.tsinghua.edu.cn/CRAN/)). For Mac os  platform, users could install gfortran([click here ~ 242MB](https://github.com/R-macos/gcc-12-branch/releases)). Afterward, simply restart computer and re-try below:
 
 ```R
 pak::pak("liubingdong/EasyMultiProfiler")
@@ -94,6 +94,20 @@ The EasyMultiProfiler package is continuously being updated with more analysis a
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
+
+**Release Notes for EMP 0.2.8**
+
+1. Performance Optimization
+
+   - Significant speed improvements implemented in the `EMP_diff_analysis` module
+
+2. Enhanced Visualization Capabilities
+
+   - Added new customizable parameters to `EMP_sankey_plot` for greater visualization flexibility
+
+3. New Statistical Functionality
+
+   - Implemented paired-test support in both `EMP_diff_analysis ` and `EMP_boxplot`
 
 ### Usage and tutorial
 For more details, please refer to the tutorial:
