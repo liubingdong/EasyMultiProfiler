@@ -115,7 +115,11 @@ For more details, please refer to the tutorial:
 Website:  [**Source 1**](http://easymultiprofiler.xielab.net)  [**Source 2**](https://liubingdong.github.io/EasyMultiProfiler_tutorial/)  [**Source 3**](https://main--gorgeous-smakager-db1548.netlify.app/) 
 
 ### Acknowledge
-This package integrates multiple widely-used tools, and we sincerely acknowledge their authors for their valuable contributions. Special thanks to [**Prof. Guangchuang Yu**](https://github.com/YuLab-SMU)  (Southern Medical University, China) for his guidance. We strongly recommend citing the original publications of the corresponding tools when using this package.
+This package integrates multiple widely used tools, and we sincerely acknowledge their authors for their valuable contributions. We strongly recommend citing the original publications of the corresponding tools when using this package. Special thanks to [**Prof. Guangchuang Yu**](https://github.com/YuLab-SMU)  (Southern Medical University, China) for his guidance. If **EMP** helps your research work. Please cite the papers below:
+
+EasyMultiProfiler: An Efficient Multi-Omics Data Integration and Analysis Workflow for Microbiome Research doi: https://doi.org/10.1101/2025.04.17.649266
+
+EasyMicroPlot : An Efficient and Convenient R Package in Microbiome Downstream Analysis and Visualization for Clinical Study. Frontiers in Genetics. doi:  https://doi.org/10.3389/fgene.2021.803627
 
 ### Contributing
 We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
