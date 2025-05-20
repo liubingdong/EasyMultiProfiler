@@ -625,7 +625,7 @@ enhance_print <- function(EMPT, ..., n = NULL, width = NULL,
         select_col <- ifelse(assay_dim[1]<20,assay_dim[1],20)
         select_row <- ifelse(assay_dim[2]<20,assay_dim[2],20)
         
-        x <- assay(EMPT)[1:select_row,1:select_col] %>% t() %>% as.data.frame() %>%
+        x <- assay(EMPT)[1:select_row,1:select_col,drop = FALSE] %>% t() %>% as.data.frame() %>%
           tibble::rownames_to_column('primary') %>% tibble::as_tibble()
       }else{
         x <- .get.assay.EMPT(EMPT)
