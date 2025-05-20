@@ -461,9 +461,13 @@ EMP_history <- function(obj) {
   total_tax_name <- c('feature','Kindom','Phylum','Class','Order','Family','Genus','Species','Strain')
   row_data <- rowData(EMPT) 
   row_name <- row_data|> colnames()
-  # check the two example in the last column to confirm the tax anotation method
-  flag <- all(str_count(row_data[1,length(row_name)],sep) == which(total_tax_name %in%  row_name[length(row_name)]) -2,
-              str_count(row_data[2,length(row_name)],sep) == which(total_tax_name %in%  row_name[length(row_name)]) -2)
+  # check the example in the last column to confirm the tax anotation method
+  if (nrow(EMPT) == 1) {
+    flag <- all(str_count(row_data[1,length(row_name)],sep) == which(total_tax_name %in%  row_name[length(row_name)]) -2)
+  }else{
+    flag <- all(str_count(row_data[1,length(row_name)],sep) == which(total_tax_name %in%  row_name[length(row_name)]) -2,
+                str_count(row_data[2,length(row_name)],sep) == which(total_tax_name %in%  row_name[length(row_name)]) -2)
+  }
   return(flag)
 }
 
