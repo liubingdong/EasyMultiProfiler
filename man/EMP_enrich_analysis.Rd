@@ -19,7 +19,7 @@ EMP_enrich_analysis(
   species = "all",
   OrgDb = NULL,
   keyType = "entrezid",
-  ont = if (method == "go") "MF" else "DO",
+  ont = if (method == "go") "MF" else "HDO",
   organism = if (method == "reactome") "human" else "Homo sapiens",
   ...
 )
@@ -53,7 +53,7 @@ EMP_enrich_analysis(
 
 \item{keyType}{For KEGG analysis, keyType include ko, ec, cpd, entrezid. For Go analysis, keyType include entrezid and symbol.}
 
-\item{ont}{For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".}
+\item{ont}{For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".}
 
 \item{organism}{For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".}
 
@@ -118,7 +118,7 @@ MAE |>
   EMP_assay_extract(experiment = 'host_gene') |>
   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
-  EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="DO",organism= 'hsa',readable=TRUE) |>
+  EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="HDO",organism= 'hsa',readable=TRUE) |>
   EMP_enrich_dotplot(show=5)
 
 ## Reactome analysis

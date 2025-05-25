@@ -108,7 +108,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
                    ont = "MF"),
   reactome.params = list(organism = "human"),
   wikipathway.params = list(organism = "Homo sapiens"),
-  do.params = list(ont = "DO",
+  do.params = list(ont = "HDO",
                    organism = "hsa"),
   ...){
   method <- tolower(method)
@@ -221,7 +221,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.
 #' @param species A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/
 #' @param OrgDb OrgDb in Go analysis.
-#' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".
+#' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
 #' @param ... Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[ReactomePA]{enrichPathway}}, \code{\link[DOSE]{enrichDO}}.
 #' @return EMPT object
@@ -276,7 +276,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #'   EMP_assay_extract(experiment = 'host_gene') |>
 #'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
-#'   EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="DO",organism= 'hsa',readable=TRUE) |>
+#'   EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="HDO",organism= 'hsa',readable=TRUE) |>
 #'   EMP_enrich_dotplot(show=5)
 #' 
 #' ## Reactome analysis
@@ -293,7 +293,7 @@ EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500, action=
                                TERM2NAME = NA,
                                KEGG_Type='KEGG',species = "all", # kegg.params
                                OrgDb = NULL, keyType = "entrezid", # go.params
-                               ont = if (method == "go") "MF" else "DO", # go.params and do.params
+                               ont = if (method == "go") "MF" else "HDO", # go.params and do.params
                                organism = if (method == "reactome") "human" else "Homo sapiens", # wikipathway.params and reactome.params
                                ...){
   kegg.params = list(keyType = keyType,
