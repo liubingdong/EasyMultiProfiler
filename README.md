@@ -121,6 +121,10 @@ This package integrates multiple widely used tools, and we sincerely acknowledge
 
 - EasyMicroPlot : An Efficient and Convenient R Package in Microbiome Downstream Analysis and Visualization for Clinical Study. Frontiers in Genetics. doi:  https://doi.org/10.3389/fgene.2021.803627
 
+### More Awesome Tools
+- aplot: Simplifying the creation of complex graphs to visualize associations across diverse data types. doi: https://doi.org/10.1016/j.xinn.2025.100958
+- Using clusterProfiler to characterize multiomics data. Nature protocols doi: https://doi.org/10.1038/s41596-024-01020-z
+
 ### Contributing
 We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
 
