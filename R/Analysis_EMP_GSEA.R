@@ -377,7 +377,7 @@ get_enrich_data <- function(method = "kegg", geneList,
 #' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.
 #' @param species A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/
 #' @param OrgDb OrgDb in Go analysis.
-#' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".
+#' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
 #' @param ... Further parameters passed to \code{\link[clusterProfiler]{GSEA}} for KEGG, \code{\link[clusterProfiler]{gseGO}} for Go, \code{\link[ReactomePA]{gsePathway}} for reactome and \code{\link[DOSE]{gseDO}} for DOSE.
 #' @return EMPT object
@@ -445,7 +445,7 @@ get_enrich_data <- function(method = "kegg", geneList,
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
 #'   EMP_GSEA_analysis(method='log2FC',
 #'                     organism='hsa',
-#'                     enrich_method = 'do') 
+#'                     enrich_method = 'HDO') 
 #' 
 #' ## Visualization
 #' MAE |>

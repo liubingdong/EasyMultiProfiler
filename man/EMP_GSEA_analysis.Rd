@@ -77,7 +77,7 @@ EMP_GSEA_analysis(
 
 \item{keyType}{For KEGG analysis, keyType include ko, ec, cpd, entrezid. For Go analysis, keyType include entrezid and symbol.}
 
-\item{ont}{For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont only support "DO".}
+\item{ont}{For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".}
 
 \item{organism}{For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".}
 
@@ -155,7 +155,7 @@ MAE |>
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
   EMP_GSEA_analysis(method='log2FC',
                     organism='hsa',
-                    enrich_method = 'do') 
+                    enrich_method = 'HDO') 
 
 ## Visualization
 MAE |>

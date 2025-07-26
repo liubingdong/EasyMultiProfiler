@@ -276,7 +276,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #'   EMP_assay_extract(experiment = 'host_gene') |>
 #'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
-#'   EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="HDO",organism= 'hsa',readable=TRUE) |>
+#'   EMP_enrich_analysis(pvalue<0.05,method = 'HDO',ont="HDO",organism= 'hsa',readable=TRUE) |>
 #'   EMP_enrich_dotplot(show=5)
 #' 
 #' ## Reactome analysis
