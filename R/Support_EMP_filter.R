@@ -181,7 +181,7 @@
       check_features <- 1
     }
   }else{
-    check_features <- ifelse((total_sample_num - length(real_feature)) == 0,0,1)
+    check_features <- ifelse((total_feature_num - length(real_feature)) == 0,0,1)
   }
 
   # for debug
