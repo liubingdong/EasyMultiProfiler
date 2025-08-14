@@ -94,7 +94,7 @@ setMethod(".get.deposit_info.EMPT","EMPT",function(obj){
 
 #' Extract the existed result or inject external result into EMPT
 #'
-#' @param obj EMPT or EMP object.
+#' @param obj EMPT
 #' @param info A character string. Result or analysis name in the EMPT or EMP object.
 #' @export
 #' @rdname EMP_result
@@ -251,11 +251,6 @@ setMethod("EMP_result<-","EMPT",function(obj,value_name,affect_when_sample_chang
  obj@deposit[[value_name]] <- value
  return(obj)
 })
-
-
-
-
-
 
 setGeneric(".get.deposit_append.EMPT",function(obj,info) standardGeneric(".get.deposit_append.EMPT"))
 setMethod(".get.deposit_append.EMPT","EMPT",function(obj,info){

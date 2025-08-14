@@ -861,3 +861,97 @@ top_detect<- function(x, n, type = 'top',index=TRUE) {
   }
 
 }
+
+#' Inject external result into EMPT
+#'
+#' @param obj EMPT
+#' @param value A data frame or tibble from the external result.
+#' @param value_name A character string. Set the name of external result to inject into EMPT project.
+#' @param affect_when_sample_changed 0 or 1. 0 means that the result is not influenced by sample changes, while 1 means the contrary.
+#' @param affect_when_feature_changed 0 or 1. 0 means that the result is not influenced by feature changes, while 1 means the contrary.
+#' @param attribute A character string inculding primary, feature, all. This parameter indicates whether the result is about primary, feature or all.
+#' @param attribute2 A character string inculding normal, diagonal or none. This parameter indicates the format of result.
+#' @param source A character string. Set the name of the analysis which generate the result. (default: user_import)
+#' @rdname EMP_inject
+#'
+#' @export
+#'
+#' @examples
+#' data(MAE)
+#'
+#' ## inject external result into EMPT
+#' ### get a EMPT object
+#' MAE |> 
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_collapse(estimate_group = 'Genus',method = 'sum',
+#'                collapse_by = 'row',action = 'add') -> obj  
+#' 
+#' ### get the raw data from the EMPT
+#' MAE |> 
+#'   EMP_assay_extract('taxonomy') |>
+#'   EMP_collapse(estimate_group = 'Genus',method = 'sum',
+#'                collapse_by = 'row',action = 'get') -> assay_data  
+#' 
+#' ### caculate the result from other packages
+#' assay_data <- assay_data |> tibble::column_to_rownames('primary')
+#' shannon_index <- vegan::diversity(assay_data,index = 'shannon') 
+#' new_result <- tibble::tibble(primary=names(shannon_index),new_shannon=shannon_index)
+#' 
+#' ### inject the new result into EMPT object
+#' obj |>
+#'   EMP_inject(value = new_result,value_name = 'new_alpha',
+#'              affect_when_sample_changed=0,
+#'              affect_when_feature_changed=1,
+#'              attribute='primary',
+#'              attribute2='normal',source='user_import') |>
+#'   EMP_filter(sample_condition  = new_shannon >2)
+EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_when_feature_changed=1,attribute,attribute2='normal',source='user_import'){
+  deposilt_info <- .get.deposit_info.EMPT(obj)
+  
+  if (attribute2 == 'normal') {
+    check_attribute <- attribute %in% (value %>% as.data.frame() %>% colnames())
+    if (!check_attribute) {
+      stop("When attribute2 == 'normal', new value must contain primary or feature or attribute must be none!")
+    }
+  }else if(attribute2 == 'diagonal'){
+    check_diagonal <- colnames(as.data.frame(value)) == rownames(as.data.frame(value))
+    if (!check_diagonal) {
+      stop("New value is not a diagonal matrix or data.frame,please check!")
+    }
+  }else if(attribute2 == 'none'){
+    if (attribute != 'all') {
+      stop("When attribute2 == 'none', attribute must be all!")
+    }
+  }else {
+    stop("Parameter attribute2 must be normal,diagonal or none!")
+  }
+  
+  
+  if (!affect_when_sample_changed %in% 0:1) {
+    stop("Paramter affect_when_sample_changed must be 0 or 1!")
+  }
+  
+  if (!affect_when_feature_changed %in% 0:1) {
+    stop("Paramter affect_when_feature_changed must be 0 or 1!")
+  }
+  
+  if (is.null(source)) {
+    source <- 'user_import'
+  }
+  
+  new_value_info <- data.frame(Result=value_name,
+                               affect_when_sample_changed=affect_when_sample_changed,
+                               affect_when_feature_changed=affect_when_feature_changed,
+                               attribute=attribute,
+                               attribute2=attribute2,
+                               source=source)
+  if (value_name %in% deposilt_info$Result) {
+    stop('An analysis result named ',value_name,' already exists in the data!')
+  }else{
+    deposilt_info %<>% dplyr::bind_rows(new_value_info)
+  }
+  
+  obj@deposit_info <- deposilt_info
+  obj@deposit[[value_name]] <- value
+  return(obj)  
+}
