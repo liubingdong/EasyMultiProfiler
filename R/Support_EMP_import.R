@@ -431,7 +431,11 @@ EMP_normal_import <- function(file=NULL,data=NULL,sampleID=NULL,dfmap=NULL,assay
     data[,sampleID][is.na(data[,sampleID])] <- 0
   }
 
-  data <- data[rowSums(data[,sampleID]) != 0,] # filter away empty feature!
+  if (length(sampleID) == 1) {
+    data <- data[data[,sampleID] != 0,] # rowSums not support array of one dimensions!
+  }else{
+    data <- data[rowSums(data[,sampleID]) != 0,] # filter away empty feature!
+  }  
   rownames(data) <- NULL # necessary!
   
   row_data <- data %>% dplyr::select(!all_of(!!sampleID))
