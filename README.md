@@ -117,7 +117,7 @@ Website:  [**Source 1**](http://easymultiprofiler.xielab.net)  [**Source 2**](ht
 ### Acknowledge
 This package integrates multiple widely used tools, and we sincerely acknowledge their authors for their valuable contributions. Special thanks to [**Prof. Guangchuang Yu**](https://github.com/YuLab-SMU)  (Southern Medical University, China) for his guidance. If EMP contributes to your research, please consider citing the following papers. Your recognition is invaluable to our continued work.
 
-- (Preprint) EasyMultiProfiler: An Efficient Multi-Omics Data Integration and Analysis Workflow for Microbiome Research doi: https://doi.org/10.1101/2025.04.17.649266
+- EasyMultiProfiler: An Efficient Multi-Omics Data Integration and Analysis Workflow for Microbiome Research doi: https://doi.org/10.1007/s11427-025-3035-0
 
 - EasyMicroPlot : An Efficient and Convenient R Package in Microbiome Downstream Analysis and Visualization for Clinical Study. Frontiers in Genetics. doi:  https://doi.org/10.3389/fgene.2021.803627
 
@@ -126,5 +126,5 @@ This package integrates multiple widely used tools, and we sincerely acknowledge
 - Using clusterProfiler to characterize multiomics data. Nature protocols doi: https://doi.org/10.1038/s41596-024-01020-z
 
 ### Contributing
-We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues)). 
+We welcome any contribution, including but not limited to code, ideas, and tutorials. Please report errors and questions on GitHub [**Issues**](https://github.com/liubingdong/EasyMultiProfiler/issues). 
 
