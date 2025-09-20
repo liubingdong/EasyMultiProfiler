@@ -345,7 +345,7 @@ EMP_function_import <- function(file=NULL,data=NULL,type,assay_name=NULL,humann_
     }
     colnames(temp)[1] <- 'feature'
 
-    if (any(duplicated(data[,1]))) {
+    if (any(duplicated(temp[,1]))) {
       stop("Duplicated ko or ec name, please check the data!")
     }
 

@@ -28,7 +28,7 @@
 
 .EMP_filter <- function(obj,sample_condition,feature_condition,
                        filterSample=NULL,filterFeature=NULL,experiment=NULL,
-                       show_info=NULL,action='select',keep_result=FALSE){
+                       show_info=NULL,action='select',remove_zero_sum_sample=FALSE,remove_zero_sum_feature=FALSE,keep_result=FALSE){
   primary <- feature <- NULL
   #call <- match.call()
   sample_condition <- dplyr::enquo(sample_condition)
@@ -67,11 +67,13 @@
 
   ## select sample
   obj %>% EMP_coldata_extract() %>%
-    dplyr::filter(!!sample_condition) %>% dplyr::pull(primary) -> sample_id
+    dplyr::filter(!!sample_condition) %>% 
+    dplyr::pull(primary) -> sample_id
 
   ## select feature
   obj %>% EMP_rowdata_extract() %>%
-    dplyr::filter(!!feature_condition) %>% dplyr::pull(feature) -> feature_id
+    dplyr::filter(!!feature_condition) %>% 
+    dplyr::pull(feature) -> feature_id
 
   if (action == 'select') {
     if (!is.null(filterSample)) {
@@ -99,12 +101,42 @@
     stop('Paramter action should be select or kick!')
   }
 
+  # Remove zero-sum features
+  if (remove_zero_sum_sample == TRUE | remove_zero_sum_feature == TRUE) {
+
+    if (!.get.assay_name.EMPT(obj) %in% c('counts','relative','integer')) {
+      EMP_message("This assay is not count, relative abundance, or integer data. Thus, using the remove_zero_sum parameter is not recommended!",color = 31,order = 1,show='warning')
+    }
+
+    assay_data<- assay(obj)[real_feature,real_sample]
+    
+    check_zero_result <- check_zero(mat = assay_data,
+                                  check_zero_sum_sample=remove_zero_sum_sample,
+                                  check_zero_sum_feature=remove_zero_sum_feature)
+      
+    while (check_zero_result$flag==TRUE) {
+      filter_assay_result <- filter_zero_martrx(mat = assay_data,
+                                                remove_zero_sum_sample = remove_zero_sum_sample,
+                                                remove_zero_sum_feature = remove_zero_sum_feature,
+                                                real_sample = real_sample,
+                                                real_feature = real_feature,
+                                                filterSample = check_zero_result$no_zero_sample,
+                                                filterFeature = check_zero_result$no_zero_feature
+                                                )
+      assay_data <- filter_assay_result$final_mat
+      real_sample <- filter_assay_result$real_sample
+      real_feature <- filter_assay_result$real_feature
+      check_zero_result <- check_zero(assay_data,
+                                    check_zero_sum_sample=remove_zero_sum_sample,
+                                    check_zero_sum_feature=remove_zero_sum_feature)
+    }
+  }
+
   sample_filter_num<- total_sample_num - length(real_sample)
   feature_filter_num <- total_feature_num - length(real_feature)
 
-
   if (length(real_sample) == 0 | length(real_feature) == 0) {
-    warning('No sample or feature meet the condition, plz reset the parameter!')
+    warning("No sample or feature meet the condition, plz reset the parameter!")
   }else {
     if (check_obj == "MultiAssayExperiment") {
       deposit <- obj[real_feature,real_sample,,drop=FALSE]
@@ -362,6 +394,91 @@
 }
 
 
+
+check_zero_martrix <- function(mat, MARGIN,tol = 1e-10) {
+  # 处理空矩阵的情况
+  deposit <- list()
+  deposit$flag <- FALSE
+  deposit$zero_name < NULL
+  deposit$no_zero_name < NULL
+  
+  if (nrow(mat) == 0 | ncol(mat) == 0) {
+    stop("Empty assay happend!")
+  }
+  
+  # 计算行总和
+  sums <- apply(mat, MARGIN, function(x) sum(x))
+  # 使用容差比较，避免浮点数精度问题
+  switch (MARGIN,
+    `1` = {zero_name <- rownames(mat)[sums < tol]
+         deposit$zero_name <- zero_name
+         deposit$no_zero_name <- setdiff(rownames(mat),zero_name)
+        },
+    `2` = {zero_name <- colnames(mat)[sums < tol]
+         deposit$zero_name <- zero_name
+         deposit$no_zero_name <- setdiff(colnames(mat),zero_name)
+    }
+  )  
+  if (length(deposit$zero_name) > 0) {
+    deposit$flag <- TRUE
+  }
+  deposit$status <- MARGIN
+  return(deposit)
+}
+
+filter_zero_martrx <- function(mat,real_sample,real_feature,
+                               remove_zero_sum_sample=FALSE,remove_zero_sum_feature=FALSE,
+                               filterSample=NULL,filterFeature=NULL){
+  deposit <- list()
+  assay_data<- mat[real_feature,real_sample]
+  if (remove_zero_sum_sample == TRUE) {
+    if (is.null(filterSample)) {
+      no_zero_sample <- rownames(assay_data)[apply(assay_data, 2, function(x) sum(x) != 0)]
+    }else{
+      no_zero_sample <- filterSample
+    }
+    real_sample <- intersect(real_sample,no_zero_sample)
+  }
+  
+  if (remove_zero_sum_feature == TRUE) {
+    if (is.null(filterFeature)) {
+      no_zero_feature <- rownames(assay_data)[apply(assay_data, 1, function(x) sum(x) != 0)]
+    }else{
+      no_zero_feature <- filterFeature
+    }
+    real_feature <- intersect(real_feature,no_zero_feature)
+  }     
+  deposit$real_sample <- real_sample
+  deposit$real_feature <- real_feature
+  deposit$final_mat <- mat[real_feature,real_sample]
+  return(deposit)
+}
+
+
+check_zero <- function(mat,check_zero_sum_sample,check_zero_sum_feature){
+  deposit <- list()
+  check_zero_sample <- list()
+  check_zero_feature <- list()
+  check_zero_sample$flag <- FALSE
+  check_zero_feature$flag <- FALSE
+
+  if (check_zero_sum_sample==TRUE) {
+    check_zero_sample <- check_zero_martrix(mat,2)
+    deposit$no_zero_sample <- check_zero_sample$no_zero_name
+  }
+  if (check_zero_sum_feature==TRUE) {
+    check_zero_feature <- check_zero_martrix(mat,1)
+    deposit$no_zero_feature <- check_zero_feature$no_zero_name
+  }
+
+  deposit$flag <- any(check_zero_sample$flag,check_zero_feature$flag)
+
+  return(deposit)
+}
+
+
+
+
 #' Filer experssion or abundance data that match a condition
 #'
 #' @param obj EMPT object.
@@ -369,6 +486,8 @@
 #' @param feature_condition Expressions that return a logical value, and are defined in terms of the variables in rowdata. If multiple expressions are included, they are combined with the &，| operator. 
 #' @param filterSample A series of character strings. Select samples in the data exactly.
 #' @param filterFeature A series of character strings. Select samples in the data exactly.
+#' @param remove_zero_sum_sample Remove samples with zero counts in all features.(default:FALSE)
+#' @param remove_zero_sum_feature Remove features with zero counts in all samples.(default:FALSE)
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
 #' @param keep_result If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.
 #' @param show_info A character string. Set the class of EMPT to show properly.
@@ -405,7 +524,7 @@
 #'              filterSample = c('P11774','P31579'),action = 'kick') # Accurately kick samples based on satisfying sample_condition
 EMP_filter <- function(obj,sample_condition,feature_condition,
                        filterSample=NULL,filterFeature=NULL,experiment=NULL,
-                       show_info=NULL,action='select',keep_result=FALSE,use_cached=TRUE){
+                       show_info=NULL,action='select',remove_zero_sum_sample=FALSE,remove_zero_sum_feature=FALSE,keep_result=FALSE,use_cached=TRUE){
   call <- match.call()
   deposit <- NULL
   sample_condition <- dplyr::enquo(sample_condition)
@@ -414,8 +533,9 @@ EMP_filter <- function(obj,sample_condition,feature_condition,
     memoise::forget(.EMP_filter_m) %>% invisible()
   }  
   deposit <- .EMP_filter_m(obj=obj,sample_condition={{sample_condition}},feature_condition={{feature_condition}},
-                       filterSample=filterSample,filterFeature=filterFeature,experiment=experiment,
-                       show_info=show_info,action=action,keep_result=keep_result)
+                       filterSample=filterSample,filterFeature=filterFeature,
+                       remove_zero_sum_sample=remove_zero_sum_sample,remove_zero_sum_feature=remove_zero_sum_feature,
+                       experiment=experiment,show_info=show_info,action=action,keep_result=keep_result)
   if (is(obj,"MultiAssayExperiment")) {
     return(deposit)
   }else if (is(obj,"EMPT")) {

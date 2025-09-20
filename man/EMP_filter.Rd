@@ -13,6 +13,8 @@ EMP_filter(
   experiment = NULL,
   show_info = NULL,
   action = "select",
+  remove_zero_sum_sample = FALSE,
+  remove_zero_sum_feature = FALSE,
   keep_result = FALSE,
   use_cached = TRUE
 )
@@ -33,6 +35,10 @@ EMP_filter(
 \item{show_info}{A character string. Set the class of EMPT to show properly.}
 
 \item{action}{A character string. You can use the filterSample and filterFeature parameters in conjunction with this. The choice is whether to keep filterSample and filterFeature (select), or simply exclude them (kick).}
+
+\item{remove_zero_sum_sample}{Remove samples with zero counts in all features.(default:FALSE)}
+
+\item{remove_zero_sum_feature}{Remove features with zero counts in all samples.(default:FALSE)}
 
 \item{keep_result}{If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.}
 
