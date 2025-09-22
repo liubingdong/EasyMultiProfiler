@@ -250,7 +250,7 @@
       } 
     }
     
-    if (keep_result == TRUE | i %in% keep_result_real) {
+    if (all(keep_result == TRUE) | i %in% keep_result_real) {
        each_deposit_info$affect_when_sample_changed <- 0
        each_deposit_info$affect_when_feature_changed <- 0
     }
