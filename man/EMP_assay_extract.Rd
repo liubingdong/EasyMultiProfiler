@@ -6,7 +6,7 @@
 \usage{
 EMP_assay_extract(
   obj,
-  experiment,
+  experiment = "experiment",
   pattern_ref = "Name",
   pattern = NULL,
   use_cached = TRUE,

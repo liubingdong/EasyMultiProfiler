@@ -112,7 +112,7 @@
 #'   EMP_assay_extract('geno_ec',pattern = '1.1.1.1',pattern_ref = 'feature',exact = TRUE)
 #' MAE |>
 #'   EMP_assay_extract('geno_ko',pattern = 'mtlD',pattern_ref = 'Name',exact = FALSE)
-EMP_assay_extract <- function (obj,experiment,pattern_ref = 'Name',pattern = NULL,use_cached = TRUE,
+EMP_assay_extract <- function (obj,experiment='experiment',pattern_ref = 'Name',pattern = NULL,use_cached = TRUE,
                                exact=FALSE,action = 'add') {
   deposit <- NULL
   call <- match.call()
