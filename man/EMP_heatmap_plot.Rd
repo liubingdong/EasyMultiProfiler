@@ -31,6 +31,8 @@ EMP_heatmap.EMP_cor_analysis(
   tree_size = 0.1,
   show = "all",
   label_size = 4,
+  legend_bar = NULL,
+  border_color = "white",
   mytheme = "theme()"
 )
 
@@ -44,6 +46,8 @@ EMP_heatmap.WGCNA(
   tree_size = 0.1,
   show = "all",
   label_size = 4,
+  legend_bar = NULL,
+  border_color = "white",
   mytheme = "theme()"
 )
 
@@ -61,6 +65,8 @@ EMP_heatmap.EMP_assay_data(
   clust_method = "complete",
   tree_size = 0.1,
   label_size = 4,
+  legend_bar = NULL,
+  border_color = "white",
   mytheme = "theme()"
 )
 }
@@ -84,6 +90,16 @@ EMP_heatmap.EMP_assay_data(
 \item{show}{A character string. Show inluding all, sig and pvalue.}
 
 \item{label_size}{A number. Set the label size. (default:4)}
+
+\item{legend_bar}{Set the range for the legend color scale. Options include:
+\itemize{
+  \item \code{c(-1, 1)} - Manual limits (replace with desired values)
+  \item \code{"auto"} - Automatic calculation from data
+  \item \code{NULL} - Default ggplot2 behavior
+}
+Based on the `limits` parameter in \code{\link[ggplot2]{binned_scale}}.}
+
+\item{border_color}{Color of cell borders on heatmap. (default:white)}
 
 \item{mytheme}{Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.}
 
@@ -138,8 +154,17 @@ MAE |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) |>
   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') |> # collapse the data by group
-  EMP_heatmap_plot(rotate=TRUE,palette='Spectral')
+  EMP_heatmap_plot(rotate=TRUE,palette='Spectral') # More palette
 
+## Plot as the style from the pheatmap package
+MAE |>
+  EMP_assay_extract('geno_ec') |>
+  EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+  EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) |>
+  EMP_decostand(method = 'standardize') |>
+  EMP_heatmap_plot(rotate=FALSE,palette='Spectral',
+                   border_color='grey60',
+                   legend_bar='auto')
 ## for cor analysis
 k1 <- MAE |>
   EMP_assay_extract('taxonomy') |>

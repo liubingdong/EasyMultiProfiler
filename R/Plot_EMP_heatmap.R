@@ -9,6 +9,14 @@
 #' @param clust_method A character string. More see fastcluster::hclust (default: complete) 
 #' @param label_size A number. Set the label size. (default:4) 
 #' @param tree_size A number between 0 and 1. Set the clust tree size. (default:0.1) 
+#' @param legend_bar Set the range for the legend color scale. Options include:
+#'   \itemize{
+#'     \item \code{c(-1, 1)} - Manual limits (replace with desired values)
+#'     \item \code{"auto"} - Automatic calculation from data
+#'     \item \code{NULL} - Default ggplot2 behavior
+#'   }
+#'   Based on the `limits` parameter in \code{\link[ggplot2]{binned_scale}}.
+#' @param border_color Color of cell borders on heatmap. (default:white) 
 #' @section Detaild about Palettes:
 #' The following palettes are available for use with these scales:
 #' \describe{
@@ -28,7 +36,7 @@
 #'
 EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","darkred"),
                             clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,
-                            show='all',label_size=4,mytheme = 'theme()'){
+                            show='all',label_size=4,legend_bar=NULL,border_color='white',mytheme = 'theme()'){
   var1 <- var2 <- coefficient <- EMP <- NULL
   call <- match.call()
   if (is(obj,"EMP")) {
@@ -98,17 +106,28 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
   df.label<-df$rp
 
 
+  # set the range of legend bar
+  if (is.null(legend_bar)) {
+    limits_value <- NULL
+  }else if (is.numeric(legend_bar) & length(legend_bar) == 2) {
+    limits_value <- legend_bar
+  }else if (legend_bar[1] == 'auto') {
+    limits_value <- legend_bar_set(df$coefficient)
+  }else{
+    EMP_message("legend_bar only support NULL, 'auto' and numeric vector!",color = 31,order = 1,show='stop')
+  }
+
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-      geom_tile(color = "white") +
-      geom_text(size=label_size) + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_tile(color = border_color) +
+      geom_text(size=label_size) + scale_fill_steps2(limits = limits_value,low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-      geom_tile(color = "white") +
-      geom_text(size=label_size) + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+      geom_tile(color = border_color) +
+      geom_text(size=label_size) + scale_fill_steps(limits = limits_value,low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
@@ -119,16 +138,16 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
                                     'PuBuGn', 'PuRd', 'Purples', 'RdPu', 'Reds', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd')
     if (check_palette) {
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-        geom_tile(color = "white") +
-        geom_text(size=label_size) + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_tile(color = border_color) +
+        geom_text(size=label_size) + scale_fill_distiller(limits = limits_value,palette=palette) +  labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
 
     }else{
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-        geom_tile(color = "white") +
-        geom_text(size=label_size) + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
+        geom_tile(color = border_color) +
+        geom_text(size=label_size) + scale_fill_steps(limits = limits_value,low = 'white',high = palette) + labs(x=experiment_name[1],y=experiment_name[2],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
@@ -164,13 +183,21 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
 #' @param clust_method A character string. More see fastcluster::hclust (default: complete) 
 #' @param label_size A number. Set the label size. (default:4) 
 #' @param tree_size A number between 0 and 1. Set the clust tree size. (default:0.1) 
+#' @param legend_bar Set the range for the legend color scale. Options include:
+#'   \itemize{
+#'     \item \code{c(-1, 1)} - Manual limits (replace with desired values)
+#'     \item \code{"auto"} - Automatic calculation from data
+#'     \item \code{NULL} - Default ggplot2 behavior
+#'   }
+#'   Based on the `limits` parameter in \code{\link[ggplot2]{binned_scale}}.
+#' @param border_color Color of cell borders on heatmap. (default:white) 
 #' @rdname EMP_heatmap_plot
 #' @importFrom dplyr mutate
 #'
 #'
 EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
                                 clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,
-                                show='all',label_size=4,mytheme = 'theme()'){
+                                show='all',label_size=4,legend_bar=NULL,border_color='white',mytheme = 'theme()'){
   WGCNA_color <- WGCNA_module_elements <- `.` <- var2 <- var1 <- coefficient <- NULL
   call <- match.call()
   if (is(obj,"EMP")) {
@@ -253,18 +280,28 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
     df$var2 <- factor(df$var2,levels=var2_order)
   }
 
+  # set the range of legend bar
+  if (is.null(legend_bar)) {
+    limits_value <- NULL
+  }else if (is.numeric(legend_bar) & length(legend_bar) == 2) {
+    limits_value <- legend_bar
+  }else if (legend_bar[1] == 'auto') {
+    limits_value <- legend_bar_set(df$coefficient)
+  }else{
+    EMP_message("legend_bar only support NULL, 'auto' and numeric vector!",color = 31,order = 1,show='stop')
+  }
 
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-      geom_tile(color = "white") +
-      geom_text(size=label_size) + scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+      geom_tile(color = border_color) +
+      geom_text(size=label_size) + scale_fill_steps2(limits = limits_value,low = palette[1], mid=palette[2],high = palette[3],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-      geom_tile(color = "white") +
-      geom_text(size=label_size) + scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+      geom_tile(color = border_color) +
+      geom_text(size=label_size) + scale_fill_steps(limits = limits_value,low = palette[1],high = palette[2],show.limits = T) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
@@ -275,16 +312,16 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
                                     'PuBuGn', 'PuRd', 'Purples', 'RdPu', 'Reds', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd')
     if (check_palette) {
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-        geom_tile(color = "white") +
-        geom_text(size=label_size) + scale_fill_distiller(palette=palette) +  labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+        geom_tile(color = border_color) +
+        geom_text(size=label_size) + scale_fill_distiller(limits = limits_value,palette=palette) +  labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
 
     }else{
       p1 <- ggplot(df,aes(x=var1,y=var2,fill=coefficient,label=df.label))+
-        geom_tile(color = "white") +
-        geom_text(size=label_size) + scale_fill_steps(low = 'white',high = palette) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
+        geom_tile(color = border_color) +
+        geom_text(size=label_size) + scale_fill_steps(limits = limits_value,low = 'white',high = palette) + labs(x=experiment_name[2],y=experiment_name[1],fill='coefficient') +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
         eval(parse(text = paste0(mytheme)))
@@ -333,6 +370,14 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 #' @param bySample A boolean. Whether the function decostand by the sample or feature. Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)
 #' @param logbase An interger. The logarithm base used in method = "log".(default=2). Detaled information in the EMP_decostand. (Only activated for EMP_assay_data)
 #' @param pseudocount A number. The logarithm pseudocount used in method = "clr" or "alr".(default=0.0000001). (Only activated for EMP_assay_data)
+#' @param legend_bar Set the range for the legend color scale. Options include:
+#'   \itemize{
+#'     \item \code{c(-1, 1)} - Manual limits (replace with desired values)
+#'     \item \code{"auto"} - Automatic calculation from data
+#'     \item \code{NULL} - Default ggplot2 behavior
+#'   }
+#'   Based on the `limits` parameter in \code{\link[ggplot2]{binned_scale}}.
+#' @param border_color Color of cell borders on heatmap. (default:white) 
 #' @param mytheme Modify components of a theme according to the \code{\link[ggplot2]{theme}} and \code{\link[ggplot2]{ggtheme}}.
 #' @rdname EMP_heatmap_plot
 #' @importFrom forcats fct_relevel
@@ -348,7 +393,7 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
 EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkred"),rotate=FALSE,
                                        scale=NULL,bySample='default',logbase =2,pseudocount=0.0000001,
                                        clust_row=FALSE,clust_col=FALSE,dist_method='euclidean',clust_method='complete',tree_size=0.1,label_size=4,
-                                       mytheme = 'theme()'){
+                                       legend_bar=NULL,border_color='white',mytheme = 'theme()'){
   call <- match.call()
 
   primary <- value <- NULL
@@ -405,18 +450,29 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
     }
   }
 
+  # set the range of legend bar
+  if (is.null(legend_bar)) {
+    limits_value <- NULL
+  }else if (is.numeric(legend_bar) & length(legend_bar) == 2) {
+    limits_value <- legend_bar
+  }else if (legend_bar[1] == 'auto') {
+    limits_value <- legend_bar_set(df$value)
+  }else{
+    EMP_message("legend_bar only support NULL, 'auto' and numeric vector!",color = 31,order = 1,show='stop')
+  }
+
   if (length(palette) >= 3) {
     p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
-      geom_tile(color = "white") +
-      scale_fill_steps2(low = palette[1], mid=palette[2],high = palette[3],midpoint = median(df$value),show.limits = T) + 
+      geom_tile(color = border_color) +
+      scale_fill_steps2(limits = limits_value,low = palette[1], mid=palette[2],high = palette[3],midpoint = median(df$value),show.limits = T) + 
       xlab(NULL) + ylab(NULL) +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
       eval(parse(text = paste0(mytheme)))
   }else if(length(palette) == 2){
     p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
-      geom_tile(color = "white") +
-      scale_fill_steps(low = palette[1],high = palette[2],show.limits = T) + 
+      geom_tile(color = border_color) +
+      scale_fill_steps(limits = limits_value,low = palette[1],high = palette[2],show.limits = T) + 
       xlab(NULL) + ylab(NULL) +
       theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
       #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
@@ -428,8 +484,8 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
                                     'PuBuGn', 'PuRd', 'Purples', 'RdPu', 'Reds', 'YlGn', 'YlGnBu', 'YlOrBr', 'YlOrRd')
     if (check_palette) {
       p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
-        geom_tile(color = "white") +
-        scale_fill_distiller(palette=palette) + 
+        geom_tile(color = border_color) +
+        scale_fill_distiller(limits = limits_value,palette=palette) + 
         xlab(NULL) + ylab(NULL) + 
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
@@ -437,8 +493,8 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
       
     }else{
       p1 <- ggplot(df,aes(x=!!sym(xy_name[1]),y=!!sym(xy_name[2]),fill=value)) +
-        geom_tile(color = "white") +
-        scale_fill_steps(low = 'white',high = palette) + 
+        geom_tile(color = border_color) +
+        scale_fill_steps(limits = limits_value,low = 'white',high = palette) + 
         xlab(NULL) + ylab(NULL) +
         theme_minimal() +theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
         #guides(fill = guide_colorsteps(title.position = "top",show.limits = TRUE), color="none") +
@@ -476,3 +532,10 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
 }  
 
 
+legend_bar_set<- function(x) {
+  max_value <- max(x) |> abs()
+  min_value <- min(x) |> abs()
+  value <- max(max_value,min_value) |> ceiling()
+  vec <- c(-value,value)
+  return(vec)
+}

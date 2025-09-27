@@ -129,8 +129,17 @@ setMethod(".get.plot_info.EMP<-","EMP",function(obj,value){
 #'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
 #'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) |>
 #'   EMP_collapse(estimate_group = 'Group',collapse_by = 'col') |> # collapse the data by group
-#'   EMP_heatmap_plot(rotate=TRUE,palette='Spectral')
+#'   EMP_heatmap_plot(rotate=TRUE,palette='Spectral') # More palette
 #'
+#' ## Plot as the style from the pheatmap package
+#' MAE |>
+#'   EMP_assay_extract('geno_ec') |>
+#'   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
+#'   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) |>
+#'   EMP_decostand(method = 'standardize') |>
+#'   EMP_heatmap_plot(rotate=FALSE,palette='Spectral',
+#'                    border_color='grey60',
+#'                    legend_bar='auto')
 #' ## for cor analysis
 #' k1 <- MAE |>
 #'   EMP_assay_extract('taxonomy') |>
