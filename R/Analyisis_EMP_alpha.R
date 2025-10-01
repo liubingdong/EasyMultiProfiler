@@ -74,7 +74,7 @@ EMP_alpha_analysis <- function(obj,experiment,use_cached = TRUE,action='add',...
 
 
   if (use_cached == FALSE) {
-    memoise::forget(.EMP_alpha_analysis) %>% invisible()
+    memoise::forget(EMP_alpha_analysis_m) %>% invisible()
   }
 
   ## only integer, counts and relative data could used in alpha_analysis
