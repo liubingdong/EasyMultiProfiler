@@ -326,7 +326,7 @@ get_enrich_data <- function(method = "kegg", geneList,
   if (is.null(data)) {
     stop('GSEA based on foldchange need EMP_diff_analysis first!')
   }else{
-    data %<>% dplyr::filter({{ condition }})
+    data %<>% dplyr::filter(!!condition)
   }
   
   data %<>% tidyr::drop_na() %>%
@@ -379,6 +379,7 @@ get_enrich_data <- function(method = "kegg", geneList,
 #' @param OrgDb OrgDb in Go analysis.
 #' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to \code{\link[clusterProfiler]{GSEA}} for KEGG, \code{\link[clusterProfiler]{gseGO}} for Go, \code{\link[ReactomePA]{gsePathway}} for reactome and \code{\link[DOSE]{gseDO}} for DOSE.
 #' @return EMPT object
 #' @export
@@ -445,7 +446,7 @@ get_enrich_data <- function(method = "kegg", geneList,
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
 #'   EMP_GSEA_analysis(method='log2FC',
 #'                     organism='hsa',
-#'                     enrich_method = 'HDO') 
+#'                     enrich_method = 'do') 
 #' 
 #' ## Visualization
 #' MAE |>
@@ -474,7 +475,9 @@ EMP_GSEA_analysis <- function(obj,condition,experiment,estimate_group=NULL,metho
                                KEGG_Type='KEGG',species = "all", # kegg.params
                                OrgDb = NULL, keyType = "entrezid", ont = if (enrich_method == "go") "MF" else "DO", # go.params
                                organism = if (method == "reactome") "human" else "Homo sapiens", # wikipathway.params
+                               use_cached = TRUE,
                                ...){
+  condition <- dplyr::enquo(condition)
   kegg.params = list(keyType = keyType,
                    KEGG_Type = KEGG_Type,
                    species = species)
@@ -499,7 +502,10 @@ EMP_GSEA_analysis <- function(obj,condition,experiment,estimate_group=NULL,metho
   
   switch(method,
          "signal2Noise" = {  
-           EMPT %<>%  .EMP_GSEA_analysis_Signal2Noise(estimate_group,group_level,method = enrich_method, 
+           if (use_cached == FALSE) {
+             memoise::forget(.EMP_GSEA_analysis_Signal2Noise_m) %>% invisible()
+           }           
+           EMPT %<>%  .EMP_GSEA_analysis_Signal2Noise_m(estimate_group,group_level,method = enrich_method, 
                                                       pseudocount,pvalueCutoff,threshold,seed,gson=gson,
                                                       TERM2GENE = TERM2GENE,
                                                       TERM2NAME = TERM2NAME,
@@ -514,7 +520,10 @@ EMP_GSEA_analysis <- function(obj,condition,experiment,estimate_group=NULL,metho
            if (!cor_method %in% c('pearson','spearman')) {
              stop('Parameter method in EMP_GSEA_analysis_cor should be one of pearson, spearman! ')
            }
-           EMPT %<>%  .EMP_GSEA_analysis_cor(estimate_group,cor_method = cor_method,
+           if (use_cached == FALSE) {
+             memoise::forget(.EMP_GSEA_analysis_cor_m) %>% invisible()
+           }               
+           EMPT %<>%  .EMP_GSEA_analysis_cor_m(estimate_group,cor_method = cor_method,
                                              method = enrich_method, 
                                              pvalueCutoff = pvalueCutoff,threshold_r,threshold_p,seed,gson=gson,
                                              TERM2GENE = TERM2GENE,
@@ -526,8 +535,11 @@ EMP_GSEA_analysis <- function(obj,condition,experiment,estimate_group=NULL,metho
                                              do.params = do.params,
                                              ...)
          },
-         "log2FC" = {    
-           EMPT %<>% .EMP_GSEA_analysis_log2FC({{condition}},method = enrich_method,pvalueCutoff = pvalueCutoff,seed = seed,gson=gson,                                           
+         "log2FC" = {   
+           if (use_cached == FALSE) {
+             memoise::forget(.EMP_GSEA_analysis_log2FC_m) %>% invisible()
+           }             
+           EMPT %<>% .EMP_GSEA_analysis_log2FC_m(condition=condition,method = enrich_method,pvalueCutoff = pvalueCutoff,seed = seed,gson=gson,                                           
                                                       TERM2GENE = TERM2GENE,
                                                       TERM2NAME = TERM2NAME,
                                                       kegg.params = kegg.params,
@@ -557,6 +569,9 @@ EMP_GSEA_analysis <- function(obj,condition,experiment,estimate_group=NULL,metho
 
 
 
+.EMP_GSEA_analysis_Signal2Noise_m <- memoise::memoise(.EMP_GSEA_analysis_Signal2Noise,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
+.EMP_GSEA_analysis_cor_m <- memoise::memoise(.EMP_GSEA_analysis_cor,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
+.EMP_GSEA_analysis_log2FC_m <- memoise::memoise(.EMP_GSEA_analysis_log2FC,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
 

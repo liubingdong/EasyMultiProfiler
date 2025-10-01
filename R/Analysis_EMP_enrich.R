@@ -124,7 +124,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
     combineGroup <- TRUE
     feature_name <- names(EMPT)
   }else{
-    condition <- dplyr::enquo(condition)
+    #condition <- dplyr::enquo(condition)
     df <- diff_df %>%
       dplyr::filter(!!condition) %>%
       tidyr::drop_na(sign_group) ## filter NA or the result will add NA group!
@@ -223,6 +223,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #' @param OrgDb OrgDb in Go analysis.
 #' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".
+#' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[ReactomePA]{enrichPathway}}, \code{\link[DOSE]{enrichDO}}.
 #' @return EMPT object
 #' @export
@@ -276,7 +277,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #'   EMP_assay_extract(experiment = 'host_gene') |>
 #'   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
 #'   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
-#'   EMP_enrich_analysis(pvalue<0.05,method = 'HDO',ont="HDO",organism= 'hsa',readable=TRUE) |>
+#'   EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="HDO",organism= 'hsa',readable=TRUE) |>
 #'   EMP_enrich_dotplot(show=5)
 #' 
 #' ## Reactome analysis
@@ -294,8 +295,10 @@ EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500, action=
                                KEGG_Type='KEGG',species = "all", # kegg.params
                                OrgDb = NULL, keyType = "entrezid", # go.params
                                ont = if (method == "go") "MF" else "HDO", # go.params and do.params
-                               organism = if (method == "reactome") "human" else "Homo sapiens", # wikipathway.params and reactome.params
+                               organism = if (method == "reactome") "human" else "Homo sapiens", # wikipathway.params and reactome.params,
+                               use_cached = TRUE,
                                ...){
+  condition <- dplyr::enquo(condition)
   kegg.params = list(keyType = keyType,
                    KEGG_Type = KEGG_Type,
                    species = species)
@@ -312,7 +315,11 @@ EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500, action=
 
   call <- match.call()
 
-  EMPT <- .EMP_enrich_analysis(obj,{{condition}},minGSSize=minGSSize,maxGSSize=maxGSSize, combineGroup=combineGroup,gson=gson, 
+  if (use_cached == FALSE) {
+    memoise::forget(.EMP_enrich_analysis_m) %>% invisible()
+  }
+
+  EMPT <- .EMP_enrich_analysis_m(obj,condition=condition,minGSSize=minGSSize,maxGSSize=maxGSSize, combineGroup=combineGroup,gson=gson, 
                             method = method,
                             TERM2GENE = TERM2GENE,
                             TERM2NAME = TERM2NAME,
@@ -334,6 +341,7 @@ EMP_enrich_analysis <- function(obj,condition,minGSSize=1,maxGSSize=500, action=
 }
 
 
+.EMP_enrich_analysis_m <- memoise::memoise(.EMP_enrich_analysis,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
 # #' Title

@@ -21,6 +21,7 @@ EMP_enrich_analysis(
   keyType = "entrezid",
   ont = if (method == "go") "MF" else "HDO",
   organism = if (method == "reactome") "human" else "Homo sapiens",
+  use_cached = TRUE,
   ...
 )
 }
@@ -56,6 +57,8 @@ EMP_enrich_analysis(
 \item{ont}{For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".}
 
 \item{organism}{For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".}
+
+\item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
 \item{...}{Further parameters passed to \code{\link[clusterProfiler]{compareCluster}},\code{\link[clusterProfiler]{enricher}}, \code{\link[clusterProfiler]{enrichGO}}, \code{\link[ReactomePA]{enrichPathway}}, \code{\link[DOSE]{enrichDO}}.}
 }
