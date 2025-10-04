@@ -48,7 +48,7 @@ EMP_enrich_analysis(
 
 \item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.}
 
-\item{species}{A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/}
+\item{species}{A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/tables/br08606.html'}
 
 \item{OrgDb}{OrgDb in Go analysis.}
 
@@ -121,7 +121,7 @@ MAE |>
   EMP_assay_extract(experiment = 'host_gene') |>
   EMP_feature_convert(from = 'symbol',to='entrezid',species='Human') |>
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group,p.adjust = 'fdr') |> 
-  EMP_enrich_analysis(pvalue<0.05,method = 'HDO',ont="HDO",organism= 'hsa',readable=TRUE) |>
+  EMP_enrich_analysis(pvalue<0.05,method = 'do',ont="HDO",organism= 'hsa',readable=TRUE) |>
   EMP_enrich_dotplot(show=5)
 
 ## Reactome analysis

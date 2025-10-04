@@ -72,7 +72,7 @@ EMP_GSEA_analysis(
 
 \item{KEGG_Type}{A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.}
 
-\item{species}{A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/}
+\item{species}{A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/tables/br08606.html'}
 
 \item{OrgDb}{OrgDb in Go analysis.}
 
@@ -158,7 +158,7 @@ MAE |>
   EMP_diff_analysis(method = 'DESeq2',.formula = ~Group) |>
   EMP_GSEA_analysis(method='log2FC',
                     organism='hsa',
-                    enrich_method = 'HDO') 
+                    enrich_method = 'do') 
 
 ## Visualization
 MAE |>

@@ -219,7 +219,7 @@ enrich_do <- function(df, feature_name, do.params, minGSSize, maxGSSize, combine
 #' @param gson a GSON object, if not NULL, use it as annotation data.
 #' @param keyType For KEGG analysis, keyType include ko, ec, cpd, entrezid. For Go analysis, keyType include entrezid and symbol.
 #' @param KEGG_Type A character string. KEGG_Type include KEGG and MKEGG in KEGG analysis. KEGG means KEGG pathway. MKEGG means KEGG module.
-#' @param species A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/catalog/
+#' @param species A character string. Species includ all, hsa, mmu,...in in KEGG analysis. Supported organism listed in 'https://www.genome.jp/kegg/tables/br08606.html'
 #' @param OrgDb OrgDb in Go analysis.
 #' @param ont For Go analysis, ont include "BP", "MF","CC", and "ALL". For DOSE analysis, ont support "HDO","HPO", and "MPO".
 #' @param organism For Reactome analysis, organism include "human", "rat", "mouse", "celegans", "yeast", "zebrafish", "fly". For DOSE analysis, organism include "hsa" and "mmu".

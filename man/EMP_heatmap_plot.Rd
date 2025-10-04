@@ -162,7 +162,7 @@ MAE |>
   EMP_diff_analysis(method='DESeq2',.formula = ~Group) |>
   EMP_filter(feature_condition = pvalue<0.05 & abs(fold_change) >3.5) |>
   EMP_decostand(method = 'standardize') |>
-  EMP_heatmap_plot(rotate=FALSE,palette='Spectral',
+  EMP_heatmap_plot(palette='Spectral',
                    border_color='grey60',
                    legend_bar='auto')
 ## for cor analysis
