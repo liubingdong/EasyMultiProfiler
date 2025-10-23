@@ -37,7 +37,16 @@ setMethod("show", "EMPT",
                       EMP_message(str,color = 32,order = 1,show='message')
                      }
                      object %>% enhance_print(n=10)
-                   },              
+                   },   
+                   "EMP_mutate_assay" = {
+                     print(.get.assay.EMPT(object))
+                   }, 
+                   "EMP_mutate_row" = {
+                     print(.get.row_info.EMPT(object))
+                   },
+                   "EMP_mutate_col" = {
+                     print(.get.mapping.EMPT(object))
+                   },                              
                    "EMP_decostand" = {
                      for (str in object@message_info) {
                       EMP_message(str,color = 32,order = 1,show='message')
@@ -164,6 +173,15 @@ setMethod("show", "EMPT",
                      }
                      return(.get.assay.EMPT(object))
                    },
+                   "EMP_mutate_assay" = {
+                     return(.get.assay.EMPT(object))
+                   }, 
+                   "EMP_mutate_row" = {
+                     return(.get.row_info.EMPT(object))
+                   },
+                   "EMP_mutate_col" = {
+                     return(.get.mapping.EMPT(object))
+                   },                                                            
                    "EMP_decostand" = {
                      for (str in object@message_info) {
                       EMP_message(str,color = 32,order = 1,show='message')

@@ -199,8 +199,10 @@
   if (is.logical(real_sample)) {
     if (real_sample == TRUE) {
       check_samples <- 0
+      real_sample <- colnames(EMPT)
     }else{
-      check_samples <- 1
+      #check_samples <- 1
+      stop('real_sample dont allow FALSE!')
     }
   }else{
     check_samples <- ifelse((total_sample_num - length(real_sample)) == 0,0,1)
@@ -209,8 +211,10 @@
   if (is.logical(real_feature)) {
     if (real_feature == TRUE) {
       check_features <- 0
+      real_feature <- rownames(EMPT)
     }else{
-      check_features <- 1
+      #check_features <- 1
+      stop('real_feature dont allow FALSE!')
     }
   }else{
     check_features <- ifelse((total_feature_num - length(real_feature)) == 0,0,1)

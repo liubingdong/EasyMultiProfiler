@@ -352,8 +352,10 @@ setMethod(".get.assay.EMPT<-","EMPT",function(obj,value){
   feature_name <- colnames(value)[-1]
 
   rowdata <- rowData(obj) %>% as.data.frame() %>% 
-    dplyr::filter(feature %in% feature_name) 
-
+    dplyr::filter(feature %in% feature_name) %>%
+    .add_NA_row(feature_name) 
+  rownames(rowdata) <- rowdata$feature ## necessary
+  
   coldata <- colData(obj) %>% as.data.frame() %>% 
     dplyr::filter(rownames(.) %in% sample_name) %>% 
     dplyr::arrange(rownames(.))  ## necessary

@@ -60,6 +60,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 \itemize{
 	\item \code{\link{EMP_filter}} 
 	\item \code{\link{EMP_history}} 
+	\item \code{\link{EMP_mutate}} 
 	\item \code{\link{EMP_inject}} 	
 	\item \code{\link{EMP_result}}	
 	\item \code{\link{EMP_summary}}
