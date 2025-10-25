@@ -1,4 +1,4 @@
-.EMP_mutate<- function(obj,experiment='experiment',dots=dots,.by = NULL,.before = NULL,.after = NULL,mutate_by = 'sample',location='coldata',action='colwise',keep_result=FALSE){
+.EMP_mutate.EMPT<- function(obj,experiment='experiment',dots=dots,.by = NULL,.before = NULL,.after = NULL,mutate_by = 'sample',location='coldata',action='colwise',keep_result=FALSE){
   
   mutate_by <- match.arg(mutate_by, c("sample", "feature"))
   location <- match.arg(location, c("coldata", "rowdata","assay"))
@@ -391,12 +391,46 @@
   return(EMPT)
 }
 
-.EMP_mutate_m <- memoise::memoise(.EMP_mutate,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
+.EMP_mutate.EMPT_m <- memoise::memoise(.EMP_mutate.EMPT,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
+
+
+
+.EMP_mutate.MAE <- function(obj,dots,.by = NULL,.before = NULL,.after = NULL,
+                            mutate_by='sample',location='coldata',action='colwise',
+                            keep_result=FALSE,use_cached=TRUE){
+  
+  if (location != 'coldata' | mutate_by != 'sample') {
+    stop('EMP_mutate only suppot changing the coldata for MultiAssayExperiment!')
+  }
+
+  col_df <- obj |> EMP_coldata_extract()
+  
+  if (action == 'colwise') {
+    col_df <- col_df |> 
+      dplyr::mutate(!!!dots,.by = !!.by,.before = !!.before,.after = !!.after)
+  }else if (action == 'rowwise') {
+    col_df <- col_df |> 
+      dplyr::rowwise() |>
+      dplyr::mutate(!!!dots,.by = !!.by,.before = !!.before,.after = !!.after)
+  }else {
+    stop('Parameter action only allows colwise or rowwise!')
+  }
+  
+  col_df <- col_df |> 
+    tibble::column_to_rownames('primary') |>
+    DataFrame()
+  
+  obj@colData <- col_df
+  
+  return(obj)
+}
+
+.EMP_mutate.MAE_m<- memoise::memoise(.EMP_mutate.MAE,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
 #' Create, modify, and delete columns for EMPT object
 #'
-#' @param obj EMPT object.
+#' @param obj MAE or EMPT object.
 #' @param experiment A character string. Experiment name in the MultiAssayExperiment object. 
 #' @param mutate_by A character string inluding sample and feature.
 #' @param location A character string inluding assay, rowdata and coldata.
@@ -453,10 +487,19 @@
 #'     mutate_by = 'sample',location = 'coldata',.after = Group
 #'   ) |>
 #'   EMP_boxplot(estimate = 'Degree')
+#'
+#' # Change the whole coldata for the MultiAssayExperiment
+#' MAE |>
+#'   EMP_mutate(Degree = dplyr::case_when(
+#'     BMI < 18.5                        ~ "Lean",
+#'     BMI >= 18.5 & BMI < 24            ~ "Normal",
+#'     BMI >= 24 & BMI < 28              ~ "Fat",
+#'     TRUE                              ~ "Need Med"),
+#'     .after = Group) |>
+#'   EMP_coldata_extract()
 
 
-
-EMP_mutate <- function(obj,experiment='experiment',...,.by = NULL,.before = NULL,.after = NULL,mutate_by='sample',location='coldata',action='colwise',
+EMP_mutate <- function(obj,experiment = NULL,...,.by = NULL,.before = NULL,.after = NULL,mutate_by='sample',location='coldata',action='colwise',
                           keep_result=FALSE,use_cached=TRUE){
   call <- match.call()
   dots <- rlang::enquos(...)
@@ -465,14 +508,26 @@ EMP_mutate <- function(obj,experiment='experiment',...,.by = NULL,.before = NULL
   .after <- rlang::enquo(.after)
 
   deposit <- NULL
+
   if (use_cached == FALSE) {
-    memoise::forget(.EMP_mutate_m) %>% invisible()
+    memoise::forget(.EMP_mutate.EMPT_m) %>% invisible()
+    memoise::forget(.EMP_mutate.MAE_m) %>% invisible()
   }  
 
-  deposit <- .EMP_mutate_m(obj=obj,experiment=experiment,dots=dots,.by = .by,.before = .before,.after = .after,mutate_by=mutate_by,location=location,action=action,
-                          keep_result=keep_result)
+  if (is(obj,"MultiAssayExperiment") & !is.null(experiment)) {
+    obj <- obj |> .as.EMPT(experiment=experiment)
+  }
 
-  .get.history.EMPT(obj) <- call
+  if (is(obj,"MultiAssayExperiment")) {
+    deposit <- .EMP_mutate.MAE_m(obj=obj,dots=dots,.by = .by,.before = .before,.after = .after,mutate_by=mutate_by,location=location,action=action,
+                          keep_result=keep_result)    
+  }else if (is(obj,"EMPT")) {
+    deposit <- .EMP_mutate.EMPT_m(obj=obj,experiment=experiment,dots=dots,.by = .by,.before = .before,.after = .after,mutate_by=mutate_by,location=location,action=action,
+                          keep_result=keep_result)
+    .get.history.EMPT(obj) <- call
+  }else {
+    stop('EMP_mutate only support MultiAssayExperiment or EMPT object!')
+  }
   return(deposit)
 
 }

@@ -6,7 +6,7 @@
 \usage{
 EMP_mutate(
   obj,
-  experiment = "experiment",
+  experiment = NULL,
   ...,
   .by = NULL,
   .before = NULL,
@@ -19,7 +19,7 @@ EMP_mutate(
 )
 }
 \arguments{
-\item{obj}{EMPT object.}
+\item{obj}{MAE or EMPT object.}
 
 \item{experiment}{A character string. Experiment name in the MultiAssayExperiment object.}
 
@@ -35,7 +35,7 @@ EMP_mutate(
 
 \item{location}{A character string inluding assay, rowdata and coldata.}
 
-\item{action}{A character string inluding colwise and rowwise.}
+\item{action}{A character string inluding colwise and rowwise, indicating whether operations should be performed column-wise or row-wise.}
 
 \item{keep_result}{If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.}
 
@@ -93,4 +93,14 @@ MAE |>
     mutate_by = 'sample',location = 'coldata',.after = Group
   ) |>
   EMP_boxplot(estimate = 'Degree')
+
+# Change the whole coldata for the MultiAssayExperiment
+MAE |>
+  EMP_mutate(Degree = dplyr::case_when(
+    BMI < 18.5                        ~ "Lean",
+    BMI >= 18.5 & BMI < 24            ~ "Normal",
+    BMI >= 24 & BMI < 28              ~ "Fat",
+    TRUE                              ~ "Need Med"),
+    .after = Group) |>
+  EMP_coldata_extract()
 }
