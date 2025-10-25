@@ -403,7 +403,7 @@
 #' @param .by Optionally, a selection of columns to group by for just this operation, functioning as an alternative to group_by(). See also \code{\link[dplyr]{mutate}}.
 #' @param .before Optionally, control where new columns should appear.
 #' @param .after (the default is to add to the right hand side). See relocate() for more details.
-#' @param action A character string inluding colwise and rowwise.
+#' @param action A character string inluding colwise and rowwise, indicating whether operations should be performed column-wise or row-wise.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param keep_result If the input is TRUE, it means to keep all analysis results,regardless of how samples and features change. If the input is a name, it means to keep the corresponding analysis results.
 #' @param ... ... Addtional parameters, see also \code{\link[dplyr]{mutate}}.
