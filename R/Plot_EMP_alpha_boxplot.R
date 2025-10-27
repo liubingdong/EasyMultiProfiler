@@ -153,7 +153,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
   }
 
   if (is.null(paired_group)) {
-    alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
+    alpha_plot[['pic']] <- (ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
       geom_boxplot(outlier.color=NA,width=box_width,alpha=box_alpha) +
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,size=dot_size,position = position_jitter(height = .00000001))+
       ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +
@@ -164,9 +164,9 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
       scale_fill_manual(values = col_values) + 
       theme_bw() + 
       theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
-      eval(parse(text = paste0(mytheme)))
+      eval(parse(text = paste0(mytheme))) ) |> suppressWarnings()
   }else{
-    alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
+    alpha_plot[['pic']] <- (ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
       geom_boxplot(outlier.color=NA,width=box_width,alpha=box_alpha) +
       geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) + 
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,size=dot_size,position = position_jitter(width = 0))+
@@ -178,7 +178,7 @@ EMP_boxplot_alpha_default <- function (EMPT,method = 'wilcox.test',
       scale_fill_manual(values = col_values) + 
       theme_bw() + 
       theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
-      eval(parse(text = paste0(mytheme))) 
+      eval(parse(text = paste0(mytheme))) ) |> suppressWarnings()
     # Hide the line  
     if (paired_line == FALSE) {
       alpha_plot[['pic']][['layers']] <- alpha_plot[['pic']][['layers']][-2]
@@ -279,7 +279,7 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
   }
 
   if (is.null(paired_group)) {
-    alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
+    alpha_plot[['pic']] <- (ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
       geom_violin(position = position_dodge(width = 0.1), scale = 'width',alpha=box_alpha) +
       geom_boxplot(outlier.color=NA,fill="white", width=box_width) +
       ggiraph::geom_jitter_interactive(aes(tooltip = paste0(primary,' : ',value)),shape=21,size=dot_size,position = position_jitter(height = .00000001))+
@@ -291,9 +291,9 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
       scale_fill_manual(values = col_values) + 
       theme_bw() + 
       theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
-      eval(parse(text = paste0(mytheme)))
+      eval(parse(text = paste0(mytheme))) ) |> suppressWarnings()
   }else{
-    alpha_plot[['pic']] <- ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
+    alpha_plot[['pic']] <- (ggplot(alpha_data, aes(x = !!dplyr::sym(estimate_group), y = value, fill = !!dplyr::sym(estimate_group))) +
       geom_violin(position = position_dodge(width = 0.1), scale = 'width',alpha=box_alpha) +
       geom_boxplot(outlier.color=NA,fill="white", width=box_width) +
       geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) +       
@@ -306,7 +306,7 @@ EMP_boxplot_alpha_violin <- function (EMPT,method = 'wilcox.test',
       scale_fill_manual(values = col_values) + 
       theme_bw() + 
       theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) + 
-      eval(parse(text = paste0(mytheme))) 
+      eval(parse(text = paste0(mytheme))) ) |> suppressWarnings()
     # Hide the line      
     if (paired_line == FALSE) {
       alpha_plot[['pic']][['layers']] <- alpha_plot[['pic']][['layers']][-3]
