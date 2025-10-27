@@ -71,7 +71,7 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
       ggtitle(label = title_info) +  # add title
       xlab(expression(log[2]("fold change"))) + # x-axis label
       ylab(substitute(-log[10](x), list(x = as.name(y)))) + # y-axis label
-      geom_hline(yintercept = 1.3, colour = "black",linetype="twodash",size=0.5) + # p(0.05) = 1.3
+      geom_hline(yintercept = 1.3, colour = "black",linetype="twodash",linewidth=0.5) + # p(0.05) = 1.3
       scale_x_continuous(breaks=xlim_break,limits = c(min(xlim_break),max(xlim_break))) +  # set x axis
       # 根据需要调节纵坐标
       scale_y_continuous(breaks = ylim_break,limits = c(min(ylim_break),max(ylim_break)),trans = "log1p") + # set y axis
@@ -90,8 +90,8 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
       eval(parse(text = paste0(mytheme)))
   }else{
     p <- p + 
-      geom_vline(aes(xintercept= threshold_x), colour="black", linetype="twodash",size=0.5) +
-      geom_vline(aes(xintercept= -threshold_x), colour="black", linetype="twodash",size=0.5) +
+      geom_vline(aes(xintercept= threshold_x), colour="black", linetype="twodash",linewidth=0.5) +
+      geom_vline(aes(xintercept= -threshold_x), colour="black", linetype="twodash",linewidth=0.5) +
       theme_bw() + # clean up theme
       theme(legend.position = "none")+
       eval(parse(text = paste0(mytheme)))

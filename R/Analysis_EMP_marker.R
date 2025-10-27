@@ -273,7 +273,7 @@ EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=1
   }
 
   switch(method,
-         "boruta" = {EMPT <- .EMP_Boruta_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
+         "boruta" = {EMPT <- .EMP_Boruta_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,...) |> suppressWarnings()},
          "randomforest"  = {EMPT <- .EMP_rf_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
          "xgboost"  = {EMPT <- .EMP_xgb_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,max.depth=max.depth,
                                                       eta=eta,nrounds=nrounds,xgboost_run=xgboost_run,objective=objective,verbose=verbose,...)},
