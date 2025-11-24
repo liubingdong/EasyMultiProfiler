@@ -6,9 +6,9 @@
 #' @importFrom ggbreak scale_y_break
 #' @importFrom ggiraph geom_jitter_interactive
 #' @export
-EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
-                               estimate_group = NULL,sub_group = NULL,
-                               group_level = 'default',sub_group_level = 'default',
+EMP_barplot <- function (EMPT,method = 'wilcox.test',
+                               estimate_group = NULL,compare_group = NULL,
+                               group_level = 'default',compare_group_level = 'default',
                                error_bar= 'default',label = 'p',
                                dot_size=3,bar_alpha=1,
                                step_increase=0.1,tip.length=0,ref.group=NULL,comparisons = NULL,
@@ -21,8 +21,8 @@ EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
 
   rlang::check_installed(c('ggbreak'), reason = 'for EMP_barplot().', action = install.packages) 
 
-  #if (facet==FALSE & is.null(sub_group)) {
-  #  stop("When sub_group is null, the facet can not be FALSE!")
+  #if (facet==FALSE & is.null(compare_group)) {
+  #  stop("When compare_group is null, the facet can not be FALSE!")
   #}
 
   label <- match.arg(label, c("p", "p.adj","p.signif","p.adj.signif"))
@@ -46,15 +46,16 @@ EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
   EMPT %<>% .group_level_modified(estimate_group = estimate_group,
                                   group_level = group_level)
   
-  if (!is.null(sub_group)) {
-    EMPT %<>% .group_level_modified(estimate_group = sub_group,
-                                  group_level = sub_group_level)
+  if (!is.null(compare_group)) {
+    EMPT %<>% .group_level_modified(estimate_group = compare_group,
+                                  group_level = compare_group_level)
   }
 
 
-  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,dplyr::any_of(c(!!estimate_group,!!sub_group,!!paired_group)))
-
-  data <-.get.result.EMPT(EMPT,info = 'EMP_assay_data') %>% suppressMessages() %>% dplyr::left_join(mapping,by ='primary') 
+  mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,dplyr::any_of(c(!!estimate_group,!!compare_group,!!paired_group)))
+  
+  data_info <- .get.info.EMPT(EMPT)
+  data <-.get.result.EMPT(EMPT,info = data_info) %>% suppressMessages() %>% dplyr::left_join(mapping,by ='primary') 
 
   ## clean the missing value in the group label
   if(any(is.na(data[[estimate_group]]))) {
@@ -62,21 +63,21 @@ EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
     data <- data %>% tidyr::drop_na(!!estimate_group)
   }
 
-  if (!is.null(sub_group)) {
-    if(any(is.na(data[[sub_group]]))) {
+  if (!is.null(compare_group)) {
+    if(any(is.na(data[[compare_group]]))) {
       warning('Column ',estimate_group,' has beed deteced missing value, all related samples will be removed in the display!')
-      data <- data %>% tidyr::drop_na(!!sub_group) 
+      data <- data %>% tidyr::drop_na(!!compare_group) 
     }   
   }
 
 
-  if (!is.null(sub_group)) {
-    compare_group <- sub_group
+  if (!is.null(compare_group)) {
+    compare_group <- compare_group
   }else{
     compare_group <- estimate_group
   }
 
-  data %<>%  tidyr::pivot_longer(cols = c(-primary,-dplyr::any_of(c(!!estimate_group,!!sub_group,!!paired_group))),
+  data %<>%  tidyr::pivot_longer(cols = c(-primary,-dplyr::any_of(c(!!estimate_group,!!compare_group,!!paired_group))),
                                        names_to = 'ID',
                                        values_to = 'value')
   n_ID <- data[['ID']] |> unique() |> length()
@@ -87,7 +88,7 @@ EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
       c(
         list(data = data,
              estimate_group = estimate_group,
-             sub_group = sub_group,
+             compare_group = compare_group,
              method = method,
              value = 'value',
              comparisons=comparisons,
@@ -100,8 +101,8 @@ EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
     )
   }else{
     if (n_ID > 1) {
-      if (is.null(sub_group)) {
-        sub_group <- estimate_group
+      if (is.null(compare_group)) {
+        compare_group <- estimate_group
       }
       estimate_group <- 'ID'
     }
@@ -111,7 +112,7 @@ EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
       c(
         list(data = data,
              estimate_group = estimate_group,
-             sub_group = sub_group,
+             compare_group = compare_group,
              method = method,
              value = 'value',
              comparisons=comparisons,
@@ -124,10 +125,10 @@ EMP_barplot_assay_default <- function (EMPT,method = 'wilcox.test',
     )
   }
 
-  if (is.null(sub_group)) {
+  if (is.null(compare_group)) {
     group_expr <- sym(estimate_group)
   } else {
-    group_expr <- expr(interaction(!!sym(estimate_group), !!sym(sub_group)))
+    group_expr <- expr(interaction(!!sym(estimate_group), !!sym(compare_group)))
   }
 
   data_plot <- list()

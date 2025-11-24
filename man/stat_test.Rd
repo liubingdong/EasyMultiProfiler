@@ -7,7 +7,7 @@
 stat_test(
   data,
   estimate_group = NULL,
-  sub_group = NULL,
+  compare_group = NULL,
   formula = NULL,
   value = NULL,
   method = "wilcox.test",
@@ -25,9 +25,9 @@ stat_test(
 \arguments{
 \item{data}{a data.frame.}
 
-\item{estimate_group}{estimate_group.}
+\item{estimate_group}{estimate_group.The primary grouping variable for estimation and comparison.Serves as the comparison group by default.}
 
-\item{sub_group}{sub_group.}
+\item{compare_group}{compare_group.Optional subgroup analysis variable. When specified, the subgroup comparison performs.}
 
 \item{formula}{formula.}
 
@@ -71,7 +71,7 @@ stat_test(
   data = ToothGrowth,
   value = 'len',
   estimate_group = "supp",
-  sub_group = "dose",
+  compare_group = "dose",
   method = "t.test"
 )
 

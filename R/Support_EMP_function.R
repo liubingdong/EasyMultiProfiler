@@ -969,7 +969,7 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
 #' @importFrom dplyr n_distinct
 .stat_test_single <-  function(data, 
                        estimate_group = NULL, 
-                       sub_group = NULL, 
+                       compare_group = NULL, 
                        formula = NULL,
                        value = NULL,
                        method = "wilcox.test",
@@ -988,12 +988,12 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
     if (is.null(estimate_group) | is.null(value)) {
       stop("formula is necessary，or provide the estimate_group and value!")
     }
-    if (is.null(sub_group)) {
+    if (is.null(compare_group)) {
       formula_obj <- as.formula(paste(value, "~", estimate_group))
-      compare_group <- estimate_group
+      real_compare_group <- estimate_group
     }else{
-      formula_obj <- as.formula(paste(value, "~", sub_group))
-      compare_group <- sub_group
+      formula_obj <- as.formula(paste(value, "~", compare_group))
+      real_compare_group <- compare_group
     }
     
   }else{
@@ -1004,18 +1004,18 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
     }
     
     value <- formula_vars[1]
-    compare_group <- formula_vars[2]
+    real_compare_group <- formula_vars[2]
     if (is.null(estimate_group)) {
-      estimate_group <- compare_group
+      estimate_group <- real_compare_group
     }
   }
   
-  if (identical(compare_group,estimate_group)) {
+  if (identical(real_compare_group,estimate_group)) {
     data <- data
   }else{
     #n_estimate_group <- data[[estimate_group]] |>  n_distinct()
-    #n_sub_group <- data[[compare_group]] |>  n_distinct()
-    #if (n_sub_group < n_estimate_group) {
+    #n_compare_group <- data[[real_compare_group]] |>  n_distinct()
+    #if (n_compare_group < n_estimate_group) {
     #  stop('Number of subgroup categories must be greater than or equal to the number of group categories.')
     #}
     
@@ -1026,12 +1026,12 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
   
   if (!is.null(paired_group)) {
     paired <- TRUE
-    data <- data |> dplyr::arrange(!!dplyr::sym(compare_group),!!dplyr::sym(paired_group)) 
+    data <- data |> dplyr::arrange(!!dplyr::sym(real_compare_group),!!dplyr::sym(paired_group)) 
   }
 
   # tukey_hsd need factor
-  if (!is.factor(data[[compare_group]]) & method == 'tukey.hsd') {
-    data[[compare_group]] <- factor(data[[compare_group]] )
+  if (!is.factor(data[[real_compare_group]]) & method == 'tukey.hsd') {
+    data[[real_compare_group]] <- factor(data[[real_compare_group]] )
   }
   
 
@@ -1095,8 +1095,8 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
 #' Perform Differential analysis for table
 #'
 #' @param data a data.frame.
-#' @param estimate_group estimate_group.
-#' @param sub_group sub_group.
+#' @param estimate_group estimate_group.The primary grouping variable for estimation and comparison.Serves as the comparison group by default.
+#' @param compare_group compare_group.Optional subgroup analysis variable. When specified, the subgroup comparison performs.
 #' @param formula formula.
 #' @param method statistics including t.test, wilcox.test, sign.test, emmeans.test, dunn.test, tukey.hsd.
 #' @param paired a logical indicating whether you want a paired t-test for t.test and wilcox.test.
@@ -1131,7 +1131,7 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
 #'   data = ToothGrowth,
 #'   value = 'len',
 #'   estimate_group = "supp",
-#'   sub_group = "dose",
+#'   compare_group = "dose",
 #'   method = "t.test"
 #' )
 #' 
@@ -1158,7 +1158,7 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
 #'
 stat_test <- function(data, 
                        estimate_group = NULL, 
-                       sub_group = NULL, 
+                       compare_group = NULL, 
                        formula = NULL,
                        value=NULL,
                        method = "wilcox.test",
@@ -1179,7 +1179,7 @@ stat_test <- function(data,
   if (is.null(facet.by)) {
     result <- .stat_test_single(data=data, 
                        estimate_group = estimate_group, 
-                       sub_group = sub_group, 
+                       compare_group = compare_group, 
                        formula = formula,
                        value = value,
                        method = method,
@@ -1234,7 +1234,7 @@ stat_test <- function(data,
     tryCatch({
       result <- .stat_test_single(data = sub_data,
                        estimate_group = estimate_group, 
-                       sub_group = sub_group, 
+                       compare_group = compare_group, 
                        formula = formula,
                        value = value,
                        method = method,
@@ -1290,4 +1290,3 @@ stat_test <- function(data,
   return(combined_result)
   }
 }
-

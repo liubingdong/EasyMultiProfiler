@@ -456,7 +456,7 @@
 #'   EMP_assay_extract('taxonomy') |>
 #'   EMP_collapse(collapse_by = 'row',estimate_group = 'Phylum') |>
 #'   EMP_mutate(F_B_ratio = Firmicutes/Bacteroidetes,
-#'              .by = primary,.before = 2,
+#'              .before = 2,
 #'              mutate_by = 'sample',location ='assay') |>
 #'   EMP_filter(filterFeature = 'F_B_ratio') |>
 #'   EMP_boxplot(estimate_group='Group')
