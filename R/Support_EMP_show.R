@@ -130,6 +130,10 @@ setMethod("show", "EMPT",
                      set.seed(123)
                      .show_EMP_assay_boxplot(object,.get.plot_specific.EMPT(object))
                    },
+                   "EMP_assay_barplot" = {
+                     set.seed(123)
+                     .show_EMP_assay_barplot(object,.get.plot_specific.EMPT(object))
+                   },
                    "EMP_structure_plot" = {
                      .show_EMP_structure_plot(object,.get.plot_specific.EMPT(object))
                    },

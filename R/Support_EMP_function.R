@@ -955,3 +955,339 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
   obj@deposit[[value_name]] <- value
   return(obj)  
 }
+
+
+#' @importFrom rstatix tukey_hsd
+#' @importFrom rstatix dunn_test
+#' @importFrom rstatix emmeans_test
+#' @importFrom rstatix t_test
+#' @importFrom rstatix wilcox_test
+#' @importFrom rstatix add_xy_position
+#' @importFrom rstatix add_significance
+#' @importFrom rstatix adjust_pvalue
+#' @importFrom rstatix sign_test
+#' @importFrom dplyr n_distinct
+.stat_test_single <-  function(data, 
+                       estimate_group = NULL, 
+                       sub_group = NULL, 
+                       formula = NULL,
+                       value = NULL,
+                       method = "wilcox.test",
+                       paired = FALSE,
+                       paired_group = NULL,
+                       p.adjust = "fdr",
+                       ref.group = NULL,
+                       comparisons=NULL,...) {
+  
+  
+  rlang::check_installed(c('rstatix'), reason = 'for perform_stat_test().', action = install.packages) 
+  rlang::check_installed(c('dplyr'), reason = 'for perform_stat_test().', action = install.packages) 
+  rlang::check_installed(c('emmeans'), reason = 'for perform_stat_test().', action = install.packages) 
+  
+  if (is.null(formula)) {
+    if (is.null(estimate_group) | is.null(value)) {
+      stop("formula is necessary，or provide the estimate_group and value!")
+    }
+    if (is.null(sub_group)) {
+      formula_obj <- as.formula(paste(value, "~", estimate_group))
+      compare_group <- estimate_group
+    }else{
+      formula_obj <- as.formula(paste(value, "~", sub_group))
+      compare_group <- sub_group
+    }
+    
+  }else{
+    formula_obj <- formula
+    formula_vars <- all.vars(formula_obj)
+    if (length(formula_vars) < 2) {
+      stop("formula is wrong!")
+    }
+    
+    value <- formula_vars[1]
+    compare_group <- formula_vars[2]
+    if (is.null(estimate_group)) {
+      estimate_group <- compare_group
+    }
+  }
+  
+  if (identical(compare_group,estimate_group)) {
+    data <- data
+  }else{
+    #n_estimate_group <- data[[estimate_group]] |>  n_distinct()
+    #n_sub_group <- data[[compare_group]] |>  n_distinct()
+    #if (n_sub_group < n_estimate_group) {
+    #  stop('Number of subgroup categories must be greater than or equal to the number of group categories.')
+    #}
+    
+    data %<>% 
+      group_by(!!sym(estimate_group))
+  }
+  
+  
+  if (!is.null(paired_group)) {
+    paired <- TRUE
+    data <- data |> dplyr::arrange(!!dplyr::sym(compare_group),!!dplyr::sym(paired_group)) 
+  }
+
+  # tukey_hsd need factor
+  if (!is.factor(data[[compare_group]]) & method == 'tukey.hsd') {
+    data[[compare_group]] <- factor(data[[compare_group]] )
+  }
+  
+
+  stat_result <- data %>% 
+    {
+      if (method == "tukey.hsd") {
+        tukey_hsd(formula=formula_obj,x=.,...) 
+      } else if (method == "dunn.test") {
+        dunn_test(formula=formula_obj,data=.,...)
+      } else if (method == "emmeans.test") {
+        emmeans_test(formula=formula_obj,data=.,ref.group=ref.group,comparisons=comparisons,...)
+      } else if (method == "t.test") {
+        t_test(formula=formula_obj, paired = paired,data=.,ref.group=ref.group,comparisons=comparisons,...)
+      } else if (method == "wilcox.test") {
+        wilcox_test(formula=formula_obj, paired = paired,data=.,ref.group=ref.group,comparisons=comparisons,...)
+      } else if (method == "sign.test") {
+        sign_test(formula=formula_obj,data=.,ref.group=ref.group,comparisons=comparisons,...)
+      } else {
+        stop("Not support: ", method)
+      }
+    } 
+  
+  if (!is.null(ref.group) & !is.null(comparisons)) {
+    stop("The ref.group and comparisons cant not exist together!")
+  }
+
+  if (!is.null(ref.group) && method %in% c('tukey.hsd', 'dunn.test')) {
+    stat_result <- stat_result |> 
+                      dplyr::filter(dplyr::if_any(c(group1, group2), ~ .x == {{ref.group}}))
+  }
+
+  if (!is.null(comparisons) && method %in% c('tukey.hsd', 'dunn.test')) {
+    original_class <- class(stat_result)
+    original_args <- attr(stat_result, "args")
+
+    stat_result <- stat_result |> 
+        dplyr::rowwise() %>%
+        dplyr::filter(any(purrr::map_lgl(compare, ~ setequal(.x, c(group1, group2))))) %>%
+        dplyr::ungroup()
+
+    class(stat_result) <- original_class
+    attr(stat_result, "args") <- original_args
+  }
+
+  if (!"p" %in% names(stat_result)) {
+    stat_result <- stat_result %>%
+      dplyr::mutate(p = p.adj,.before=p.adj)
+  } 
+  
+  stat_result <- stat_result %>%
+    adjust_pvalue(method = p.adjust) %>%
+    dplyr::mutate(p = round(p,3),p.adj = round(p.adj,3)) %>%
+    add_significance("p") %>%
+    add_significance("p.adj") %>%
+    dplyr::relocate(p.signif,.before=p.adj.signif) %>%
+    add_xy_position(x = estimate_group) 
+  
+  return(stat_result)
+}
+
+#' Perform Differential analysis for table
+#'
+#' @param data a data.frame.
+#' @param estimate_group estimate_group.
+#' @param sub_group sub_group.
+#' @param formula formula.
+#' @param method statistics including t.test, wilcox.test, sign.test, emmeans.test, dunn.test, tukey.hsd.
+#' @param paired a logical indicating whether you want a paired t-test for t.test and wilcox.test.
+#' @param p.adjust a character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)
+#' @param ref.group a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).
+#' @param comparisons a list of length-2 vectors, which only support t.test, wilcox.test, sign.test and emmeans.test.
+#' @param facet.by a column name for multiple features.
+#' @param ... additional parameters, see also \code{\link[rstatix]{t_test}},\code{\link[rstatix]{wilcox_test}},...
+#' @rdname stat_test
+#'
+#' @export
+#' @examples
+#'data(ToothGrowth)
+#'
+#' # for group
+#' stat_test(
+#'   data = ToothGrowth,
+#'   estimate_group = 'dose',
+#'   value = 'len',
+#'   method = "t.test"
+#' )
+#' 
+#' 
+#' stat_test(
+#'   data = ToothGrowth,
+#'   formula = len ~ dose,
+#'   method = "t.test"
+#' )
+#' 
+#' # for subgroup
+#' stat_test(
+#'   data = ToothGrowth,
+#'   value = 'len',
+#'   estimate_group = "supp",
+#'   sub_group = "dose",
+#'   method = "t.test"
+#' )
+#' 
+#' stat_test(
+#'   data = ToothGrowth,
+#'   estimate_group = 'supp',
+#'   formula = len ~ dose,
+#'   method = "t.test"
+#' )
+#'
+#'  # for ggplot2 
+#'  stat_result <- stat_test(
+#'    data = ToothGrowth,
+#'    formula = len ~ dose,
+#'    value = 'len',
+#'    method = "tukey.hsd",
+#' ) 
+#'  
+#'  # for ggpubr
+#'  if(require("ggpubr")){
+#'   ggboxplot(ToothGrowth, x = "dose", y = "len") +
+#'     stat_pvalue_manual(stat_result, label = "p", tip.length = 0.01)
+#'  }
+#'
+stat_test <- function(data, 
+                       estimate_group = NULL, 
+                       sub_group = NULL, 
+                       formula = NULL,
+                       value=NULL,
+                       method = "wilcox.test",
+                       paired = FALSE,
+                       paired_group = NULL,
+                       p.adjust = "fdr",
+                       ref.group = NULL,
+                       comparisons=NULL,
+                       facet.by = NULL, 
+                       error_handling = "warn",
+                       silent=FALSE,...) {
+  
+  # 检查必要的包
+  rlang::check_installed(c('dplyr', 'purrr', 'rlang', 'tidyr'), 
+                         reason = 'for stat_test().', 
+                         action = install.packages)
+  
+  if (is.null(facet.by)) {
+    result <- .stat_test_single(data=data, 
+                       estimate_group = estimate_group, 
+                       sub_group = sub_group, 
+                       formula = formula,
+                       value = value,
+                       method = method,
+                       paired = paired,
+                       paired_group = paired_group,
+                       p.adjust = p.adjust,
+                       ref.group = ref.group,
+                       comparisons = comparisons,...)
+    return(result)
+  }else{
+  # 验证输入
+  if (!facet.by %in% names(data)) {
+    stop("Group column '", facet.by, "' not found in data")
+  }
+    
+  if (!error_handling %in% c("stop", "warn", "silent")) {
+    stop("error_handling must be one of: 'stop', 'warn', 'silent'")
+  }
+  
+  # 获取分组信息
+  group_levels <- unique(data[[facet.by]])
+  n_groups <- length(group_levels)
+  
+  if (n_groups == 0) {
+    stop("No groups found in column '", facet.by, "'")
+  }
+
+  if (silent == FALSE) {
+    message("Processing ", n_groups, " groups...")
+  }
+  
+  # 对每个分组执行统计检验
+  results <- list()
+  errors <- list()
+  
+  for (i in seq_along(group_levels)) {
+    group_val <- group_levels[i]
+    
+    # 筛选当前分组的数据
+    sub_data <- data[data[[facet.by]] == group_val, ]
+    
+    # 检查数据是否足够
+    if (nrow(sub_data) < 2) {
+      msg <- paste("Group", group_val, "has insufficient data (n < 2)")
+      errors[[group_val]] <- msg
+      if (error_handling == "stop") stop(msg)
+      if (error_handling == "warn") warning(msg)
+      next
+    }
+    
+    # 执行统计检验
+    tryCatch({
+      result <- .stat_test_single(data = sub_data,
+                       estimate_group = estimate_group, 
+                       sub_group = sub_group, 
+                       formula = formula,
+                       value = value,
+                       method = method,
+                       paired = paired,
+                       paired_group = paired_group,
+                       p.adjust = p.adjust,
+                       ref.group = ref.group,
+                       comparisons = comparisons,...)
+      # 添加分组信息
+      result[[facet.by]] <- group_val
+      
+      # 如果要求保留分组数据信息
+      result$n_obs <- nrow(sub_data)
+
+      
+      results[[group_val]] <- result
+      
+    }, error = function(e) {
+      msg <- paste("Error in group", group_val, ":", e$message)
+      errors[[group_val]] <- msg
+      if (error_handling == "stop") stop(msg)
+      if (error_handling == "warn") warning(msg)
+    })
+  }
+  
+  # 检查是否有有效结果
+  if (length(results) == 0) {
+    stop("No successful statistical tests across all groups")
+  }
+  
+  # 合并结果
+  combined_result <- dplyr::bind_rows(results)
+  
+  # 重新排列列，将分组列放在前面
+  other_cols <- setdiff(names(combined_result), facet.by)
+  combined_result <- combined_result[, c(facet.by, other_cols)]
+  
+  # 添加属性信息
+  attr(combined_result, "groups_processed") <- names(results)
+  attr(combined_result, "groups_failed") <- names(errors)
+  attr(combined_result, "error_messages") <- errors
+  attr(combined_result, "total_groups") <- n_groups
+  attr(combined_result, "successful_groups") <- length(results)
+  
+  if (silent == FALSE) {
+    message("Successfully processed ", length(results), "/", n_groups, " groups")
+  }
+
+  if (length(errors) > 0 && error_handling == "warn") {
+    warning("Failed to process ", length(errors), " groups. Use attr(result, 'error_messages') to see details.")
+  }
+  
+  return(combined_result)
+  }
+}
+

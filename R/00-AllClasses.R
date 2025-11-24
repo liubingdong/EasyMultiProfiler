@@ -155,6 +155,8 @@ setClass("EMPT",
 
 setClass("EMP_assay_data",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_assay_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
+setClass("EMP_assay_barplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
+
 setClass("EMP_structure_plot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 setClass("EMP_fitline_plot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 
