@@ -95,20 +95,6 @@ pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
 
-**Release Notes for EMP 0.2.8**
-
-1. Performance Optimization
-
-   - Significant speed improvements implemented in the `EMP_diff_analysis` module
-
-2. Enhanced Visualization Capabilities
-
-   - Added new customizable parameters to `EMP_sankey_plot` for greater visualization flexibility
-
-3. New Statistical Functionality
-
-   - Implemented paired-test support in both `EMP_diff_analysis ` and `EMP_boxplot`
-
 ### Usage and tutorial
 For more details, please refer to the tutorial:
 

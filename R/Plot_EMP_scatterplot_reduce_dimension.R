@@ -189,7 +189,7 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
   #相须图绘制
   if (!is.null(paired_group)) {
 
-    p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
+    p1 <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) + scale_fill_manual(values=col_values) +
       ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) +
       coord_flip() + 
@@ -203,9 +203,9 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             axis.title.y=element_blank(),
             axis.text.y=element_text(colour='black',size=20,face = "bold"),
             axis.text.x=element_blank(),
-            legend.position = "none")
+            legend.position = "none") ) |> suppressWarnings()
     
-    p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+    p2 <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) + scale_fill_manual(values=col_values) +
       ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) + 
       geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
@@ -219,9 +219,9 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             axis.text.x=element_text(colour='black',size=20,angle = 45,
                                      vjust = 1,hjust = 1,face = "bold"),
             axis.text.y=element_blank(),
-            legend.position = "none")
+            legend.position = "none") ) |> suppressWarnings()
 
-    p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+    p2_r <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) + scale_fill_manual(values=col_values)+
       ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) + coord_flip() + 
       geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) +
@@ -234,10 +234,10 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             axis.title.y=element_blank(),
             axis.text.y=element_text(colour='black',size=20,face = "bold"),
             axis.text.x=element_blank(),
-            legend.position = "none")
+            legend.position = "none") ) |> suppressWarnings()
 
     if (axis_num == 3) {
-      p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
+      p3 <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
         geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
         ggsignif::geom_signif(comparisons = comparisons,test = method,test.args=list(paired=TRUE),step_increase = step_increase,...) +
         geom_line(aes(group = paired_group), color = 'gray', lwd = 0.5) + 
@@ -251,7 +251,7 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
               axis.text.x=element_text(colour='black',size=20,angle = 45,
                                        vjust = 1,hjust = 1,face = "bold"),
               axis.text.y=element_blank(),
-              legend.position = "none")
+              legend.position = "none") ) |> suppressWarnings()
     }
 
     if (paired_box_line == FALSE) {
@@ -262,7 +262,7 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
     }
  
   }else{
-    p1 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
+    p1 <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[1]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
       ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+
       coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[1]),2))),position = "jitter")+
@@ -274,9 +274,9 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             axis.title.y=element_blank(),
             axis.text.y=element_text(colour='black',size=20,face = "bold"),
             axis.text.x=element_blank(),
-            legend.position = "none")
+            legend.position = "none") ) |> suppressWarnings()
 
-    p2 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+    p2 <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
       ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
       theme_bw()+
@@ -288,9 +288,9 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             axis.text.x=element_text(colour='black',size=20,angle = 45,
                                      vjust = 1,hjust = 1,face = "bold"),
             axis.text.y=element_blank(),
-            legend.position = "none")
+            legend.position = "none") ) |> suppressWarnings()
 
-    p2_r <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
+    p2_r <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[2]))) +
       geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +scale_fill_manual(values=col_values)+
       ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...)+coord_flip() +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[2]),2))),position = "jitter")+
       theme_bw()+
@@ -301,10 +301,10 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
             axis.title.y=element_blank(),
             axis.text.y=element_text(colour='black',size=20,face = "bold"),
             axis.text.x=element_blank(),
-            legend.position = "none")
+            legend.position = "none") ) |> suppressWarnings()
 
     if (axis_num == 3) {
-      p3 <- ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
+      p3 <- (ggplot(plotdata,aes(Group,!!dplyr::sym(axis_name[3]))) + scale_fill_manual(values=col_values) +
         geom_boxplot(aes(fill = Group),outlier.colour = NA,width=box_width,alpha=box_alpha) +
         ggsignif::geom_signif(comparisons = comparisons,test = method,step_increase = step_increase,...) +ggiraph::geom_point_interactive(aes(tooltip = paste0(primary,' : ',round(!!dplyr::sym(axis_name[3]),2))),position = "jitter")+
         theme_bw()+
@@ -316,7 +316,7 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
               axis.text.x=element_text(colour='black',size=20,angle = 45,
                                        vjust = 1,hjust = 1,face = "bold"),
               axis.text.y=element_blank(),
-              legend.position = "none")
+              legend.position = "none") ) |> suppressWarnings()
     }
   }
 

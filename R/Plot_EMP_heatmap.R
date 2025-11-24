@@ -155,12 +155,12 @@ EMP_heatmap.EMP_cor_analysis <- function(obj,palette=c("steelblue","white","dark
   }
 
   if (clust_row == TRUE) {
-    row_tree <- ggtree::ggtree(var2_clust,layout = "rectangular",branch.length = "none")
+    row_tree <- ggtree::ggtree(var2_clust,layout = "rectangular",branch.length = "none") |> suppressWarnings()
     p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
   }
   
   if (clust_col == TRUE) {
-    col_tree <- ggtree::ggtree(var1_clust,branch.length = "none") + ggtree::layout_dendrogram()
+    col_tree <- (ggtree::ggtree(var1_clust,branch.length = "none") + ggtree::layout_dendrogram() )|> suppressWarnings()
     p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
   } 
 
@@ -329,12 +329,12 @@ EMP_heatmap.WGCNA <- function(obj,palette=c("steelblue","white","darkred"),
   }
 
   if (clust_row == TRUE) {
-    row_tree <- ggtree::ggtree(var2_clust,layout = "rectangular",branch.length = "none")
+    row_tree <- ggtree::ggtree(var2_clust,layout = "rectangular",branch.length = "none") |> suppressWarnings()
     p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
   }
   
   if (clust_col == TRUE) {
-    col_tree <- ggtree::ggtree(var1_clust,branch.length = "none") + ggtree::layout_dendrogram()
+    col_tree <- (ggtree::ggtree(var1_clust,branch.length = "none") + ggtree::layout_dendrogram() )|> suppressWarnings()
     p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
   } 
 
@@ -505,21 +505,21 @@ EMP_heatmap.EMP_assay_data <- function(obj,palette=c("steelblue","white","darkre
   if (rotate == TRUE) {
     #xy_name <- c('feature','primary')
     if (clust_row == TRUE) {
-      row_tree <- ggtree::ggtree(primary_clust,layout = "rectangular",branch.length = "none")
+      row_tree <- ggtree::ggtree(primary_clust,layout = "rectangular",branch.length = "none") |> suppressWarnings()
       p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
     }
     if (clust_col == TRUE) {
-      col_tree <- ggtree::ggtree(feature_clust,branch.length = "none") + ggtree::layout_dendrogram()
+      col_tree <- (ggtree::ggtree(feature_clust,branch.length = "none") + ggtree::layout_dendrogram() )|> suppressWarnings()
       p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
     }   
   }else{
     #xy_name <- c('primary','feature')  
     if (clust_row == TRUE) {
-      row_tree <- ggtree::ggtree(feature_clust,layout = "rectangular",branch.length = "none")
+      row_tree <- ggtree::ggtree(feature_clust,layout = "rectangular",branch.length = "none") |> suppressWarnings()
       p1 <- p1 %>% aplot::insert_left(row_tree,width = tree_size)
     }
     if (clust_col == TRUE) {
-      col_tree <- ggtree::ggtree(primary_clust,branch.length = "none") + ggtree::layout_dendrogram()
+      col_tree <- (ggtree::ggtree(primary_clust,branch.length = "none") + ggtree::layout_dendrogram() )|> suppressWarnings()
       p1 <- p1 %>% aplot::insert_top(col_tree,height = tree_size)
     }     
   }
