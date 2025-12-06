@@ -1,5 +1,5 @@
 .show_EMP_dimension_analysis_scatterplot <- function(obj,plot) {
-  result <- .get.plot_deposit.EMPT(obj,info = 'dimension_analysis_scatterplot')
+  result <- .get.plot_deposit.EMPT(obj,info = 'EMP_dimension_analysis_scatterplot')
   switch(plot,
          "p12" = print(result$pic$p12),
          "p23" = print(result$pic$p23),
@@ -608,8 +608,8 @@ EMP_scatterplot.EMP_dimension_analysis <- function(obj,seed=123,group_level='def
 
 
 
-  .get.plot_deposit.EMPT(EMPT,info = 'dimension_analysis_scatterplot') <- deposit
-  .get.algorithm.EMPT(EMPT) <- 'dimension_analysis_scatterplot'
+  .get.plot_deposit.EMPT(EMPT,info = 'EMP_dimension_analysis_scatterplot') <- deposit
+  .get.algorithm.EMPT(EMPT) <- 'EMP_dimension_analysis_scatterplot'
   .get.info.EMPT(EMPT) <- 'EMP_dimension_analysis_scatterplot'
   .get.plot_specific.EMPT(EMPT) <- show
   #.get.history.EMPT(EMPT) <- call

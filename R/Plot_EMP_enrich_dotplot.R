@@ -76,9 +76,9 @@ EMP_dotplot_enrich_default <- function(obj,show='pic',color='p.adjust',showCateg
     enrich_plot[['pic']] <- p
     #enrich_plot[['html']] <- plotly::ggplotly(p)
 
-    .get.plot_deposit.EMPT(obj,info = 'enrich_analysis_dotplot') <- enrich_plot
+    .get.plot_deposit.EMPT(obj,info = 'EMP_enrich_analysis_dotplot') <- enrich_plot
     .get.plot_specific.EMPT(obj) <- show
-    .get.algorithm.EMPT(obj) <- 'enrich_analysis_dotplot'
+    .get.algorithm.EMPT(obj) <- 'EMP_enrich_analysis_dotplot'
     .get.info.EMPT(obj) <- 'EMP_enrich_analysis_dotplot'
     class(obj) <- 'EMP_enrich_analysis_dotplot'
   }else{
@@ -95,7 +95,7 @@ EMP_dotplot_enrich_default <- function(obj,show='pic',color='p.adjust',showCateg
   }else if (is(obj,"EMP_multi_diff_enrich")) {
       result <- .get.plot_deposit.EMP(obj,info = 'multi_diff_enrich_dotplot')
   }else if (is(obj,"EMPT")) {
-      result <- .get.plot_deposit.EMPT(obj,info = 'enrich_analysis_dotplot')
+      result <- .get.plot_deposit.EMPT(obj,info = 'EMP_enrich_analysis_dotplot')
   }
   switch(plot,
          "pic" = print(result$pic),

@@ -44,7 +44,8 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
  }
 {Data Virtualization} : 
 \itemize{
-  \item \code{\link{EMP_boxplot}}  
+  \item \code{\link{EMP_boxplot}} 
+  \item \code{\link{EMP_barplot}}     
 	\item \code{\link{EMP_enrich_dotplot}}
 	\item \code{\link{EMP_enrich_netplot}} 
 	\item \code{\link{EMP_fitline_plot}}	
