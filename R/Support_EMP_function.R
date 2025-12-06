@@ -218,7 +218,7 @@ as.EMP <- function(object,select=NULL) {
 .check_duplicate <- function(string_vector){
   dup_indices <- duplicated(string_vector)
   if (any(dup_indices)) {
-    # 在重复元素后添加序号
+
     for(i in which(dup_indices)){
       string_original <- string_vector[i]
       string_counter <- 1
@@ -306,10 +306,10 @@ EMP_history <- function(obj) {
 }
 
 .impute_tax <- function(df) {
-  # 逐行应用函数
+
   df_merged <- t(apply(df, 1, .merge_tax_value))
   
-  # 更新数据框
+
   df <- as.data.frame(df_merged)
   
   return(df)
@@ -838,7 +838,7 @@ top_detect<- function(x, n, type = 'top',index=TRUE) {
     stop("The input n must not exceed the scale of the data!")
   }
   
-  # 确保 n 合法（大于 0 且不超过向量长度）
+
   if (n <= 0) {
     stop("n must be greater than 0.")
   } else if (n < 1) {
@@ -956,7 +956,7 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
   return(obj)  
 }
 
-
+#' @importFrom stats as.formula
 #' @importFrom rstatix tukey_hsd
 #' @importFrom rstatix dunn_test
 #' @importFrom rstatix emmeans_test
@@ -984,9 +984,11 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
   rlang::check_installed(c('dplyr'), reason = 'for perform_stat_test().', action = install.packages) 
   rlang::check_installed(c('emmeans'), reason = 'for perform_stat_test().', action = install.packages) 
   
+
+  group1 <- group2 <- compare <- p.adj <- p <- p.signif <- p.adj.signif <- `.` <- NULL
   if (is.null(formula)) {
     if (is.null(estimate_group) | is.null(value)) {
-      stop("formula is necessary，or provide the estimate_group and value!")
+      stop("formula is necessary, or provide the estimate_group and value!")
     }
     if (is.null(compare_group)) {
       formula_obj <- as.formula(paste(value, "~", estimate_group))
@@ -1038,8 +1040,14 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
   stat_result <- data %>% 
     {
       if (method == "tukey.hsd") {
+        if (!is.null(comparisons)){
+          stop(paste0("The parameter comparisons can not support ",method,'!'))
+        }
         tukey_hsd(formula=formula_obj,x=.,...) 
       } else if (method == "dunn.test") {
+        if (!is.null(comparisons)){
+          stop(paste0("The parameter comparisons can not support ",method,'!'))
+        }        
         dunn_test(formula=formula_obj,data=.,...)
       } else if (method == "emmeans.test") {
         emmeans_test(formula=formula_obj,data=.,ref.group=ref.group,comparisons=comparisons,...)
@@ -1098,12 +1106,16 @@ EMP_inject <- function(obj,value,value_name,affect_when_sample_changed=1,affect_
 #' @param estimate_group estimate_group.The primary grouping variable for estimation and comparison.Serves as the comparison group by default.
 #' @param compare_group compare_group.Optional subgroup analysis variable. When specified, the subgroup comparison performs.
 #' @param formula formula.
+#' @param value value
 #' @param method statistics including t.test, wilcox.test, sign.test, emmeans.test, dunn.test, tukey.hsd.
 #' @param paired a logical indicating whether you want a paired t-test for t.test and wilcox.test.
+#' @param paired_group  A character string. Variable name corresponding to paired primary or sample.
 #' @param p.adjust a character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)
 #' @param ref.group a character string specifying the reference group. If specified, for a given grouping variable, each of the group levels will be compared to the reference group (i.e. control group).
 #' @param comparisons a list of length-2 vectors, which only support t.test, wilcox.test, sign.test and emmeans.test.
 #' @param facet.by a column name for multiple features.
+#' @param error_handling error_handling including stop warn and silent.
+#' @param silent silent.
 #' @param ... additional parameters, see also \code{\link[rstatix]{t_test}},\code{\link[rstatix]{wilcox_test}},...
 #' @rdname stat_test
 #'
@@ -1171,7 +1183,6 @@ stat_test <- function(data,
                        error_handling = "warn",
                        silent=FALSE,...) {
   
-  # 检查必要的包
   rlang::check_installed(c('dplyr', 'purrr', 'rlang', 'tidyr'), 
                          reason = 'for stat_test().', 
                          action = install.packages)
@@ -1190,7 +1201,7 @@ stat_test <- function(data,
                        comparisons = comparisons,...)
     return(result)
   }else{
-  # 验证输入
+
   if (!facet.by %in% names(data)) {
     stop("Group column '", facet.by, "' not found in data")
   }
@@ -1199,7 +1210,7 @@ stat_test <- function(data,
     stop("error_handling must be one of: 'stop', 'warn', 'silent'")
   }
   
-  # 获取分组信息
+
   group_levels <- unique(data[[facet.by]])
   n_groups <- length(group_levels)
   
@@ -1211,17 +1222,17 @@ stat_test <- function(data,
     message("Processing ", n_groups, " groups...")
   }
   
-  # 对每个分组执行统计检验
+
   results <- list()
   errors <- list()
   
   for (i in seq_along(group_levels)) {
     group_val <- group_levels[i]
     
-    # 筛选当前分组的数据
+
     sub_data <- data[data[[facet.by]] == group_val, ]
     
-    # 检查数据是否足够
+
     if (nrow(sub_data) < 2) {
       msg <- paste("Group", group_val, "has insufficient data (n < 2)")
       errors[[group_val]] <- msg
@@ -1230,7 +1241,7 @@ stat_test <- function(data,
       next
     }
     
-    # 执行统计检验
+
     tryCatch({
       result <- .stat_test_single(data = sub_data,
                        estimate_group = estimate_group, 
@@ -1243,10 +1254,10 @@ stat_test <- function(data,
                        p.adjust = p.adjust,
                        ref.group = ref.group,
                        comparisons = comparisons,...)
-      # 添加分组信息
+
       result[[facet.by]] <- group_val
       
-      # 如果要求保留分组数据信息
+
       result$n_obs <- nrow(sub_data)
 
       
@@ -1260,19 +1271,19 @@ stat_test <- function(data,
     })
   }
   
-  # 检查是否有有效结果
+
   if (length(results) == 0) {
     stop("No successful statistical tests across all groups")
   }
   
-  # 合并结果
+
   combined_result <- dplyr::bind_rows(results)
   
-  # 重新排列列，将分组列放在前面
+
   other_cols <- setdiff(names(combined_result), facet.by)
   combined_result <- combined_result[, c(facet.by, other_cols)]
   
-  # 添加属性信息
+
   attr(combined_result, "groups_processed") <- names(results)
   attr(combined_result, "groups_failed") <- names(errors)
   attr(combined_result, "error_messages") <- errors

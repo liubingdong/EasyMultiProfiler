@@ -154,14 +154,15 @@ setClass("EMPT",
 
 
 setClass("EMP_assay_data",contains = c("EMPT","SummarizedExperiment"))
-setClass("EMP_assay_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
-setClass("EMP_assay_barplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
+#setClass("EMP_assay_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
+setClass("EMP_barplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
+setClass("EMP_boxplot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 
 setClass("EMP_structure_plot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 setClass("EMP_fitline_plot",contains = c("EMP_assay_data","EMPT","SummarizedExperiment"))
 
 setClass("EMP_alpha_analysis",contains = c("EMPT","SummarizedExperiment"))
-setClass("EMP_alpha_analysis_boxplot",contains = c("EMP_alpha_analysis","EMPT","SummarizedExperiment"))
+#setClass("EMP_alpha_analysis_boxplot",contains = c("EMP_alpha_analysis","EMPT","SummarizedExperiment"))
 
 setClass("EMP_diff_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_diff_volcanol_plot",contains = c("EMP_diff_analysis","EMPT","SummarizedExperiment"))
@@ -178,7 +179,7 @@ setClass("EMP_WGCNA_cor_analysis",contains = c("EMPT","SummarizedExperiment"))
 setClass("EMP_WGCNA_cor_heatmap",contains = c("EMP_WGCNA_cor_analysis","EMPT","SummarizedExperiment"))
 
 setClassUnion("EMP_assay_heatmap_union", c("EMP_assay_data","EMP_decostand","EMP_diff_analysis"))
-setClassUnion("EMP_assay_boxplot_union", c("EMP_assay_data","EMP_decostand","EMP_diff_analysis"))
+#setClassUnion("EMP_assay_boxplot_union", c("EMP_assay_data","EMP_decostand","EMP_diff_analysis"))
 
 
 setClass("EMP_enrich_analysis",contains = c("EMP_diff_analysis","EMPT","SummarizedExperiment"))
@@ -211,64 +212,6 @@ setClass("EMP_multi_diff_enrich_netplot",contains = c("EMP","EMP_multi_diff_enri
 setClass("EMP_multi_same_enrich",contains = c("EMP"))
 setClass("EMP_multi_same_enrich_dotplot",contains = c("EMP","EMP_multi_same_enrich"))
 setClass("EMP_multi_same_enrich_netplot",contains = c("EMP","EMP_multi_same_enrich"))
-
-
-#' Boxplot for EMPT result
-#'
-#' @param ... Additional parameters, see also \code{\link[ggsignif]{geom_signif}}
-#' @rdname EMP_boxplot
-#'
-#' @return EMPT object
-#' @export
-#'
-#' @examples
-#' data(MAE)
-#' # from assay
-#' MAE |> 
-#'   EMP_assay_extract('host_gene',pattern = 'A1BG',
-#'         pattern_ref = 'feature') |>
-#'   EMP_boxplot(method='t.test',estimate_group='Group')
-#' 
-#' # from alpha analysis
-#' MAE |> 
-#'   EMP_assay_extract('taxonomy') |> 
-#'   EMP_alpha_analysis()|>
-#'   EMP_boxplot(method='t.test',estimate_group='Group')
-#' 
-#' # volin style and more parameter
-#' MAE |> 
-#'   EMP_assay_extract('host_gene',
-#'                     pattern = 'A1BG',pattern_ref = 'feature') |>
-#'   EMP_boxplot(estimate_group='Group',box_alpha=0.8,
-#'               box_width=0.3,dot_size=5,plot_category='violin')
-#' MAE |>
-#'   EMP_assay_extract(experiment='taxonomy')|> 
-#'   EMP_alpha_analysis() |>
-#'   EMP_boxplot(estimate_group='Group',method='t.test',
-#'                box_alpha=0.8,dot_size=3,
-#'                box_width=0.3,plot_category='violin')
-#' # Paired test
-#' MAE |> 
-#'   EMP_assay_extract('host_gene',
-#'                    pattern = 'A1BG',pattern_ref = 'feature') |> 
-#'   EMP_boxplot(method='t.test',estimate_group='sub_group',paired_group='patient') # Set the paired_group
-setGeneric("EMP_boxplot",function(obj, ...) standardGeneric("EMP_boxplot"))
-
-
-#' @param ... ...
-#' @rdname EMP_boxplot
-
-setMethod("EMP_boxplot","EMP_alpha_analysis",function(obj, ...){
-  EMP_boxplot.EMP_alpha_analysis(obj, ...)
-})
-
-#' @param ... ...
-#' @rdname EMP_boxplot
-
-setMethod("EMP_boxplot","EMP_assay_boxplot_union",function(obj, ...){
-  EMP_boxplot.EMP_assay_boxplot_union(obj, ...)
-})
-
 
 #' Scatterplot for EMPT result
 #'

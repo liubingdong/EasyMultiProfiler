@@ -31,9 +31,13 @@ stat_test(
 
 \item{formula}{formula.}
 
+\item{value}{value}
+
 \item{method}{statistics including t.test, wilcox.test, sign.test, emmeans.test, dunn.test, tukey.hsd.}
 
 \item{paired}{a logical indicating whether you want a paired t-test for t.test and wilcox.test.}
+
+\item{paired_group}{A character string. Variable name corresponding to paired primary or sample.}
 
 \item{p.adjust}{a character string. Adjust P-values for Multiple Comparisons inluding fdr, holm, hochberg, hommel, bonferroni, BH, BY. (default:fdr)}
 
@@ -42,6 +46,10 @@ stat_test(
 \item{comparisons}{a list of length-2 vectors, which only support t.test, wilcox.test, sign.test and emmeans.test.}
 
 \item{facet.by}{a column name for multiple features.}
+
+\item{error_handling}{error_handling including stop warn and silent.}
+
+\item{silent}{silent.}
 
 \item{...}{additional parameters, see also \code{\link[rstatix]{t_test}},\code{\link[rstatix]{wilcox_test}},...}
 }

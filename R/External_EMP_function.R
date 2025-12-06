@@ -561,6 +561,19 @@ WGCNA_blockwiseModules <- function (datExpr, weights = NULL, checkMissingData = 
 
 
 ##### The code is from Internet(https://stackoverflow.com/questions/27585776/error-bars-for-barplot-only-in-one-direction)
+#' Upper error bar geom
+#'
+#' This geom draws upper error bars (typically used for asymmetric error bars).
+#' It's similar to `geom_errorbar()` but only draws the upper portion.
+#'
+#' @title Upper Error Bar
+#' @name geom_uperrorbar
+#' @inheritParams ggplot2::geom_errorbar
+#' @param orientation The orientation of the error bars. Use "x" for vertical
+#'   error bars and "y" for horizontal error bars.
+#' @param na.rm If `FALSE` (the default), removes missing values with a warning.
+#'   If `TRUE` silently removes missing values.
+#' @param ... Other arguments passed on to `layer()`.
 geom_uperrorbar <- function(mapping = NULL, data = NULL,
                             stat = "identity", position = "identity",
                             ...,
@@ -584,9 +597,14 @@ geom_uperrorbar <- function(mapping = NULL, data = NULL,
   )
 }
 
+#' @title Upper Error Bar Geom Object
+#' @name GeomUperrorbar
+#' @description This ggproto object implements the drawing of upper error bars.
+#'              Users should use `geom_uperrorbar()` instead of calling this object directly.
 #' @format NULL
 #' @usage NULL
 #' @export
+#' @rdname geom_uperrorbar
 GeomUperrorbar <- ggproto("GeomUperrorbar", Geom,
                           default_aes = aes(colour = "black", linewidth = 0.5, linetype = 1, width = 0.5,
                                             alpha = NA),
@@ -635,6 +653,7 @@ GeomUperrorbar <- ggproto("GeomUperrorbar", Geom,
                           }
 )
 
+#' @importFrom rlang abort
 new_data_frame <- function(x = list(), n = NULL) {
   if (length(x) != 0 && is.null(names(x))) {
     abort("Elements must be named")

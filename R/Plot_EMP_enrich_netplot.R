@@ -73,9 +73,9 @@ EMP_netplot_enrich_default <- function(obj,show='pic',showCategory=10,...) {
     enrich_plot[['pic']] <- p
     #enrich_plot[['html']] <- plotly::ggplotly(p)
 
-    .get.plot_deposit.EMPT(obj,info = 'enrich_analysis_netplot') <- enrich_plot
+    .get.plot_deposit.EMPT(obj,info = 'EMP_enrich_analysis_netplot') <- enrich_plot
     .get.plot_specific.EMPT(obj) <- show
-    .get.algorithm.EMPT(obj) <- 'enrich_analysis_netplot'
+    .get.algorithm.EMPT(obj) <- 'EMP_enrich_analysis_netplot'
     .get.info.EMPT(obj) <- 'EMP_enrich_analysis_netplot'
     class(obj) <- 'EMP_enrich_analysis_netplot'
   }else{
@@ -93,7 +93,7 @@ EMP_netplot_enrich_default <- function(obj,show='pic',showCategory=10,...) {
   }else if (is(obj,"EMP_multi_diff_enrich")) {
       result <- .get.plot_deposit.EMP(obj,info = 'multi_diff_enrich_netplot')
   }else if (is(obj,"EMPT")) {
-      result <- .get.plot_deposit.EMPT(obj,info = 'enrich_analysis_netplot')
+      result <- .get.plot_deposit.EMPT(obj,info = 'EMP_enrich_analysis_netplot')
   }
   switch(plot,
          "pic" = print(result$pic),

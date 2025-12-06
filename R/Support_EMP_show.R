@@ -122,17 +122,13 @@ setMethod("show", "EMPT",
                       set.seed(123)
                      .show_EMP_dimension_analysis_scatterplot(object,.get.plot_specific.EMPT(object))
                    },
-                   "EMP_alpha_analysis_boxplot" = {
+                   "EMP_boxplot" = {
                      set.seed(123)
-                     .show_EMP_alpha_boxplot(object,.get.plot_specific.EMPT(object))
+                     .show_EMP_boxplot(object,.get.plot_specific.EMPT(object))
                    },
-                   "EMP_assay_boxplot" = {
+                   "EMP_barplot" = {
                      set.seed(123)
-                     .show_EMP_assay_boxplot(object,.get.plot_specific.EMPT(object))
-                   },
-                   "EMP_assay_barplot" = {
-                     set.seed(123)
-                     .show_EMP_assay_barplot(object,.get.plot_specific.EMPT(object))
+                     .show_EMP_barplot(object,.get.plot_specific.EMPT(object))
                    },
                    "EMP_structure_plot" = {
                      .show_EMP_structure_plot(object,.get.plot_specific.EMPT(object))
@@ -178,13 +174,13 @@ setMethod("show", "EMPT",
                      return(.get.assay.EMPT(object))
                    },
                    "EMP_mutate_assay" = {
-                     return(.get.assay.EMPT(object))
+                     return(.get.assay.EMPT(object))  # necessary
                    }, 
                    "EMP_mutate_row" = {
-                     return(.get.row_info.EMPT(object))
+                     return(.get.assay.EMPT(object))  # necessary
                    },
                    "EMP_mutate_col" = {
-                     return(.get.mapping.EMPT(object))
+                     return(.get.assay.EMPT(object)) # necessary
                    },                                                            
                    "EMP_decostand" = {
                      for (str in object@message_info) {
