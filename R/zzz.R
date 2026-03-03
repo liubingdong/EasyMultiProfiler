@@ -3,3 +3,7 @@
   #packageStartupMessage("Suggestions and bug-reports can be submitted at: ")
   #packageStartupMessage("https://github.com/xielab2017/EasyMicroPlot")
 }
+.onLoad <- function(libname, pkgname) {
+  # 关闭lifecycle警告的全局触发
+  options(lifecycle_verbosity = "quiet") 
+}

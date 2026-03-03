@@ -1,4 +1,5 @@
 #' @import ggplot2
+#' @importFrom utils modifyList
 #' @importFrom ggiraph geom_point_interactive
 #' @importFrom ggpubr stat_pvalue_manual
 #' @importFrom ggbreak scale_y_break
@@ -25,10 +26,6 @@ EMP_boxplot_default <- function (obj,method = 'wilcox.test',
   }
 
   label <- match.arg(label, c("p", "p.adj","p.signif","p.adj.signif"))
-
-  if (dot_color == 'group') {
-    dot_color <- NULL
-  }
 
   primary <- value <- `.` <- NULL
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
@@ -81,6 +78,7 @@ EMP_boxplot_default <- function (obj,method = 'wilcox.test',
     compare_group <- estimate_group
   }
 
+
   data %<>%  tidyr::pivot_longer(cols = c(-primary,-dplyr::any_of(c(!!estimate_group,!!compare_group,!!paired_group))),
                                        names_to = 'ID',
                                        values_to = 'value')
@@ -130,10 +128,40 @@ EMP_boxplot_default <- function (obj,method = 'wilcox.test',
   }
 
   if (is.null(compare_group)) {
-    group_expr <- sym(estimate_group)
+    group_expr <- dplyr::sym(estimate_group)
   } else {
-    group_expr <- expr(interaction(!!sym(estimate_group), !!sym(compare_group)))
+    group_expr <- rlang::expr(interaction(!!dplyr::sym(estimate_group), !!dplyr::sym(compare_group)))
   }
+
+
+  if (dot_color == 'group') {
+    dot_color <- NULL
+  }
+
+  point_params <- list(
+    mapping = aes(color = factor(!!dplyr::sym(compare_group)),
+                  tooltip = paste0(primary,' : ',value),
+                  group = !!group_expr),
+    show.legend = FALSE,
+    position = position_jitterdodge(seed = seed, jitter.height = 0.000001, dodge.width = 0.75),
+    shape = 21,
+    size = dot_size,
+    color = 'black'
+  )
+
+  point_params <- modifyList(
+    point_params,
+    if (!is.null(dot_color)) list(fill = dot_color) else list()
+  )
+
+  boxplot_params <- list(
+    outlier.color=NA,alpha=box_alpha,position = position_dodge(width = 0.75)
+  )
+
+  boxplot_params <- modifyList(
+    boxplot_params,
+    if (!is.null(box_width)) list(width = box_width) else list()
+  )
 
   data_plot <- list()
 
@@ -141,21 +169,15 @@ EMP_boxplot_default <- function (obj,method = 'wilcox.test',
       data_plot[['pic']] <- (ggplot(data, aes(x = !!dplyr::sym(estimate_group), y = value, 
                   fill = !!dplyr::sym(compare_group),
                   color = !!dplyr::sym(compare_group))) +
-        geom_boxplot(outlier.color=NA,alpha=box_alpha,width=box_width,position = position_dodge(width = 0.75)) +
+        #geom_boxplot(outlier.color=NA,alpha=box_alpha,width=box_width,position = position_dodge(width = 0.75)) +
+        do.call(geom_boxplot, boxplot_params) +
         # 修改颜色
         scale_fill_manual(values = col_values) +
         scale_color_manual(values = box_color) +
         # 添加误差线
         geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) +       
         # 添加抖动点
-        geom_point_interactive(aes(color = factor(compare_group),
-                   tooltip = paste0(primary,' : ',value),
-                   group = !!group_expr),
-                   show.legend = FALSE,# 不显示图例
-                   position = position_jitterdodge(seed = seed,jitter.height = 0.000001,
-                    jitter.width = 0, ### necessary
-                    dodge.width = 0.75),
-                   shape = 21,size = dot_size,fill = dot_color,color = 'black') +
+        do.call(geom_point_interactive, point_params) +
         facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
         theme_bw() + 
         theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
@@ -186,17 +208,13 @@ EMP_boxplot_default <- function (obj,method = 'wilcox.test',
       data_plot[['pic']] <- (ggplot(data, aes(x = !!dplyr::sym(estimate_group), y = value, 
                   fill = !!dplyr::sym(compare_group),
                   color = !!dplyr::sym(compare_group))) +
-        geom_boxplot(outlier.color=NA,alpha=box_alpha,width=box_width,position = position_dodge(width = 0.75)) +
+        #geom_boxplot(outlier.color=NA,alpha=box_alpha,width=box_width,position = position_dodge(width = 0.75)) +
+        do.call(geom_boxplot, boxplot_params) +
         # 修改颜色
         scale_fill_manual(values = col_values) +
         scale_color_manual(values = box_color) +
         # 添加抖动点
-        geom_point_interactive(aes(color = factor(compare_group),
-                   tooltip = paste0(primary,' : ',value),
-                   group = !!group_expr),
-                   show.legend = FALSE,# 不显示图例
-                   position = position_jitterdodge(seed = seed,jitter.height = 0.000001,dodge.width = 0.75),
-                   shape = 21,size = dot_size,fill = dot_color,color = 'black') +
+        do.call(geom_point_interactive, point_params) +
         facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
         theme_bw() + 
         theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
@@ -268,11 +286,6 @@ EMP_boxplot_violin <- function (obj,method = 'wilcox.test',
 
   label <- match.arg(label, c("p", "p.adj","p.signif","p.adj.signif"))
 
-  
-  if (dot_color == 'group') {
-    dot_color <- NULL
-  }
-
   primary <- value <- `.` <- NULL
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
 
@@ -297,7 +310,6 @@ EMP_boxplot_violin <- function (obj,method = 'wilcox.test',
     EMPT %<>% .group_level_modified(estimate_group = compare_group,
                                   group_level = compare_group_level)
   }
-
 
   mapping <- .get.mapping.EMPT(EMPT) %>% dplyr::select(primary,dplyr::any_of(c(!!estimate_group,!!compare_group,!!paired_group)))
   
@@ -373,10 +385,31 @@ EMP_boxplot_violin <- function (obj,method = 'wilcox.test',
   }
 
   if (is.null(compare_group)) {
-    group_expr <- sym(estimate_group)
+    group_expr <- dplyr::sym(estimate_group)
   } else {
-    group_expr <- expr(interaction(!!sym(estimate_group), !!sym(compare_group)))
+    group_expr <- rlang::expr(interaction(!!dplyr::sym(estimate_group), !!dplyr::sym(compare_group)))
   }
+
+
+  if (dot_color == 'group') {
+    dot_color <- NULL
+  }
+
+  point_params <- list(
+    mapping = aes(color = factor(!!dplyr::sym(compare_group)),
+                  tooltip = paste0(primary,' : ',value),
+                  group = !!group_expr),
+    show.legend = FALSE,
+    position = position_jitterdodge(seed = seed, jitter.height = 0.000001, dodge.width = 0.75),
+    shape = 21,
+    size = dot_size,
+    color = 'black'
+  )
+
+  point_params <- modifyList(
+    point_params,
+    if (!is.null(dot_color)) list(fill = dot_color) else list()
+  )
 
   data_plot <- list()
   if (!is.null(paired_group)) {
@@ -403,14 +436,7 @@ EMP_boxplot_violin <- function (obj,method = 'wilcox.test',
         # 添加误差线
         geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) +       
         # 添加抖动点
-        geom_point_interactive(aes(color = factor(compare_group),
-                   tooltip = paste0(primary,' : ',value),
-                   group = !!group_expr),
-                   show.legend = FALSE,# 不显示图例
-                   position = position_jitterdodge(seed = seed,jitter.height = 0.000001,
-                    jitter.width = 0, ### necessary
-                    dodge.width = 1),
-                   shape = 21,size = dot_size,fill = dot_color,color = 'black') +
+        do.call(geom_point_interactive, point_params) +
         facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
         theme_bw() + 
         theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +
@@ -459,12 +485,7 @@ EMP_boxplot_violin <- function (obj,method = 'wilcox.test',
         scale_fill_manual(values = col_values) +
         scale_color_manual(values = box_color) +
         # 添加抖动点
-        geom_point_interactive(aes(color = factor(compare_group),
-                   tooltip = paste0(primary,' : ',value),
-                   group = !!group_expr),
-                   show.legend = FALSE,# 不显示图例
-                   position = position_jitterdodge(seed = seed,jitter.height = 0.000001,dodge.width = 1),
-                   shape = 21,size = dot_size,fill = dot_color,color = 'black') +
+        do.call(geom_point_interactive, point_params) +
         facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +
         theme_bw() + 
         theme(axis.text.x =element_text(angle = 45, hjust = 1,size = 10)) +

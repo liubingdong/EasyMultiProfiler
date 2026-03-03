@@ -12,12 +12,9 @@ EMP_marker_analysis(
   seed = 123,
   nfolds = 5,
   lambda_select = "lambda.min",
-  max.depth = 6,
-  eta = 0.3,
+  learning_rate = 0.3,
   nrounds = 50,
-  xgboost_run = NULL,
   objective = NULL,
-  verbose = 0,
   use_cached = TRUE,
   action = "add",
   ...
@@ -38,17 +35,11 @@ EMP_marker_analysis(
 
 \item{lambda_select}{A character string including lambda.min or lambda.1se. Only actived when method = 'lasso'. More imformation in glmnet::cv.glmnet.}
 
-\item{max.depth}{An interger (default:6). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
-
-\item{eta}{A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
+\item{learning_rate}{A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
 
 \item{nrounds}{An interger (default:50). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
 
-\item{xgboost_run}{An character string.Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.}
-
 \item{objective}{An character string. Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:squarederror for linear regression.}
-
-\item{verbose}{An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.}
 
 \item{use_cached}{A boolean. Whether the function use the results in cache or re-compute.}
 
@@ -82,17 +73,16 @@ MAE |>
 ## regression or classify by xgboost
 ### For regression
 MAE |>
-  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='regression',
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
                       estimate_group = 'Education_Years',objective = 'reg:squarederror')
 ### For two categories classify
 MAE |>
-  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='classify',
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
                       estimate_group = 'Group',objective = 'binary:logistic')
 ### For multible categories classify
 MAE |>
-  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='classify',
-                      estimate_group = 'Status',objective = 'multi:softmax',
-                      num_class=3) ## num_class is necessary
+  EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+                      estimate_group = 'Status',objective = 'multi:softprob')
 ## Lasso regression
 MAE |>
   EMP_marker_analysis(experiment = 'geno_ko',method = 'lasso',estimate_group = 'Education_Years') |>

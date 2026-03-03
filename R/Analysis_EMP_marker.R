@@ -93,42 +93,31 @@
 #' @importFrom xgboost xgboost
 #' @importFrom xgboost xgb.importance
 
-.EMP_xgb_analysis <- function(obj,seed=123,estimate_group,max.depth=6,eta=0.3,nrounds=50,objective=NULL,xgboost_run=NULL,verbose=0,...) {
+.EMP_xgb_analysis <- function(obj,seed=123,estimate_group,learning_rate=0.3,nrounds=50,objective=NULL,...) {
   assay_data <- row_data <- coldata <- tran_data <- xgb_model <- feature_importance <- primary <- feature <- NULL
   Feature <- Gain <- Cover <- Frequency <-  Importance <- xgb_Gain <- xgb_Cover <- xgb_Frequency <- xgb_Importance <- nthread <- NULL
-  assay_data <- assay(obj) %>% t()
+  assay_data <- assay(obj) %>% t() %>% as.data.frame() %>% tibble::rownames_to_column('primary')
   row_data <- obj %>% .get.row_info.EMPT() %>% dplyr::select(1:2)
 
-
-  if (is.null(objective) | is.null(xgboost_run)) {
-    stop('Parameter xgboost_run need specify classify or regression and select the suitable parameter objective!')
-  }
-
-  if (xgboost_run == 'classify') {
-    coldata <- obj %>% .get.mapping.EMPT() %>%
-      dplyr::pull({{estimate_group}}) %>%
-      as.factor() %>% 
-      as.numeric() %>% -1
-  }else if (xgboost_run == 'regression') {
-    coldata <- obj %>% .get.mapping.EMPT() %>%
-      dplyr::pull({{estimate_group}})
-  }else {
-    stop('Parameter xgboost_run must be classify or regression!')
-  }
-
+  coldata <- obj %>% .get.mapping.EMPT() %>%
+      dplyr::select(primary,{{estimate_group}})
   nthread <- parallel::detectCores() - 1
 
-  traindata <- xgb.DMatrix(data = as.matrix(assay_data),label= coldata)
+  #traindata <- xgb.DMatrix(data = as.matrix(assay_data),label= coldata)
+  traindata <- dplyr::left_join(assay_data,coldata,by='primary') |>
+    dplyr::select(-primary) |>
+    dplyr::select({{estimate_group}},everything())
+
   set.seed(seed)
-  xbg_model <- xgboost(data = traindata, 
-                       max.depth = max.depth, 
-                       eta = eta, 
+  xbg_model <- xgboost(x=traindata[-1],y= traindata[[estimate_group]],
+                       #max.depth = max.depth, 
+                       learning_rate = learning_rate, 
                        nthread = nthread, 
                        nrounds = nrounds, 
-                       objective = objective,
-                       verbose=verbose,...)
-  feature_importance <- xgb.importance(colnames(traindata), model = xbg_model)
-  xgboost::xgb.plot.importance(feature_importance,plot=F) ## This step is necessary to add importance in the feature_importance
+                       objective = objective,...)
+
+  feature_importance <- xgb.importance(model = xbg_model)
+  feature_importance <- xgboost::xgb.plot.importance(feature_importance,plot=F) ## This step is necessary to add importance in the feature_importance
   feature_importance <- feature_importance %>%
     dplyr::rename(feature=Feature,xgb_Gain=Gain,xgb_Cover=Cover,xgb_Frequency=Frequency,xgb_Importance=Importance)
   feature_importance <- dplyr::left_join(row_data,feature_importance,by='feature') %>%
@@ -140,7 +129,6 @@
   
   .get.estimate_group.EMPT(obj) <- estimate_group
   .get.method.EMPT(obj) <- 'xgboost'
-  .get.algorithm.EMPT(obj) <- xgboost_run
   .get.info.EMPT(obj) <- 'EMP_marker_analysis'
   return(obj)
 }
@@ -193,12 +181,9 @@
 #' @param seed An interger. Set the random seed to the plot.
 #' @param nfolds An interger. Only actived when method = 'lasso'. More imformation in glmnet::cv.glmnet.
 #' @param lambda_select A character string including lambda.min or lambda.1se. Only actived when method = 'lasso'. More imformation in glmnet::cv.glmnet.
-#' @param max.depth An interger (default:6). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
-#' @param eta A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
+#' @param learning_rate A number (0.3). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param nrounds An interger (default:50). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
-#' @param xgboost_run An character string.Parameter xgboost_run need specify classify or regression and select the suitable parameter objective. More imformation in xgboost::xgboost.
 #' @param objective An character string. Only actived when method = 'xgboost'. More imformation in xgboost::xgboost. eg. binary:logistic for two categories classify,multi:softmax for multible categories classify and reg:squarederror for linear regression.                                 
-#' @param verbose An interger (default:0). Only actived when method = 'xgboost'. More imformation in xgboost::xgboost.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param action A character string. Whether to join the new information to the EMPT (add), or just get the detailed result generated here (get).
 #' @param ... Further parameters passed to the function \code{\link[Boruta]{Boruta}}, \code{\link[randomForest]{randomForest}}, \code{\link[xgboost]{xgboost}} and \code{\link[glmnet]{cv.glmnet}}.
@@ -226,23 +211,22 @@
 #' ## regression or classify by xgboost
 #' ### For regression
 #' MAE |>
-#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='regression',
+#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
 #'                       estimate_group = 'Education_Years',objective = 'reg:squarederror')
 #' ### For two categories classify
 #' MAE |>
-#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='classify',
+#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
 #'                       estimate_group = 'Group',objective = 'binary:logistic')
 #' ### For multible categories classify
 #' MAE |>
-#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',xgboost_run='classify',
-#'                       estimate_group = 'Status',objective = 'multi:softmax',
-#'                       num_class=3) ## num_class is necessary
+#'   EMP_marker_analysis(experiment = 'geno_ec',method = 'xgboost',
+#'                       estimate_group = 'Status',objective = 'multi:softprob')
 #' ## Lasso regression
 #' MAE |>
 #'   EMP_marker_analysis(experiment = 'geno_ko',method = 'lasso',estimate_group = 'Education_Years') |>
 #'   EMP_filter(feature_condition = lasso_coe >0) # Select the imprortant feature
 EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=123,nfolds=5,lambda_select='lambda.min',
-                                  max.depth=6,eta=0.3,nrounds=50,xgboost_run=NULL,objective=NULL,verbose=0,use_cached=TRUE,action='add',...){
+                                learning_rate=0.3,nrounds=50,objective=NULL,use_cached=TRUE,action='add',...){
 
   call <- match.call()
   
@@ -275,8 +259,8 @@ EMP_marker_analysis <- function(obj,experiment,method,estimate_group=NULL,seed=1
   switch(method,
          "boruta" = {EMPT <- .EMP_Boruta_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,...) |> suppressWarnings()},
          "randomforest"  = {EMPT <- .EMP_rf_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,...)},
-         "xgboost"  = {EMPT <- .EMP_xgb_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,max.depth=max.depth,
-                                                      eta=eta,nrounds=nrounds,xgboost_run=xgboost_run,objective=objective,verbose=verbose,...)},
+         "xgboost"  = {EMPT <- .EMP_xgb_analysis_m(obj=EMPT,seed=seed,estimate_group=estimate_group,
+                                                      learning_rate=learning_rate,nrounds=nrounds,objective=objective,...)},
          "lasso"  = {EMPT <- .EMP_lasso_analysis_m(obj=EMPT,estimate_group=estimate_group,seed=seed,nfolds=nfolds,lambda_select=lambda_select,...)},
          )
   class(EMPT) <- 'EMP_marker_analysis'
