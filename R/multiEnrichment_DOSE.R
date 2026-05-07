@@ -1,5 +1,15 @@
-get_geneSet_index <- getFromNamespace("get_geneSet_index", "DOSE")
+#get_geneSet_index <- getFromNamespace("get_geneSet_index", "DOSE")
 # get_enriched <- getFromNamespace("get_enriched", "DOSE")
+
+get_geneSet_index <- function (geneSets, minGSSize, maxGSSize) {
+    if (is.na(minGSSize) || is.null(minGSSize)) 
+        minGSSize <- 1
+    if (is.na(maxGSSize) || is.null(maxGSSize)) 
+        maxGSSize <- Inf
+    geneSet_size <- sapply(geneSets, length)
+    idx <- minGSSize <= geneSet_size & geneSet_size <= maxGSSize
+    return(idx)
+}
 
 #' Title
 #'

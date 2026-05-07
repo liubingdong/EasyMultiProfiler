@@ -1,4 +1,3 @@
-#' @importFrom tidybulk adjust_abundance
 #' @importFrom tibble rownames_to_column
 #' @importFrom tibble as_tibble
 #' @importFrom magrittr %>%

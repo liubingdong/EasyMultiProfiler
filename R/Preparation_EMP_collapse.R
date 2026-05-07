@@ -147,7 +147,6 @@ EMP_collapse_byrow <- function(x,experiment,estimate_group=NULL,method='sum',na_
 .EMP_collapse_byrow_m <- memoise::memoise(EMP_collapse_byrow,cache = cachem::cache_mem(max_size = 4096 * 1024^2))
 
 
-#' @importFrom tidybulk tidybulk
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr filter
@@ -362,7 +361,6 @@ EMP_collapse_bycol <- function(x,experiment,estimate_group=NULL,method='sum',na_
 #' @param collapse_by A character string. Methods include col or row.
 #' @param use_cached A boolean. Whether the function use the results in cache or re-compute.
 #' @param ... Further parameters passed to the function \code{\link[base]{mean}}, \code{\link[base]{sum}}, \code{\link[stats]{median}}, \code{\link[base]{min}}, \code{\link[base]{max}} in the base package. 
-#' @importFrom tidybulk tidybulk
 #' @importFrom dplyr rename
 #' @importFrom tidyr drop_na
 #' @importFrom dplyr filter

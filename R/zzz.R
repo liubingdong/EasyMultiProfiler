@@ -5,5 +5,6 @@
 }
 .onLoad <- function(libname, pkgname) {
   # 关闭lifecycle警告的全局触发
-  options(lifecycle_verbosity = "quiet") 
+  options(lifecycle_verbosity = "quiet",
+          warnPartialMatchArgs = FALSE)
 }
