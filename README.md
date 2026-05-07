@@ -30,6 +30,7 @@ The EasyMultiProfiler package aims to offer a user-friendly and efficient multi-
 
 ```R
 if (!requireNamespace("pak", quietly=TRUE)) install.packages("pak")
+pak::pak("tidyomics/tidybulk@4db6efe",ask=FALSE)
 pak::pak("liubingdong/EasyMultiProfiler")
 library(EasyMultiProfiler)
 ```
