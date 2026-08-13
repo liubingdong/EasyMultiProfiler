@@ -4,7 +4,6 @@
 ##'
 ##' @name multiEnrichResult-class
 ##' @aliases multiEnrichResult-class
-##'   show,multiEnrichResult-method summary,multiEnrichResult-method
 ##'
 ##' @docType class
 ##' @slot result multi-omics enrichment analysis.
@@ -60,8 +59,6 @@ setClass("multiEnrichResult",
 ##'
 ##' @name multiGseaResult-class
 ##' @aliases gseahResult-class
-##'   show,multiGseaResult-method summary,multiGseaResult-method
-##'
 ##' @docType class
 ##' @slot result multi-omics GSEA anaysis.
 ##' @slot enrichmentScore enrichmentScore.

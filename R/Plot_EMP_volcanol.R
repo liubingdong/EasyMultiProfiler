@@ -2,7 +2,7 @@
 EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic',
                            html_width=NULL,html_height=NULL,key_feature=NULL,threshold_x = 0,dot_size = 1.75,dot_alpha= 1,
                            mytheme = 'theme()',...) {
-  sign_group <- log2FC <- feature <- color <- key <- NULL
+  sign_group <- log2FC <- feature <- color <- key <- pvalue <- NULL
   if (is.null(palette)) {
     col_values <- .get.palette.EMPT(EMPT)
     col_values <- c(col_values[1:2],"#636363")

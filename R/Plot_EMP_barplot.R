@@ -129,9 +129,6 @@ EMP_barplot <- function (obj,method = 'wilcox.test',
     upper = "uperrorbar"
   )
   
-  if (dot_color == 'group') {
-    dot_color <- NULL
-  }
 
   primary <- value <- `.` <- NULL
   estimate_group <- .check_estimate_group.EMPT(EMPT,estimate_group)
@@ -239,6 +236,16 @@ EMP_barplot <- function (obj,method = 'wilcox.test',
   }
 
   data_plot <- list()
+
+  # set the dot color
+  if (identical(dot_color, "group")) {
+    fill_aes <- aes(fill = !!sym(compare_group))
+    fill_const <- list()
+  } else {
+    fill_aes <- aes()
+    fill_const <- list(fill = dot_color)
+  } 
+
   if (!is.null(paired_group)) {
       data_plot[['pic']] <- (ggplot(data, aes(x = !!dplyr::sym(estimate_group), y = value, 
                   fill = !!dplyr::sym(compare_group),
@@ -258,14 +265,24 @@ EMP_barplot <- function (obj,method = 'wilcox.test',
                      width = 0.3,linewidth = 0.8) +
         geom_line(aes(group = !!dplyr::sym(paired_group)), color = 'gray', lwd = 0.5) +       
         # 添加抖动点
-        geom_point_interactive(aes(color = factor(compare_group),
-                   tooltip = paste0(primary,' : ',value),
-                   group = !!group_expr),
-                   show.legend = FALSE,# 不显示图例
-                   position = position_jitterdodge(seed = seed,jitter.height = 0.000001,
-                    jitter.width = 0, ### necessary
-                    dodge.width = 0.8),
-                   shape = 21,size = dot_size,fill = dot_color,color = 'black') +
+        geom_point_interactive(
+          aes(
+            !!!fill_aes,
+            color = factor(!!sym(compare_group)),
+            tooltip = paste0(primary,' : ',value),
+            group = !!group_expr
+          ),
+          show.legend = FALSE,
+          position = position_jitterdodge(
+            seed = seed,
+            jitter.height = 0.000001,
+            dodge.width = 0.8
+          ),
+          shape = 21,
+          size = dot_size,
+          !!!fill_const,
+          color = 'black'
+        ) +
         # 抖动点边框颜色
         #scale_color_manual(values = rep('black',3)) +
         scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +    
@@ -313,12 +330,24 @@ EMP_barplot <- function (obj,method = 'wilcox.test',
                      position = position_dodge(width = 0.8),
                      width = 0.3,linewidth = 0.8) +
         # 添加抖动点
-        geom_point_interactive(aes(color = factor(compare_group),
-                   tooltip = paste0(primary,' : ',value),
-                   group = !!group_expr),
-                   show.legend = FALSE,# 不显示图例
-                   position = position_jitterdodge(seed = seed,jitter.height = 0.000001,dodge.width = 0.8),
-                   shape = 21,size = dot_size,fill = dot_color,color = 'black') +
+        geom_point_interactive(
+          aes(
+            !!!fill_aes,
+            color = factor(!!sym(compare_group)),
+            tooltip = paste0(primary,' : ',value),
+            group = !!group_expr
+          ),
+          show.legend = FALSE,
+          position = position_jitterdodge(
+            seed = seed,
+            jitter.height = 0.000001,
+            dodge.width = 0.8
+          ),
+          shape = 21,
+          size = dot_size,
+          !!!fill_const,
+          color = 'black'
+        ) +
         # 抖动点边框颜色
         scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +     
         facet_wrap(ID~., scales = 'free', strip.position = 'top',ncol = ncol) +

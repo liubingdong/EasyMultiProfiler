@@ -3,8 +3,6 @@
 \docType{class}
 \name{multiEnrichResult-class}
 \alias{multiEnrichResult-class}
-\alias{show,multiEnrichResult-method}
-\alias{summary,multiEnrichResult-method}
 \title{Class "multiEnrichResult"
 This class represents the result of multi-omics ORA enrichment analysis.}
 \description{

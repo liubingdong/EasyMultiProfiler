@@ -4,8 +4,6 @@
 \name{multiGseaResult-class}
 \alias{multiGseaResult-class}
 \alias{gseahResult-class}
-\alias{show,multiGseaResult-method}
-\alias{summary,multiGseaResult-method}
 \title{Class "multiGseaResult"
 This class represents the result of multi-omics GSEA analysis}
 \description{

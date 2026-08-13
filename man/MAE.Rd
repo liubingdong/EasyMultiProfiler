@@ -8,7 +8,7 @@
 MultiAssayExperiment
 }
 \usage{
-MAE
+data(MAE)
 }
 \value{
 MultiAssayExperiment
