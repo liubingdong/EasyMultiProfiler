@@ -67,21 +67,68 @@ EMP_volcanol_plot_default <- function(EMPT,y='pvalue',palette = NULL,show = 'pic
   # set the key feature
   data <- data %>% dplyr::mutate(key = ifelse(feature %in% key_feature,'key',NA))
 
-  p <- ggplot(data, aes(x = log2FC, y = -log10(!!dplyr::sym(y)),label = feature)) +
-      ggiraph::geom_jitter_interactive(aes(tooltip = paste0(feature,' : ',log2FC,' ',!!dplyr::sym(y)),
-                                           color = color), size = dot_size, alpha = dot_alpha, na.rm = T)+
-      # add gene points
-      ggtitle(label = title_info) +  # add title
-      xlab(expression(log[2]("fold change"))) + # x-axis label
-      ylab(substitute(-log[10](x), list(x = as.name(y)))) + # y-axis label
-      geom_hline(yintercept = 1.3, colour = "black",linetype="twodash",linewidth=0.5) + # p(0.05) = 1.3
-      scale_x_continuous(breaks=xlim_break,limits = c(min(xlim_break),max(xlim_break))) +  # set x axis
-      # 根据需要调节纵坐标
-      scale_y_continuous(breaks = ylim_break,limits = c(min(ylim_break),max(ylim_break)),trans = "log1p") + # set y axis
-
-      scale_color_manual(values = c("UP" = col_values[1],
-                                    "DOWN" = col_values[2],
-                                    "none" = col_values[3])) 
+  p <- ggplot(
+          data,
+          aes(
+            x = log2FC,
+            y = -log10(!!dplyr::sym(y)),
+            label = feature
+          )
+        ) +
+          ggiraph::geom_jitter_interactive(
+            aes(
+              tooltip = paste0(
+                feature, " : ", log2FC, " ", !!dplyr::sym(y)
+              ),
+              fill = color
+            ),
+            size = dot_size,
+            alpha = dot_alpha,
+            na.rm = TRUE,
+            color = "black",   # 黑色描边
+            stroke = 0.3,      # 描边粗细
+            shape = 21         # fill + color 均可映射/设置
+          ) +
+          
+          # add gene points
+          ggtitle(label = title_info) +
+          
+          # x-axis label
+          xlab(expression(log[2]("fold change"))) +
+          
+          # y-axis label
+          ylab(substitute(-log[10](x), list(x = as.name(y)))) +
+          
+          # p(0.05) = 1.3
+          geom_hline(
+            yintercept = 1.3,
+            colour = "black",
+            linetype = "twodash",
+            linewidth = 0.5
+          ) +
+          
+          # x axis
+          scale_x_continuous(
+            breaks = xlim_break,
+            limits = c(min(xlim_break), max(xlim_break))
+          ) +
+          
+          # y axis
+          scale_y_continuous(
+            breaks = ylim_break,
+            limits = c(min(ylim_break), max(ylim_break)),
+            trans = "log1p"
+          ) +
+          
+          # fill color for groups
+          scale_fill_manual(
+            values = c(
+              "UP"   = col_values[1],
+              "DOWN" = col_values[2],
+              "none" = col_values[3]
+            )
+          )
+          
   if (!is.null(key_feature)) {
     p <- p + ggrepel::geom_text_repel(data=subset(data,key == 'key'),...)
   }
